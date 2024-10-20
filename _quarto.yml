@@ -1,0 +1,71 @@
+project:
+  output-dir: docs
+  type: book
+
+book:
+  title: "Generative AI"
+  author:
+    - Max Brede
+    - Alwin Klick
+  date: "Winter semester 2024/25"
+  sidebar:
+    style: "docked"
+    search: true
+    logo: magpie_cover.webp
+  favicon: magpie_cover.webp
+  page-footer: 
+    left: '<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" style="padding-right: 10px;"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>'
+    center: 'All images are generated using R, DALL·E or Midjourney if not indicated otherwise.'
+  repo-url: https://github.com/MBrede/KFN_MethodLab_24
+  repo-actions: [issue]
+  chapters:
+    - part: index.qmd
+      chapters: 
+        - prep.qmd
+    - part: "Language Models"
+      chapters:
+        - rste_schritte.qmd
+    - part: "Image Generation"
+      chapters:
+        - wrangling02.qmd
+        - tidymodels.qmd
+        - quarto.qmd
+        - tables.qmd
+    
+crossref:
+  fig-title: Abb
+  tbl-title: Tab
+  fig-prefix: Abbildung
+  tbl-prefix: Tabelle
+  labels: arabic
+  subref-labels: alpha a
+  
+  
+bibliography: references.bib
+csl: apa.csl
+number-sections: false
+toc-depth: 3
+toc-expand: 2
+freeze: auto
+reference-location: margin
+code-annotations: below
+  
+format:
+  html:
+    theme: simplex
+    css: styles.css
+    include-after-body: 
+      - flip-script.js
+  # pdf:
+  #   documentclass: scrreprt
+  #   include-in-header: 
+  #     text: |
+  #       \usepackage{makeidx}
+  #       \makeindex
+  #   include-after-body: 
+  #     text: |
+  #       \printindex
+
+
+
+

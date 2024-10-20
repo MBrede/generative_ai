@@ -1,0 +1,15 @@
+---
+toc-title: '![](imgs/magpie_data_presentation.webp){width=240px}<br> <h3>Introduction</h3>'
+---
+# Introduction
+
+```{r setup}
+#| include: false
+
+library(tidyverse)
+```
+
+{{< include README.md >}}
+
+
+
