@@ -57,35 +57,53 @@ Students
 
 ## Schedule:
 
-| CW: | Date: | Topics: |
-|:--:|---:|---|
-|46| 12.11.  | * Language Model Basics  |
-|  |         | * Choosing open source models |
-|  |         | * Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
-|46|  13.11. | * Prompting strategies  |
-|  |         | * Generation of synthetic texts  |
-|47|  19.11. | * Fundamentals of agents and train-of-thought prompting |
-|  |         | * Examples of agent-frameworks (Llamaindex, LangChain & Haystack)|
-|47|  20.11. | * Semantic embeddings and vector stores |
-|  |         | * (Multimodal) Recommendations [https://qdrant.tech/recommendations/] |
-|48| 26.11.  | * Retrieval augmented and interleaved generation |
-|  |         | * Anomaly detection [https://qdrant.tech/data-analysis-anomaly-detection/] |
-|48|  27.11. | * Code generation and function calling  |
-|  |         | * Data analysis  |
-|49| 3.12.  |  * Constitutional AI Tuning |
-|  |         | * Prompt injection and prevention  |
-|49| 4.12.  | * AI image generator basics |
-|  |         | * Basics of using Open Source AI image generation models |
-|  |         | *  Generative Adversarial Networks (GANs) |
-|50|  10.12. | * Multimodal embeddings |
-|  |         | * Variational Autoencoders / Diffusion Models  |
-|50| 11.12.  | * (Generative) approaches for image dataset augmentation |
-|51|  17.12. | * Basics of Finetuning strategies  |
-|  |         | * Alignment and Finetuning of (L)LMs |
-|51| 18.12.  | * Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
-|  |         | * (Q)LoRA fine-tuning using Unsloth |
+| Number: | CW: | Date: | Topics: |
+|---:|:--:|---:|---|
+|1|46| 12.11.  | * Language Model Basics  |
+||  |         | * Choosing open source models |
+||  |         | * Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
+|2|46|  13.11. | * Prompting strategies  |
+||  |         | * Generation of synthetic texts  |
+|3|47|  19.11. | * Fundamentals of agents and train-of-thought prompting |
+||  |         | * Examples of agent-frameworks (Llamaindex, LangChain & Haystack)|
+|4|47|  20.11. | * Semantic embeddings and vector stores |
+||  |         | * Retrieval augmented and interleaved generation  |
+|5|48| 26.11.  | * Code generation and function calling  |
+||  |         | * Data analysis  |
+|6|48|  27.11. | * Constitutional AI Tuning |
+||  |         | * Prompt injection and prevention  |
+|7|49| 3.12.  |   |
+|8|49| 4.12.  | * AI image generator basics |
+||  |         | * Basics of using Open Source AI image generation models |
+||  |         | *  Generative Adversarial Networks (GANs) |
+|9|50|  10.12. | * Multimodal embeddings |
+||  |         | * Variational Autoencoders / Diffusion Models  |
+|10|50| 11.12.  | * (Generative) approaches for image dataset augmentation |
+|11|51|  17.12. | * Basics of Finetuning strategies  |
+||  |         | * Alignment and Finetuning of (L)LMs |
+|12|51| 18.12.  | * Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
+||  |         | * (Q)LoRA fine-tuning using Unsloth |
 
 
 Tests für LLM-Modelle? Oder lieber nicht?
 - Multimodal embeddings?
 - Knowledge graphs?
+
+## Notizen
+
+* Instruct vs non-instruct
+
+
+## Themenideen
+
+* Kinderbuch mit Anspruch
+
+
+## In-session Aufgaben
+Termin:
+1. Kleine Sprachmodelle zum Laufen bringen mit unterschiedlichen Backends
+2. Prompting-Strategien testen [Datensatz](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de)
+3. Agent, der Zeit bis Semesterende, Kieler Woche, ... ausrechnet
+4. Datensatz(?) in vector-store überführen und dann durchsuchen und Agent zugänglich machen
+5. Agent-System zur deskriptiven Analyse, Beispiel mit PandasAI?
+6. Update eines Datensatzes nach Constitution
