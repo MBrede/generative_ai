@@ -1,0 +1,12 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Function Calling</h3>'
+---
+
+# Function Calling
+
+## Code generation and function calling
+
+## Data analysis
+
+## Further Readings
+

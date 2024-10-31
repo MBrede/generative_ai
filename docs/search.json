@@ -1,0 +1,426 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Generative AI",
+    "section": "",
+    "text": "Introduction\nThis introductory script on the topic of “Generative AI” was created for the elective module “Generative AI” as given to the master students of the master programme “Data Science” at the University of Applied Sciences Kiel and was built using quarto.\nThe intention of this script is not to be a complete guide to all things generative AI, but to give an overview of the topics and applications of these emerging techniques.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#schedule",
+    "href": "index.html#schedule",
+    "title": "Generative AI",
+    "section": "Schedule:",
+    "text": "Schedule:\n\n\n\n\n\n\n\n\n\n\nNumber:\nCW:\nDate:\nTitle:\nTopics:\n\n\n\n\n1\n46\n12.11.\nGetting started with (L)LMs\n* Language Model Basics\n\n\n\n\n\n\n* Choosing open source models\n\n\n\n\n\n\n* Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)\n\n\n2\n46\n13.11.\nPrompting\n* Prompting strategies\n\n\n\n\n\n\n* Generation of synthetic texts\n\n\n3\n47\n19.11.\nAgent basics\n* Fundamentals of agents and train-of-thought prompting\n\n\n\n\n\n\n* Examples of agent-frameworks (Llamaindex, LangChain & Haystack)\n\n\n4\n47\n20.11.\nEmbedding-based agent-systems\n* Semantic embeddings and vector stores\n\n\n\n\n\n\n* Retrieval augmented and interleaved generation\n\n\n5\n48\n26.11.\nFunction Calling\n* Code generation and function calling\n\n\n\n\n\n\n* Data analysis\n\n\n6\n48\n27.11.\nAgent interaction\n* Constitutional AI Tuning\n\n\n\n\n\n\n* Preventing prompt injections\n\n\n7\n49\n3.12.\n???\n\n\n\n8\n49\n4.12.\nAI image generation I\n* AI image generator basics\n\n\n\n\n\n\n* Basics of using Open Source AI image generation models\n\n\n\n\n\n\n* Generative Adversarial Networks (GANs)\n\n\n9\n50\n10.12.\nAI image generation II\n* Multimodal embeddings\n\n\n\n\n\n\n* Variational Autoencoders / Diffusion Models\n\n\n10\n50\n11.12.\nAugmentation of image datasets\n* (Generative) approaches for image dataset augmentation\n\n\n11\n51\n17.12.\nFinetuning Basics\n* Basics of Finetuning strategies\n\n\n\n\n\n\n* Alignment and Finetuning of (L)LMs\n\n\n12\n51\n18.12.\nRank adaptation\n* Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models\n\n\n\n\n\n\n* (Q)LoRA fine-tuning using Unsloth\n\n\n\nTests für LLM-Modelle? Oder lieber nicht? - Multimodal embeddings? - Knowledge graphs?",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#notizen",
+    "href": "index.html#notizen",
+    "title": "Generative AI",
+    "section": "Notizen",
+    "text": "Notizen\n\nInstruct vs non-instruct",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#themenideen",
+    "href": "index.html#themenideen",
+    "title": "Generative AI",
+    "section": "Themenideen",
+    "text": "Themenideen\n\nKinderbuch mit Anspruch",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#in-session-aufgaben",
+    "href": "index.html#in-session-aufgaben",
+    "title": "Generative AI",
+    "section": "In-session Aufgaben",
+    "text": "In-session Aufgaben\nTermin: 1. Kleine Sprachmodelle zum Laufen bringen mit unterschiedlichen Backends 2. Prompting-Strategien testen Datensatz 3. Agent, der Zeit bis Semesterende, Kieler Woche, … ausrechnet 4. Datensatz(?) in vector-store überführen und dann durchsuchen und Agent zugänglich machen 5. Agent-System zur deskriptiven Analyse, Beispiel mit PandasAI? 6. Update eines Datensatzes nach Constitution",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "content/orga.html",
+    "href": "content/orga.html",
+    "title": "Organizational Details",
+    "section": "",
+    "text": "Planned Class Structure\nEach class meeting will follow this structure: 1. Instructional Session: We’ll introduce new concepts and techniques. 2. Practice Exercise: Students will apply these concepts through an exercise. 3. Project Worktime: Students will work on their team projects.\nStudents will be divided into teams of three at the start of the course, with projects culminating in a final presentation to the class. The project grade will count towards your final course grade.",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Organizational Details</span>"
+    ]
+  },
+  {
+    "objectID": "content/orga.html#project-details",
+    "href": "content/orga.html#project-details",
+    "title": "Organizational Details",
+    "section": "Project Details",
+    "text": "Project Details\nProjects should allow students to apply what they’ve learned throughout the course. They must implement an LLM-based system that includes at least four of the following features:\n\nRetrieval Augmentation/RAG\nData Analysis\nMultiple Agents\nFine-tuning on Synthetic Data\nFunction-calling-based interface to an AI image generator\n\nStudents are free to choose their project topic, as long as it fits within the course scope and is approved by the instructor. All projects must be implemented in Python.\nExample Project Ideas:\n\nLLM Tourist Guide: Uses Wikipedia data to provide travel tips and enhances them with generated images.\nQuarto Data Presentation Pipeline: Builds and illustrates a Quarto presentation based on a given dataset.\nSynthetic Author: Generates commit-messages and GitHub issues illustrated with AI-generated images based on commit history/diff.\nAI Storyteller: Creates illustrated short stories for children based on historical events.",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Organizational Details</span>"
+    ]
+  },
+  {
+    "objectID": "content/getting_started_with_llms.html",
+    "href": "content/getting_started_with_llms.html",
+    "title": "Getting started with (L)LMs",
+    "section": "",
+    "text": "Language Model Basics\nThis chapter is a brief introduction to the basics of language models and how to use them in practice. It assumes that you have some basic knowledge about machine learning and natural language processing.",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with (L)LMs</span>"
+    ]
+  },
+  {
+    "objectID": "content/getting_started_with_llms.html#language-model-basics",
+    "href": "content/getting_started_with_llms.html#language-model-basics",
+    "title": "Getting started with (L)LMs",
+    "section": "",
+    "text": "Traditional Methods: Bag Of Words (BOW)\n\n\n\nBOW-representation of sentences.\n\n\nThe Bag Of Words (BOW) method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus.\n\n\n\nCBOW-representation of corpus.\n\n\nThe Continuous Bag Of Words (CBOW) method extends traditional BOW by representing words as dense vectors in a continuous space. CBOW predicts a target word based on its context, learning meaningful word representations from large amounts of text data.\n\n\n\n\n\n\nFig 2.1: FastText1 Model using CBOW-Method to predict missing word.\n\n1 Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables.\n\nfastText is an open-source library developed by Facebook that builds upon the CBOW method. It introduces subword information and uses hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations.\n\n\nLanguage Model Embeddings\n\n\n\nModel using CBOW-Method to predict missing word.\n\n\nLanguage Model Embeddings are learned by predicting the next word in a sequence. These embeddings capture semantic and syntactic relationships between words, enabling various downstream tasks such as sentiment analysis, machine translation, and question answering.",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with (L)LMs</span>"
+    ]
+  },
+  {
+    "objectID": "content/getting_started_with_llms.html#choosing-open-source-models",
+    "href": "content/getting_started_with_llms.html#choosing-open-source-models",
+    "title": "Getting started with (L)LMs",
+    "section": "Choosing open source models",
+    "text": "Choosing open source models",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with (L)LMs</span>"
+    ]
+  },
+  {
+    "objectID": "content/getting_started_with_llms.html#basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp",
+    "href": "content/getting_started_with_llms.html#basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp",
+    "title": "Getting started with (L)LMs",
+    "section": "Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)",
+    "text": "Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with (L)LMs</span>"
+    ]
+  },
+  {
+    "objectID": "content/getting_started_with_llms.html#further-readings",
+    "href": "content/getting_started_with_llms.html#further-readings",
+    "title": "Getting started with (L)LMs",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with (L)LMs</span>"
+    ]
+  },
+  {
+    "objectID": "content/prompting.html",
+    "href": "content/prompting.html",
+    "title": "Prompting",
+    "section": "",
+    "text": "Prompting strategies",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Prompting</span>"
+    ]
+  },
+  {
+    "objectID": "content/prompting.html#generation-of-synthetic-texts",
+    "href": "content/prompting.html#generation-of-synthetic-texts",
+    "title": "Prompting",
+    "section": "Generation of synthetic texts",
+    "text": "Generation of synthetic texts",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Prompting</span>"
+    ]
+  },
+  {
+    "objectID": "content/prompting.html#further-readings",
+    "href": "content/prompting.html#further-readings",
+    "title": "Prompting",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Prompting</span>"
+    ]
+  },
+  {
+    "objectID": "content/agent_basics.html",
+    "href": "content/agent_basics.html",
+    "title": "Agent basics",
+    "section": "",
+    "text": "Fundamentals of agents and train-of-thought prompting",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Agent basics</span>"
+    ]
+  },
+  {
+    "objectID": "content/agent_basics.html#examples-of-agent-frameworks-llamaindex-langchain-haystack",
+    "href": "content/agent_basics.html#examples-of-agent-frameworks-llamaindex-langchain-haystack",
+    "title": "Agent basics",
+    "section": "Examples of agent-frameworks (Llamaindex, LangChain & Haystack)",
+    "text": "Examples of agent-frameworks (Llamaindex, LangChain & Haystack)",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Agent basics</span>"
+    ]
+  },
+  {
+    "objectID": "content/agent_basics.html#further-readings",
+    "href": "content/agent_basics.html#further-readings",
+    "title": "Agent basics",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Agent basics</span>"
+    ]
+  },
+  {
+    "objectID": "content/embeddings.html",
+    "href": "content/embeddings.html",
+    "title": "Embedding-based agent-systems",
+    "section": "",
+    "text": "Semantic embeddings and vector stores",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Embedding-based agent-systems</span>"
+    ]
+  },
+  {
+    "objectID": "content/embeddings.html#retrieval-augmented-and-interleaved-generation",
+    "href": "content/embeddings.html#retrieval-augmented-and-interleaved-generation",
+    "title": "Embedding-based agent-systems",
+    "section": "Retrieval augmented and interleaved generation",
+    "text": "Retrieval augmented and interleaved generation",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Embedding-based agent-systems</span>"
+    ]
+  },
+  {
+    "objectID": "content/embeddings.html#further-readings",
+    "href": "content/embeddings.html#further-readings",
+    "title": "Embedding-based agent-systems",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Embedding-based agent-systems</span>"
+    ]
+  },
+  {
+    "objectID": "content/function_calling.html",
+    "href": "content/function_calling.html",
+    "title": "Function Calling",
+    "section": "",
+    "text": "Code generation and function calling",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Function Calling</span>"
+    ]
+  },
+  {
+    "objectID": "content/function_calling.html#data-analysis",
+    "href": "content/function_calling.html#data-analysis",
+    "title": "Function Calling",
+    "section": "Data analysis",
+    "text": "Data analysis",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Function Calling</span>"
+    ]
+  },
+  {
+    "objectID": "content/function_calling.html#further-readings",
+    "href": "content/function_calling.html#further-readings",
+    "title": "Function Calling",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Function Calling</span>"
+    ]
+  },
+  {
+    "objectID": "content/agent_interaction.html",
+    "href": "content/agent_interaction.html",
+    "title": "Agent interaction",
+    "section": "",
+    "text": "Constitutional AI Tuning",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Agent interaction</span>"
+    ]
+  },
+  {
+    "objectID": "content/agent_interaction.html#preventing-prompt-injections",
+    "href": "content/agent_interaction.html#preventing-prompt-injections",
+    "title": "Agent interaction",
+    "section": "Preventing prompt injections",
+    "text": "Preventing prompt injections",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Agent interaction</span>"
+    ]
+  },
+  {
+    "objectID": "content/agent_interaction.html#further-readings",
+    "href": "content/agent_interaction.html#further-readings",
+    "title": "Agent interaction",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Language Models",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Agent interaction</span>"
+    ]
+  },
+  {
+    "objectID": "content/generator_basics.html",
+    "href": "content/generator_basics.html",
+    "title": "AI image generation",
+    "section": "",
+    "text": "AI image generator basics",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/generator_basics.html#basics-of-using-open-source-ai-image-generation-models",
+    "href": "content/generator_basics.html#basics-of-using-open-source-ai-image-generation-models",
+    "title": "AI image generation",
+    "section": "Basics of using Open Source AI image generation models",
+    "text": "Basics of using Open Source AI image generation models",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/generator_basics.html#generative-adversarial-networks-gans",
+    "href": "content/generator_basics.html#generative-adversarial-networks-gans",
+    "title": "AI image generation",
+    "section": "Generative Adversarial Networks (GANs)",
+    "text": "Generative Adversarial Networks (GANs)",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/generator_basics.html#further-readings",
+    "href": "content/generator_basics.html#further-readings",
+    "title": "AI image generation",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/augmentation.html",
+    "href": "content/augmentation.html",
+    "title": "Augmentation of image datasets",
+    "section": "",
+    "text": "(Generative) approaches for image dataset augmentation",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Augmentation of image datasets</span>"
+    ]
+  },
+  {
+    "objectID": "content/augmentation.html#further-readings",
+    "href": "content/augmentation.html#further-readings",
+    "title": "Augmentation of image datasets",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Augmentation of image datasets</span>"
+    ]
+  },
+  {
+    "objectID": "content/finetuning_approaches.html",
+    "href": "content/finetuning_approaches.html",
+    "title": "Finetuning Approaches",
+    "section": "",
+    "text": "Basics of Finetuning strategies",
+    "crumbs": [
+      "Finetuning",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Finetuning Approaches</span>"
+    ]
+  },
+  {
+    "objectID": "content/finetuning_approaches.html#alignment-and-finetuning-of-llms",
+    "href": "content/finetuning_approaches.html#alignment-and-finetuning-of-llms",
+    "title": "Finetuning Approaches",
+    "section": "Alignment and Finetuning of (L)LMs",
+    "text": "Alignment and Finetuning of (L)LMs",
+    "crumbs": [
+      "Finetuning",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Finetuning Approaches</span>"
+    ]
+  },
+  {
+    "objectID": "content/finetuning_approaches.html#further-readings",
+    "href": "content/finetuning_approaches.html#further-readings",
+    "title": "Finetuning Approaches",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Finetuning",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Finetuning Approaches</span>"
+    ]
+  },
+  {
+    "objectID": "content/rank_adaptation.html",
+    "href": "content/rank_adaptation.html",
+    "title": "Rank adaptation",
+    "section": "",
+    "text": "Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models",
+    "crumbs": [
+      "Finetuning",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Rank adaptation</span>"
+    ]
+  },
+  {
+    "objectID": "content/rank_adaptation.html#qlora-fine-tuning-using-unsloth",
+    "href": "content/rank_adaptation.html#qlora-fine-tuning-using-unsloth",
+    "title": "Rank adaptation",
+    "section": "(Q)LoRA fine-tuning using Unsloth",
+    "text": "(Q)LoRA fine-tuning using Unsloth",
+    "crumbs": [
+      "Finetuning",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Rank adaptation</span>"
+    ]
+  },
+  {
+    "objectID": "content/rank_adaptation.html#further-readings",
+    "href": "content/rank_adaptation.html#further-readings",
+    "title": "Rank adaptation",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Finetuning",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Rank adaptation</span>"
+    ]
+  }
+]

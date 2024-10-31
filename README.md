@@ -57,32 +57,32 @@ Students
 
 ## Schedule:
 
-| Number: | CW: | Date: | Topics: |
-|---:|:--:|---:|---|
-|1|46| 12.11.  | * Language Model Basics  |
-||  |         | * Choosing open source models |
-||  |         | * Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
-|2|46|  13.11. | * Prompting strategies  |
-||  |         | * Generation of synthetic texts  |
-|3|47|  19.11. | * Fundamentals of agents and train-of-thought prompting |
-||  |         | * Examples of agent-frameworks (Llamaindex, LangChain & Haystack)|
-|4|47|  20.11. | * Semantic embeddings and vector stores |
-||  |         | * Retrieval augmented and interleaved generation  |
-|5|48| 26.11.  | * Code generation and function calling  |
-||  |         | * Data analysis  |
-|6|48|  27.11. | * Constitutional AI Tuning |
-||  |         | * Prompt injection and prevention  |
-|7|49| 3.12.  |   |
-|8|49| 4.12.  | * AI image generator basics |
-||  |         | * Basics of using Open Source AI image generation models |
-||  |         | *  Generative Adversarial Networks (GANs) |
-|9|50|  10.12. | * Multimodal embeddings |
-||  |         | * Variational Autoencoders / Diffusion Models  |
-|10|50| 11.12.  | * (Generative) approaches for image dataset augmentation |
-|11|51|  17.12. | * Basics of Finetuning strategies  |
-||  |         | * Alignment and Finetuning of (L)LMs |
-|12|51| 18.12.  | * Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
-||  |         | * (Q)LoRA fine-tuning using Unsloth |
+| Number: | CW: | Date: | Title: | Topics: |
+|---:|:--:|---:|---|---|
+|1|46| 12.11.  | Getting started with (L)LMs| * Language Model Basics  |
+||  |         || * Choosing open source models |
+||  |         || * Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
+|2|46|  13.11. | Prompting| * Prompting strategies  |
+||  |         || * Generation of synthetic texts  |
+|3|47|  19.11. | Agent basics| * Fundamentals of agents and train-of-thought prompting |
+||  |         || * Examples of agent-frameworks (Llamaindex, LangChain & Haystack)|
+|4|47|  20.11. | Embedding-based agent-systems| * Semantic embeddings and vector stores |
+||  |         || * Retrieval augmented and interleaved generation  |
+|5|48| 26.11.  | Function Calling| * Code generation and function calling  |
+||  |         || * Data analysis  |
+|6|48|  27.11. | Agent interaction | * Constitutional AI Tuning |
+||  |         || * Preventing prompt injections |
+|7|49| 3.12.  |???|   |
+|8|49| 4.12.  |AI image generation I| * AI image generator basics |
+||  |         || * Basics of using Open Source AI image generation models |
+||  |         || *  Generative Adversarial Networks (GANs) |
+|9|50|  10.12. |AI image generation II| * Multimodal embeddings |
+||  |         || * Variational Autoencoders / Diffusion Models  |
+|10|50| 11.12.  |Augmentation of image datasets| * (Generative) approaches for image dataset augmentation |
+|11|51|  17.12. |Finetuning Basics| * Basics of Finetuning strategies  |
+||  |         || * Alignment and Finetuning of (L)LMs |
+|12|51| 18.12.  |Rank adaptation| * Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
+||  |         || * (Q)LoRA fine-tuning using Unsloth |
 
 
 Tests für LLM-Modelle? Oder lieber nicht?

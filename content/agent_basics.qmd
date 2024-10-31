@@ -1,0 +1,12 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Agent basics</h3>'
+---
+
+# Agent basics
+
+## Fundamentals of agents and train-of-thought prompting
+
+## Examples of agent-frameworks (Llamaindex, LangChain & Haystack)
+
+## Further Readings
+

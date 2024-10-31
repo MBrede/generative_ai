@@ -1,0 +1,12 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Prompting</h3>'
+---
+
+# Prompting
+
+## Prompting strategies
+
+## Generation of synthetic texts
+
+## Further Readings
+

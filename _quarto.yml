@@ -7,36 +7,43 @@ book:
   author:
     - Max Brede
     - Alwin Klick
-  date: "Winter semester 2024/25"
+  date: "winter semester 2024/25"
   sidebar:
     style: "docked"
     search: true
-    logo: magpie_cover.webp
-  favicon: magpie_cover.webp
+    logo: cover.jpg
+  favicon: cover.jpg
   page-footer: 
     left: '<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" style="padding-right: 10px;"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>'
-    center: 'All images are generated using R, DALL·E or Midjourney if not indicated otherwise.'
-  repo-url: https://github.com/MBrede/KFN_MethodLab_24
+    center: 'All images are generated using Python, R, draw.io, Flux or Stable Diffusion XL if not indicated otherwise.'
+  repo-url: https://github.com/MBrede/generative_ai
   repo-actions: [issue]
   chapters:
     - part: index.qmd
       chapters: 
-        - prep.qmd
+        - content/orga.qmd
     - part: "Language Models"
       chapters:
-        - rste_schritte.qmd
+        - content/getting_started_with_llms.qmd
+        - content/prompting.qmd
+        - content/agent_basics.qmd
+        - content/embeddings.qmd
+        - content/function_calling.qmd
+        - content/agent_interaction.qmd
     - part: "Image Generation"
       chapters:
-        - wrangling02.qmd
-        - tidymodels.qmd
-        - quarto.qmd
-        - tables.qmd
+        - content/generator_basics.qmd
+        - content/augmentation.qmd
+    - part: "Finetuning"
+      chapters: 
+        - content/finetuning_approaches.qmd
+        - content/rank_adaptation.qmd
     
 crossref:
-  fig-title: Abb
+  fig-title: Fig
   tbl-title: Tab
-  fig-prefix: Abbildung
-  tbl-prefix: Tabelle
+  fig-prefix: Figure
+  tbl-prefix: Table
   labels: arabic
   subref-labels: alpha a
   

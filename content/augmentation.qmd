@@ -1,0 +1,10 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image datasets</h3>'
+---
+
+# Augmentation of image datasets
+
+## (Generative) approaches for image dataset augmentation
+
+## Further Readings
+

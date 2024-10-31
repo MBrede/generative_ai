@@ -1,0 +1,183 @@
+table,
+.table-condensed,
+table.rmdtable {
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+table,
+.table-condensed,
+table.rmdtable,
+table.rmdtable .header th,
+.table > thead > tr > th {
+  border-collapse: collapse;
+  border-style: solid;
+  border-spacing: 0;
+  border-width: medium 0 medium 0;
+  border-color: inherit
+}
+
+table.rmdtable th,
+table.rmdtable td,
+table th,
+table.rmdtable tr > td:first-child,
+table.rmdtable tr > .odd {
+  padding: 0.4em 0.5em;
+  color: inherit;
+  background: #fff;
+  font-weight: normal;
+}
+
+table.rmdtable .header {
+  padding: 0.4em 0.5em;
+  color: inherit;
+  background: #f3f3f3;
+  font-weight: normal;
+}
+
+table.rmdtable .even {
+  padding: 0.4em 0.5em;
+  color: inherit;
+  background: #f1f1f1;
+  font-weight: normal;
+}
+
+.table > tbody > tr > td {
+  border-width: 0;
+  font-size: 80%;
+}
+
+
+
+.verysmall .table > tbody > tr > td {
+  font-size: 8px;
+}
+
+.column-left{
+  float: left;
+  width: 33%;
+  text-align: left;
+}
+.column-center{
+  display: inline-block;
+  width: 33%;
+  text-align: center;
+}
+.column-right{
+  float: right;
+  width: 33%;
+  text-align: right;
+}
+.half-left{
+  float: left;
+  vertical-align: top;
+  width: 48%;
+  text-align: left;
+  display:inline-block;
+  box-sizing:border-box;
+}
+.half-right{
+  float: right;
+  vertical-align: top;
+  width: 48%;
+  text-align: left;
+  display:inline-block;
+  box-sizing:border-box;
+}
+
+.tt-left{
+  width: 65%;
+  text-align: left;
+  display:inline-block;
+  box-sizing:border-box;
+}
+.ot-right{
+  width: 30%;
+  text-align: left;
+  display:inline-block;
+  box-sizing:border-box;
+  vertical-align: top;
+}
+
+.codeComment{
+  padding: 10px 0 10px 60px;
+  margin-bottom: 20px;
+  width: 106%;
+  left: -60px;
+  position: relative;
+  border-radius: .25rem;
+}
+
+code{
+  color: #336699;
+}
+.q{
+ color:#333333;
+ background-color:#e6eeff;
+ line-height: 28px;
+ padding: 10px 0 10px 60px;
+ margin-bottom: 20px;
+ width: 100%;
+ left: -60px;
+ position: relative;
+ border-radius: .25rem;
+}
+
+.o{
+ color:#333333;
+ background-color:#ffeecc;
+ line-height: 28px;
+ padding: 10px 0 10px 60px;
+ margin-bottom: 20px;
+ width: 100%;
+ left: -60px;
+ position: relative;
+ border-radius: .25rem;
+}
+
+.small > .pre{
+  font-size: 75%;
+  width: 120%;
+}
+
+.smallText > .pre{
+  font-size: 75%;
+  width: 100%;
+}
+
+slides > slide {
+  overflow-y: auto !important;
+}
+
+.cols {display: flex; }
+
+.col {
+  width: 48%;
+  font-size: 75%;
+  padding: 10px;
+}
+
+.card {
+  border-width: 0px;
+}
+
+.blur-effect {
+  filter: blur(8px); /* Adjust blur value as needed */
+}
+
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0); /* Adjust background as needed */
+  justify-content: center;
+  align-items: center;
+}
+
+.show-overlay {
+  display: flex;
+  
+}

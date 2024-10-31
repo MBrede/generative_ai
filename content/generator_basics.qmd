@@ -1,0 +1,14 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>AI image generation</h3>'
+---
+
+# AI image generation
+
+## AI image generator basics
+
+## Basics of using Open Source AI image generation models
+
+## Generative Adversarial Networks (GANs)
+
+## Further Readings
+

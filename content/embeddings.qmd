@@ -1,0 +1,12 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Embedding-based agent-systems</h3>'
+---
+
+# Embedding-based agent-systems
+
+## Semantic embeddings and vector stores
+
+## Retrieval augmented and interleaved generation
+
+## Further Readings
+
