@@ -9,7 +9,8 @@ This chapter is a brief introduction to the basics of language models and how to
 
 ## Language Model Basics
 
-### Traditional Methods: Bag Of Words (BOW)
+### A short history of natural language processing
+
 ![BOW-representation of sentences.](../imgs/bow.gif){#fig-BOW width=100%}
 
 The **Bag Of Words (BOW)** method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus. Additionally, it does not take into account the order of words in a sentence, which can be crucial for understanding its meaning. For example, the sentences "The cat is on the mat" and "The mat is on the cat" have different meanings despite having the same set of words.
@@ -27,16 +28,46 @@ fastText, an open-source library developed by Facebook, builds upon the CBOW met
 **Language Model Embeddings** are learned by predicting the next word in a sequence. These embeddings capture semantic and syntactic relationships between words, enabling them to understand context effectively. Since these embeddings represent the conditional probability distribution that language models learn to comprehend natural language, they can be reused by other models for tasks such as text classification or text retrieval. But more on this later.
 
 Still, these models did not really solve the inherent issue of the order of words in a sentence. The input of models of this generation still used a dummyfied version of the corpus to represent context, which loses a lot of information.
-Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)** or **Long Short-Term Memory (LSTM) networks**. These models could learn to keep track of long-term dependencies in text data and improve the understanding of context. However, RNNs suffered from the vanishing gradient problem, which made it difficult for them to capture long-range dependencies effectively. LSTMs addressed this issue by introducing a mechanism called "gates" that allowed information to flow through the network more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time.
 
+![RNN-model, in this cased trained on text prediction.](../imgs/rnn.gif){#fig-rnn width=100%}
 
+Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of long-term dependencies in text data and improve the understanding of context. However, RNNs suffered from the vanishing gradient problem, which made it difficult for them to capture long-range dependencies effectively. 
+
+![LSTM-model, also trained on text prediction.](../imgs/lstm.gif){#fig-lstm width=100%}
+
+**Long Short-Term Memory (LSTM) networks** addressed this issue by introducing a mechanism called "gates" that allowed information to flow through the network more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time.
+
+### Attention is all you need
+
+In their seminal paper "Attention is all you need", @vaswaniAttentionAllYou2023 described the transformer architecture. The implementation of the multi-headed attention meachnism allowed to solve all major issues of the language modelling approaches of the previous generation. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies.
+
+<!-- Absatz mit transfomer-gif, das einmal Aufmerksamkeit illustriert -->
+
+The advances made through leveraging transformer-based architectures for language modelling lead to a family of general-purpose language models, which, unlike the approaches before, where not trained for a specific task but rather on a general text base with the intention of allowing specific fine-tuning to adapt to a task.
+Classic examples for these early general-purpose natural language generating Transformer models are the Generative Pre-trained Transformer (the predecessor of ChatGPT you all know) first described in @radfordImprovingLanguageUnderstanding2018 and the "Bidirectional Encoder Representations from Transformers" (BERT)-Architecture and training procedure described by @devlinBERTPretrainingDeep2019.
 
 
 ## Choosing open source models
 
 ## Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)
 
+Now it is your turn!
+In your project-groups, you will each have to build a small "Hello World"-style application that uses an open source model.
+
+1. Choose a small model using the sources we discussed before.
+2. Each group is to use one of the following frameworks
+    * [Huggingface](https://huggingface.co/)
+    * [Ollama](https://ollama.com/)
+    * [LM-Studio](https://lmstudio.ai/) from python
+    * [Llama.cpp](https://github.com/ggerganov/llama.cpp)
+    to load and use the model in your application.
+3. Present your results and your experiences with the frameworks in a short presentation.
+4. Submit your code and report on moodle.
+
 ## Further Readings
 
+* The Attention is all you need-paper [@vaswaniAttentionAllYou2023] and the brilliant video discussing it by Umar Jamil [@umarjamilAttentionAllYou2023]
 
+
+## References
 

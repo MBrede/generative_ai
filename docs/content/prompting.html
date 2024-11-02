@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -226,7 +246,8 @@ Prompting<br>
 </h3>
    
   <ul>
-  <li><a href="#prompting-strategies" id="toc-prompting-strategies" class="nav-link active" data-scroll-target="#prompting-strategies">Prompting strategies</a></li>
+  <li><a href="#instruct-tuned-models" id="toc-instruct-tuned-models" class="nav-link active" data-scroll-target="#instruct-tuned-models">Instruct-tuned models</a></li>
+  <li><a href="#prompting-strategies" id="toc-prompting-strategies" class="nav-link" data-scroll-target="#prompting-strategies">Prompting strategies</a></li>
   <li><a href="#generation-of-synthetic-texts" id="toc-generation-of-synthetic-texts" class="nav-link" data-scroll-target="#generation-of-synthetic-texts">Generation of synthetic texts</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   </ul>
@@ -254,8 +275,82 @@ Prompting<br>
 </header>
 
 
+<p>Prompting describes the utilization of the ability of language models to use zero or few-shot instrutions to perform a task. This ability, which we briefly touched on when we were discussing the history of language models (i.e., the paper by <span class="citation" data-cites="radfordLanguageModelsAre2019">Radford et al. (<a href="#ref-radfordLanguageModelsAre2019" role="doc-biblioref">2019</a>)</span>), is one of the most important aspects of modern large language models.</p>
+<p>Prompting can be used for various tasks such as text generation, summarization, question answering, and many more.</p>
+<section id="instruct-tuned-models" class="level2">
+<h2 class="anchored" data-anchor-id="instruct-tuned-models">Instruct-tuned models</h2>
+<p>Instruct-tuned models are trained on a dataset (for an example, see <a href="#fig-instructData" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>) that consists of instructions and their corresponding outputs. This is different from the pretraining phase of language models where they were trained on large amounts of text data without any specific task in mind. The goal of instruct-tuning is to make the model better at following instructions and generating more accurate and relevant outputs.</p>
+<div id="fig-instructData" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-instructData-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/instruct_dataset.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-instructData-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;3.1: An example for a dataset that can be used for instruct-finetuning. This dataset can be found on <a href="https://huggingface.co/datasets/rajpurkar/squad">huggingface</a>
+</figcaption>
+</figure>
+</div>
+<p class="q">
+Test the difference between instruct and non-instruct-models by trying to get a gpt2-version (i.e., <a href="https://model.lmstudio.ai/download/QuantFactory/gpt2-xl-GGUF">“QuantFactory/gpt2-xl-GGUF”</a>) and a small Llama 3.2 Instruct-Model (i.e., <a href="https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF">“hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF”</a> to write a small poem about the inception of the field of language modelling. Use LM-Studio to test this.
+</p>
+<div class="card">
+<div class="content">
+<div id="fig-poems" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-poems-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-poems" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-llamapoem" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-llamapoem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/llama1bpoem.png" class="img-fluid figure-img" data-ref-parent="fig-poems">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-llamapoem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) A poem written by Llama 3.2 1B - a model with Instruct-Finetuning
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-poems" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-gpt2poem" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-gpt2poem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/gpt2poem.png" class="img-fluid figure-img" data-ref-parent="fig-poems">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-gpt2poem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) A “poem” written by GPT2 - a model without Instruct-Finetuning
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-poems-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;3.2: A poem and a “poem”
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="overlay">
+<p>Show answer</p>
+</div>
+</div>
+</section>
 <section id="prompting-strategies" class="level2">
 <h2 class="anchored" data-anchor-id="prompting-strategies">Prompting strategies</h2>
+<p>The results of a prompted call to a LM is highly dependend on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of “prompt engineering” has emerged. There is a veritable plethora of resources available online that discuss different strategies for prompting LMs. It has to be said though, that the strategies that work and don’t work can vary greatly between models and tasks. A bit of general advice that holds true for nearly all models though, is to</p>
+<ol type="a">
+<li>define the task in as many small steps as possible</li>
+<li>to be as literal and descriptive as possible and</li>
+<li>to provide examples if possible.</li>
+</ol>
+<p>Since the quality of results is so highly dependable on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated. One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.</p>
+<p class="q">
+</p><ol type="1">
+<li>Test the above-mentioned prompting strategies on the <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">MTOP Intent Dataset</a> and evaluate the results against each other.</li>
+</ol>
+<p></p>
+<p>Prompting-Strategien testen <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">Datensatz</a></p>
 </section>
 <section id="generation-of-synthetic-texts" class="level2">
 <h2 class="anchored" data-anchor-id="generation-of-synthetic-texts">Generation of synthetic texts</h2>
@@ -264,6 +359,11 @@ Prompting<br>
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-radfordLanguageModelsAre2019" class="csl-entry" role="listitem">
+Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., &amp; Sutskever, I. (2019). Language models are unsupervised multitask learners. <em>OpenAI Blog</em>, <em>1</em>(8), 9.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

@@ -4,7 +4,57 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Prompting</h3>'
 
 # Prompting
 
+Prompting describes the utilization of the ability of language models to use zero or few-shot instrutions to perform a task. This ability, which we briefly touched on when we were discussing the history of language models (i.e., the paper by @radfordLanguageModelsAre2019), is one of the most important aspects of modern large language models.
+
+Prompting can be used for various tasks such as text generation, summarization, question answering, and many more. 
+
+## Instruct-tuned models
+
+Instruct-tuned models are trained on a dataset (for an example, see @fig-instructData) that consists of instructions and their corresponding outputs. This is different from the pretraining phase of language models where they were trained on large amounts of text data without any specific task in mind. The goal of instruct-tuning is to make the model better at following instructions and generating more accurate and relevant outputs.
+
+![An example for a dataset that can be used for instruct-finetuning. This dataset can be found on [huggingface](https://huggingface.co/datasets/rajpurkar/squad)](../imgs/instruct_dataset.png){#fig-instructData}
+
+<p class='q'>Test the difference between instruct and non-instruct-models by trying to get a gpt2-version (i.e., ["QuantFactory/gpt2-xl-GGUF"](https://model.lmstudio.ai/download/QuantFactory/gpt2-xl-GGUF)) and a small Llama 3.2 Instruct-Model (i.e., ["hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF"](https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF) to write a small poem about the inception of the field of language modelling. Use LM-Studio to test this.</p>
+
+:::{class="card"}
+:::{class="content"}
+
+::: {#fig-poems layout-ncol=2}
+
+![A poem written by Llama 3.2 1B - a model with Instruct-Finetuning](../imgs/llama1bpoem.png){#fig-llamapoem}
+
+![A "poem" written by GPT2 - a model without Instruct-Finetuning](../imgs/gpt2poem.png){#fig-gpt2poem}
+
+A poem and a "poem"
+:::
+
+:::
+:::{class="overlay"}
+Show answer
+:::
+:::
+
+
 ## Prompting strategies
+
+The results of a prompted call to a LM is highly dependend on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of "prompt engineering" has emerged.
+There is a veritable plethora of resources available online that discuss different strategies for prompting LMs. It has to be said though, that the strategies that work and don't work can vary greatly between models and tasks.
+A bit of general advice that holds true for nearly all models though, is to 
+
+a) define the task in as many small steps as possible
+b) to be as literal and descriptive as possible and 
+c) to provide examples if possible.
+
+Since the quality of results is so highly dependable on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated.
+One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.
+
+<p class='q'>
+1. Test the above-mentioned prompting strategies on the [MTOP Intent Dataset](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de) and evaluate the results against each other.
+
+
+</p>
+
+ Prompting-Strategien testen [Datensatz](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de)
 
 ## Generation of synthetic texts
 

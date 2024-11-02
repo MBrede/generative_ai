@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -220,7 +240,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
-    <h2 id="toc-title"><img src="../imgs/cover.jpg" class="img-fluid" width="240"><br><br>
+    <h2 id="toc-title"><img src="../imgs/history.jpg" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
 Getting started with (L)LMs<br>
 </h3>
@@ -228,12 +248,13 @@ Getting started with (L)LMs<br>
   <ul>
   <li><a href="#language-model-basics" id="toc-language-model-basics" class="nav-link active" data-scroll-target="#language-model-basics">Language Model Basics</a>
   <ul class="collapse">
-  <li><a href="#traditional-methods-bag-of-words-bow" id="toc-traditional-methods-bag-of-words-bow" class="nav-link" data-scroll-target="#traditional-methods-bag-of-words-bow">Traditional Methods: Bag Of Words (BOW)</a></li>
-  <li><a href="#language-model-embeddings" id="toc-language-model-embeddings" class="nav-link" data-scroll-target="#language-model-embeddings">Language Model Embeddings</a></li>
+  <li><a href="#a-short-history-of-natural-language-processing" id="toc-a-short-history-of-natural-language-processing" class="nav-link" data-scroll-target="#a-short-history-of-natural-language-processing">A short history of natural language processing</a></li>
+  <li><a href="#attention-is-all-you-need" id="toc-attention-is-all-you-need" class="nav-link" data-scroll-target="#attention-is-all-you-need">Attention is all you need</a></li>
   </ul></li>
   <li><a href="#choosing-open-source-models" id="toc-choosing-open-source-models" class="nav-link" data-scroll-target="#choosing-open-source-models">Choosing open source models</a></li>
   <li><a href="#basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp" id="toc-basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp" class="nav-link" data-scroll-target="#basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp">Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -262,19 +283,27 @@ Getting started with (L)LMs<br>
 <p>This chapter is a brief introduction to the basics of language models and how to use them in practice. It assumes that you have some basic knowledge about machine learning and natural language processing.</p>
 <section id="language-model-basics" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="language-model-basics">Language Model Basics</h2>
-<section id="traditional-methods-bag-of-words-bow" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="traditional-methods-bag-of-words-bow">Traditional Methods: Bag Of Words (BOW)</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/bow.gif" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>BOW-representation of sentences.</figcaption>
+<section id="a-short-history-of-natural-language-processing" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="a-short-history-of-natural-language-processing">A short history of natural language processing</h3>
+<div id="fig-BOW" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-BOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/bow.gif" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-BOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;2.1: BOW-representation of sentences.
+</figcaption>
 </figure>
 </div>
-<p>The <strong>Bag Of Words (BOW)</strong> method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/cbow.gif" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>CBOW-representation of corpus.</figcaption>
+<p>The <strong>Bag Of Words (BOW)</strong> method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus. Additionally, it does not take into account the order of words in a sentence, which can be crucial for understanding its meaning. For example, the sentences “The cat is on the mat” and “The mat is on the cat” have different meanings despite having the same set of words.</p>
+<div id="fig-CBOW" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-CBOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/cbow.gif" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CBOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;2.2: CBOW-representation of corpus.
+</figcaption>
 </figure>
 </div>
 <p>The <strong>Continuous Bag Of Words (CBOW)</strong> method extends traditional BOW by representing words as dense vectors in a continuous space. CBOW predicts a target word based on its context, learning meaningful word representations from large amounts of text data.</p>
@@ -284,21 +313,51 @@ Getting started with (L)LMs<br>
 <img src="../imgs/training.gif" class="img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fasttext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;2.1: FastText<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Model using CBOW-Method to predict missing word.
+Fig&nbsp;2.3: FastText<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Model using CBOW-Method to predict missing word.
 </figcaption>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables.</p></div></div></figure>
 </div>
-<p>fastText is an open-source library developed by Facebook that builds upon the CBOW method. It introduces subword information and uses hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations.</p>
-</section>
-<section id="language-model-embeddings" class="level3">
-<h3 class="anchored" data-anchor-id="language-model-embeddings">Language Model Embeddings</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/embeddings.gif" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>Model using CBOW-Method to predict missing word.</figcaption>
+<p>fastText, an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of <strong>Embeddings</strong>, which laid the foundation for many modern NLP methods.</p>
+<div id="fig-embed" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-embed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/embeddings.gif" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-embed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;2.4: Model using CBOW-Method to predict missing word.
+</figcaption>
 </figure>
 </div>
-<p><strong>Language Model Embeddings</strong> are learned by predicting the next word in a sequence. These embeddings capture semantic and syntactic relationships between words, enabling various downstream tasks such as sentiment analysis, machine translation, and question answering.</p>
+<p><strong>Language Model Embeddings</strong> are learned by predicting the next word in a sequence. These embeddings capture semantic and syntactic relationships between words, enabling them to understand context effectively. Since these embeddings represent the conditional probability distribution that language models learn to comprehend natural language, they can be reused by other models for tasks such as text classification or text retrieval. But more on this later.</p>
+<p>Still, these models did not really solve the inherent issue of the order of words in a sentence. The input of models of this generation still used a dummyfied version of the corpus to represent context, which loses a lot of information.</p>
+<div id="fig-rnn" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/rnn.gif" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;2.5: RNN-model, in this cased trained on text prediction.
+</figcaption>
+</figure>
+</div>
+<p>Traditionally, this was approached by feeding these embeddings into <strong>Recurrent Neural Networks (RNNs)</strong>. These models could learn to keep track of long-term dependencies in text data and improve the understanding of context. However, RNNs suffered from the vanishing gradient problem, which made it difficult for them to capture long-range dependencies effectively.</p>
+<div id="fig-lstm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/lstm.gif" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lstm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;2.6: LSTM-model, also trained on text prediction.
+</figcaption>
+</figure>
+</div>
+<p><strong>Long Short-Term Memory (LSTM) networks</strong> addressed this issue by introducing a mechanism called “gates” that allowed information to flow through the network more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time.</p>
+</section>
+<section id="attention-is-all-you-need" class="level3">
+<h3 class="anchored" data-anchor-id="attention-is-all-you-need">Attention is all you need</h3>
+<p>In their seminal paper “Attention is all you need”, <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span> described the transformer architecture. The implementation of the multi-headed attention meachnism allowed to solve all major issues of the language modelling approaches of the previous generation. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies.</p>
+<!-- Absatz mit transfomer-gif, das einmal Aufmerksamkeit illustriert -->
+<p>The advances made through leveraging transformer-based architectures for language modelling lead to a family of general-purpose language models, which, unlike the approaches before, where not trained for a specific task but rather on a general text base with the intention of allowing specific fine-tuning to adapt to a task. Classic examples for these early general-purpose natural language generating Transformer models are the Generative Pre-trained Transformer (the predecessor of ChatGPT you all know) first described in <span class="citation" data-cites="radfordImprovingLanguageUnderstanding2018">Radford et al. (<a href="#ref-radfordImprovingLanguageUnderstanding2018" role="doc-biblioref">2018</a>)</span> and the “Bidirectional Encoder Representations from Transformers” (BERT)-Architecture and training procedure described by <span class="citation" data-cites="devlinBERTPretrainingDeep2019">Devlin et al. (<a href="#ref-devlinBERTPretrainingDeep2019" role="doc-biblioref">2019</a>)</span>.</p>
 </section>
 </section>
 <section id="choosing-open-source-models" class="level2">
@@ -306,11 +365,44 @@ Fig&nbsp;2.1: FastText<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-
 </section>
 <section id="basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp" class="level2">
 <h2 class="anchored" data-anchor-id="basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp">Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)</h2>
+<p>Now it is your turn! In your project-groups, you will each have to build a small “Hello World”-style application that uses an open source model.</p>
+<ol type="1">
+<li>Choose a small model using the sources we discussed before.</li>
+<li>Each group is to use one of the following frameworks
+<ul>
+<li><a href="https://huggingface.co/">Huggingface</a></li>
+<li><a href="https://ollama.com/">Ollama</a></li>
+<li><a href="https://lmstudio.ai/">LM-Studio</a> from python</li>
+<li><a href="https://github.com/ggerganov/llama.cpp">Llama.cpp</a> to load and use the model in your application.</li>
+</ul></li>
+<li>Present your results and your experiences with the frameworks in a short presentation.</li>
+<li>Submit your code and report on moodle.</li>
+</ol>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<ul>
+<li>The Attention is all you need-paper <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">Vaswani et al., 2023</a>)</span> and the brilliant video discussing it by Umar Jamil <span class="citation" data-cites="umarjamilAttentionAllYou2023">(<a href="#ref-umarjamilAttentionAllYou2023" role="doc-biblioref">Umar Jamil, 2023</a>)</span></li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-devlinBERTPretrainingDeep2019" class="csl-entry" role="listitem">
+Devlin, J., Chang, M.-W., Lee, K., &amp; Toutanova, K. (2019). <em><span>BERT</span>: <span class="nocase">Pre-training</span> of <span>Deep Bidirectional Transformers</span> for <span>Language Understanding</span></em> (arXiv:1810.04805). arXiv. <a href="https://doi.org/10.48550/arXiv.1810.04805">https://doi.org/10.48550/arXiv.1810.04805</a>
+</div>
+<div id="ref-radfordImprovingLanguageUnderstanding2018" class="csl-entry" role="listitem">
+Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). <em>Improving language understanding with unsupervised learning</em>.
+</div>
+<div id="ref-umarjamilAttentionAllYou2023" class="csl-entry" role="listitem">
+Umar Jamil. (2023). <em>Attention is all you need (<span>Transformer</span>) - <span>Model</span> explanation (including math), <span>Inference</span> and <span>Training</span></em>.
+</div>
+<div id="ref-vaswaniAttentionAllYou2023" class="csl-entry" role="listitem">
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., &amp; Polosukhin, I. (2023). <em>Attention <span>Is All You Need</span></em> (arXiv:1706.03762). arXiv. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>
+</div>
+</div>
 </section>
 
 

@@ -1,0 +1,475 @@
+@misc{angelovTop2VecDistributedRepresentations2020,
+  title = {{{Top2Vec}}: {{Distributed Representations}} of {{Topics}}},
+  shorttitle = {{{Top2Vec}}},
+  author = {Angelov, Dimo},
+  year = {2020},
+  month = aug,
+  number = {arXiv:2008.09470},
+  eprint = {2008.09470},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2008.09470},
+  urldate = {2023-02-08},
+  abstract = {Topic modeling is used for discovering latent semantic structure, usually referred to as topics, in a large collection of documents. The most widely used methods are Latent Dirichlet Allocation and Probabilistic Latent Semantic Analysis. Despite their popularity they have several weaknesses. In order to achieve optimal results they often require the number of topics to be known, custom stop-word lists, stemming, and lemmatization. Additionally these methods rely on bag-of-words representation of documents which ignore the ordering and semantics of words. Distributed representations of documents and words have gained popularity due to their ability to capture semantics of words and documents. We present \${\textbackslash}texttt\{top2vec\}\$, which leverages joint document and word semantic embedding to find \${\textbackslash}textit\{topic vectors\}\$. This model does not require stop-word lists, stemming or lemmatization, and it automatically finds the number of topics. The resulting topic vectors are jointly embedded with the document and word vectors with distance between them representing semantic similarity. Our experiments demonstrate that \${\textbackslash}texttt\{top2vec\}\$ finds topics which are significantly more informative and representative of the corpus trained on than probabilistic generative models.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/home/brede/Zotero/storage/SN8D8VYF/Angelov - 2020 - Top2Vec Distributed Representations of Topics.pdf;/home/brede/Zotero/storage/PJGCG2CD/2008.html}
+}
+
+@misc{brownLanguageModelsAre2020,
+  title = {Language {{Models}} Are {{Few-Shot Learners}}},
+  author = {Brown, Tom B. and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and Agarwal, Sandhini and {Herbert-Voss}, Ariel and Krueger, Gretchen and Henighan, Tom and Child, Rewon and Ramesh, Aditya and Ziegler, Daniel M. and Wu, Jeffrey and Winter, Clemens and Hesse, Christopher and Chen, Mark and Sigler, Eric and Litwin, Mateusz and Gray, Scott and Chess, Benjamin and Clark, Jack and Berner, Christopher and McCandlish, Sam and Radford, Alec and Sutskever, Ilya and Amodei, Dario},
+  year = {2020},
+  month = jul,
+  number = {arXiv:2005.14165},
+  eprint = {2005.14165},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2005.14165},
+  urldate = {2024-06-13},
+  abstract = {Recent work has demonstrated substantial gains on many NLP tasks and benchmarks by pre-training on a large corpus of text followed by fine-tuning on a specific task. While typically task-agnostic in architecture, this method still requires task-specific fine-tuning datasets of thousands or tens of thousands of examples. By contrast, humans can generally perform a new language task from only a few examples or from simple instructions - something which current NLP systems still largely struggle to do. Here we show that scaling up language models greatly improves task-agnostic, few-shot performance, sometimes even reaching competitiveness with prior state-of-the-art fine-tuning approaches. Specifically, we train GPT-3, an autoregressive language model with 175 billion parameters, 10x more than any previous non-sparse language model, and test its performance in the few-shot setting. For all tasks, GPT-3 is applied without any gradient updates or fine-tuning, with tasks and few-shot demonstrations specified purely via text interaction with the model. GPT-3 achieves strong performance on many NLP datasets, including translation, question-answering, and cloze tasks, as well as several tasks that require on-the-fly reasoning or domain adaptation, such as unscrambling words, using a novel word in a sentence, or performing 3-digit arithmetic. At the same time, we also identify some datasets where GPT-3's few-shot learning still struggles, as well as some datasets where GPT-3 faces methodological issues related to training on large web corpora. Finally, we find that GPT-3 can generate samples of news articles which human evaluators have difficulty distinguishing from articles written by humans. We discuss broader societal impacts of this finding and of GPT-3 in general.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/2QVGMDLC/Brown et al. - 2020 - Language Models are Few-Shot Learners.pdf;/home/brede/Zotero/storage/BMIR58VA/2005.html}
+}
+
+@misc{cerUniversalSentenceEncoder2018,
+  title = {Universal {{Sentence Encoder}}},
+  author = {Cer, Daniel and Yang, Yinfei and Kong, Sheng-yi and Hua, Nan and Limtiaco, Nicole and John, Rhomni St and Constant, Noah and {Guajardo-Cespedes}, Mario and Yuan, Steve and Tar, Chris and Sung, Yun-Hsuan and Strope, Brian and Kurzweil, Ray},
+  year = {2018},
+  month = apr,
+  number = {arXiv:1803.11175},
+  eprint = {1803.11175},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1803.11175},
+  urldate = {2023-08-31},
+  abstract = {We present models for encoding sentences into embedding vectors that specifically target transfer learning to other NLP tasks. The models are efficient and result in accurate performance on diverse transfer tasks. Two variants of the encoding models allow for trade-offs between accuracy and compute resources. For both variants, we investigate and report the relationship between model complexity, resource consumption, the availability of transfer task training data, and task performance. Comparisons are made with baselines that use word level transfer learning via pretrained word embeddings as well as baselines do not use any transfer learning. We find that transfer learning using sentence embeddings tends to outperform word level transfer. With transfer learning via sentence embeddings, we observe surprisingly good performance with minimal amounts of supervised training data for a transfer task. We obtain encouraging results on Word Embedding Association Tests (WEAT) targeted at detecting model bias. Our pre-trained sentence encoding models are made freely available for download and on TF Hub.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/8Y29JXZU/Cer et al. - 2018 - Universal Sentence Encoder.pdf;/home/brede/Zotero/storage/T7DMLBLE/1803.html}
+}
+
+@misc{dettmersQLoRAEfficientFinetuning2023,
+  title = {{{QLoRA}}: {{Efficient Finetuning}} of {{Quantized LLMs}}},
+  shorttitle = {{{QLoRA}}},
+  author = {Dettmers, Tim and Pagnoni, Artidoro and Holtzman, Ari and Zettlemoyer, Luke},
+  year = {2023},
+  month = may,
+  number = {arXiv:2305.14314},
+  eprint = {2305.14314},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2305.14314},
+  urldate = {2024-06-13},
+  abstract = {We present QLoRA, an efficient finetuning approach that reduces memory usage enough to finetune a 65B parameter model on a single 48GB GPU while preserving full 16-bit finetuning task performance. QLoRA backpropagates gradients through a frozen, 4-bit quantized pretrained language model into Low Rank Adapters{\textasciitilde}(LoRA). Our best model family, which we name Guanaco, outperforms all previous openly released models on the Vicuna benchmark, reaching 99.3\% of the performance level of ChatGPT while only requiring 24 hours of finetuning on a single GPU. QLoRA introduces a number of innovations to save memory without sacrificing performance: (a) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights (b) double quantization to reduce the average memory footprint by quantizing the quantization constants, and (c) paged optimziers to manage memory spikes. We use QLoRA to finetune more than 1,000 models, providing a detailed analysis of instruction following and chatbot performance across 8 instruction datasets, multiple model types (LLaMA, T5), and model scales that would be infeasible to run with regular finetuning (e.g. 33B and 65B parameter models). Our results show that QLoRA finetuning on a small high-quality dataset leads to state-of-the-art results, even when using smaller models than the previous SoTA. We provide a detailed analysis of chatbot performance based on both human and GPT-4 evaluations showing that GPT-4 evaluations are a cheap and reasonable alternative to human evaluation. Furthermore, we find that current chatbot benchmarks are not trustworthy to accurately evaluate the performance levels of chatbots. A lemon-picked analysis demonstrates where Guanaco fails compared to ChatGPT. We release all of our models and code, including CUDA kernels for 4-bit training.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/B4G8WXK3/Dettmers et al. - 2023 - QLoRA Efficient Finetuning of Quantized LLMs.pdf;/home/brede/Zotero/storage/CPNG7ND2/2305.html}
+}
+
+@misc{devlinBERTPretrainingDeep2019,
+  title = {{{BERT}}: {{Pre-training}} of {{Deep Bidirectional Transformers}} for {{Language Understanding}}},
+  shorttitle = {{{BERT}}},
+  author = {Devlin, Jacob and Chang, Ming-Wei and Lee, Kenton and Toutanova, Kristina},
+  year = {2019},
+  month = may,
+  number = {arXiv:1810.04805},
+  eprint = {1810.04805},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1810.04805},
+  urldate = {2023-08-31},
+  abstract = {We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5\% (7.7\% point absolute improvement), MultiNLI accuracy to 86.7\% (4.6\% absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/C27A4JIB/Devlin et al. - 2019 - BERT Pre-training of Deep Bidirectional Transform.pdf;/home/brede/Zotero/storage/T7CIV858/1810.html}
+}
+
+@article{ganesanEmpiricalEvaluationPretrained2021,
+  title = {Empirical {{Evaluation}} of {{Pre-trained Transformers}} for {{Human-Level NLP}}: {{The Role}} of {{Sample Size}} and {{Dimensionality}}},
+  shorttitle = {Empirical {{Evaluation}} of {{Pre-trained Transformers}} for {{Human-Level NLP}}},
+  author = {Ganesan, Adithya V and Matero, Matthew and Ravula, Aravind Reddy and Vu, Huy and Schwartz, H. Andrew},
+  year = {2021},
+  month = jun,
+  journal = {Proceedings of the conference. Association for Computational Linguistics. North American Chapter. Meeting},
+  volume = {2021},
+  pages = {4515--4532},
+  doi = {10.18653/v1/2021.naacl-main.357},
+  urldate = {2024-05-23},
+  abstract = {In human-level NLP tasks, such as predicting mental health, personality, or demographics, the number of observations is often smaller than the standard 768+ hidden state sizes of each layer within modern transformer-based language models, limiting the ability to effectively leverage transformers. Here, we provide a systematic study on the role of dimension reduction methods (principal components analysis, factorization techniques, or multi-layer auto-encoders) as well as the dimensionality of embedding vectors and sample sizes as a function of predictive performance. We first find that fine-tuning large models with a limited amount of data pose a significant difficulty which can be overcome with a pre-trained dimension reduction regime. RoBERTa consistently achieves top performance in human-level tasks, with PCA giving benefit over other reduction methods in better handling users that write longer texts. Finally, we observe that a majority of the tasks achieve results comparable to the best performance with just 112 of the embedding dimensions.},
+  pmcid = {PMC8294338},
+  pmid = {34296226},
+  file = {/home/brede/Zotero/storage/9A9J26SB/Ganesan et al. - 2021 - Empirical Evaluation of Pre-trained Transformers f.pdf}
+}
+
+@misc{GoogleGemma2bHugging2024,
+  title = {Google/Gemma-2b {$\cdot$} {{Hugging Face}}},
+  year = {2024},
+  month = may,
+  urldate = {2024-06-04},
+  abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
+  howpublished = {https://huggingface.co/google/gemma-2b},
+  file = {/home/brede/Zotero/storage/SFVK7C6D/gemma-2b.html}
+}
+
+@inproceedings{guhrTrainingBroadCoverageGerman2020,
+  title = {Training a {{Broad-Coverage German Sentiment Classification Model}} for {{Dialog Systems}}},
+  booktitle = {Proceedings of the {{Twelfth Language Resources}} and {{Evaluation Conference}}},
+  author = {Guhr, Oliver and Schumann, Anne-Kathrin and Bahrmann, Frank and B{\"o}hme, Hans Joachim},
+  year = {2020},
+  month = may,
+  pages = {1627--1632},
+  publisher = {European Language Resources Association},
+  address = {Marseille, France},
+  urldate = {2023-02-08},
+  abstract = {This paper describes the training of a general-purpose German sentiment classification model. Sentiment classification is an important aspect of general text analytics. Furthermore, it plays a vital role in dialogue systems and voice interfaces that depend on the ability of the system to pick up and understand emotional signals from user utterances. The presented study outlines how we have collected a new German sentiment corpus and then combined this corpus with existing resources to train a broad-coverage German sentiment model. The resulting data set contains 5.4 million labelled samples. We have used the data to train both, a simple convolutional and a transformer-based classification model and compared the results achieved on various training configurations. The model and the data set will be published along with this paper.},
+  isbn = {979-10-95546-34-4},
+  langid = {english},
+  file = {/home/brede/Zotero/storage/6U6HIUDU/Guhr et al. - 2020 - Training a Broad-Coverage German Sentiment Classif.pdf}
+}
+
+@misc{hoffmannTrainingComputeOptimalLarge2022,
+  title = {Training {{Compute-Optimal Large Language Models}}},
+  author = {Hoffmann, Jordan and Borgeaud, Sebastian and Mensch, Arthur and Buchatskaya, Elena and Cai, Trevor and Rutherford, Eliza and Casas, Diego de Las and Hendricks, Lisa Anne and Welbl, Johannes and Clark, Aidan and Hennigan, Tom and Noland, Eric and Millican, Katie and van den Driessche, George and Damoc, Bogdan and Guy, Aurelia and Osindero, Simon and Simonyan, Karen and Elsen, Erich and Rae, Jack W. and Vinyals, Oriol and Sifre, Laurent},
+  year = {2022},
+  month = mar,
+  number = {arXiv:2203.15556},
+  eprint = {2203.15556},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2203.15556},
+  urldate = {2023-08-31},
+  abstract = {We investigate the optimal model size and number of tokens for training a transformer language model under a given compute budget. We find that current large language models are significantly undertrained, a consequence of the recent focus on scaling language models whilst keeping the amount of training data constant. By training over 400 language models ranging from 70 million to over 16 billion parameters on 5 to 500 billion tokens, we find that for compute-optimal training, the model size and the number of training tokens should be scaled equally: for every doubling of model size the number of training tokens should also be doubled. We test this hypothesis by training a predicted compute-optimal model, Chinchilla, that uses the same compute budget as Gopher but with 70B parameters and 4\${\textbackslash}times\$ more more data. Chinchilla uniformly and significantly outperforms Gopher (280B), GPT-3 (175B), Jurassic-1 (178B), and Megatron-Turing NLG (530B) on a large range of downstream evaluation tasks. This also means that Chinchilla uses substantially less compute for fine-tuning and inference, greatly facilitating downstream usage. As a highlight, Chinchilla reaches a state-of-the-art average accuracy of 67.5\% on the MMLU benchmark, greater than a 7\% improvement over Gopher.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/X77MQQST/Hoffmann et al. - 2022 - Training Compute-Optimal Large Language Models.pdf;/home/brede/Zotero/storage/EKDF5A2C/2203.html}
+}
+
+@misc{huLoRALowRankAdaptation2021,
+  title = {{{LoRA}}: {{Low-Rank Adaptation}} of {{Large Language Models}}},
+  shorttitle = {{{LoRA}}},
+  author = {Hu, Edward J. and Shen, Yelong and Wallis, Phillip and {Allen-Zhu}, Zeyuan and Li, Yuanzhi and Wang, Shean and Wang, Lu and Chen, Weizhu},
+  year = {2021},
+  month = oct,
+  number = {arXiv:2106.09685},
+  eprint = {2106.09685},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2106.09685},
+  urldate = {2024-06-13},
+  abstract = {An important paradigm of natural language processing consists of large-scale pre-training on general domain data and adaptation to particular tasks or domains. As we pre-train larger models, full fine-tuning, which retrains all model parameters, becomes less feasible. Using GPT-3 175B as an example -- deploying independent instances of fine-tuned models, each with 175B parameters, is prohibitively expensive. We propose Low-Rank Adaptation, or LoRA, which freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture, greatly reducing the number of trainable parameters for downstream tasks. Compared to GPT-3 175B fine-tuned with Adam, LoRA can reduce the number of trainable parameters by 10,000 times and the GPU memory requirement by 3 times. LoRA performs on-par or better than fine-tuning in model quality on RoBERTa, DeBERTa, GPT-2, and GPT-3, despite having fewer trainable parameters, a higher training throughput, and, unlike adapters, no additional inference latency. We also provide an empirical investigation into rank-deficiency in language model adaptation, which sheds light on the efficacy of LoRA. We release a package that facilitates the integration of LoRA with PyTorch models and provide our implementations and model checkpoints for RoBERTa, DeBERTa, and GPT-2 at https://github.com/microsoft/LoRA.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/AJWE3RJM/Hu et al. - 2021 - LoRA Low-Rank Adaptation of Large Language Models.pdf;/home/brede/Zotero/storage/4ABG2ERX/2106.html}
+}
+
+@misc{jiangMoRAHighRankUpdating2024,
+  title = {{{MoRA}}: {{High-Rank Updating}} for {{Parameter-Efficient Fine-Tuning}}},
+  shorttitle = {{{MoRA}}},
+  author = {Jiang, Ting and Huang, Shaohan and Luo, Shengyue and Zhang, Zihan and Huang, Haizhen and Wei, Furu and Deng, Weiwei and Sun, Feng and Zhang, Qi and Wang, Deqing and Zhuang, Fuzhen},
+  year = {2024},
+  month = may,
+  number = {arXiv:2405.12130},
+  eprint = {2405.12130},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2405.12130},
+  urldate = {2024-06-13},
+  abstract = {Low-rank adaptation is a popular parameter-efficient fine-tuning method for large language models. In this paper, we analyze the impact of low-rank updating, as implemented in LoRA. Our findings suggest that the low-rank updating mechanism may limit the ability of LLMs to effectively learn and memorize new knowledge. Inspired by this observation, we propose a new method called MoRA, which employs a square matrix to achieve high-rank updating while maintaining the same number of trainable parameters. To achieve it, we introduce the corresponding non-parameter operators to reduce the input dimension and increase the output dimension for the square matrix. Furthermore, these operators ensure that the weight can be merged back into LLMs, which makes our method can be deployed like LoRA. We perform a comprehensive evaluation of our method across five tasks: instruction tuning, mathematical reasoning, continual pretraining, memory and pretraining. Our method outperforms LoRA on memory-intensive tasks and achieves comparable performance on other tasks.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/Q83E3CS8/Jiang et al. - 2024 - MoRA High-Rank Updating for Parameter-Efficient F.pdf;/home/brede/Zotero/storage/5Z6B55RZ/2405.html}
+}
+
+@misc{jiangScalingSentenceEmbeddings2023,
+  title = {Scaling {{Sentence Embeddings}} with {{Large Language Models}}},
+  author = {Jiang, Ting and Huang, Shaohan and Luan, Zhongzhi and Wang, Deqing and Zhuang, Fuzhen},
+  year = {2023},
+  month = jul,
+  number = {arXiv:2307.16645},
+  eprint = {2307.16645},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2307.16645},
+  urldate = {2024-02-12},
+  abstract = {Large language models (LLMs) have recently garnered significant interest. With in-context learning, LLMs achieve impressive results in various natural language tasks. However, the application of LLMs to sentence embeddings remains an area of ongoing research. In this work, we propose an in-context learning-based method aimed at improving sentence embeddings performance. Our approach involves adapting the previous prompt-based representation method for autoregressive models, constructing a demonstration set that enables LLMs to perform in-context learning, and scaling up the LLMs to different model sizes. Through extensive experiments, in-context learning enables LLMs to generate high-quality sentence embeddings without any fine-tuning. It helps LLMs achieve performance comparable to current contrastive learning methods. By scaling model size, we find scaling to more than tens of billion parameters harms the performance on semantic textual similarity (STS) tasks. However, the largest model outperforms other counterparts and achieves the new state-of-the-art result on transfer tasks. We also fine-tune LLMs with current contrastive learning approach, and the 2.7B OPT model, incorporating our prompt-based method, surpasses the performance of 4.8B ST5, achieving the new state-of-the-art results on STS tasks. Our code is available at https://github.com/kongds/scaling\_sentemb.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/FY6IBY7L/Jiang et al. - 2023 - Scaling Sentence Embeddings with Large Language Mo.pdf;/home/brede/Zotero/storage/YNDIEFQD/2307.html}
+}
+
+@misc{jiangScalingSentenceEmbeddings2023a,
+  title = {Scaling {{Sentence Embeddings}} with {{Large Language Models}}},
+  author = {Jiang, Ting and Huang, Shaohan and Luan, Zhongzhi and Wang, Deqing and Zhuang, Fuzhen},
+  year = {2023},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2307.16645},
+  urldate = {2024-06-04},
+  abstract = {Large language models (LLMs) have recently garnered significant interest. With in-context learning, LLMs achieve impressive results in various natural language tasks. However, the application of LLMs to sentence embeddings remains an area of ongoing research. In this work, we propose an in-context learning-based method aimed at improving sentence embeddings performance. Our approach involves adapting the previous prompt-based representation method for autoregressive models, constructing a demonstration set that enables LLMs to perform in-context learning, and scaling up the LLMs to different model sizes. Through extensive experiments, in-context learning enables LLMs to generate high-quality sentence embeddings without any fine-tuning. It helps LLMs achieve performance comparable to current contrastive learning methods. By scaling model size, we find scaling to more than tens of billion parameters harms the performance on semantic textual similarity (STS) tasks. However, the largest model outperforms other counterparts and achieves the new state-of-the-art result on transfer tasks. We also fine-tune LLMs with current contrastive learning approach, and the 2.7B OPT model, incorporating our prompt-based method, surpasses the performance of 4.8B ST5, achieving the new state-of-the-art results on STS tasks. Our code is available at https://github.com/kongds/scaling\_sentemb.},
+  copyright = {arXiv.org perpetual, non-exclusive license},
+  keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences}
+}
+
+@misc{JphmeEm_german_13b_v01Hugging2023,
+  title = {Jphme/Em\_german\_13b\_v01 {$\cdot$} {{Hugging Face}}},
+  year = {2023},
+  month = oct,
+  urldate = {2023-12-12},
+  abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
+  howpublished = {https://huggingface.co/jphme/em\_german\_13b\_v01},
+  file = {/home/brede/Zotero/storage/2ELIEDF6/em_german_13b_v01.html}
+}
+
+@misc{kaplanScalingLawsNeural2020,
+  title = {Scaling {{Laws}} for {{Neural Language Models}}},
+  author = {Kaplan, Jared and McCandlish, Sam and Henighan, Tom and Brown, Tom B. and Chess, Benjamin and Child, Rewon and Gray, Scott and Radford, Alec and Wu, Jeffrey and Amodei, Dario},
+  year = {2020},
+  month = jan,
+  number = {arXiv:2001.08361},
+  eprint = {2001.08361},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2001.08361},
+  urldate = {2023-08-31},
+  abstract = {We study empirical scaling laws for language model performance on the cross-entropy loss. The loss scales as a power-law with model size, dataset size, and the amount of compute used for training, with some trends spanning more than seven orders of magnitude. Other architectural details such as network width or depth have minimal effects within a wide range. Simple equations govern the dependence of overfitting on model/dataset size and the dependence of training speed on model size. These relationships allow us to determine the optimal allocation of a fixed compute budget. Larger models are significantly more sample-efficient, such that optimally compute-efficient training involves training very large models on a relatively modest amount of data and stopping significantly before convergence.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/home/brede/Zotero/storage/LSAQQ5MU/Kaplan et al. - 2020 - Scaling Laws for Neural Language Models.pdf;/home/brede/Zotero/storage/G3SA9WEQ/2001.html}
+}
+
+@inproceedings{kentonBertPretrainingDeep2019,
+  title = {Bert: {{Pre-training}} of Deep Bidirectional Transformers for Language Understanding},
+  shorttitle = {Bert},
+  booktitle = {Proceedings of {{naacL-HLT}}},
+  author = {Kenton, Jacob Devlin Ming-Wei Chang and Toutanova, Lee Kristina},
+  year = {2019},
+  volume = {1},
+  pages = {2},
+  publisher = {Minneapolis, Minnesota},
+  urldate = {2024-11-02},
+  file = {/home/brede/Zotero/storage/BLT9BGAU/Kenton and Toutanova - 2019 - Bert Pre-training of deep bidirectional transformers for language understanding.pdf}
+}
+
+@article{klingerAutomaticEmotionDetection2016,
+  title = {Automatic {{Emotion Detection}} for {{Quantitative Literary Studies}}},
+  author = {Klinger, Roman and Suliya, Surayya Samat and Reiter, Nils},
+  year = {2016},
+  file = {/home/brede/Zotero/storage/GWMC2LWP/Klinger et al. - 2016 - Automatic Emotion Detection for antitative Literar.pdf}
+}
+
+@inproceedings{leDistributedRepresentationsSentences2014,
+  title = {Distributed {{Representations}} of {{Sentences}} and {{Documents}}},
+  booktitle = {Proceedings of the 31st {{International Conference}} on {{Machine Learning}}},
+  author = {Le, Quoc and Mikolov, Tomas},
+  year = {2014},
+  month = jun,
+  pages = {1188--1196},
+  publisher = {PMLR},
+  issn = {1938-7228},
+  urldate = {2023-02-18},
+  abstract = {Many machine learning algorithms require the  input to be represented as a fixed length feature  vector. When it comes to texts, one of the most  common representations is bag-of-words. Despite their popularity, bag-of-words models have  two major weaknesses: they lose the ordering  of the words and they also ignore semantics of  the words. For example, "powerful," "strong"  and "Paris" are equally distant. In this paper,  we propose an unsupervised algorithm that learns  vector representations of sentences and text documents. This algorithm represents each document by a dense vector which is trained to predict  words in the document. Its construction gives our  algorithm the potential to overcome the weaknesses of bag-of-words models. Empirical results show that our technique outperforms bag-of-words models as well as other techniques for  text representations. Finally, we achieve new  state-of-the-art results on several text classification and sentiment analysis tasks.},
+  langid = {english},
+  file = {/home/brede/Zotero/storage/RCEGU94G/Le and Mikolov - 2014 - Distributed Representations of Sentences and Docum.pdf}
+}
+
+@misc{liuRoBERTaRobustlyOptimized2019,
+  title = {{{RoBERTa}}: {{A Robustly Optimized BERT Pretraining Approach}}},
+  shorttitle = {{{RoBERTa}}},
+  author = {Liu, Yinhan and Ott, Myle and Goyal, Naman and Du, Jingfei and Joshi, Mandar and Chen, Danqi and Levy, Omer and Lewis, Mike and Zettlemoyer, Luke and Stoyanov, Veselin},
+  year = {2019},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.1907.11692},
+  urldate = {2024-06-04},
+  abstract = {Language model pretraining has led to significant performance gains but careful comparison between different approaches is challenging. Training is computationally expensive, often done on private datasets of different sizes, and, as we will show, hyperparameter choices have significant impact on the final results. We present a replication study of BERT pretraining (Devlin et al., 2019) that carefully measures the impact of many key hyperparameters and training data size. We find that BERT was significantly undertrained, and can match or exceed the performance of every model published after it. Our best model achieves state-of-the-art results on GLUE, RACE and SQuAD. These results highlight the importance of previously overlooked design choices, and raise questions about the source of recently reported improvements. We release our models and code.},
+  copyright = {arXiv.org perpetual, non-exclusive license},
+  keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences}
+}
+
+@misc{MistralaiMixtral8x7BInstructv0Hugging,
+  title = {Mistralai/{{Mixtral-8x7B-Instruct-v0}}.1 {$\cdot$} {{Hugging Face}}},
+  urldate = {2024-06-04},
+  abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
+  howpublished = {https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1}
+}
+
+@article{radfordImprovingLanguageUnderstanding2018,
+  title = {Improving Language Understanding with Unsupervised Learning},
+  author = {Radford, Alec and Narasimhan, Karthik and Salimans, Tim and Sutskever, Ilya},
+  year = {2018},
+  publisher = {Technical report, OpenAI}
+}
+
+@article{radfordLanguageModelsAre2019,
+  title = {Language Models Are Unsupervised Multitask Learners},
+  author = {Radford, Alec and Wu, Jeffrey and Child, Rewon and Luan, David and Amodei, Dario and Sutskever, Ilya},
+  year = {2019},
+  journal = {OpenAI blog},
+  volume = {1},
+  number = {8},
+  pages = {9},
+  urldate = {2024-06-13}
+}
+
+@misc{reimersMakingMonolingualSentence2020,
+  title = {Making {{Monolingual Sentence Embeddings Multilingual}} Using {{Knowledge Distillation}}},
+  author = {Reimers, Nils and Gurevych, Iryna},
+  year = {2020},
+  month = oct,
+  number = {arXiv:2004.09813},
+  eprint = {2004.09813},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2004.09813},
+  urldate = {2023-02-08},
+  abstract = {We present an easy and efficient method to extend existing sentence embedding models to new languages. This allows to create multilingual versions from previously monolingual models. The training is based on the idea that a translated sentence should be mapped to the same location in the vector space as the original sentence. We use the original (monolingual) model to generate sentence embeddings for the source language and then train a new system on translated sentences to mimic the original model. Compared to other methods for training multilingual sentence embeddings, this approach has several advantages: It is easy to extend existing models with relatively few samples to new languages, it is easier to ensure desired properties for the vector space, and the hardware requirements for training is lower. We demonstrate the effectiveness of our approach for 50+ languages from various language families. Code to extend sentence embeddings models to more than 400 languages is publicly available.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/GH9RBRGF/Reimers and Gurevych - 2020 - Making Monolingual Sentence Embeddings Multilingua.pdf;/home/brede/Zotero/storage/BJZX6A4X/2004.html}
+}
+
+@misc{reimersSentenceBERTSentenceEmbeddings2019,
+  title = {Sentence-{{BERT}}: {{Sentence Embeddings}} Using {{Siamese BERT-Networks}}},
+  shorttitle = {Sentence-{{BERT}}},
+  author = {Reimers, Nils and Gurevych, Iryna},
+  year = {2019},
+  month = aug,
+  number = {arXiv:1908.10084},
+  eprint = {1908.10084},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1908.10084},
+  urldate = {2023-08-31},
+  abstract = {BERT (Devlin et al., 2018) and RoBERTa (Liu et al., 2019) has set a new state-of-the-art performance on sentence-pair regression tasks like semantic textual similarity (STS). However, it requires that both sentences are fed into the network, which causes a massive computational overhead: Finding the most similar pair in a collection of 10,000 sentences requires about 50 million inference computations ({\textasciitilde}65 hours) with BERT. The construction of BERT makes it unsuitable for semantic similarity search as well as for unsupervised tasks like clustering. In this publication, we present Sentence-BERT (SBERT), a modification of the pretrained BERT network that use siamese and triplet network structures to derive semantically meaningful sentence embeddings that can be compared using cosine-similarity. This reduces the effort for finding the most similar pair from 65 hours with BERT / RoBERTa to about 5 seconds with SBERT, while maintaining the accuracy from BERT. We evaluate SBERT and SRoBERTa on common STS tasks and transfer learning tasks, where it outperforms other state-of-the-art sentence embeddings methods.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/QLTUXEKV/Reimers and Gurevych - 2019 - Sentence-BERT Sentence Embeddings using Siamese B.pdf;/home/brede/Zotero/storage/K97C7QYJ/1908.html}
+}
+
+@inproceedings{remusSentiWSAPubliclyAvailable2010a,
+  title = {{{SentiWS-A Publicly Available German-language Resource}} for {{Sentiment Analysis}}},
+  booktitle = {Proceedings of the {{Seventh International Conference}} on {{Language Resources}} and {{Evaluation}} ({{LREC}}'10)},
+  author = {Remus, Robert and Quasthoff, Uwe and Heyer, Gerhard},
+  year = {2010},
+  file = {/home/brede/Zotero/storage/6YB9FN5L/L10-1339.html}
+}
+
+@misc{touvronLLaMAOpenEfficient2023,
+  title = {{{LLaMA}}: {{Open}} and {{Efficient Foundation Language Models}}},
+  shorttitle = {{{LLaMA}}},
+  author = {Touvron, Hugo and Lavril, Thibaut and Izacard, Gautier and Martinet, Xavier and Lachaux, Marie-Anne and Lacroix, Timoth{\'e}e and Rozi{\`e}re, Baptiste and Goyal, Naman and Hambro, Eric and Azhar, Faisal and Rodriguez, Aurelien and Joulin, Armand and Grave, Edouard and Lample, Guillaume},
+  year = {2023},
+  month = feb,
+  number = {arXiv:2302.13971},
+  eprint = {2302.13971},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2302.13971},
+  urldate = {2023-08-31},
+  abstract = {We introduce LLaMA, a collection of foundation language models ranging from 7B to 65B parameters. We train our models on trillions of tokens, and show that it is possible to train state-of-the-art models using publicly available datasets exclusively, without resorting to proprietary and inaccessible datasets. In particular, LLaMA-13B outperforms GPT-3 (175B) on most benchmarks, and LLaMA-65B is competitive with the best models, Chinchilla-70B and PaLM-540B. We release all our models to the research community.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/FNJUHT4K/Touvron et al. - 2023 - LLaMA Open and Efficient Foundation Language Mode.pdf;/home/brede/Zotero/storage/IPHQ9SSM/2302.html}
+}
+
+@misc{umarjamilAttentionAllYou2023,
+  title = {Attention Is All You Need ({{Transformer}}) - {{Model}} Explanation (Including Math), {{Inference}} and {{Training}}},
+  author = {{Umar Jamil}},
+  year = {2023},
+  month = may,
+  urldate = {2024-11-02},
+  abstract = {A complete explanation of all the layers of a Transformer Model: Multi-Head Self-Attention, Positional Encoding, including all the matrix multiplications and a complete description of the training and inference process. Paper: Attention is all you need - https://arxiv.org/abs/1706.03762 Slides PDF: https://github.com/hkproj/transformer... Chapters 00:00 - Intro 01:10 - RNN and their problems 08:04 - Transformer Model 09:02 - Maths background and notations 12:20 - Encoder (overview) 12:31 - Input Embeddings 15:04 - Positional Encoding 20:08 - Single Head Self-Attention 28:30 - Multi-Head Attention 35:39 - Query, Key, Value 37:55 - Layer Normalization 40:13 - Decoder (overview) 42:24 - Masked Multi-Head Attention 44:59 - Training 52:09 - Inference}
+}
+
+@misc{UnslothPhi3mini4kinstructHugging,
+  title = {Unsloth/{{Phi-3-mini-4k-instruct}} {$\cdot$} {{Hugging Face}}},
+  urldate = {2024-06-04},
+  abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
+  howpublished = {https://huggingface.co/unsloth/Phi-3-mini-4k-instruct},
+  file = {/home/brede/Zotero/storage/GHRW47IL/Phi-3-mini-4k-instruct.html}
+}
+
+@misc{vaswaniAttentionAllYou2023,
+  title = {Attention {{Is All You Need}}},
+  author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, Lukasz and Polosukhin, Illia},
+  year = {2023},
+  month = aug,
+  number = {arXiv:1706.03762},
+  eprint = {1706.03762},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1706.03762},
+  urldate = {2023-08-24},
+  abstract = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/4B6TNRTM/Vaswani et al. - 2023 - Attention Is All You Need.pdf;/home/brede/Zotero/storage/VYHFDL37/1706.html}
+}
+
+@misc{wangImprovingTextEmbeddings2024,
+  title = {Improving {{Text Embeddings}} with {{Large Language Models}}},
+  author = {Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+  year = {2024},
+  month = may,
+  number = {arXiv:2401.00368},
+  eprint = {2401.00368},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-06-04},
+  abstract = {In this paper, we introduce a novel and simple method for obtaining high-quality text embeddings using only synthetic data and less than 1k training steps. Unlike existing methods that often depend on multi-stage intermediate pre-training with billions of weakly-supervised text pairs, followed by fine-tuning with a few labeled datasets, our method does not require building complex training pipelines or relying on manually collected datasets that are often constrained by task diversity and language coverage. We leverage proprietary LLMs to generate diverse synthetic data for hundreds of thousands of text embedding tasks across 93 languages. We then fine-tune open-source decoder-only LLMs on the synthetic data using standard contrastive loss. Experiments demonstrate that our method achieves strong performance on highly competitive text embedding benchmarks without using any labeled data. Furthermore, when fine-tuned with a mixture of synthetic and labeled data, our model sets new state-of-the-art results on the BEIR and MTEB benchmarks.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Information Retrieval},
+  file = {/home/brede/Zotero/storage/EXM99SNT/Wang et al. - 2024 - Improving Text Embeddings with Large Language Mode.pdf;/home/brede/Zotero/storage/YIJG8L87/2401.html}
+}
+
+@misc{wangMultilingualE5Text2024,
+  title = {Multilingual {{E5 Text Embeddings}}: {{A Technical Report}}},
+  shorttitle = {Multilingual {{E5 Text Embeddings}}},
+  author = {Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+  year = {2024},
+  month = feb,
+  number = {arXiv:2402.05672},
+  eprint = {2402.05672},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-06-17},
+  abstract = {This technical report presents the training methodology and evaluation results of the opensource multilingual E5 text embedding models, released in mid-2023. Three embedding models of different sizes (small / base / large) are provided, offering a balance between the inference efficiency and embedding quality. The training procedure adheres to the English E5 model recipe, involving contrastive pre-training on 1 billion multilingual text pairs, followed by fine-tuning on a combination of labeled datasets. Additionally, we introduce a new instruction-tuned embedding model, whose performance is on par with state-of-the-art, English-only models of similar sizes. Information regarding the model release can be found at https://github.com/microsoft/unilm/ tree/master/e5.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  keywords = {Computer Science - Computation and Language,Computer Science - Information Retrieval},
+  file = {/home/brede/Zotero/storage/S48GUDWT/Wang et al. - 2024 - Multilingual E5 Text Embeddings A Technical Repor.pdf}
+}
+
+@misc{wangSearchingBestPractices2024,
+  title = {Searching for {{Best Practices}} in {{Retrieval-Augmented Generation}}},
+  author = {Wang, Xiaohua and Wang, Zhenghua and Gao, Xuan and Zhang, Feiran and Wu, Yixin and Xu, Zhibo and Shi, Tianyuan and Wang, Zhengyuan and Li, Shizheng and Qian, Qi and Yin, Ruicheng and Lv, Changze and Zheng, Xiaoqing and Huang, Xuanjing},
+  year = {2024},
+  month = jul,
+  number = {arXiv:2407.01219},
+  eprint = {2407.01219},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-07-12},
+  abstract = {Retrieval-augmented generation (RAG) techniques have proven to be effective in integrating up-to-date information, mitigating hallucinations, and enhancing response quality, particularly in specialized domains. While many RAG approaches have been proposed to enhance large language models through query-dependent retrievals, these approaches still suffer from their complex implementation and prolonged response times. Typically, a RAG workflow involves multiple processing steps, each of which can be executed in various ways. Here, we investigate existing RAG approaches and their potential combinations to identify optimal RAG practices. Through extensive experiments, we suggest several strategies for deploying RAG that balance both performance and efficiency. Moreover, we demonstrate that multimodal retrieval techniques can significantly enhance question-answering capabilities about visual inputs and accelerate the generation of multimodal content using a ``retrieval as generation'' strategy. Resources are available at https://github.com/FudanDNN-NLP/RAG.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/DNYCQNUK/Wang et al. - 2024 - Searching for Best Practices in Retrieval-Augmente.pdf}
+}
+
+@misc{yadkoriBelieveNotBelieve2024,
+  title = {To {{Believe}} or {{Not}} to {{Believe Your LLM}}},
+  author = {Yadkori, Yasin Abbasi and Kuzborskij, Ilja and Gy{\"o}rgy, Andr{\'a}s and Szepesv{\'a}ri, Csaba},
+  year = {2024},
+  month = jun,
+  number = {arXiv:2406.02543},
+  eprint = {2406.02543},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2406.02543},
+  urldate = {2024-06-10},
+  abstract = {We explore uncertainty quantification in large language models (LLMs), with the goal to identify when uncertainty in responses given a query is large. We simultaneously consider both epistemic and aleatoric uncertainties, where the former comes from the lack of knowledge about the ground truth (such as about facts or the language), and the latter comes from irreducible randomness (such as multiple possible answers). In particular, we derive an information-theoretic metric that allows to reliably detect when only epistemic uncertainty is large, in which case the output of the model is unreliable. This condition can be computed based solely on the output of the model obtained simply by some special iterative prompting based on the previous responses. Such quantification, for instance, allows to detect hallucinations (cases when epistemic uncertainty is high) in both single- and multi-answer responses. This is in contrast to many standard uncertainty quantification strategies (such as thresholding the log-likelihood of a response) where hallucinations in the multi-answer case cannot be detected. We conduct a series of experiments which demonstrate the advantage of our formulation. Further, our investigations shed some light on how the probabilities assigned to a given output by an LLM can be amplified by iterative prompting, which might be of independent interest.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/K85T5MI8/Yadkori et al. - 2024 - To Believe or Not to Believe Your LLM.pdf;/home/brede/Zotero/storage/P483HJIW/2406.html}
+}

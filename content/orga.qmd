@@ -8,6 +8,7 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Orgaization Details</h3>
 ## Planned Class Structure
 
 Each class meeting will follow this structure:
+
 1. **Instructional Session**: We'll introduce new concepts and techniques.
 2. **Practice Exercise**: Students will apply these concepts through an exercise.
 3. **Project Worktime**: Students will work on their team projects.
@@ -16,20 +17,22 @@ Students will be divided into teams of three at the start of the course, with pr
 
 ## Project Details
 
-Projects should allow students to apply what they've learned throughout the course. They must implement an LLM-based system that includes at least four of the following features:
+Projects should allow students to apply what they've learned throughout the course. They must implement an LLM-based system that includes at least two of the following features:
 
 - Retrieval Augmentation/RAG
 - Data Analysis
 - Multiple Agents
 - Fine-tuning on Synthetic Data
-- Function-calling-based interface to an AI image generator
+
+The project should also include function-calling-based interface to an AI image generator.
 
 Students are free to choose their project topic, as long as it fits within the course scope and is approved by the instructor. All projects must be implemented in Python.
 
 **Example Project Ideas**:
 
-1. **LLM Tourist Guide**: Uses Wikipedia data to provide travel tips and enhances them with generated images.
-2. **Quarto Data Presentation Pipeline**: Builds and illustrates a Quarto presentation based on a given dataset.
-3. **Synthetic Author**: Generates commit-messages and GitHub issues illustrated with AI-generated images based on commit history/diff.
+1. **LLM Tourist Guide**: Uses [TA.SH data](https://opendata.schleswig-holstein.de/dataset/poi-der-touristischen-landesdatenbank) to provide travel tips and enhances them with generated images.
+2. **Quarto Data Presentation Pipeline**: Builds and illustrates a Quarto presentation based on a given [open dataset](https://data.worldbank.org/).
+3. **Synthetic Author**: Generates commit-messages based on commit history/diff. It could also suggest GitHub issues illustrated with AI-generated images. 
 4. **AI Storyteller**: Creates illustrated short stories for children based on historical events.
+5. **AI Webdesigner** A tool that creates and illustrates a webpage based on a Amazon product page.
 
