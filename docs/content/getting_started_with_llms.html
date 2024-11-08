@@ -315,9 +315,9 @@ Fig&nbsp;2.2: CBOW-representation of corpus.
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fasttext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.3: FastText<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Model using CBOW-Method to predict missing word.
 </figcaption>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables.</p></div></div></figure>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext’s spiritual successor word2vec <span class="citation" data-cites="mikolovEfficientEstimationWord2013">(<a href="#ref-mikolovEfficientEstimationWord2013" role="doc-biblioref">Mikolov et al., 2013</a>)</span>.</p></div></div></figure>
 </div>
-<p>fastText, an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of <strong>Embeddings</strong>, which laid the foundation for many modern NLP methods.</p>
+<p>fastText <span class="citation" data-cites="bojanowskiEnrichingWordVectors2017">(<a href="#ref-bojanowskiEnrichingWordVectors2017" role="doc-biblioref">Bojanowski et al., 2017</a>)</span>, an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of <strong>Embeddings</strong>, which laid the foundation for many modern NLP methods.</p>
 <div id="fig-embed" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-embed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -351,13 +351,48 @@ Fig&nbsp;2.6: LSTM-model, also trained on text prediction.
 </figcaption>
 </figure>
 </div>
-<p><strong>Long Short-Term Memory (LSTM) networks</strong> addressed this issue by introducing a mechanism called “gates” that allowed information to flow through the network more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time.</p>
+<p><strong>Long Short-Term Memory (LSTM) networks</strong> addressed this issue by introducing a mechanism called “gates” that allowed information to flow through the network more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time. Additionally, a single LSTM is still only able to process the input sequence from left to right, which is not ideal for inputs that contain ambiguos words that need context after them to fully understand their meaning. Take the following part of a sentence:</p>
+<blockquote class="blockquote">
+<p>The plant was growing</p>
+</blockquote>
+<p>The word plant get’s wildly differing meanings, depending on how the sentence continues:</p>
+<blockquote class="blockquote">
+<p>The plant was growing rapidly in the sunny corner of the garden.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>The plant was growing to accommodate more machinery for production.</p>
+</blockquote>
+<p>A model that only processes the input sequence from left to right would just not be able to understand the meaning of “plant” in this context.</p>
+<p>The ELMo model <span class="citation" data-cites="petersDeepContextualizedWord2018">(<a href="#ref-petersDeepContextualizedWord2018" role="doc-biblioref">Peters et al., 2018</a>)</span>, which stands for Embeddings from Language Models, is an extension of LSTMs that improved contextual word representations. ELMo uses bidirectional LSTM layers to capture both past and future context, enabling it to understand the meaning of words in their surrounding context. This resulted in ELMo outperforming other models of it’s era on a variety of natural language processing tasks. Still as each of the LSTM-Layer were only able to process one part of the sequence at a time, it was still unfortunately slow in training and inference. It’s performance additionally decreased with the length of the input sequence since LSTM-cells have a better information retention than RNNs but are still not able to keep track of dependencies over long sequences.</p>
 </section>
-<section id="attention-is-all-you-need" class="level3">
+<section id="attention-is-all-you-need" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="attention-is-all-you-need">Attention is all you need</h3>
 <p>In their seminal paper “Attention is all you need”, <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span> described the transformer architecture. The implementation of the multi-headed attention meachnism allowed to solve all major issues of the language modelling approaches of the previous generation. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies.</p>
 <!-- Absatz mit transfomer-gif, das einmal Aufmerksamkeit illustriert -->
-<p>The advances made through leveraging transformer-based architectures for language modelling lead to a family of general-purpose language models, which, unlike the approaches before, where not trained for a specific task but rather on a general text base with the intention of allowing specific fine-tuning to adapt to a task. Classic examples for these early general-purpose natural language generating Transformer models are the Generative Pre-trained Transformer (the predecessor of ChatGPT you all know) first described in <span class="citation" data-cites="radfordImprovingLanguageUnderstanding2018">Radford et al. (<a href="#ref-radfordImprovingLanguageUnderstanding2018" role="doc-biblioref">2018</a>)</span> and the “Bidirectional Encoder Representations from Transformers” (BERT)-Architecture and training procedure described by <span class="citation" data-cites="devlinBERTPretrainingDeep2019">Devlin et al. (<a href="#ref-devlinBERTPretrainingDeep2019" role="doc-biblioref">2019</a>)</span>.</p>
+<p><a href="#fig-TransformerVsLSTM" class="quarto-xref">Figure&nbsp;<span>2.7</span></a>, taken from <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span>, shows the test performance of Transformer models compared to LSTM-based models as a function of model size and context length. Transformers outperform LSTMs with increasing context length.</p>
+<div id="fig-TransformerVsLSTM" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-TransformerVsLSTM-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/transformer_vs_lstm.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-TransformerVsLSTM-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;2.7: Comparison of Transformer- and LSTM-performance based on Model size and context length. Taken from <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>Furthermore, <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span> and <span class="citation" data-cites="hoffmannTrainingComputeOptimalLarge2022">Hoffmann et al. (<a href="#ref-hoffmannTrainingComputeOptimalLarge2022" role="doc-biblioref">2022</a>)</span> after them postulated performace power-laws (see also #fig-powerlaw) that suggest that the performance of a Transformer directly scales with the models size and data availability. Though the task of prediction of natural language poses a non-zero limit to the performanve, it is suggested that this limit is not reached for any of the currently available models.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Incidentally, we might run out of data to train on before reaching that limit <span class="citation" data-cites="villalobosPositionWillWe2024">(<a href="#ref-villalobosPositionWillWe2024" role="doc-biblioref">Villalobos et al., 2024</a>)</span>.</p></div></div><div id="fig-powerlaw" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-powerlaw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/power_law.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-powerlaw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;2.8: Performance power law for transformer models. Taken from <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>The advances made through leveraging transformer-based architectures for language modelling led to a family of general-purpose language models. Unlike the approaches before, these models were not trained for a specific task but rather on a general text base with the intention of allowing specific fine-tuning to adapt to a task. Classic examples of these early general-purpose natural language generating Transformer models are the Generative Pre-trained Transformer (the predecessor of ChatGPT you all know), first described in <span class="citation" data-cites="radfordImprovingLanguageUnderstanding2018">Radford et al. (<a href="#ref-radfordImprovingLanguageUnderstanding2018" role="doc-biblioref">2018</a>)</span>, and the “Bidirectional Encoder Representations from Transformers” (BERT) architecture and training procedure, described by <span class="citation" data-cites="devlinBERTPretrainingDeep2019">Devlin et al. (<a href="#ref-devlinBERTPretrainingDeep2019" role="doc-biblioref">2019</a>)</span>.</p>
+<p>This general-purpose architecture is the base of modern LLMs as we know them today and most applications we will discuss in this course.</p>
 </section>
 </section>
 <section id="choosing-open-source-models" class="level2">
@@ -390,8 +425,23 @@ Fig&nbsp;2.6: LSTM-model, also trained on text prediction.
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-bojanowskiEnrichingWordVectors2017" class="csl-entry" role="listitem">
+Bojanowski, P., Grave, E., Joulin, A., &amp; Mikolov, T. (2017). <em>Enriching <span>Word Vectors</span> with <span>Subword Information</span></em> (arXiv:1607.04606). arXiv. <a href="https://doi.org/10.48550/arXiv.1607.04606">https://doi.org/10.48550/arXiv.1607.04606</a>
+</div>
 <div id="ref-devlinBERTPretrainingDeep2019" class="csl-entry" role="listitem">
 Devlin, J., Chang, M.-W., Lee, K., &amp; Toutanova, K. (2019). <em><span>BERT</span>: <span class="nocase">Pre-training</span> of <span>Deep Bidirectional Transformers</span> for <span>Language Understanding</span></em> (arXiv:1810.04805). arXiv. <a href="https://doi.org/10.48550/arXiv.1810.04805">https://doi.org/10.48550/arXiv.1810.04805</a>
+</div>
+<div id="ref-hoffmannTrainingComputeOptimalLarge2022" class="csl-entry" role="listitem">
+Hoffmann, J., Borgeaud, S., Mensch, A., Buchatskaya, E., Cai, T., Rutherford, E., Casas, D. de L., Hendricks, L. A., Welbl, J., Clark, A., Hennigan, T., Noland, E., Millican, K., Driessche, G. van den, Damoc, B., Guy, A., Osindero, S., Simonyan, K., Elsen, E., … Sifre, L. (2022). <em>Training <span>Compute-Optimal Large Language Models</span></em> (arXiv:2203.15556). arXiv. <a href="https://doi.org/10.48550/arXiv.2203.15556">https://doi.org/10.48550/arXiv.2203.15556</a>
+</div>
+<div id="ref-kaplanScalingLawsNeural2020a" class="csl-entry" role="listitem">
+Kaplan, J., McCandlish, S., Henighan, T., Brown, T. B., Chess, B., Child, R., Gray, S., Radford, A., Wu, J., &amp; Amodei, D. (2020). <em>Scaling <span>Laws</span> for <span>Neural Language Models</span></em> (arXiv:2001.08361). arXiv. <a href="https://doi.org/10.48550/arXiv.2001.08361">https://doi.org/10.48550/arXiv.2001.08361</a>
+</div>
+<div id="ref-mikolovEfficientEstimationWord2013" class="csl-entry" role="listitem">
+Mikolov, T., Chen, K., Corrado, G., &amp; Dean, J. (2013). <em>Efficient <span>Estimation</span> of <span>Word Representations</span> in <span>Vector Space</span></em> (arXiv:1301.3781). arXiv. <a href="https://doi.org/10.48550/arXiv.1301.3781">https://doi.org/10.48550/arXiv.1301.3781</a>
+</div>
+<div id="ref-petersDeepContextualizedWord2018" class="csl-entry" role="listitem">
+Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K., &amp; Zettlemoyer, L. (2018). <em>Deep contextualized word representations</em> (arXiv:1802.05365). arXiv. <a href="https://doi.org/10.48550/arXiv.1802.05365">https://doi.org/10.48550/arXiv.1802.05365</a>
 </div>
 <div id="ref-radfordImprovingLanguageUnderstanding2018" class="csl-entry" role="listitem">
 Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). <em>Improving language understanding with unsupervised learning</em>.
@@ -401,6 +451,9 @@ Umar Jamil. (2023). <em>Attention is all you need (<span>Transformer</span>) - <
 </div>
 <div id="ref-vaswaniAttentionAllYou2023" class="csl-entry" role="listitem">
 Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., &amp; Polosukhin, I. (2023). <em>Attention <span>Is All You Need</span></em> (arXiv:1706.03762). arXiv. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>
+</div>
+<div id="ref-villalobosPositionWillWe2024" class="csl-entry" role="listitem">
+Villalobos, P., Ho, A., Sevilla, J., Besiroglu, T., Heim, L., &amp; Hobbhahn, M. (2024, June). Position: <span>Will</span> we run out of data? <span>Limits</span> of <span>LLM</span> scaling based on human-generated data. <em>Forty-First <span>International Conference</span> on <span>Machine Learning</span></em>.
 </div>
 </div>
 </section>

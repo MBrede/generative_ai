@@ -16,6 +16,22 @@
   file = {/home/brede/Zotero/storage/SN8D8VYF/Angelov - 2020 - Top2Vec Distributed Representations of Topics.pdf;/home/brede/Zotero/storage/PJGCG2CD/2008.html}
 }
 
+@misc{bojanowskiEnrichingWordVectors2017,
+  title = {Enriching {{Word Vectors}} with {{Subword Information}}},
+  author = {Bojanowski, Piotr and Grave, Edouard and Joulin, Armand and Mikolov, Tomas},
+  year = {2017},
+  month = jun,
+  number = {arXiv:1607.04606},
+  eprint = {1607.04606},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1607.04606},
+  urldate = {2024-11-08},
+  abstract = {Continuous word representations, trained on large unlabeled corpora are useful for many natural language processing tasks. Popular models that learn such representations ignore the morphology of words, by assigning a distinct vector to each word. This is a limitation, especially for languages with large vocabularies and many rare words. In this paper, we propose a new approach based on the skipgram model, where each word is represented as a bag of character \$n\$-grams. A vector representation is associated to each character \$n\$-gram; words being represented as the sum of these representations. Our method is fast, allowing to train models on large corpora quickly and allows us to compute word representations for words that did not appear in the training data. We evaluate our word representations on nine different languages, both on word similarity and analogy tasks. By comparing to recently proposed morphological word representations, we show that our vectors achieve state-of-the-art performance on these tasks.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/RJGRHPMD/Bojanowski et al. - 2017 - Enriching Word Vectors with Subword Information.pdf;/home/brede/Zotero/storage/I64RILZ7/1607.html}
+}
+
 @misc{brownLanguageModelsAre2020,
   title = {Language {{Models}} Are {{Few-Shot Learners}}},
   author = {Brown, Tom B. and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and Agarwal, Sandhini and {Herbert-Voss}, Ariel and Krueger, Gretchen and Henighan, Tom and Child, Rewon and Ramesh, Aditya and Ziegler, Daniel M. and Wu, Jeffrey and Winter, Clemens and Hesse, Christopher and Chen, Mark and Sigler, Eric and Litwin, Mateusz and Gray, Scott and Chess, Benjamin and Clark, Jack and Berner, Christopher and McCandlish, Sam and Radford, Alec and Sutskever, Ilya and Amodei, Dario},
@@ -199,18 +215,6 @@
   file = {/home/brede/Zotero/storage/FY6IBY7L/Jiang et al. - 2023 - Scaling Sentence Embeddings with Large Language Mo.pdf;/home/brede/Zotero/storage/YNDIEFQD/2307.html}
 }
 
-@misc{jiangScalingSentenceEmbeddings2023a,
-  title = {Scaling {{Sentence Embeddings}} with {{Large Language Models}}},
-  author = {Jiang, Ting and Huang, Shaohan and Luan, Zhongzhi and Wang, Deqing and Zhuang, Fuzhen},
-  year = {2023},
-  publisher = {arXiv},
-  doi = {10.48550/ARXIV.2307.16645},
-  urldate = {2024-06-04},
-  abstract = {Large language models (LLMs) have recently garnered significant interest. With in-context learning, LLMs achieve impressive results in various natural language tasks. However, the application of LLMs to sentence embeddings remains an area of ongoing research. In this work, we propose an in-context learning-based method aimed at improving sentence embeddings performance. Our approach involves adapting the previous prompt-based representation method for autoregressive models, constructing a demonstration set that enables LLMs to perform in-context learning, and scaling up the LLMs to different model sizes. Through extensive experiments, in-context learning enables LLMs to generate high-quality sentence embeddings without any fine-tuning. It helps LLMs achieve performance comparable to current contrastive learning methods. By scaling model size, we find scaling to more than tens of billion parameters harms the performance on semantic textual similarity (STS) tasks. However, the largest model outperforms other counterparts and achieves the new state-of-the-art result on transfer tasks. We also fine-tune LLMs with current contrastive learning approach, and the 2.7B OPT model, incorporating our prompt-based method, surpasses the performance of 4.8B ST5, achieving the new state-of-the-art results on STS tasks. Our code is available at https://github.com/kongds/scaling\_sentemb.},
-  copyright = {arXiv.org perpetual, non-exclusive license},
-  keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences}
-}
-
 @misc{JphmeEm_german_13b_v01Hugging2023,
   title = {Jphme/Em\_german\_13b\_v01 {$\cdot$} {{Hugging Face}}},
   year = {2023},
@@ -221,7 +225,7 @@
   file = {/home/brede/Zotero/storage/2ELIEDF6/em_german_13b_v01.html}
 }
 
-@misc{kaplanScalingLawsNeural2020,
+@misc{kaplanScalingLawsNeural2020a,
   title = {Scaling {{Laws}} for {{Neural Language Models}}},
   author = {Kaplan, Jared and McCandlish, Sam and Henighan, Tom and Brown, Tom B. and Chess, Benjamin and Child, Rewon and Gray, Scott and Radford, Alec and Wu, Jeffrey and Amodei, Dario},
   year = {2020},
@@ -286,11 +290,43 @@
   keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences}
 }
 
+@misc{mikolovEfficientEstimationWord2013,
+  title = {Efficient {{Estimation}} of {{Word Representations}} in {{Vector Space}}},
+  author = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
+  year = {2013},
+  month = sep,
+  number = {arXiv:1301.3781},
+  eprint = {1301.3781},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1301.3781},
+  urldate = {2024-11-08},
+  abstract = {We propose two novel model architectures for computing continuous vector representations of words from very large data sets. The quality of these representations is measured in a word similarity task, and the results are compared to the previously best performing techniques based on different types of neural networks. We observe large improvements in accuracy at much lower computational cost, i.e. it takes less than a day to learn high quality word vectors from a 1.6 billion words data set. Furthermore, we show that these vectors provide state-of-the-art performance on our test set for measuring syntactic and semantic word similarities.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/EU2MFH8Y/Mikolov et al. - 2013 - Efficient Estimation of Word Representations in Vector Space.pdf;/home/brede/Zotero/storage/29DGKGTD/1301.html}
+}
+
 @misc{MistralaiMixtral8x7BInstructv0Hugging,
   title = {Mistralai/{{Mixtral-8x7B-Instruct-v0}}.1 {$\cdot$} {{Hugging Face}}},
   urldate = {2024-06-04},
   abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
   howpublished = {https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1}
+}
+
+@misc{petersDeepContextualizedWord2018,
+  title = {Deep Contextualized Word Representations},
+  author = {Peters, Matthew E. and Neumann, Mark and Iyyer, Mohit and Gardner, Matt and Clark, Christopher and Lee, Kenton and Zettlemoyer, Luke},
+  year = {2018},
+  month = mar,
+  number = {arXiv:1802.05365},
+  eprint = {1802.05365},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1802.05365},
+  urldate = {2024-11-08},
+  abstract = {We introduce a new type of deep contextualized word representation that models both (1) complex characteristics of word use (e.g., syntax and semantics), and (2) how these uses vary across linguistic contexts (i.e., to model polysemy). Our word vectors are learned functions of the internal states of a deep bidirectional language model (biLM), which is pre-trained on a large text corpus. We show that these representations can be easily added to existing models and significantly improve the state of the art across six challenging NLP problems, including question answering, textual entailment and sentiment analysis. We also present an analysis showing that exposing the deep internals of the pre-trained network is crucial, allowing downstream models to mix different types of semi-supervision signals.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language},
+  file = {/home/brede/Zotero/storage/7BB9SM92/Peters et al. - 2018 - Deep contextualized word representations.pdf;/home/brede/Zotero/storage/H9ZUA9GN/1802.html}
 }
 
 @article{radfordImprovingLanguageUnderstanding2018,
@@ -354,6 +390,19 @@
   file = {/home/brede/Zotero/storage/6YB9FN5L/L10-1339.html}
 }
 
+@misc{sardanaChinchillaOptimalAccountingInference2024,
+  title = {Beyond {{Chinchilla-Optimal}}: {{Accounting}} for {{Inference}} in {{Language Model Scaling Laws}}},
+  shorttitle = {Beyond {{Chinchilla-Optimal}}},
+  author = {Sardana, Nikhil and Portes, Jacob and Doubov, Sasha and Frankle, Jonathan},
+  year = {2024},
+  publisher = {arXiv},
+  doi = {10.48550/ARXIV.2401.00448},
+  urldate = {2024-11-08},
+  abstract = {Large language model (LLM) scaling laws are empirical formulas that estimate changes in model quality as a result of increasing parameter count and training data. However, these formulas, including the popular Deepmind Chinchilla scaling laws, neglect to include the cost of inference. We modify the Chinchilla scaling laws to calculate the optimal LLM parameter count and pre-training data size to train and deploy a model of a given quality and inference demand. We conduct our analysis both in terms of a compute budget and real-world costs and find that LLM researchers expecting reasonably large inference demand ({\textasciitilde}1B requests) should train models smaller and longer than Chinchilla-optimal. Furthermore, we train 47 models of varying sizes and parameter counts to validate our formula and find that model quality continues to improve as we scale tokens per parameter to extreme ranges (up to 10,000). Finally, we ablate the procedure used to fit the Chinchilla scaling law coefficients and find that developing scaling laws only from data collected at typical token/parameter ratios overestimates the impact of additional tokens at these extreme ranges.},
+  copyright = {arXiv.org perpetual, non-exclusive license},
+  keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences,Machine Learning (cs.LG)}
+}
+
 @misc{touvronLLaMAOpenEfficient2023,
   title = {{{LLaMA}}: {{Open}} and {{Efficient Foundation Language Models}}},
   shorttitle = {{{LLaMA}}},
@@ -404,6 +453,19 @@
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
   file = {/home/brede/Zotero/storage/4B6TNRTM/Vaswani et al. - 2023 - Attention Is All You Need.pdf;/home/brede/Zotero/storage/VYHFDL37/1706.html}
+}
+
+@inproceedings{villalobosPositionWillWe2024,
+  title = {Position: {{Will}} We Run out of Data? {{Limits}} of {{LLM}} Scaling Based on Human-Generated Data},
+  shorttitle = {Position},
+  booktitle = {Forty-First {{International Conference}} on {{Machine Learning}}},
+  author = {Villalobos, Pablo and Ho, Anson and Sevilla, Jaime and Besiroglu, Tamay and Heim, Lennart and Hobbhahn, Marius},
+  year = {2024},
+  month = jun,
+  urldate = {2024-11-08},
+  abstract = {We investigate the potential constraints on LLM scaling posed by the availability of public human-generated text data. We forecast the growing demand for training data based on current trends and estimate the total stock of public human text data. Our findings indicate that if current LLM development trends continue, models will be trained on datasets roughly equal in size to the available stock of public human text data between 2026 and 2032, or slightly earlier if models are overtrained. We explore how progress in language modeling can continue when human-generated text datasets cannot be scaled any further. We argue that synthetic data generation, transfer learning from data-rich domains, and data efficiency improvements might support further progress.},
+  langid = {english},
+  file = {/home/brede/Zotero/storage/MKJRDATW/Villalobos et al. - 2024 - Position Will we run out of data Limits of LLM scaling based on human-generated data.pdf}
 }
 
 @misc{wangImprovingTextEmbeddings2024,

@@ -1,4 +1,3 @@
-
 This introductory script on the topic of "Generative AI" was created for the elective module "Generative AI" as given to the master students of the master programme "Data Science" at the University of Applied Sciences Kiel and was built using `quarto`.
 
 The intention of this script is not to be a complete guide to all things generative AI, but to give an overview of the topics and applications of these emerging techniques.
