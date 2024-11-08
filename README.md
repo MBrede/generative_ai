@@ -2,6 +2,7 @@ This introductory script on the topic of "Generative AI" was created for the ele
 
 The intention of this script is not to be a complete guide to all things generative AI, but to give an overview of the topics and applications of these emerging techniques.
 
+
 # Contents and learning objectives
 
 From the [module database entry](https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1):
