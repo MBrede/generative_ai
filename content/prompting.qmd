@@ -41,7 +41,7 @@ Show answer
 
 ## Prompting strategies
 
-The results of a prompted call to a LM is highly dependend on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of "prompt engineering" has emerged.
+The results of a prompted call to a LM is highly dependent on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of "prompt engineering" has emerged.
 There is a veritable plethora of resources available online that discuss different strategies for prompting LMs. It has to be said though, that the strategies that work and don't work can vary greatly between models and tasks.
 A bit of general advice that holds true for nearly all models though, is to 
 
@@ -49,11 +49,11 @@ a) define the task in as many small steps as possible
 b) to be as literal and descriptive as possible and 
 c) to provide examples if possible.
 
-Since the quality of results is so highly dependable on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated.
+Since the quality of results is so highly dependent on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated.
 One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.
 
 :::{.q}
-**1.** Test the above-mentioned prompting strategies on the [MTOP Intent Dataset](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de) and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intendend to prompt. Use a python script to call one of the following three models in LM-Studio for this:
+**1.** Test the above-mentioned prompting strategies on the [MTOP Intent Dataset](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de) and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:
 
 1. [Phi 3.1 mini](https://model.lmstudio.ai/download/lmstudio-community/Phi-3.1-mini-128k-instruct-GGUF)
 2. [Gemma 2 2B](https://model.lmstudio.ai/download/lmstudio-community/gemma-2-2b-it-GGUF)
@@ -75,5 +75,12 @@ Check these strategies on whether they improve your results. If your first instr
 
 ## Generation of synthetic texts
 
+As we discussed before, small models can perform on an acceptable level, if they are finetuned appropriately.
+
+A good way to do this is to use a larger model to generate synthetic data that you then use for training the smaller model. This approach has been used successfully in many applications.
+
 ## Further Readings
 
+* [This prompting-guide](https://www.promptingguide.ai/) has some nice general advice
+* [OpenAI](https://platform.openai.com/docs/guides/prompt-engineering) has its own set of tipps
+* [deepset](https://docs.cloud.deepset.ai/docs/prompt-engineering-guidelines), the company behind Haystack, has a nice guide as well

@@ -5,7 +5,7 @@ toc-title: '![](../imgs/history.jpg){width=240px}<br> <h3>Getting started with (
 
 # Getting started with (L)LMs
 
-This chapter provides a brief introduction to the history and function of modern language models, focusing on their practical use in text generation tasks. 
+This chapter provides a brief introduction to the history and function of modern language models, focusing on their practical use in text generation tasks.
 It will then give a short introduction on how to utilize pretrained language models for your own applications.
 
 ## Language Model Basics
@@ -35,7 +35,7 @@ Still, these models did not really solve the inherent issue of the order of word
 
 ![RNN-model, in this cased trained on text prediction.](../imgs/rnn.gif){#fig-rnn width=100%}
 
-Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of long-term dependencies in text data and improve the understanding of context. However, RNNs suffered from the vanishing gradient problem, which made it difficult for them to capture long-range dependencies effectively.
+Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of long-term dependencies in text data and improve the understanding of context. However, RNNs suffered from their architecture's inherent inability to retain information over long sequences.
 
 ![LSTM-model, also trained on text prediction.](../imgs/lstm.gif){#fig-lstm width=100%}
 
@@ -63,7 +63,7 @@ As the paper's title neatly suggests, the major breakthrough presented in this p
 
 #### Self-Attention Mechanism
 
-The self-attention mechanism relies on three components: **Query (Q)**, **Key (K)**, and **Value (V)**, inspired by concepts in information retrieval. Imagine you search for a specific term in a library (query), match it against the catalog (key), and retrieve relevant books (value). 
+The self-attention mechanism relies on three components: **Query (Q)**, **Key (K)**, and **Value (V)**, inspired by concepts in information retrieval. Imagine you search for a specific term in a library (query), match it against the catalog (key), and retrieve relevant books (value).
 
 In practice, for each word in a sentence, the model calculates:
 1. **Relevance Scores**: Compare each Query vector (Q) with every Key vector (K) in the sequence using the dot product. These scores measure how much focus one word should have on another.
@@ -212,12 +212,12 @@ This small example is already pretty close to the general attention-mechanism de
 
 ![Multi-headed attention as depicted in @vaswaniAttentionAllYou2023](../imgs/multi-head.png){#fig-multihead}
 
- Instead of 5x5 matrices, the attenion mechanism as described in the paper implements $d_n \times d_c$^[$\frac{d_n}{h} \times \frac{d_c}{h}$ actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce th computational cost.] matrices, where $d_n$ is the dimension of the embedding space^[I.e., the dimensionality used to represent each word's meaning. In the previous toy-example illustrating the concept of embeddings, this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.] and $d_c$ is the size of the context window. In the original paper, @vaswaniAttentionAllYou2023 implement the context-window as the same size as the embedding space (i.e., $d_n = d_c$). 
+ Instead of 5x5 matrices, the attenion mechanism as described in the paper implements $d_n \times d_c$^[$\frac{d_n}{h} \times \frac{d_c}{h}$ actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce th computational cost.] matrices, where $d_n$ is the dimension of the embedding space^[I.e., the dimensionality used to represent each word's meaning. In the previous toy-example illustrating the concept of embeddings, this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.] and $d_c$ is the size of the context window. In the original paper, @vaswaniAttentionAllYou2023 implement the context-window as the same size as the embedding space (i.e., $d_n = d_c$).
  In @fig-illustratedAttention you can see a brilliant illustration of the multiheaded-attention mechanism at work.
 
 ![Illustration of the multi-headed attention mechanism. Taken from @hussainTutorialOpensourceLarge2024](../imgs/illustrated_attention.png){#fig-illustratedAttention}
 
-The implementation of the multi-headed attention mechanism allowed to solve all major issues of the language modelling approaches of the previous generation. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies. This mechanism also implicitly solves the bidirectionality-issue since each word can be taken into account when processsing every other word in the sequence.
+The implementation of the multi-headed attention mechanism allowed to solve all major issues of the language modelling approaches of the previous generation^[Well, kind of. Transformers are far superior language models due to their ability to parallely process long sequence without issues with stretched context - these advantages come at a price though. GPT-3s training is estimated to have emitted around 502 metric tons of carbon [@AIAAICChatGPTTraining]. The computational cost of the architecture as described here does additionally scale quadratically with context window size.]. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies. This mechanism also implicitly solves the bidirectionality-issue since each word can be taken into account when processsing every other word in the sequence.
 
 The description until now omitted one final but key detail - we only spoke about the weight matrices $Q$, $K$ and $V$. Each of these weight matrices are actually the product of the learned weights and the input vectors. In other words, each of the three matrices is calculated as follows:
 
@@ -339,5 +339,7 @@ In your project-groups, you will each have to build a small "Hello World"-style 
 * [This](https://stats.stackexchange.com/a/424127) *very* good answer on stack exchange that explains the attention-concept [@424127]
 
 ## References
+
+
 
 
