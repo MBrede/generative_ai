@@ -240,7 +240,7 @@ div.csl-indent {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
-    <h2 id="toc-title"><img src="../imgs/cover.jpg" class="img-fluid" width="240"><br><br>
+    <h2 id="toc-title"><img src="../imgs/prompting.jpg" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
 Prompting<br>
 </h3>
@@ -338,15 +338,15 @@ Fig&nbsp;3.2: A poem and a “poem”
 </section>
 <section id="prompting-strategies" class="level2">
 <h2 class="anchored" data-anchor-id="prompting-strategies">Prompting strategies</h2>
-<p>The results of a prompted call to a LM is highly dependend on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of “prompt engineering” has emerged. There is a veritable plethora of resources available online that discuss different strategies for prompting LMs. It has to be said though, that the strategies that work and don’t work can vary greatly between models and tasks. A bit of general advice that holds true for nearly all models though, is to</p>
+<p>The results of a prompted call to a LM is highly dependent on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of “prompt engineering” has emerged. There is a veritable plethora of resources available online that discuss different strategies for prompting LMs. It has to be said though, that the strategies that work and don’t work can vary greatly between models and tasks. A bit of general advice that holds true for nearly all models though, is to</p>
 <ol type="a">
 <li>define the task in as many small steps as possible</li>
 <li>to be as literal and descriptive as possible and</li>
 <li>to provide examples if possible.</li>
 </ol>
-<p>Since the quality of results is so highly dependable on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated. One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.</p>
+<p>Since the quality of results is so highly dependent on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated. One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.</p>
 <div class="q">
-<p><strong>1.</strong> Test the above-mentioned prompting strategies on the <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">MTOP Intent Dataset</a> and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intendend to prompt. Use a python script to call one of the following three models in LM-Studio for this:</p>
+<p><strong>1.</strong> Test the above-mentioned prompting strategies on the <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">MTOP Intent Dataset</a> and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:</p>
 <ol type="1">
 <li><a href="https://model.lmstudio.ai/download/lmstudio-community/Phi-3.1-mini-128k-instruct-GGUF">Phi 3.1 mini</a></li>
 <li><a href="https://model.lmstudio.ai/download/lmstudio-community/gemma-2-2b-it-GGUF">Gemma 2 2B</a></li>
@@ -365,9 +365,16 @@ Fig&nbsp;3.2: A poem and a “poem”
 </section>
 <section id="generation-of-synthetic-texts" class="level2">
 <h2 class="anchored" data-anchor-id="generation-of-synthetic-texts">Generation of synthetic texts</h2>
+<p>As we discussed before, small models can perform on an acceptable level, if they are finetuned appropriately.</p>
+<p>A good way to do this is to use a larger model to generate synthetic data that you then use for training the smaller model. This approach has been used successfully in many applications.</p>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<ul>
+<li><a href="https://www.promptingguide.ai/">This prompting-guide</a> has some nice general advice</li>
+<li><a href="https://platform.openai.com/docs/guides/prompt-engineering">OpenAI</a> has its own set of tipps</li>
+<li><a href="https://docs.cloud.deepset.ai/docs/prompt-engineering-guidelines">deepset</a>, the company behind Haystack, has a nice guide as well</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
