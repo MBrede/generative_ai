@@ -8,6 +8,7 @@
 
 <meta name="author" content="Max Brede">
 <meta name="author" content="Alwin Klick">
+<meta name="dcterms.date" content="2024-11-09">
 
 <title>Generative AI</title>
 <style>
@@ -221,7 +222,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
-    <h2 id="toc-title"><img src="imgs/magpie_data_presentation.webp" class="img-fluid" width="240"><br><br>
+    <h2 id="toc-title"><img src="cover.jpg" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
 Introduction<br>
 </h3>
@@ -231,9 +232,6 @@ Introduction<br>
   <li><a href="#contents-and-learning-objectives" id="toc-contents-and-learning-objectives" class="nav-link" data-scroll-target="#contents-and-learning-objectives">Contents and learning objectives</a>
   <ul class="collapse">
   <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule">Schedule:</a></li>
-  <li><a href="#notizen" id="toc-notizen" class="nav-link" data-scroll-target="#notizen">Notizen</a></li>
-  <li><a href="#themenideen" id="toc-themenideen" class="nav-link" data-scroll-target="#themenideen">Themenideen</a></li>
-  <li><a href="#in-session-aufgaben" id="toc-in-session-aufgaben" class="nav-link" data-scroll-target="#in-session-aufgaben">In-session Aufgaben</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -261,7 +259,7 @@ Introduction<br>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">Invalid Date</p>
+      <p class="date">November 9, 2024</p>
     </div>
   </div>
   
@@ -275,36 +273,89 @@ Introduction<br>
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
+<!-- ```{r setup}
+#| include: false
+
+library(tidyverse)
+``` -->
 <p>This introductory script on the topic of “Generative AI” was created for the elective module “Generative AI” as given to the master students of the master programme “Data Science” at the University of Applied Sciences Kiel and was built using <code>quarto</code>.</p>
 <p>The intention of this script is not to be a complete guide to all things generative AI, but to give an overview of the topics and applications of these emerging techniques.</p>
 </section>
 <section id="contents-and-learning-objectives" class="level1">
 <h1>Contents and learning objectives</h1>
-<p>From the <a href="https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1">module database entry</a>:</p>
-<p>Open Source Language Models - Overview of model lists - Ollama - Generation of synthetic text as training sets</p>
-<p>Agent Systems - Llamaindex, LangChain &amp; Haystack - Function calling - Data analysis</p>
-<p>Embeddings and Vector Stores - Semantic Search - Retrieval-augmented generation - Recommendations</p>
-<p>AI Image Generators - Generative Adversarial Networks (GANs) - Variational Autoencoders / Diffusion Models - Generative approaches for image dataset augmentation</p>
-<p>Fine-Tuning of LLMs and Diffusion Models - Examples: LoRA, QLoRA, MoRA</p>
-<p>The goal is for the students to reach the following learning objectives:</p>
-<p>Students - know the fundamentals of generative AI systems. - know various modern applications of generative AI systems. - know the theoretical foundations and practical applications of generative AI systems.</p>
-<p>Students - are able to explain and apply various open-source language models. - are able to implement and utilize agent systems and their functionalities. - are able to understand and use embeddings and vector stores for semantic search and recommendations. - are able to explain and practically apply different methods for image generation. - are able to fine-tune large language models (LLMs) and diffusion models for specific tasks.</p>
-<p>Students - are able to successfully organize teamwork for generative AI projects. - are able to report and present team solutions for practical project tasks. - are able to interpret and communicate the approaches in technical and functional terms.</p>
-<p>Students - are able to work professionally in the field of generative AI systems. - are able to give and accept professional feedback to different topics of generative AI systems. - are able to select relevant scientific literature about generative AI systems.</p>
+<p>Contents listed in the <a href="https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1">module database entry</a>:</p>
+<p>Open Source Language Models</p>
+<ul>
+<li>Overview of model lists</li>
+<li>Ollama</li>
+<li>Generation of synthetic text as training sets</li>
+</ul>
+<p>Agent Systems</p>
+<ul>
+<li>Llamaindex, LangChain &amp; Haystack</li>
+<li>Function calling</li>
+<li>Data analysis</li>
+</ul>
+<p>Embeddings and Vector Stores</p>
+<ul>
+<li>Semantic Search</li>
+<li>Retrieval-augmented generation</li>
+<li>Recommendations</li>
+</ul>
+<p>AI Image Generators</p>
+<ul>
+<li>Generative Adversarial Networks (GANs)</li>
+<li>Variational Autoencoders / Diffusion Models</li>
+<li>Generative approaches for image dataset augmentation</li>
+</ul>
+<p>Fine-Tuning of LLMs and Diffusion Models</p>
+<ul>
+<li>Examples: LoRA, QLoRA, MoRA</li>
+</ul>
+<hr>
+<p>Learning objectives listed in the <a href="https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1">module database entry</a>:</p>
+<p>Students</p>
+<ul>
+<li>know the fundamentals of generative AI systems.</li>
+<li>know various modern applications of generative AI systems.</li>
+<li>know the theoretical foundations and practical applications of generative AI systems.</li>
+</ul>
+<p>Students</p>
+<ul>
+<li>are able to explain and apply various open-source language models.</li>
+<li>are able to implement and utilize agent systems and their functionalities.</li>
+<li>are able to understand and use embeddings and vector stores for semantic search and recommendations.</li>
+<li>are able to explain and practically apply different methods for image generation.</li>
+<li>are able to fine-tune large language models (LLMs) and diffusion models for specific tasks.</li>
+</ul>
+<p>Students</p>
+<ul>
+<li>are able to successfully organize teamwork for generative AI projects.</li>
+<li>are able to report and present team solutions for practical project tasks.</li>
+<li>are able to interpret and communicate the approaches in technical and functional terms.</li>
+</ul>
+<p>Students</p>
+<ul>
+<li>are able to work professionally in the field of generative AI systems.</li>
+<li>are able to give and accept professional feedback to different topics of generative AI systems.</li>
+<li>are able to select relevant scientific literature about generative AI systems.</li>
+</ul>
+<hr>
 <section id="schedule" class="level2">
 <h2 class="anchored" data-anchor-id="schedule">Schedule:</h2>
-<table class="caption-top table">
+<table class="table-striped table-hover caption-top table">
+<caption>Course schedule</caption>
 <colgroup>
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 16%">
-<col style="width: 16%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 10%">
+<col style="width: 30%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">Number:</th>
-<th style="text-align: center;">CW:</th>
+<th style="text-align: right;">CW:</th>
 <th style="text-align: right;">Date:</th>
 <th>Title:</th>
 <th>Topics:</th>
@@ -313,191 +364,182 @@ Introduction<br>
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: center;">46</td>
+<td style="text-align: right;">46</td>
 <td style="text-align: right;">12.11.</td>
 <td>Getting started with (L)LMs</td>
-<td>* Language Model Basics</td>
+<td>Language Model Basics</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Choosing open source models</td>
+<td>Choosing open source models</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)</td>
+<td>Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
-<td style="text-align: center;">46</td>
+<td style="text-align: right;">46</td>
 <td style="text-align: right;">13.11.</td>
 <td>Prompting</td>
-<td>* Prompting strategies</td>
+<td>Prompting strategies</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Generation of synthetic texts</td>
+<td>Generation of synthetic texts</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">3</td>
-<td style="text-align: center;">47</td>
+<td style="text-align: right;">47</td>
 <td style="text-align: right;">19.11.</td>
 <td>Agent basics</td>
-<td>* Fundamentals of agents and train-of-thought prompting</td>
+<td>Fundamentals of agents and train-of-thought prompting</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Examples of agent-frameworks (Llamaindex, LangChain &amp; Haystack)</td>
+<td>Examples of agent-frameworks (Llamaindex, LangChain &amp; Haystack)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: center;">47</td>
+<td style="text-align: right;">47</td>
 <td style="text-align: right;">20.11.</td>
 <td>Embedding-based agent-systems</td>
-<td>* Semantic embeddings and vector stores</td>
+<td>Semantic embeddings and vector stores</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Retrieval augmented and interleaved generation</td>
+<td>Retrieval augmented and interleaved generation</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">5</td>
-<td style="text-align: center;">48</td>
+<td style="text-align: right;">48</td>
 <td style="text-align: right;">26.11.</td>
 <td>Function Calling</td>
-<td>* Code generation and function calling</td>
+<td>Code generation and function calling</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Data analysis</td>
+<td>Data analysis</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">6</td>
-<td style="text-align: center;">48</td>
+<td style="text-align: right;">48</td>
 <td style="text-align: right;">27.11.</td>
 <td>Agent interaction</td>
-<td>* Constitutional AI Tuning</td>
+<td>Constitutional AI Tuning</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Preventing prompt injections</td>
+<td>Preventing prompt injections</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">7</td>
-<td style="text-align: center;">49</td>
+<td style="text-align: right;">49</td>
 <td style="text-align: right;">3.12.</td>
-<td>???</td>
+<td>AI image generation I</td>
+<td>AI image generator basics</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 <td></td>
+<td>Basics of using Open Source AI image generation models</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+<td>Generative Adversarial Networks (GANs)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">8</td>
-<td style="text-align: center;">49</td>
+<td style="text-align: right;">49</td>
 <td style="text-align: right;">4.12.</td>
-<td>AI image generation I</td>
-<td>* AI image generator basics</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-<td>* Basics of using Open Source AI image generation models</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-<td>* Generative Adversarial Networks (GANs)</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">9</td>
-<td style="text-align: center;">50</td>
-<td style="text-align: right;">10.12.</td>
 <td>AI image generation II</td>
-<td>* Multimodal embeddings</td>
+<td>Multimodal embeddings</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* Variational Autoencoders / Diffusion Models</td>
+<td>Variational Autoencoders / Diffusion Models</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">10.12.</td>
+<td>Augmentation of image datasets</td>
+<td>(Generative) approaches for image dataset augmentation</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">10</td>
-<td style="text-align: center;">50</td>
+<td style="text-align: right;">50</td>
 <td style="text-align: right;">11.12.</td>
-<td>Augmentation of image datasets</td>
-<td>* (Generative) approaches for image dataset augmentation</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">11</td>
-<td style="text-align: center;">51</td>
-<td style="text-align: right;">17.12.</td>
 <td>Finetuning Basics</td>
-<td>* Basics of Finetuning strategies</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-<td>* Alignment and Finetuning of (L)LMs</td>
+<td>Basics of Finetuning strategies</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">12</td>
-<td style="text-align: center;">51</td>
-<td style="text-align: right;">18.12.</td>
-<td>Rank adaptation</td>
-<td>* Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models</td>
-</tr>
-<tr class="even">
 <td style="text-align: right;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>* (Q)LoRA fine-tuning using Unsloth</td>
+<td>Alignment and Finetuning of (L)LMs</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">17.12.</td>
+<td>Rank adaptation</td>
+<td>Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+<td>(Q)LoRA fine-tuning using Unsloth</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">18.12.</td>
+<td>Project presentations</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<p>Tests für LLM-Modelle? Oder lieber nicht? - Multimodal embeddings? - Knowledge graphs?</p>
-</section>
-<section id="notizen" class="level2">
-<h2 class="anchored" data-anchor-id="notizen">Notizen</h2>
-<ul>
-<li>Instruct vs non-instruct</li>
-</ul>
-</section>
-<section id="themenideen" class="level2">
-<h2 class="anchored" data-anchor-id="themenideen">Themenideen</h2>
-<ul>
-<li>Kinderbuch mit Anspruch</li>
-</ul>
-</section>
-<section id="in-session-aufgaben" class="level2">
-<h2 class="anchored" data-anchor-id="in-session-aufgaben">In-session Aufgaben</h2>
-<p>Termin: 1. Kleine Sprachmodelle zum Laufen bringen mit unterschiedlichen Backends 2. Prompting-Strategien testen <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">Datensatz</a> 3. Agent, der Zeit bis Semesterende, Kieler Woche, … ausrechnet 4. Datensatz(?) in vector-store überführen und dann durchsuchen und Agent zugänglich machen 5. Agent-System zur deskriptiven Analyse, Beispiel mit PandasAI? 6. Update eines Datensatzes nach Constitution</p>
+<!-- ## In-session Aufgaben
+Termin:
+1. Kleine Sprachmodelle zum Laufen bringen mit unterschiedlichen Backends
+2. Prompting-Strategien testen [Datensatz](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de)
+3. Agent, der Zeit bis Semesterende, Kieler Woche, ... ausrechnet
+4. Datensatz(?) in vector-store überführen und dann durchsuchen und Agent zugänglich machen
+5. Agent-System zur deskriptiven Analyse, Beispiel mit PandasAI?
+6. Update eines Datensatzes nach Constitution -->
 
 
 </section>

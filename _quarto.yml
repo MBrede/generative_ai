@@ -7,7 +7,7 @@ book:
   author:
     - Max Brede
     - Alwin Klick
-  date: "winter semester 2024/25"
+  date: last-modified
   sidebar:
     style: "docked"
     search: true

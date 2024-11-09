@@ -1,15 +1,24 @@
 ---
-toc-title: '![](imgs/magpie_data_presentation.webp){width=240px}<br> <h3>Introduction</h3>'
+toc-title: '![](cover.jpg){width=240px}<br> <h3>Introduction</h3>'
 ---
 # Introduction
 
-```{r setup}
+<!-- ```{r setup}
 #| include: false
 
 library(tidyverse)
-```
+``` -->
 
 {{< include README.md >}}
 
+: Course schedule {.striped .hover tbl-colwidths="[5,5,10,30,50]"}
 
 
+<!-- ## In-session Aufgaben
+Termin:
+1. Kleine Sprachmodelle zum Laufen bringen mit unterschiedlichen Backends
+2. Prompting-Strategien testen [Datensatz](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de)
+3. Agent, der Zeit bis Semesterende, Kieler Woche, ... ausrechnet
+4. Datensatz(?) in vector-store überführen und dann durchsuchen und Agent zugänglich machen
+5. Agent-System zur deskriptiven Analyse, Beispiel mit PandasAI?
+6. Update eines Datensatzes nach Constitution -->
