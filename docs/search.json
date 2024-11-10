@@ -86,11 +86,11 @@
     ]
   },
   {
-    "objectID": "content/getting_started_with_llms.html#basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp",
-    "href": "content/getting_started_with_llms.html#basics-of-using-open-source-models-huggingface-ollama-llm-studio-llama.cpp",
+    "objectID": "content/getting_started_with_llms.html#basics-of-using-open-source-models",
+    "href": "content/getting_started_with_llms.html#basics-of-using-open-source-models",
     "title": "Getting started with (L)LMs",
-    "section": "Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)",
-    "text": "Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)\nNow it is your turn! In your project-groups, you will each have to build a small “Hello World”-style application that uses an open source model.\n\nChoose a small model using the sources we discussed before.\nEach group is to use one of the following frameworks\n\nHuggingface\nOllama\nLM-Studio from python\nLlama.cpp to load and use the model in your application.\n\nPresent your results and your experiences with the frameworks in a short presentation.\nSubmit your code and report on moodle.",
+    "section": "Basics of using open source models",
+    "text": "Basics of using open source models\n\n\n\n\n\n\n📝 Task\n\n\n\nNow it is your turn! In your project-groups, you will each have to build a small “Hello World”-style application that uses an open source model.\n\nChoose a small model using the sources we discussed before.\nEach group is to use one of the following frameworks\n\nHuggingface\nOllama\nLM-Studio from python\nLlama.cpp to load and use the model in your application.\n\nPresent your results and your experiences with the frameworks in a short presentation.\nSubmit your code and report on moodle.",
     "crumbs": [
       "Language Models",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with (L)LMs</span>"
@@ -134,7 +134,7 @@
     "href": "content/prompting.html#instruct-tuned-models",
     "title": "Prompting",
     "section": "",
-    "text": "Fig 3.1: An example for a dataset that can be used for instruct-finetuning. This dataset can be found on huggingface\n\n\n\n\n\n\n\n\n\n📝 Task\n\n\n\nTest the difference between instruct and non-instruct-models by trying to get a gpt2-version (i.e., “QuantFactory/gpt2-xl-GGUF”) and a small Llama 3.2 Instruct-Model (i.e., “hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF” to write a small poem about the inception of the field of language modelling. Use LM-Studio to test this.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(a) A poem written by Llama 3.2 1B - a model with Instruct-Finetuning\n\n\n\n\n\n\n\n\n\n\n\n(b) A “poem” written by GPT2 - a model without Instruct-Finetuning\n\n\n\n\n\n\n\nFig 3.2: A poem and a “poem”\n\n\n\n\n\nShow answer",
+    "text": "Fig 3.1: An example for a dataset that can be used for instruct-finetuning. This dataset can be found on huggingface\n\n\n\n\n\n\n\n\n\n📝 Task\n\n\n\nTest the difference between instruct and non-instruct-models.\nDo this by trying to get a gpt2-version (i.e., “QuantFactory/gpt2-xl-GGUF”) and a small Llama 3.2 Instruct-Model (i.e., “hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF” to write a small poem about the inception of the field of language modelling.\nUse LM-Studio to test this.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(a) A poem written by Llama 3.2 1B - a model with Instruct-Finetuning\n\n\n\n\n\n\n\n\n\n\n\n(b) A “poem” written by GPT2 - a model without Instruct-Finetuning\n\n\n\n\n\n\n\nFig 3.2: A poem and a “poem”\n\n\n\n\n\nShow answer",
     "crumbs": [
       "Language Models",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Prompting</span>"
@@ -145,7 +145,7 @@
     "href": "content/prompting.html#prompting-strategies",
     "title": "Prompting",
     "section": "Prompting strategies",
-    "text": "Prompting strategies\nThe results of a prompted call to a LM is highly dependent on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of “prompt engineering” has emerged. There is a veritable plethora of resources available online that discuss different strategies for prompting LMs. It has to be said though, that the strategies that work and don’t work can vary greatly between models and tasks. A bit of general advice that holds true for nearly all models though, is to\n\ndefine the task in as many small steps as possible\nto be as literal and descriptive as possible and\nto provide examples if possible.\n\nSince the quality of results is so highly dependent on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated. One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.\n\n\n\n\n\n\nNote\n\n\n\n## 📝 Task 1. Test the above-mentioned prompting strategies on the MTOP Intent Dataset and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:\n\nPhi 3.1 mini\nGemma 2 2B\nLlama 3.2 1B\n\nUse the F1-score implemented in scikit learn to evaluate your results.\n2. You do sometimes read very specific tips on how to improve your results. Here are three, that you can find from time to time:\n\nDo promise rewards (i.e., monetary tips) instead of threatening punishments\nDo formulate using affirmation (“Do the task”) instead of negating behaviours to be avoided (“Don’t do this mistake”)\nLet the model reason about the problem before giving an answer\n\nCheck these strategies on whether they improve your results. If your first instruction already results in near-perfect classification, brainstorm a difficult task that you can validate qualitatively. Let the model write a recipe or describe Kiel for example.\n3. Present your results\n3. Upload your code to moodle",
+    "text": "Prompting strategies\nThe results of a prompted call to a LM is highly dependent on the exact wording of the prompt. This is especially true for more complex tasks, where the model needs to perform multiple steps in order to solve the task. It is not for naught that the field of “prompt engineering” has emerged. There is a veritable plethora of resources available online that discuss different strategies for prompting LMs. It has to be said though, that the strategies that work and don’t work can vary greatly between models and tasks. A bit of general advice that holds true for nearly all models though, is to\n\ndefine the task in as many small steps as possible\nto be as literal and descriptive as possible and\nto provide examples if possible.\n\nSince the quality of results is so highly dependent on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated. One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.\n\n\n\n\n\n\nNote\n\n\n\n## 📝 Task\n1. Test the above-mentioned prompting strategies on the MTOP Intent Dataset and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:\n\nPhi 3.1 mini\nGemma 2 2B\nLlama 3.2 1B\n\nUse the F1-score implemented in scikit learn to evaluate your results.\n2. You do sometimes read very specific tips on how to improve your results. Here are three, that you can find from time to time:\n\nDo promise rewards (i.e., monetary tips) instead of threatening punishments\nDo formulate using affirmation (“Do the task”) instead of negating behaviours to be avoided (“Don’t do this mistake”)\nLet the model reason about the problem before giving an answer\n\nCheck these strategies on whether they improve your results. If your first instruction already results in near-perfect classification, brainstorm a difficult task that you can validate qualitatively. Let the model write a recipe or describe Kiel for example.\n3. Present your results\n3. Upload your code to moodle",
     "crumbs": [
       "Language Models",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Prompting</span>"
@@ -435,17 +435,6 @@
     "crumbs": [
       "Finetuning",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Rank adaptation</span>"
-    ]
-  },
-  {
-    "objectID": "content/getting_started_with_llms.html#basics-of-using-open-source-models",
-    "href": "content/getting_started_with_llms.html#basics-of-using-open-source-models",
-    "title": "Getting started with (L)LMs",
-    "section": "Basics of using open source models",
-    "text": "Basics of using open source models\n\n\n\n\n\n\n📝 Task\n\n\n\nNow it is your turn! In your project-groups, you will each have to build a small “Hello World”-style application that uses an open source model.\n\nChoose a small model using the sources we discussed before.\nEach group is to use one of the following frameworks\n\nHuggingface\nOllama\nLM-Studio from python\nLlama.cpp to load and use the model in your application.\n\nPresent your results and your experiences with the frameworks in a short presentation.\nSubmit your code and report on moodle.",
-    "crumbs": [
-      "Language Models",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Getting started with (L)LMs</span>"
     ]
   }
 ]

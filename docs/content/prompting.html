@@ -300,8 +300,9 @@ Fig&nbsp;3.1: An example for a dataset that can be used for instruct-finetuning.
 </div>
 </div>
 <div class="callout-body-container callout-body">
-Test the difference between instruct and non-instruct-models by trying to get a gpt2-version (i.e., <a href="https://model.lmstudio.ai/download/QuantFactory/gpt2-xl-GGUF">“QuantFactory/gpt2-xl-GGUF”</a>) and a small Llama 3.2 Instruct-Model (i.e., <a href="https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF">“hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF”</a> to write a small poem about the inception of the field of language modelling. Use LM-Studio to test this.
-<p></p>
+<p>Test the difference between instruct and non-instruct-models.</p>
+<p>Do this by trying to get a gpt2-version (i.e., <a href="https://model.lmstudio.ai/download/QuantFactory/gpt2-xl-GGUF">“QuantFactory/gpt2-xl-GGUF”</a>) and a small Llama 3.2 Instruct-Model (i.e., <a href="https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF">“hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF”</a> to write a small poem about the inception of the field of language modelling.</p>
+<p>Use LM-Studio to test this.</p>
 </div>
 </div>
 <div class="card">
@@ -366,7 +367,8 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>## 📝 Task <strong>1.</strong> Test the above-mentioned prompting strategies on the <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">MTOP Intent Dataset</a> and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:</p>
+<p>## 📝 Task</p>
+<p><strong>1.</strong> Test the above-mentioned prompting strategies on the <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">MTOP Intent Dataset</a> and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:</p>
 <ol type="1">
 <li><a href="https://model.lmstudio.ai/download/lmstudio-community/Phi-3.1-mini-128k-instruct-GGUF">Phi 3.1 mini</a></li>
 <li><a href="https://model.lmstudio.ai/download/lmstudio-community/gemma-2-2b-it-GGUF">Gemma 2 2B</a></li>
@@ -458,7 +460,7 @@ var myFunction = function() {
   if (overlay) {
     overlay.classList.toggle('show-overlay');
   }
-};
+}
 
 for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener('click', myFunction, false);

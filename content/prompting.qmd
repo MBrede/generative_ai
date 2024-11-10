@@ -62,8 +62,8 @@ Since the quality of results is so highly dependent on the chosen model, it is g
 One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.
 
 ::: {.callout-note}
-
  ## 📝 Task 
+ 
 **1.** Test the above-mentioned prompting strategies on the [MTOP Intent Dataset](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de) and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:
 
 1. [Phi 3.1 mini](https://model.lmstudio.ai/download/lmstudio-community/Phi-3.1-mini-128k-instruct-GGUF)
