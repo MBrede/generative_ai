@@ -46,7 +46,9 @@ crossref:
   tbl-prefix: Table
   labels: arabic
   subref-labels: alpha a
-  
+
+execute:
+  echo: false
   
 bibliography: references.bib
 csl: apa.csl
