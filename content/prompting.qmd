@@ -21,7 +21,11 @@ An example for a dataset that can be used for instruct-finetuning. This dataset 
 
 ::: {.callout-note}
 ## 📝 Task
-Test the difference between instruct and non-instruct-models by trying to get a gpt2-version (i.e., ["QuantFactory/gpt2-xl-GGUF"](https://model.lmstudio.ai/download/QuantFactory/gpt2-xl-GGUF)) and a small Llama 3.2 Instruct-Model (i.e., ["hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF"](https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF) to write a small poem about the inception of the field of language modelling. Use LM-Studio to test this.</p>
+Test the difference between instruct and non-instruct-models.
+
+Do this by trying to get a gpt2-version (i.e., ["QuantFactory/gpt2-xl-GGUF"](https://model.lmstudio.ai/download/QuantFactory/gpt2-xl-GGUF)) and a small Llama 3.2 Instruct-Model (i.e., ["hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF"](https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF) to write a small poem about the inception of the field of language modelling.
+
+Use LM-Studio to test this.
 :::
 
 
