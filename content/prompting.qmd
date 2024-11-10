@@ -112,6 +112,8 @@ Start by generating two examples for each emotion. Validate these results and ad
 Then use these examples to generate 100 samples for each emotion.
 
 Use one of the above mentioned (non-manual) strategies to validate the data you generated.
+
+Upload your results to Moodle.
 :::
 
 
