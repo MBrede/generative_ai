@@ -172,6 +172,19 @@
   file = {/home/brede/Zotero/storage/6U6HIUDU/Guhr et al. - 2020 - Training a Broad-Coverage German Sentiment Classif.pdf}
 }
 
+@misc{heidloffFinetuningSmallLLMs2023,
+  title = {Fine-Tuning Small {{LLMs}} with {{Output}} from Large {{LLMs}}},
+  author = {Heidloff, Niklas},
+  year = {2023},
+  month = aug,
+  journal = {Niklas Heidloff},
+  urldate = {2024-11-10},
+  abstract = {The innovation in the AI space is continuing in an incredible speed. This post describes a new technique that has evolved recently which allows smaller fine-tuned models to almost reach the performance of much larger models.},
+  howpublished = {https://heidloff.net/article/fine-tune-small-llm-with-big-llm/},
+  langid = {english},
+  file = {/home/brede/Zotero/storage/ANZB5Q5S/fine-tune-small-llm-with-big-llm.html}
+}
+
 @misc{heidloffFoundationModelsTransformers2023,
   title = {Foundation {{Models}}, {{Transformers}}, {{BERT}} and {{GPT}}},
   author = {Heidloff, Niklas},
@@ -335,6 +348,23 @@
   file = {/home/brede/Zotero/storage/GWMC2LWP/Klinger et al. - 2016 - Automatic Emotion Detection for antitative Literar.pdf}
 }
 
+@misc{kumarSelectiveFinetuningLLMlabeled2024,
+  title = {Selective {{Fine-tuning}} on {{LLM-labeled Data May Reduce Reliance}} on {{Human Annotation}}: {{A Case Study Using Schedule-of-Event Table Detection}}},
+  shorttitle = {Selective {{Fine-tuning}} on {{LLM-labeled Data May Reduce Reliance}} on {{Human Annotation}}},
+  author = {Kumar, Bhawesh and Amar, Jonathan and Yang, Eric and Li, Nan and Jia, Yugang},
+  year = {2024},
+  month = aug,
+  number = {arXiv:2405.06093},
+  eprint = {2405.06093},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2405.06093},
+  urldate = {2024-11-10},
+  abstract = {Large Language Models (LLMs) have demonstrated their efficacy across a broad spectrum of tasks in healthcare applications. However, often LLMs need to be fine-tuned on task-specific expert annotated data to achieve optimal performance, which can be expensive and time consuming. In this study, we fine-tune PaLM-2 with parameter efficient fine-tuning (PEFT) using noisy labels obtained from gemini-pro 1.0 for the detection of Schedule-of-Event (SoE) tables, which specify care plan in clinical trial protocols. We introduce a filtering mechanism to select high-confidence labels for this table classification task, thereby reducing the noise in the auto-generated labels. We show that fine-tuned PaLM-2 with those labels achieves performance that exceeds the gemini-pro 1.0 and other LLMs. Furthermore, its performance is close to a PaLM-2 fine-tuned on labels obtained from non-expert annotators. Our results show that leveraging LLM-generated labels through powerful models like gemini-pro can potentially serve as a viable strategy for improving LLM performance through fine-tuning in specialized tasks, particularly in domains where expert annotations are scarce, expensive, or time-consuming to obtain.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/home/brede/Zotero/storage/ISZQTCQ9/Kumar et al. - 2024 - Selective Fine-tuning on LLM-labeled Data May Reduce Reliance on Human Annotation A Case Study Usin.pdf;/home/brede/Zotero/storage/8DY6QRRT/2405.html}
+}
+
 @inproceedings{leDistributedRepresentationsSentences2014,
   title = {Distributed {{Representations}} of {{Sentences}} and {{Documents}}},
   booktitle = {Proceedings of the 31st {{International Conference}} on {{Machine Learning}}},
@@ -476,6 +506,37 @@
   keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences,Machine Learning (cs.LG)}
 }
 
+@article{silvaImprovingDenseRetrieval2024,
+  title = {Improving Dense Retrieval Models with {{LLM}} Augmented Data for Dataset Search},
+  author = {Silva, Levy and Barbosa, Luciano},
+  year = {2024},
+  month = jun,
+  journal = {Knowledge-Based Systems},
+  volume = {294},
+  pages = {111740},
+  issn = {0950-7051},
+  doi = {10.1016/j.knosys.2024.111740},
+  urldate = {2024-11-10},
+  abstract = {Data augmentation for training supervised models has achieved great results in different areas. With the popularity of Large Language Models (LLMs), a research area has emerged focused on applying LLMs for text data augmentation. This approach is particularly beneficial for low-resource tasks, whereby the availability of labeled data is very scarce. Dataset search is an information retrieval task that aims to retrieve relevant datasets based on user queries. However, due to the lack of labeled data tailored explicitly for this task, developing accurate retrieval models becomes challenging. In this paper, we target LLMs to create training examples for retrieval models in the dataset search task. Specifically, we propose a new pipeline that generates synthetic queries from dataset descriptions using LLMs. The query-description pairs are utilized to fine-tune dense retrieval approaches for re-ranking, which we assume as soft matches to our task. We evaluated our pipeline using fine-tuned embedding models for semantic search over dataset search benchmarks (NTCIR and ACORDAR). We tuned these models in the dataset search task using the synthetic data generated by our solution and compared their performance with the original models. The results show the models tuned on the synthetic data statistically outperform the baselines at different normalized discounted cumulative gain levels.},
+  keywords = {Data augmentation,Dataset retrieval,Dataset search,Large language models,Query generation},
+  file = {/home/brede/Zotero/storage/6CRLBRGF/S0950705124003757.html}
+}
+
+@misc{singhEmpiricalStudyValidating2024,
+  title = {An {{Empirical Study}} of {{Validating Synthetic Data}} for {{Formula Generation}}},
+  author = {Singh, Usneek and Cambronero, Jos{\'e} and Gulwani, Sumit and Kanade, Aditya and Khatry, Anirudh and Le, Vu and Singh, Mukul and Verbruggen, Gust},
+  year = {2024},
+  month = nov,
+  number = {arXiv:2407.10657},
+  eprint = {2407.10657},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2407.10657},
+  urldate = {2024-11-10},
+  abstract = {Large language models (LLMs) can be leveraged to help with writing formulas in spreadsheets, but resources on these formulas are scarce, impacting both the base performance of pre-trained models and limiting the ability to fine-tune them. Given a corpus of formulas, we can use a(nother) model to generate synthetic natural language utterances for fine-tuning. However, it is important to validate whether the NL generated by the LLM is indeed accurate to be beneficial for fine-tuning. In this paper, we provide empirical results on the impact of validating these synthetic training examples with surrogate objectives that evaluate the accuracy of the synthetic annotations. We demonstrate that validation improves performance over raw data across four models (2 open and 2 closed weight). Interestingly, we show that although validation tends to prune more challenging examples, it increases the complexity of problems that models can solve after being fine-tuned on validated data.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
+}
+
 @misc{touvronLLaMAOpenEfficient2023,
   title = {{{LLaMA}}: {{Open}} and {{Efficient Foundation Language Models}}},
   shorttitle = {{{LLaMA}}},
@@ -607,4 +668,20 @@
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
   file = {/home/brede/Zotero/storage/K85T5MI8/Yadkori et al. - 2024 - To Believe or Not to Believe Your LLM.pdf;/home/brede/Zotero/storage/P483HJIW/2406.html}
+}
+
+@misc{zhongSyntheT2CGeneratingSynthetic2024,
+  title = {{{SyntheT2C}}: {{Generating Synthetic Data}} for {{Fine-Tuning Large Language Models}} on the {{Text2Cypher Task}}},
+  shorttitle = {{{SyntheT2C}}},
+  author = {Zhong, Ziije and Zhong, Linqing and Sun, Zhaoze and Jin, Qingyun and Qin, Zengchang and Zhang, Xiaofan},
+  year = {2024},
+  month = jun,
+  number = {arXiv:2406.10710},
+  eprint = {2406.10710},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2406.10710},
+  urldate = {2024-11-10},
+  abstract = {Integrating Large Language Models (LLMs) with existing Knowledge Graph (KG) databases presents a promising avenue for enhancing LLMs' efficacy and mitigating their "hallucinations". Given that most KGs reside in graph databases accessible solely through specialized query languages (e.g., Cypher), there exists a critical need to bridge the divide between LLMs and KG databases by automating the translation of natural language into Cypher queries (commonly termed the "Text2Cypher" task). Prior efforts tried to bolster LLMs' proficiency in Cypher generation through Supervised Fine-Tuning. However, these explorations are hindered by the lack of annotated datasets of Query-Cypher pairs, resulting from the labor-intensive and domain-specific nature of annotating such datasets. In this study, we propose SyntheT2C, a methodology for constructing a synthetic Query-Cypher pair dataset, comprising two distinct pipelines: (1) LLM-based prompting and (2) template-filling. SyntheT2C facilitates the generation of extensive Query-Cypher pairs with values sampled from an underlying Neo4j graph database. Subsequently, SyntheT2C is applied to two medical databases, culminating in the creation of a synthetic dataset, MedT2C. Comprehensive experiments demonstrate that the MedT2C dataset effectively enhances the performance of backbone LLMs on the Text2Cypher task. Both the SyntheT2C codebase and the MedT2C dataset will be released soon.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
 }

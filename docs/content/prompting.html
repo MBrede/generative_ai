@@ -94,7 +94,7 @@ div.csl-indent {
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -254,7 +254,7 @@ Prompting<br>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/prompting.html"><span class="chapter-title">Prompting</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -290,9 +290,20 @@ Fig&nbsp;3.1: An example for a dataset that can be used for instruct-finetuning.
 </figcaption>
 </figure>
 </div>
-<p class="q">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
 Test the difference between instruct and non-instruct-models by trying to get a gpt2-version (i.e., <a href="https://model.lmstudio.ai/download/QuantFactory/gpt2-xl-GGUF">“QuantFactory/gpt2-xl-GGUF”</a>) and a small Llama 3.2 Instruct-Model (i.e., <a href="https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF">“hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF”</a> to write a small poem about the inception of the field of language modelling. Use LM-Studio to test this.
-</p>
+<p></p>
+</div>
+</div>
 <div class="card">
 <div class="content">
 <div id="fig-poems" class="quarto-layout-panel">
@@ -345,8 +356,17 @@ Fig&nbsp;3.2: A poem and a “poem”
 <li>to provide examples if possible.</li>
 </ol>
 <p>Since the quality of results is so highly dependent on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated. One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.</p>
-<div class="q">
-<p><strong>1.</strong> Test the above-mentioned prompting strategies on the <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">MTOP Intent Dataset</a> and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>## 📝 Task <strong>1.</strong> Test the above-mentioned prompting strategies on the <a href="https://huggingface.co/datasets/mteb/mtop_intent/viewer/de">MTOP Intent Dataset</a> and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:</p>
 <ol type="1">
 <li><a href="https://model.lmstudio.ai/download/lmstudio-community/Phi-3.1-mini-128k-instruct-GGUF">Phi 3.1 mini</a></li>
 <li><a href="https://model.lmstudio.ai/download/lmstudio-community/gemma-2-2b-it-GGUF">Gemma 2 2B</a></li>
@@ -361,28 +381,71 @@ Fig&nbsp;3.2: A poem and a “poem”
 </ul>
 <p>Check these strategies on whether they improve your results. If your first instruction already results in near-perfect classification, brainstorm a difficult task that you can validate qualitatively. Let the model write a recipe or describe Kiel for example.</p>
 <p><strong>3.</strong> Present your results</p>
+<p><strong>3.</strong> Upload your code to moodle</p>
+</div>
 </div>
 </section>
-<section id="generation-of-synthetic-texts" class="level2">
+<section id="generation-of-synthetic-texts" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="generation-of-synthetic-texts">Generation of synthetic texts</h2>
 <p>As we discussed before, small models can perform on an acceptable level, if they are finetuned appropriately.</p>
-<p>A good way to do this is to use a larger model to generate synthetic data that you then use for training the smaller model. This approach has been used successfully in many applications.</p>
-</section>
+<p>A good way to do this is to use a larger model to generate synthetic data that you then use for training the smaller model. This approach has been used successfully in many applications, for example for improving graph-database queries <span class="citation" data-cites="zhongSyntheT2CGeneratingSynthetic2024">(<a href="#ref-zhongSyntheT2CGeneratingSynthetic2024" role="doc-biblioref">Zhong et al., 2024</a>)</span>, for improving dataset search <span class="citation" data-cites="silvaImprovingDenseRetrieval2024">(<a href="#ref-silvaImprovingDenseRetrieval2024" role="doc-biblioref">Silva &amp; Barbosa, 2024</a>)</span> or the generation of spreadsheet-formulas <span class="citation" data-cites="singhEmpiricalStudyValidating2024">(<a href="#ref-singhEmpiricalStudyValidating2024" role="doc-biblioref">Singh et al., 2024</a>)</span>.</p>
+<p>Since even the largest LLMs are not perfect in general and might be even worse on some specific niche tasks, evidence suggests that a validation strategy for data generated in this way is beneficial <span class="citation" data-cites="singhEmpiricalStudyValidating2024 kumarSelectiveFinetuningLLMlabeled2024">(<a href="#ref-kumarSelectiveFinetuningLLMlabeled2024" role="doc-biblioref">Kumar et al., 2024</a>; <a href="#ref-singhEmpiricalStudyValidating2024" role="doc-biblioref">Singh et al., 2024</a>)</span>.</p>
+<p>Strategies to validate the synthetic data include:</p>
+<ul>
+<li>Using a human annotator to label part of the data to test the models output</li>
+<li>Forcing the model to answer in a structured way that is automatically testable (e.g., by using JSON)</li>
+<li>Forcing the model to return 2 or more answers and checking for consistency</li>
+<li>Combining the two approaches above (i.e., forcing the model to return multiple structured outputs (JSON, XML, YAML, …) and checking for consistency)</li>
+<li>Using a second LLM/different prompt to rate the answers</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using your script for batch-testing different prompts, generate synthetic data for a emotion detection task based on <a href="https://en.wikipedia.org/wiki/Paul_Ekman">Paul Ekman’s</a> six basic emotions: anger, disgust, fear, happiness, sadness and surprise<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>The generated data should consist of a sentence and the emotion that is expressed in it. Start by generating two examples for each emotion. Validate these results and adapt them if necessary. Then use these examples to generate 100 samples for each emotion.</p>
+<p>Use one of the above mentioned (non-manual) strategies to validate the data you generated.</p>
+</div>
+</div>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Though this nomenclature has fallen a bit out of fashion</p></div></div></section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 <ul>
 <li><a href="https://www.promptingguide.ai/">This prompting-guide</a> has some nice general advice</li>
 <li><a href="https://platform.openai.com/docs/guides/prompt-engineering">OpenAI</a> has its own set of tipps</li>
 <li><a href="https://docs.cloud.deepset.ai/docs/prompt-engineering-guidelines">deepset</a>, the company behind Haystack, has a nice guide as well</li>
+<li><a href="https://heidloff.net/article/fine-tune-small-llm-with-big-llm/">This blog-article</a>, again written by Heidloff <span class="citation" data-cites="heidloffFinetuningSmallLLMs2023">(<a href="#ref-heidloffFinetuningSmallLLMs2023" role="doc-biblioref">Heidloff, 2023</a>)</span></li>
 </ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-heidloffFinetuningSmallLLMs2023" class="csl-entry" role="listitem">
+Heidloff, N. (2023). Fine-tuning small <span>LLMs</span> with <span>Output</span> from large <span>LLMs</span>. In <em>Niklas Heidloff</em>. https://heidloff.net/article/fine-tune-small-llm-with-big-llm/.
+</div>
+<div id="ref-kumarSelectiveFinetuningLLMlabeled2024" class="csl-entry" role="listitem">
+Kumar, B., Amar, J., Yang, E., Li, N., &amp; Jia, Y. (2024). <em>Selective <span class="nocase">Fine-tuning</span> on <span class="nocase">LLM-labeled Data May Reduce Reliance</span> on <span>Human Annotation</span>: <span class="nocase">A Case Study Using Schedule-of-Event Table Detection</span></em> (arXiv:2405.06093). arXiv. <a href="https://doi.org/10.48550/arXiv.2405.06093">https://doi.org/10.48550/arXiv.2405.06093</a>
+</div>
 <div id="ref-radfordLanguageModelsAre2019" class="csl-entry" role="listitem">
 Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., &amp; Sutskever, I. (2019). Language models are unsupervised multitask learners. <em>OpenAI Blog</em>, <em>1</em>(8), 9.
 </div>
+<div id="ref-silvaImprovingDenseRetrieval2024" class="csl-entry" role="listitem">
+Silva, L., &amp; Barbosa, L. (2024). Improving dense retrieval models with <span>LLM</span> augmented data for dataset search. <em>Knowledge-Based Systems</em>, <em>294</em>, 111740. <a href="https://doi.org/10.1016/j.knosys.2024.111740">https://doi.org/10.1016/j.knosys.2024.111740</a>
+</div>
+<div id="ref-singhEmpiricalStudyValidating2024" class="csl-entry" role="listitem">
+Singh, U., Cambronero, J., Gulwani, S., Kanade, A., Khatry, A., Le, V., Singh, M., &amp; Verbruggen, G. (2024). <em>An <span>Empirical Study</span> of <span>Validating Synthetic Data</span> for <span>Formula Generation</span></em> (arXiv:2407.10657). arXiv. <a href="https://doi.org/10.48550/arXiv.2407.10657">https://doi.org/10.48550/arXiv.2407.10657</a>
+</div>
+<div id="ref-zhongSyntheT2CGeneratingSynthetic2024" class="csl-entry" role="listitem">
+Zhong, Z., Zhong, L., Sun, Z., Jin, Q., Qin, Z., &amp; Zhang, X. (2024). <em><span>SyntheT2C</span>: <span>Generating Synthetic Data</span> for <span>Fine-Tuning Large Language Models</span> on the <span>Text2Cypher Task</span></em> (arXiv:2406.10710). arXiv. <a href="https://doi.org/10.48550/arXiv.2406.10710">https://doi.org/10.48550/arXiv.2406.10710</a>
+</div>
 </div>
 </section>
+
 
 </main> <!-- /main -->
 <script>

@@ -39,13 +39,13 @@ fastText [@bojanowskiEnrichingWordVectors2017], an open-source library developed
 
 Still, these models did not really solve the inherent issue of the order of words in a sentence. The input of models of this generation still used a dummyfied version of the corpus to represent context, which loses a lot of information.
 
-![RNN-model, in this cased trained on text prediction.](../imgs/rnn.gif){#fig-rnn width=100%}
+![Illustration of a simple RNN-model, (exaggeratingly) illustrating the issue of vanishing gradients](../imgs/rnns.webp){#fig-rnn width=100%}
 
-Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of long-term dependencies in text data and improve the understanding of context. However, RNNs suffered from their architecture's inherent inability to retain information over long sequences.
+Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of sequential dependencies in text data and improve the understanding of context. However, RNNs suffered from their architecture's inherent inability to retain information over long sequences. Simple RNN- cells^[And pretty much all of the more complex variants] iterate through a sequence and use both their last output and the next sequence element as input to predict the next output. This makes it hard for them to learn long-term dependencies, since they have to compress all information into one vector. This problem is known as the **vanishing gradient** problem and is schematically illustrated in @fig-rnn.
 
-![LSTM-model, also trained on text prediction.](../imgs/lstm.gif){#fig-lstm width=100%}
+<!-- ![LSTM-model, also trained on text prediction.](../imgs/lstm.gif){#fig-lstm width=100%} -->
 
-**Long Short-Term Memory (LSTM) networks** addressed this issue by introducing a mechanism called "gates" that allowed information to flow through the network more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time. Additionally, a single LSTM  is still only able to process the input sequence from left to right, which is not ideal for inputs that contain ambiguos words that need context after them to fully understand their meaning.
+**Long Short-Term Memory (LSTM) networks** addressed this issue by introducing a mechanism called "gates" that allowed information to flow through the network selectively and more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time. Additionally, a single LSTM  is still only able to process the input sequence from left to right, which is not ideal for inputs that contain ambiguos words that need context after them to fully understand their meaning.
 Take the following part of a sentence:
 
 > The plant was growing
@@ -99,7 +99,7 @@ As a simplification, we assume that all aspects can be described in binary terms
 
 ```{r 1x5/1x5}
 #| fig-width: 8
-#| fig-height: 2
+#| fig-height: 2.5
 display_a_multiplication(matrix(c(1, 0, 1, 0, 1), nrow = 1), 
                          matrix(c(1, 0, 1, 1, 0), nrow = 5),bracket_kink_length = 0.2)
 ```
@@ -109,7 +109,7 @@ If we now add a series of items we want to query for to our matrix $K$, the resu
 
 ```{r 1x5/5x5}
 #| fig-width: 8
-#| fig-height: 2
+#| fig-height: 2.5
 mat2 <- matrix(c(
     1, 0, 1, 1, 0,
     0, 0, 1, 0, 1,
@@ -127,7 +127,7 @@ display_a_multiplication(matrix(c(1, 0, 1, 0, 1), nrow = 1),
 
 ```{r 5x5/5x5}
 #| fig-width: 8
-#| fig-height: 2
+#| fig-height: 2.5
 
 mat1 = matrix(c(1, 0, 1, 0, 1, 0L, 0L, 1L, 0L, 0L, 1L, 0L, 1L, 1L, 0L, 0L, 0L, 1L, 1L, 0L, 
 0L, 0L, 0L, 1L, 0L), nrow = 5, byrow = TRUE)
@@ -162,7 +162,7 @@ $$
 
 ```{r QxKT}
 #| fig-width: 8
-#| fig-height: 2
+#| fig-height: 2.5
 
 mat1 = matrix(round(runif(25, -2,2), 2), nrow = 5, byrow = TRUE)
 
@@ -188,7 +188,7 @@ $$
 
 ```{r QxKT/sqrt(dn)}
 #| fig-width: 8
-#| fig-height: 2
+#| fig-height: 2.5
 plot_an_equation(list((mat1 %*% mat2)/sqrt(dim(mat1)[2])),
                          bracket_kink_length = 0.4,
                          show_names = T)
@@ -203,7 +203,7 @@ $$
 
 ```{r softmax_QxKT/sqrt(dn)V}
 #| fig-width: 8
-#| fig-height: 2
+#| fig-height: 2.5
 
 scaled_qkt = mat1 %*% mat2/sqrt(dim(mat1)[2])
 
@@ -334,6 +334,9 @@ A good starting point for getting an overview about such metrics and benchmarks 
 
 ## Basics of using open source models
 
+::: {.callout-note}
+## 📝 Task
+
 Now it is your turn!
 In your project-groups, you will each have to build a small "Hello World"-style application that uses an open source model.
 
@@ -346,6 +349,7 @@ In your project-groups, you will each have to build a small "Hello World"-style 
     to load and use the model in your application.
 3. Present your results and your experiences with the frameworks in a short presentation.
 4. Submit your code and report on moodle.
+:::
 
 ## Further Readings
 

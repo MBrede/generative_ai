@@ -122,7 +122,7 @@ plot_an_equation <- function(operation_list,
     coord_equal() +
     theme_void() +
     theme(legend.position = 'none') +
-    scale_size(range = c(1, 10)) +
+    scale_size(range = c(0, 7.5)) +
     scale_color_gradient2(low = '#376795',
                           mid = '#fff',
                           high = '#EF8A47')
