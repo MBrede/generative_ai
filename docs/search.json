@@ -4,7 +4,17 @@
     "href": "index.html",
     "title": "Generative AI",
     "section": "",
-    "text": "Introduction\nThis introductory script on the topic of “Generative AI” was created for the elective module “Generative AI” as given to the master students of the master programme “Data Science” at the University of Applied Sciences Kiel and was built using quarto.\nThe intention of this script is not to be a complete guide to all things generative AI, but to give an overview of the topics and applications of these emerging techniques.",
+    "text": "Introduction\nThis script serves as an introduction to Generative AI and was developed for the elective module “Generative AI,” offered to master’s students of the “Data Science” program at the University of Applied Sciences Kiel. Built using quarto, this resource is designed to provide an accessible overview of key topics and applications in this rapidly evolving field.\nWhile not an exhaustive guide to Generative AI, the script highlights foundational concepts, modern applications, and practical techniques that empower students to engage with and explore the possibilities of these transformative technologies.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html#contents-and-learning-objectives",
+    "href": "index.html#contents-and-learning-objectives",
+    "title": "Generative AI",
+    "section": "Contents and learning objectives",
+    "text": "Contents and learning objectives\nContents listed in the module database entry:\nOpen Source Language Models\n\nOverview of model lists\nOllama\nGeneration of synthetic text as training sets\n\nAgent Systems\n\nLlamaindex, LangChain & Haystack\nFunction calling\nData analysis\n\nEmbeddings and Vector Stores\n\nSemantic Search\nRetrieval-augmented generation\nRecommendations\n\nAI Image Generators\n\nGenerative Adversarial Networks (GANs)\nVariational Autoencoders / Diffusion Models\nGenerative approaches for image dataset augmentation\n\nFine-Tuning of LLMs and Diffusion Models\n\nExamples: LoRA, QLoRA, MoRA\n\n\nLearning objectives listed in the module database entry:\nStudents\n\nknow the fundamentals of generative AI systems.\nknow various modern applications of generative AI systems.\nknow the theoretical foundations and practical applications of generative AI systems.\n\nStudents\n\nare able to explain and apply various open-source language models.\nare able to implement and utilize agent systems and their functionalities.\nare able to understand and use embeddings and vector stores for semantic search and recommendations.\nare able to explain and practically apply different methods for image generation.\nare able to fine-tune large language models (LLMs) and diffusion models for specific tasks.\n\nStudents\n\nare able to successfully organize teamwork for generative AI projects.\nare able to report and present team solutions for practical project tasks.\nare able to interpret and communicate the approaches in technical and functional terms.\n\nStudents\n\nare able to work professionally in the field of generative AI systems.\nare able to give and accept professional feedback to different topics of generative AI systems.\nare able to select relevant scientific literature about generative AI systems.",
     "crumbs": [
       "Introduction"
     ]
