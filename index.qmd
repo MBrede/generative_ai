@@ -9,7 +9,103 @@ toc-title: '![](cover.jpg){width=240px}<br> <h3>Introduction</h3>'
 library(tidyverse)
 ``` -->
 
-{{< include README.md >}}
+This script serves as an introduction to **Generative AI** and was developed for the elective module "Generative AI," offered to master's students of the "Data Science" program at the University of Applied Sciences Kiel. Built using `quarto`, this resource is designed to provide an accessible overview of key topics and applications in this rapidly evolving field.
+
+While not an exhaustive guide to Generative AI, the script highlights foundational concepts, modern applications, and practical techniques that empower students to engage with and explore the possibilities of these transformative technologies.
+
+
+## Contents and learning objectives
+
+Contents listed in the [module database entry](https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1):
+
+Open Source Language Models
+
+- Overview of model lists
+- Ollama
+- Generation of synthetic text as training sets
+
+Agent Systems
+
+- Llamaindex, LangChain & Haystack
+- Function calling
+- Data analysis
+
+Embeddings and Vector Stores
+
+- Semantic Search
+- Retrieval-augmented generation
+- Recommendations
+
+AI Image Generators
+
+- Generative Adversarial Networks (GANs)
+- Variational Autoencoders / Diffusion Models
+- Generative approaches for image dataset augmentation
+
+Fine-Tuning of LLMs and Diffusion Models
+
+- Examples: LoRA, QLoRA, MoRA
+
+----
+
+Learning objectives listed in the [module database entry](https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1):
+
+Students
+
+- know the fundamentals of generative AI systems.
+- know various modern applications of generative AI systems.
+- know the theoretical foundations and practical applications of generative AI systems.
+
+Students
+
+- are able to explain and apply various open-source language models.
+- are able to implement and utilize agent systems and their functionalities.
+- are able to understand and use embeddings and vector stores for semantic search and recommendations.
+- are able to explain and practically apply different methods for image generation.
+- are able to fine-tune large language models (LLMs) and diffusion models for specific tasks.
+
+Students
+
+- are able to successfully organize teamwork for generative AI projects.
+- are able to report and present team solutions for practical project tasks.
+- are able to interpret and communicate the approaches in technical and functional terms.
+
+Students
+
+- are able to work professionally in the field of generative AI systems.
+- are able to give and accept professional feedback to different topics of generative AI systems.
+- are able to select relevant scientific literature about generative AI systems.
+
+----
+
+## Schedule:
+
+| Number: | CW: | Date: | Title: | Topics: |
+|---:|--:|---:|---|---|
+|1|46| 12.11.  | Getting started with (L)LMs| Language Model Basics  |
+||  |         || Choosing open source models |
+||  |         || Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
+|2|46|  13.11. | Prompting| Prompting strategies  |
+||  |         || Generation of synthetic texts  |
+|3|47|  19.11. | Agent basics| Fundamentals of agents and train-of-thought prompting |
+||  |         || Examples of agent-frameworks (Llamaindex, LangChain & Haystack)|
+|4|47|  20.11. | Embedding-based agent-systems| Semantic embeddings and vector stores |
+||  |         || Retrieval augmented and interleaved generation  |
+|5|48| 26.11.  | Function Calling| Code generation and function calling  |
+||  |         || Data analysis  |
+|6|48|  27.11. | Agent interaction | Constitutional AI Tuning |
+||  |         || Preventing prompt injections |
+|7|49| 3.12.  |AI image generation I|  AI image generator basics |
+||  |         || Basics of using Open Source AI image generation models |
+||  |         ||  Generative Adversarial Networks (GANs) |
+|8|49| 4.12.  |AI image generation II| Multimodal embeddings |
+||  |         || Variational Autoencoders / Diffusion Models  |
+|9|50|  10.12. |Augmentation of image datasets| (Generative) approaches for image dataset augmentation |
+|10|50| 11.12.  |Finetuning Basics| Basics of Finetuning strategies  |
+||  |         || Alignment and Finetuning of (L)LMs |
+|11|51|  17.12. |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
+||  |         || (Q)LoRA fine-tuning using Unsloth |
+|12|51| 18.12.  |Project presentations||
 
 : Course schedule {.striped .hover tbl-colwidths="[5,5,10,30,50]"}
 
