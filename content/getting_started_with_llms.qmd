@@ -63,7 +63,7 @@ The ELMo model [@petersDeepContextualizedWord2018], which stands for Embeddings 
 
 ### Attention is all you need
 
-In their seminal paper "Attention is all you need", @vaswaniAttentionAllYou2023 described the transformer architecture.
+In their transformative paper "Attention is all you need", @vaswaniAttentionAllYou2023 described the transformer architecture.
 
 As the paper's title neatly suggests, the major breakthrough presented in this paper was the introduction of the so-called self-attention mechanism. This mechanism allows the model to "focus" on different parts of the input to a) determine the appropriate context for each word and b) to improve its performance on differing tasks by allowing the model to filter unnecessary information.
 
