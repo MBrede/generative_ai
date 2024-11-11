@@ -201,7 +201,7 @@ Since we want to use this matrix for filtering our dataset, we would prefer the 
 The resulting matrix with scaled weights for each aspect is then multiplied with the value-matrix that contains one datapoint in each row, described by 5 aspects along the columns.
 
 $$
-softmax(\frac{Q \times K^T}{\sqrt{d_n}}) \times V = 
+\text{softmax}(\frac{Q \times K^T}{\sqrt{d_n}}) \times V = 
 $$
 
 ```{r softmax_QxKT/sqrt(dn)V}
@@ -232,7 +232,7 @@ This small example is already pretty close to the general attention-mechanism de
 
 ![Multi-headed attention as depicted in @vaswaniAttentionAllYou2023](../imgs/multi-head.png){#fig-multihead}
 
- Instead of 5x5 matrices, the attenion mechanism as described in the paper implements $d_n \times d_c$^[$\frac{d_n}{h} \times \frac{d_c}{h}$ actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce th computational cost.] matrices, where $d_n$ is the dimension of the embedding space^[I.e., the dimensionality used to represent each word's meaning. In the previous toy-example illustrating the concept of embeddings, this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.] and $d_c$ is the size of the context window. In the original paper, @vaswaniAttentionAllYou2023 implement the context-window as the same size as the embedding space (i.e., $d_n = d_c$).
+ Instead of 5x5 matrices, the attenion mechanism as described in the paper implements $d_n \times d_c$^[$\frac{d_n}{h} \times \frac{d_c}{h}$ actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce th computational cost.] matrices, where $d_n$ is the dimension of the embedding space^[I.e., the dimensionality used to represent each word's meaning. In the previous toy-example illustrating the concept of embeddings (@fig-embed), this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.] and $d_c$ is the size of the context window. In the original paper, @vaswaniAttentionAllYou2023 implement the context-window as the same size as the embedding space (i.e., $d_n = d_c$).
  In @fig-illustratedAttention you can see a brilliant illustration of the multiheaded-attention mechanism at work.
 
 ![Illustration of the multi-headed attention mechanism. Taken from @hussainTutorialOpensourceLarge2024](../imgs/illustrated_attention.png){#fig-illustratedAttention}
@@ -249,7 +249,7 @@ $$
 \end{align}
 $$
 
-where $W_{Q, k, v}$ are the learned weight matrices and $X$ is the input matrix. This input matrix consists of a) the learned embeddings of the tokenized input-parts and b) the added, so called positional encoding.^[While we are talking about omitted details, the whole architecture implements its layers as residual layers. This means that the output of each layer is added to the input of the layer before it is passed on to the next layer. But this detail is irelevant for our understanding of the central mechanism.]
+where $W_{Q, k, v}$ are the learned weight matrices and $X$ is the input matrix. This input matrix consists of a) the learned embeddings of the tokenized input-parts and b) the added, so called positional encoding.^[While we are talking about omitted details, the whole architecture implements its layers as residual layers. This means that the output of each layer is added to the input of the layer before, before it is passed on to the next layer. But this detail is irelevant for our understanding of the central mechanism.]
 
 The positional encoding is a vector that encodes the position of each token in the input sequence. It is added to the embedding of each token to provide the model with information about the order of the tokens in the sequence. The positional encoding is calculated as follows:
 
