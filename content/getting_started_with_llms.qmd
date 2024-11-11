@@ -125,7 +125,7 @@ display_a_multiplication(matrix(c(1, 0, 1, 0, 1), nrow = 1),
                          ,bracket_kink_length = 0.4)
 ```
 
- The result is a vector of attention scores that sum up to 1 for each word in the input sequence.
+ The result is a vector of scores that indicate the matches of the query per key.
  This principle does obviously also work for more than one query by adding more rows to our Query matrix $Q$. This does result in a matrix, in which each row indicates the amount of matching keys for each query:
 
 ```{r 5x5/5x5}

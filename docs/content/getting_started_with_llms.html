@@ -435,7 +435,7 @@ Fig&nbsp;2.5: Illustration of a simple RNN-model, (exaggeratingly) illustrating 
 </div>
 </div>
 </div>
-<p>The result is a vector of attention scores that sum up to 1 for each word in the input sequence. This principle does obviously also work for more than one query by adding more rows to our Query matrix <span class="math inline">\(Q\)</span>. This does result in a matrix, in which each row indicates the amount of matching keys for each query:</p>
+<p>The result is a vector of scores that indicate the matches of the query per key. This principle does obviously also work for more than one query by adding more rows to our Query matrix <span class="math inline">\(Q\)</span>. This does result in a matrix, in which each row indicates the amount of matching keys for each query:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
