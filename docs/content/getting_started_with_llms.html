@@ -413,7 +413,7 @@ Fig&nbsp;2.5: Illustration of a simple RNN-model, (exaggeratingly) illustrating 
 <li><span class="math inline">\(V\)</span> is the value matrix.</li>
 <li><span class="math inline">\(d_k\)</span> is the dimensionality of the key vectors, ensuring scale invariance.</li>
 </ul>
-<p>Let’s illustrate this with a practical example.</p>
+<p>Let’s first illustrate this concept with a practical example (not specifically from the context of NLP) to later circle back to its application in the transformer architecture.</p>
 <p>We look at a retrieval task in which we query in a domain that has 5 attributes describing the items in it. The aforementioned “lookup” is then implemented by calculating the dot product between the query and the transposed keys resulting in a vector of weights for each input-aspect.</p>
 <p>As a simplification, we assume that all aspects can be described in binary terms. A hypothetical 1x5 query matrix (Q) represents the aspects we are querying in a 5-dimensional space, while a transposed 1x5 key matrix (K) represents the aspects of the search space. The dot product between these matrices results in a scalar that reflects the alignment or similarity between the query and the key, effectively indicating how many aspects of the query align with the search space.</p>
 <div class="cell">

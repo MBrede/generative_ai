@@ -93,7 +93,7 @@ where:
 - $V$ is the value matrix.
 - $d_k$ is the dimensionality of the key vectors, ensuring scale invariance.
 
-Let’s illustrate this with a practical example.
+Let’s first illustrate this concept with a practical example (not specifically from the context of NLP) to later circle back to its application in the transformer architecture.
 
 We look at a retrieval task in which we query in a domain that has 5 attributes describing the items in it.
 The aforementioned "lookup" is then implemented by calculating the dot product between the query and the transposed keys resulting in a vector of weights for each input-aspect.
