@@ -21,19 +21,19 @@ This section will first explore the evolution of these representations before in
 
 ### A short history of natural language processing
 
-![BOW-representation of sentences.](../imgs/bow.gif){#fig-BOW width=100%}
+![BOW-representation of sentences.](../imgs/bow.gif){#fig-BOW .enlarge-onhover width=100%}
 
 The **Bag Of Words (BOW)** method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus. Additionally, it does not take into account the order of words in a sentence, which can be crucial for understanding its meaning. For example, the sentences "The cat is on the mat" and "The mat is on the cat" have different meanings despite having the same set of words.
 
-![CBOW-representation of corpus.](../imgs/cbow.gif){#fig-CBOW width=100%}
+![CBOW-representation of corpus.](../imgs/cbow.gif){#fig-CBOW .enlarge-onhover width=100%}
 
 The **Continuous Bag Of Words (CBOW)** method extends traditional BOW by representing words as dense vectors in a continuous space. CBOW predicts a target word based on its context, learning meaningful word representations from large amounts of text data.
 
-![FastText^[Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext's spiritual successor word2vec [@mikolovEfficientEstimationWord2013].] Model using CBOW-Method to predict missing word.](../imgs/training.gif){#fig-fasttext width=100%}
+![FastText^[Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext's spiritual successor word2vec [@mikolovEfficientEstimationWord2013].] Model using CBOW-Method to predict missing word.](../imgs/training.gif){#fig-fasttext  .enlarge-onhover width=100%}
 
 fastText [@bojanowskiEnrichingWordVectors2017], an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of **Embeddings**, which laid the foundation for many modern NLP methods.
 
-![Model using CBOW-Method to predict missing word.](../imgs/embeddings.gif){#fig-embed width=100%}
+![Model using CBOW-Method to predict missing word.](../imgs/embeddings.gif){#fig-embed .enlarge-onhover width=100%}
 
 **Language Model Embeddings** are learned by predicting the next word in a sequence. These embeddings capture semantic and syntactic relationships between words, enabling them to understand context effectively. Since these embeddings represent the conditional probability distribution that language models learn to comprehend natural language, they can be reused by other models for tasks such as text classification or text retrieval. But more on this later.
 
@@ -235,7 +235,7 @@ This small example is already pretty close to the general attention-mechanism de
  Instead of 5x5 matrices, the attenion mechanism as described in the paper implements $d_n \times d_c$^[$\frac{d_n}{h} \times \frac{d_c}{h}$ actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce the computational cost.] matrices, where $d_n$ is the dimension of the embedding space^[I.e., the dimensionality used to represent each word's meaning. In the previous toy-example illustrating the concept of embeddings (@fig-embed), this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.] and $d_c$ is the size of the context window. In the original paper, @vaswaniAttentionAllYou2023 implement the context-window as the same size as the embedding space (i.e., $d_n = d_c$).
  In @fig-illustratedAttention you can see a brilliant illustration of the multiheaded-attention mechanism at work.
 
-![Illustration of the multi-headed attention mechanism. Taken from @hussainTutorialOpensourceLarge2024](../imgs/illustrated_attention.png){#fig-illustratedAttention}
+![Illustration of the multi-headed attention mechanism. Taken from @hussainTutorialOpensourceLarge2024](../imgs/illustrated_attention.png){#fig-illustratedAttention .enlarge-onhover}
 
 The implementation of the multi-headed attention mechanism allowed to solve all major issues of the language modelling approaches of the previous generation^[Well, kind of. Transformers are far superior language models due to their ability to parallely process long sequences without issues with stretched context - these advantages come at a price though. GPT-3s training is estimated to have emitted around 502 metric tons of carbon [@AIAAICChatGPTTraining]. The computational cost of the architecture as described here does additionally scale quadratically with context window size.]. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies. This mechanism also implicitly solves the bidirectionality-issue since each word can be taken into account when processsing every other word in the sequence.
 
@@ -273,6 +273,7 @@ Where $i$ is the dimension and $pos$ is the position. Those 2 formulas are not t
 #| fig-height: 4
 #| fig-align: center
 #| label: fig-positional
+#| classes: .enlarge-onhover
 
 library(ggplot2)
 library(tibble)
@@ -306,11 +307,11 @@ The Encoder half uses the embedding -> encoding -> multi-headed-attention -> fee
 @fig-TransformerVsLSTM, taken from @kaplanScalingLawsNeural2020a, shows the test performance of Transformer models compared to LSTM-based models as a function of model size and context length.
 Transformers outperform LSTMs with increasing context length.
 
-![Comparison of Transformer- and LSTM-performance based on Model size and context length. Taken from @kaplanScalingLawsNeural2020a](../imgs/transformer_vs_lstm.png){#fig-TransformerVsLSTM width=100%}
+![Comparison of Transformer- and LSTM-performance based on Model size and context length. Taken from @kaplanScalingLawsNeural2020a](../imgs/transformer_vs_lstm.png){#fig-TransformerVsLSTM .enlarge-onhover width=100%}
 
 Furthermore, @kaplanScalingLawsNeural2020a and @hoffmannTrainingComputeOptimalLarge2022 after them postulated performace power-laws (see also @fig-powerlaw) that suggest that the performance of a Transformer directly scales with the models size and data availability. Though the task of prediction of natural language poses a non-zero limit to the performance, it is suggested that this limit is not reached for any of the currently available models.^[Incidentally, we might run out of data to train on before reaching that limit [@villalobosPositionWillWe2024].]
 
-![Performance power law for transformer models. Taken from @kaplanScalingLawsNeural2020a](../imgs/power_law.png){#fig-powerlaw width=100%}
+![Performance power law for transformer models. Taken from @kaplanScalingLawsNeural2020a](../imgs/power_law.png){#fig-powerlaw .enlarge-onhover width=100%}
 
 The advances made through leveraging transformer-based architectures for language modelling led to a family of general-purpose language models. Unlike the approaches before, these models were not trained for a specific task but rather on a general text base with the intention of allowing specific fine-tuning to adapt to a task.
 Classic examples of these early general-purpose natural language generating Transformer models are the Generative Pre-trained Transformer (the predecessor of ChatGPT you all know), first described in @radfordImprovingLanguageUnderstanding2018, and the "Bidirectional Encoder Representations from Transformers" (BERT) architecture and training procedure, described by @devlinBERTPretrainingDeep2019.

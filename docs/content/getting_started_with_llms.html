@@ -315,10 +315,10 @@ Getting started with (L)LMs<br>
 <p>Language models have diverse applications, including speech recognition, machine translation, text generation, and question answering. While we’ll concentrate on <strong>text generation</strong> for this course, understanding the general concept of language models is crucial. Given language’s inherent complexity and ambiguity, a fundamental challenge in NLP is creating structured representations that can be employed downstream. This section will first explore the evolution of these representations before introducing the transformer architecture, which forms the foundation of most modern language models.</p>
 <section id="a-short-history-of-natural-language-processing" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="a-short-history-of-natural-language-processing">A short history of natural language processing</h3>
-<div id="fig-BOW" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-BOW" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-BOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/bow.gif" class="img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/bow.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-BOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.1: BOW-representation of sentences.
@@ -326,10 +326,10 @@ Fig&nbsp;2.1: BOW-representation of sentences.
 </figure>
 </div>
 <p>The <strong>Bag Of Words (BOW)</strong> method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus. Additionally, it does not take into account the order of words in a sentence, which can be crucial for understanding its meaning. For example, the sentences “The cat is on the mat” and “The mat is on the cat” have different meanings despite having the same set of words.</p>
-<div id="fig-CBOW" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-CBOW" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-CBOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/cbow.gif" class="img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/cbow.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CBOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.2: CBOW-representation of corpus.
@@ -337,10 +337,10 @@ Fig&nbsp;2.2: CBOW-representation of corpus.
 </figure>
 </div>
 <p>The <strong>Continuous Bag Of Words (CBOW)</strong> method extends traditional BOW by representing words as dense vectors in a continuous space. CBOW predicts a target word based on its context, learning meaningful word representations from large amounts of text data.</p>
-<div id="fig-fasttext" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<div id="fig-fasttext" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-fasttext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/training.gif" class="img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/training.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fasttext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.3: FastText<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Model using CBOW-Method to predict missing word.
@@ -348,10 +348,10 @@ Fig&nbsp;2.3: FastText<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext’s spiritual successor word2vec <span class="citation" data-cites="mikolovEfficientEstimationWord2013">(<a href="#ref-mikolovEfficientEstimationWord2013" role="doc-biblioref">Mikolov et al., 2013</a>)</span>.</p></div></div></figure>
 </div>
 <p>fastText <span class="citation" data-cites="bojanowskiEnrichingWordVectors2017">(<a href="#ref-bojanowskiEnrichingWordVectors2017" role="doc-biblioref">Bojanowski et al., 2017</a>)</span>, an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of <strong>Embeddings</strong>, which laid the foundation for many modern NLP methods.</p>
-<div id="fig-embed" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-embed" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-embed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/embeddings.gif" class="img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/embeddings.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-embed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.4: Model using CBOW-Method to predict missing word.
@@ -498,10 +498,10 @@ Fig&nbsp;2.6: Multi-headed attention as depicted in <span class="citation" data-
 </figure>
 </div>
 <p>Instead of 5x5 matrices, the attenion mechanism as described in the paper implements <span class="math inline">\(d_n \times d_c\)</span><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> matrices, where <span class="math inline">\(d_n\)</span> is the dimension of the embedding space<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> and <span class="math inline">\(d_c\)</span> is the size of the context window. In the original paper, <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span> implement the context-window as the same size as the embedding space (i.e., <span class="math inline">\(d_n = d_c\)</span>). In <a href="#fig-illustratedAttention" class="quarto-xref">Figure&nbsp;<span>2.7</span></a> you can see a brilliant illustration of the multiheaded-attention mechanism at work.</p>
-<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;<span class="math inline">\(\frac{d_n}{h} \times \frac{d_c}{h}\)</span> actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce the computational cost.</p></div><div id="fn6"><p><sup>6</sup>&nbsp;I.e., the dimensionality used to represent each word’s meaning. In the previous toy-example illustrating the concept of embeddings (<a href="#fig-embed" class="quarto-xref">Figure&nbsp;<span>2.4</span></a>), this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.</p></div></div><div id="fig-illustratedAttention" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;<span class="math inline">\(\frac{d_n}{h} \times \frac{d_c}{h}\)</span> actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce the computational cost.</p></div><div id="fn6"><p><sup>6</sup>&nbsp;I.e., the dimensionality used to represent each word’s meaning. In the previous toy-example illustrating the concept of embeddings (<a href="#fig-embed" class="quarto-xref">Figure&nbsp;<span>2.4</span></a>), this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.</p></div></div><div id="fig-illustratedAttention" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustratedAttention-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/illustrated_attention.png" class="img-fluid figure-img">
+<img src="../imgs/illustrated_attention.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-illustratedAttention-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.7: Illustration of the multi-headed attention mechanism. Taken from <span class="citation" data-cites="hussainTutorialOpensourceLarge2024">Hussain et al. (<a href="#ref-hussainTutorialOpensourceLarge2024" role="doc-biblioref">2024</a>)</span>
@@ -526,7 +526,7 @@ PE_{(pos, 2i+1)} &amp;=&amp; cos(\frac{pos}{10000^{\frac{2i}{d_{model}}}})
 \end{array}
 \]</span></p>
 <p>Where <span class="math inline">\(i\)</span> is the dimension and <span class="math inline">\(pos\)</span> is the position. Those 2 formulas are not the most intuitive, what they do is to add a unique offset to each embedding though, that allows the model to infer and weigh the token’s positions in the matrix on it’s own. <a href="#fig-positional" class="quarto-xref">Figure&nbsp;<span>2.8</span></a> illustrates the pattern this specific combination of sin and cos creates for each sequence-position and embedding-dimension.</p>
-<div class="cell" data-layout-align="center">
+<div class="cell enlarge-onhover" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-positional" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The x-axis represents the position and the y-axis represents the dimension. The color represents the value of the encoding." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
@@ -553,10 +553,10 @@ Fig&nbsp;2.9: The transformer architecture as depicted in <span class="citation"
 </div>
 <p>The Encoder half uses the embedding -&gt; encoding -&gt; multi-headed-attention -&gt; feed-forward structure to create a semantic representation of the sequence. The Decoder half uses the same structure, but with an additional masked multi-head attention layer to prevent the model from looking at future tokens. This is necessary because we want to generate a sequence token by token.</p>
 <p><a href="#fig-TransformerVsLSTM" class="quarto-xref">Figure&nbsp;<span>2.10</span></a>, taken from <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span>, shows the test performance of Transformer models compared to LSTM-based models as a function of model size and context length. Transformers outperform LSTMs with increasing context length.</p>
-<div id="fig-TransformerVsLSTM" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-TransformerVsLSTM" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-TransformerVsLSTM-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/transformer_vs_lstm.png" class="img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/transformer_vs_lstm.png" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-TransformerVsLSTM-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.10: Comparison of Transformer- and LSTM-performance based on Model size and context length. Taken from <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span>
@@ -564,10 +564,10 @@ Fig&nbsp;2.10: Comparison of Transformer- and LSTM-performance based on Model si
 </figure>
 </div>
 <p>Furthermore, <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span> and <span class="citation" data-cites="hoffmannTrainingComputeOptimalLarge2022">Hoffmann et al. (<a href="#ref-hoffmannTrainingComputeOptimalLarge2022" role="doc-biblioref">2022</a>)</span> after them postulated performace power-laws (see also <a href="#fig-powerlaw" class="quarto-xref">Figure&nbsp;<span>2.11</span></a>) that suggest that the performance of a Transformer directly scales with the models size and data availability. Though the task of prediction of natural language poses a non-zero limit to the performance, it is suggested that this limit is not reached for any of the currently available models.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;Incidentally, we might run out of data to train on before reaching that limit <span class="citation" data-cites="villalobosPositionWillWe2024">(<a href="#ref-villalobosPositionWillWe2024" role="doc-biblioref">Villalobos et al., 2024</a>)</span>.</p></div></div><div id="fig-powerlaw" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;Incidentally, we might run out of data to train on before reaching that limit <span class="citation" data-cites="villalobosPositionWillWe2024">(<a href="#ref-villalobosPositionWillWe2024" role="doc-biblioref">Villalobos et al., 2024</a>)</span>.</p></div></div><div id="fig-powerlaw" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-powerlaw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/power_law.png" class="img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/power_law.png" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-powerlaw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;2.11: Performance power law for transformer models. Taken from <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span>

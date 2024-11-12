@@ -181,3 +181,16 @@ slides > slide {
   display: flex;
   
 }
+
+
+.enlarge-onhover {
+  width: 100%;
+}
+
+.enlarge-onhover:hover {
+  width: 75vw;
+  position: relative;
+  z-index: 2; 
+  background-color: #FCFCFC;
+  box-shadow: 0px -1px 4px rgba(200,200,200,0.6);
+}
