@@ -388,7 +388,7 @@ Fig&nbsp;2.5: Illustration of a simple RNN-model, (exaggeratingly) illustrating 
 </section>
 <section id="attention-is-all-you-need" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="attention-is-all-you-need">Attention is all you need</h3>
-<p>In their transformative paper “Attention is all you need”, <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref"><strong>vaswaniAttentionAllYou2023?</strong></a>)</span> described the transformer architecture.</p>
+<p>In their transformative paper “Attention is all you need”, <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span> described the transformer architecture.</p>
 <p>As the paper’s title neatly suggests, the major breakthrough presented in this paper was the introduction of the so-called self-attention mechanism. This mechanism allows the model to “focus” on different parts of the input to a) determine the appropriate context for each word and b) to improve its performance on differing tasks by allowing the model to filter unnecessary information.</p>
 <section id="self-attention-mechanism" class="level4">
 <h4 class="anchored" data-anchor-id="self-attention-mechanism">Self-Attention Mechanism</h4>
@@ -486,18 +486,18 @@ Q \times K^T =
 </div>
 <p>The result is now an attention matrix in the sense that it tells us the importance of each value’s aspect for our query. In the specific example, the forth value seems to be the most important aspect for our third query. The crucial advantage is, that all aspects of all queries can be simultaneously compared with all aspects of all values without the necessity of sequential processing.</p>
 <p>Though this general idea of weighting aspects in the sense of self-attention<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> to process a sequence without disadvantages of the distances of the items was used before <span class="citation" data-cites="bahdanauNeuralMachineTranslation2014">(<a href="#ref-bahdanauNeuralMachineTranslation2014" role="doc-biblioref">Bahdanau, 2014</a>)</span>, the major contribution of the paper was the complete reliance on this mechanism without the need of LSTM/RNN parts. That their suggested architecture works is in part due to the utilisation of multiple self-attention layers, each learning its own weights for <span class="math inline">\(Q\)</span>, <span class="math inline">\(K\)</span> and <span class="math inline">\(V\)</span>. This allows the model to learn more complex patterns and dependencies between words in a sentence. You can think of it as allowing the model to focus on different parts of the input sequence at different stages of processing. The outputs of the multiple heads are then concatenated and linearly transformed into the final output representation using a series of fully connected feed-forward layers.</p>
-<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;<em>self</em> in the sense of the model weighting its own embeddings, queries, keys and values</p></div></div><p>This small example is already pretty close to the general attention-mechanism described by <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref"><strong>vaswaniAttentionAllYou2023?</strong></a>)</span> (see also <a href="#fig-multihead" class="quarto-xref">Figure&nbsp;<span>2.6</span></a>), though the actual language model learns its own weights for <span class="math inline">\(Q\)</span>, <span class="math inline">\(K\)</span> and <span class="math inline">\(V\)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;<em>self</em> in the sense of the model weighting its own embeddings, queries, keys and values</p></div></div><p>This small example is already pretty close to the general attention-mechanism described by <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span> (see also <a href="#fig-multihead" class="quarto-xref">Figure&nbsp;<span>2.6</span></a>), though the actual language model learns its own weights for <span class="math inline">\(Q\)</span>, <span class="math inline">\(K\)</span> and <span class="math inline">\(V\)</span>.</p>
 <div id="fig-multihead" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-multihead-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/multi-head.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-multihead-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;2.6: Multi-headed attention as depicted in <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref"><strong>vaswaniAttentionAllYou2023?</strong></a>)</span>
+Fig&nbsp;2.6: Multi-headed attention as depicted in <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span>
 </figcaption>
 </figure>
 </div>
-<p>Instead of 5x5 matrices, the attenion mechanism as described in the paper implements <span class="math inline">\(d_n \times d_c\)</span><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> matrices, where <span class="math inline">\(d_n\)</span> is the dimension of the embedding space<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> and <span class="math inline">\(d_c\)</span> is the size of the context window. In the original paper, <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref"><strong>vaswaniAttentionAllYou2023?</strong></a>)</span> implement the context-window as the same size as the embedding space (i.e., <span class="math inline">\(d_n = d_c\)</span>). In <a href="#fig-illustratedAttention" class="quarto-xref">Figure&nbsp;<span>2.7</span></a> you can see a brilliant illustration of the multiheaded-attention mechanism at work.</p>
+<p>Instead of 5x5 matrices, the attenion mechanism as described in the paper implements <span class="math inline">\(d_n \times d_c\)</span><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> matrices, where <span class="math inline">\(d_n\)</span> is the dimension of the embedding space<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> and <span class="math inline">\(d_c\)</span> is the size of the context window. In the original paper, <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span> implement the context-window as the same size as the embedding space (i.e., <span class="math inline">\(d_n = d_c\)</span>). In <a href="#fig-illustratedAttention" class="quarto-xref">Figure&nbsp;<span>2.7</span></a> you can see a brilliant illustration of the multiheaded-attention mechanism at work.</p>
 <div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;<span class="math inline">\(\frac{d_n}{h} \times \frac{d_c}{h}\)</span> actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce the computational cost.</p></div><div id="fn6"><p><sup>6</sup>&nbsp;I.e., the dimensionality used to represent each word’s meaning. In the previous toy-example illustrating the concept of embeddings (<a href="#fig-embed" class="quarto-xref">Figure&nbsp;<span>2.4</span></a>), this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.</p></div></div><div id="fig-illustratedAttention" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustratedAttention-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -540,14 +540,14 @@ Fig&nbsp;2.8: The positional encoding for 50 dimensions and 512 embedding-dimens
 </div>
 </div>
 </div>
-<p>These parts alltogether are all building-blocks of the basic transformer architecture. As you can see in <a href="#fig-classicTransformerPicture" class="quarto-xref">Figure&nbsp;<span>2.9</span></a>, all parts depicted by <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref"><strong>vaswaniAttentionAllYou2023?</strong></a>)</span> are parts we have discussed until now.</p>
+<p>These parts alltogether are all building-blocks of the basic transformer architecture. As you can see in <a href="#fig-classicTransformerPicture" class="quarto-xref">Figure&nbsp;<span>2.9</span></a>, all parts depicted by <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span> are parts we have discussed until now.</p>
 <div id="fig-classicTransformerPicture" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-classicTransformerPicture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/transformer_architecture.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-classicTransformerPicture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;2.9: The transformer architecture as depicted in <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref"><strong>vaswaniAttentionAllYou2023?</strong></a>)</span>
+Fig&nbsp;2.9: The transformer architecture as depicted in <span class="citation" data-cites="vaswaniAttentionAllYou2023">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">2023</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -602,7 +602,7 @@ Fig&nbsp;2.11: Performance power law for transformer models. Taken from <span cl
 <div class="callout-body-container callout-body">
 <p>Now it is your turn! In your project-groups, you will each have to build a small “Hello World”-style application that uses an open source model.</p>
 <ol type="1">
-<li>Choose a small model using the sources we discussed before.</li>
+<li>Choose a small model using the <a href="https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a">sources we discussed before</a>.</li>
 <li>Each group is to use one of the following frameworks
 <ul>
 <li><a href="https://huggingface.co/">Huggingface</a></li>
@@ -620,7 +620,7 @@ Fig&nbsp;2.11: Performance power law for transformer models. Taken from <span cl
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 <ul>
 <li><p><a href="https://heidloff.net/article/foundation-models-transformers-bert-and-gpt/">This</a> quite high-level blog-article about foundational models by <span class="citation" data-cites="heidloffFoundationModelsTransformers2023">Heidloff (<a href="#ref-heidloffFoundationModelsTransformers2023" role="doc-biblioref">2023</a>)</span></p></li>
-<li><p>The Attention is all you need-paper <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref"><strong>vaswaniAttentionAllYou2023?</strong></a>)</span> and the brilliant video discussing it by Umar Jamil <span class="citation" data-cites="umarjamilAttentionAllYou2023">(<a href="#ref-umarjamilAttentionAllYou2023" role="doc-biblioref">Umar Jamil, 2023</a>)</span></p></li>
+<li><p>The Attention is all you need-paper <span class="citation" data-cites="vaswaniAttentionAllYou2023">(<a href="#ref-vaswaniAttentionAllYou2023" role="doc-biblioref">Vaswani et al., 2023</a>)</span> and the brilliant video discussing it by Umar Jamil <span class="citation" data-cites="umarjamilAttentionAllYou2023">(<a href="#ref-umarjamilAttentionAllYou2023" role="doc-biblioref">Umar Jamil, 2023</a>)</span></p></li>
 <li><p><a href="https://stats.stackexchange.com/a/424127">This</a> <em>very</em> good answer on stack exchange that explains the attention-concept <span class="citation" data-cites="424127">(<a href="#ref-424127" role="doc-biblioref">(https://stats.stackexchange.com/users/95569/dontloo), n.d.</a>)</span></p></li>
 </ul>
 </section>
@@ -670,6 +670,9 @@ Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). <em>Impro
 </div>
 <div id="ref-umarjamilAttentionAllYou2023" class="csl-entry" role="listitem">
 Umar Jamil. (2023). <em>Attention is all you need (<span>Transformer</span>) - <span>Model</span> explanation (including math), <span>Inference</span> and <span>Training</span></em>.
+</div>
+<div id="ref-vaswaniAttentionAllYou2023" class="csl-entry" role="listitem">
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., &amp; Polosukhin, I. (2023). <em>Attention <span>Is All You Need</span></em> (arXiv:1706.03762). arXiv. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>
 </div>
 <div id="ref-villalobosPositionWillWe2024" class="csl-entry" role="listitem">
 Villalobos, P., Ho, A., Sevilla, J., Besiroglu, T., Heim, L., &amp; Hobbhahn, M. (2024, June). Position: <span>Will</span> we run out of data? <span>Limits</span> of <span>LLM</span> scaling based on human-generated data. <em>Forty-First <span>International Conference</span> on <span>Machine Learning</span></em>.
