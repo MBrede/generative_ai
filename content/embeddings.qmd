@@ -4,7 +4,31 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Embedding-based agent-sy
 
 # Embedding-based agent-systems
 
+All agents we discussed until here are using tools that allow them to use their generated inputs in some way.
+In a lot of usecases, we do not only want to generate text but to also inform the generation based on some kind of existing knowledge base.
+Examples for these kinds of usecases include:
+
+- Answering questions about a specific topic (e.g., a company or product)
+- Summarizing a document
+- Generating a report based on data
+
+Though most modern LLMs are increasingly capable in answering basic knowledge-questions, the more comples a topic or the more relevant the factual basis of an answer is, the more it is important to base generated answers on actual data.
+
 ## Semantic embeddings and vector stores
+
+To empower an agent too look up information during its thought-process, one has to build a tool that allows an agent to use natural language to retrieve information necessary for a task.
+The fundamental principle to do this are so-called *semantic embeddings*.
+These are pretty close to the concept we introduced when talking about the foundations of LLMs (see [here](getting_started_with_llms)) and can be understood as a way to map textual data into a vector space.
+The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Though one could use any kind of (L)LM to calculate these embeddings^[and there are approaches to use LLMs to solve this taks i.e., @jiangScalingSentenceEmbeddings2023a], it is advisable to use models specifically trained for this purpose. 
+@reimersSentenceBERTSentenceEmbeddings2019a proposed *Sentence-BERT* which is a simple but effective approach to calculate semantic embeddings. SBERT and similar approaches are based on a (L)LM that was trained to predict missing words as we discussed before, resulting in a general representation of naturel language.
+
+It is then used to embed a pair of sentences for which some measure of similarity is known. 
+An example for a dataset containing such sentences is the [Stanford Natural Language Inferenc(SNLI) corpus @bowmanLargeAnnotatedCorpus2015](https://aclanthology.org/D15-1075/) which labels 550k pairs of sentences as either *entailment*, *contradiction* or *neutral*.
+@reimersSentenceBERTSentenceEmbeddings2019a then concated the both senteces embeddings and their element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls.
+The resulting network is highly effective in calculating semantic similarities between sentences.
+Newer iterations of the sentencetransformer module did also implement training routines 
+
+
 
 ## Retrieval augmented and interleaved generation
 

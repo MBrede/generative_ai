@@ -87,7 +87,7 @@ Students
 ||  |         || Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
 |2|46|  13.11. | Prompting| Prompting strategies  |
 ||  |         || Generation of synthetic texts  |
-|3|47|  19.11. | Agent basics| Fundamentals of agents and train-of-thought prompting |
+|3|47|  19.11. | Agent basics| Fundamentals of agents and chain-of-thought prompting |
 ||  |         || Examples of agent-frameworks (Llamaindex, LangChain & Haystack)|
 |4|47|  20.11. | Embedding-based agent-systems| Semantic embeddings and vector stores |
 ||  |         || Retrieval augmented and interleaved generation  |

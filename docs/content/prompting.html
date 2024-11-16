@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.33">
+<meta name="generator" content="quarto-1.6.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,10 +58,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-01c78b5cd655e4cd89133cf59d535862.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-95a75f2d64ef49ac58e55e5a9b9728bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1052c83b22d40503221c7936d9896ba9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,6 +90,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -249,7 +278,9 @@ Prompting<br>
   <li><a href="#instruct-tuned-models" id="toc-instruct-tuned-models" class="nav-link active" data-scroll-target="#instruct-tuned-models">Instruct-tuned models</a></li>
   <li><a href="#prompting-strategies" id="toc-prompting-strategies" class="nav-link" data-scroll-target="#prompting-strategies">Prompting strategies</a></li>
   <li><a href="#generation-of-synthetic-texts" id="toc-generation-of-synthetic-texts" class="nav-link" data-scroll-target="#generation-of-synthetic-texts">Generation of synthetic texts</a></li>
+  <li><a href="#temperature" id="toc-temperature" class="nav-link" data-scroll-target="#temperature">Temperature</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -418,6 +449,60 @@ Too many labels. Reduce the label count for the task -->
 </div>
 </div>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Though this nomenclature has fallen a bit out of fashion</p></div></div></section>
+<section id="temperature" class="level2">
+<h2 class="anchored" data-anchor-id="temperature">Temperature</h2>
+<p>You might have encountered eerily similar answers from the language model, especially in the last task. Talking of it - why does the model return different answers to the same prompt at all if we do use pretrained-models in the first place? Shouldn’t the utilization of the frozen weight-matrix result in the same answer, every time we run the model with the same input?</p>
+<p>Yes, it should. And it does.</p>
+<p>Remember that a language model trained on language generation as we discussed in the first session ends in a softmax-layer that returns probabilities for each token in the vocabulary. The generation-pipeline does not just use the token with the highest probability though, but samples from this distribution. This means, that even if the input is identical, the output will be different every time you run the model.</p>
+<p>The temperature parameter controls the steepness of the softmax-function and thus the randomness of the sampling process. A higher temperature value results in more random outputs, while a lower temperature value results in more “deterministic” outputs. The temperatur, indicated as a float between 0 and 1, is used to modulate the probabilities of the next token. This is done by adding a <span class="math inline">\(\frac{1}{Temp}\)</span> factor to the model-outputs before applying the softmax.</p>
+<p>This effectively changes the Sofmax-fomula from</p>
+<p><span class="math display">\[
+p_{Token} = \frac{e^{z_{Token}}}{\sum_{i=1}^k e^{z_{i}}}
+\]</span></p>
+<p>to <span class="math display">\[
+p_{Token}(Temp) = \frac{e^{\frac{z_{Token}}{Temp}}}{\sum_{i=1}^k e ^{\frac{z_{i}}{Temp}}}
+\]</span></p>
+<p>Where</p>
+<ul>
+<li><span class="math inline">\(z_{Token}\)</span> is the output for a given token</li>
+<li><span class="math inline">\(k\)</span> is the size of the vocabulary</li>
+<li><span class="math inline">\(Temp\)</span> is the temperature parameter (0 &lt; <span class="math inline">\(Temp\)</span> &lt;= 1)</li>
+</ul>
+<p>The effect of this temperature can be seen in <a href="#fig-temp" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>.</p>
+<div class="cell enlarge-onhover" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-temp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-temp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="prompting_files/figure-html/fig-temp-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token." width="2400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-temp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;3.3: The effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Most generation-frameworks do additionally provide a parameter called <em>top_k</em> or <em>top_p</em>. These parameters are used to limit the number of tokens that can be selected as the next token. This is done by sorting the probabilities in descending order and only considering the top k tokens or the top p percent of tokens.</p>
+<p>Temperature is the mayor setting to controll a LLMs “creativity” though.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the script provided for generating snthetic data, test the effect of the temperature parameter on the output of the model.</p>
+<ul>
+<li>Use the same prompt and the same model</li>
+<li>Run the model with a temperature value of 0.1, 0.5, 1.0 and 2.0</li>
+</ul>
+</div>
+</div>
+</section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 <ul>
@@ -426,6 +511,9 @@ Too many labels. Reduce the label count for the task -->
 <li><a href="https://docs.cloud.deepset.ai/docs/prompt-engineering-guidelines">deepset</a>, the company behind Haystack, has a nice guide as well</li>
 <li><a href="https://heidloff.net/article/fine-tune-small-llm-with-big-llm/">This blog-article</a>, again written by Heidloff <span class="citation" data-cites="heidloffFinetuningSmallLLMs2023">(<a href="#ref-heidloffFinetuningSmallLLMs2023" role="doc-biblioref">Heidloff, 2023</a>)</span></li>
 </ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
@@ -552,8 +640,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -664,7 +750,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

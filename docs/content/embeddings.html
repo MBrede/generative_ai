@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.33">
+<meta name="generator" content="quarto-1.6.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -38,10 +58,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-01c78b5cd655e4cd89133cf59d535862.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-95a75f2d64ef49ac58e55e5a9b9728bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1052c83b22d40503221c7936d9896ba9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -74,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -233,7 +253,7 @@ Embedding-based agent-systems<br>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/embeddings.html"><span class="chapter-title">Embedding-based agent-systems</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -254,8 +274,17 @@ Embedding-based agent-systems<br>
 </header>
 
 
-<section id="semantic-embeddings-and-vector-stores" class="level2">
+<p>All agents we discussed until here are using tools that allow them to use their generated inputs in some way. In a lot of usecases, we do not only want to generate text but to also inform the generation based on some kind of existing knowledge base. Examples for these kinds of usecases include:</p>
+<ul>
+<li>Answering questions about a specific topic (e.g., a company or product)</li>
+<li>Summarizing a document</li>
+<li>Generating a report based on data</li>
+</ul>
+<p>Though most modern LLMs are increasingly capable in answering basic knowledge-questions, the more comples a topic or the more relevant the factual basis of an answer is, the more it is important to base generated answers on actual data.</p>
+<section id="semantic-embeddings-and-vector-stores" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="semantic-embeddings-and-vector-stores">Semantic embeddings and vector stores</h2>
+<p>To empower an agent too look up information during its thought-process, one has to build a tool that allows an agent to use natural language to retrieve information necessary for a task. The fundamental principle to do this are so-called <em>semantic embeddings</em>. These are pretty close to the concept we introduced when talking about the foundations of LLMs (see <a href="getting_started_with_llms">here</a>) and can be understood as a way to map textual data into a vector space. The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Though one could use any kind of (L)LM to calculate these embeddings<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, it is advisable to use models specifically trained for this purpose. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> proposed <em>Sentence-BERT</em> which is a simple but effective approach to calculate semantic embeddings. SBERT and similar approaches are based on a (L)LM that was trained to predict missing words as we discussed before, resulting in a general representation of naturel language.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;and there are approaches to use LLMs to solve this taks i.e., <span class="citation" data-cites="jiangScalingSentenceEmbeddings2023a">Jiang et al. (<a href="#ref-jiangScalingSentenceEmbeddings2023a" role="doc-biblioref">2023</a>)</span></p></div></div><p>It is then used to embed a pair of sentences for which some measure of similarity is known. An example for a dataset containing such sentences is the <a href="https://aclanthology.org/D15-1075/">Stanford Natural Language Inferenc(SNLI) corpus <span class="citation" data-cites="bowmanLargeAnnotatedCorpus2015">Bowman et al. (<span>2015</span>)</span></a> which labels 550k pairs of sentences as either <em>entailment</em>, <em>contradiction</em> or <em>neutral</em>. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> then concated the both senteces embeddings and their element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls. The resulting network is highly effective in calculating semantic similarities between sentences. Newer iterations of the sentencetransformer module did also implement training routines</p>
 </section>
 <section id="retrieval-augmented-and-interleaved-generation" class="level2">
 <h2 class="anchored" data-anchor-id="retrieval-augmented-and-interleaved-generation">Retrieval augmented and interleaved generation</h2>
@@ -264,7 +293,19 @@ Embedding-based agent-systems<br>
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-bowmanLargeAnnotatedCorpus2015" class="csl-entry" role="listitem">
+Bowman, S. R., Angeli, G., Potts, C., &amp; Manning, C. D. (2015). A large annotated corpus for learning natural language inference. In L. Màrquez, C. Callison-Burch, &amp; J. Su (Eds.), <em>Proceedings of the 2015 <span>Conference</span> on <span>Empirical Methods</span> in <span>Natural Language Processing</span></em> (pp. 632–642). Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/D15-1075">https://doi.org/10.18653/v1/D15-1075</a>
+</div>
+<div id="ref-jiangScalingSentenceEmbeddings2023a" class="csl-entry" role="listitem">
+Jiang, T., Huang, S., Luan, Z., Wang, D., &amp; Zhuang, F. (2023). <em>Scaling <span>Sentence Embeddings</span> with <span>Large Language Models</span></em> (arXiv:2307.16645). arXiv. <a href="https://doi.org/10.48550/arXiv.2307.16645">https://doi.org/10.48550/arXiv.2307.16645</a>
+</div>
+<div id="ref-reimersSentenceBERTSentenceEmbeddings2019a" class="csl-entry" role="listitem">
+Reimers, N., &amp; Gurevych, I. (2019). <em>Sentence-<span>BERT</span>: <span>Sentence Embeddings</span> using <span>Siamese BERT-Networks</span></em> (arXiv:1908.10084). arXiv. <a href="https://doi.org/10.48550/arXiv.1908.10084">https://doi.org/10.48550/arXiv.1908.10084</a>
+</div>
+</div>
 </section>
+
 
 </main> <!-- /main -->
 <script>
@@ -367,8 +408,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -479,7 +518,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

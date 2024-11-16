@@ -35,7 +35,8 @@ fastText [@bojanowskiEnrichingWordVectors2017], an open-source library developed
 
 ![Model using CBOW-Method to predict missing word.](../imgs/embeddings.gif){#fig-embed .enlarge-onhover width=100%}
 
-**Language Model Embeddings** are learned by predicting the next word in a sequence. These embeddings capture semantic and syntactic relationships between words, enabling them to understand context effectively. Since these embeddings represent the conditional probability distribution that language models learn to comprehend natural language, they can be reused by other models for tasks such as text classification or text retrieval. But more on this later.
+**Language Model Embeddings** are learned by predicting the next word, or, in most cases, the next part of a word in a sequence. The utilisation of word-parts instead of whole words was another invention introduced by fastText [@bojanowskiEnrichingWordVectors2017], that allowed the model to generalize to new, unknown words when moving to inference. These parts of words are also called **tokens**. Embeddings are the representation the model learns to map the context-tokens to a multiclass classification of the missing token in the space of all possible tokens.
+These embeddings capture semantic and syntactic relationships between words, enabling them to understand context effectively. Since these embeddings represent the conditional probability distribution that language models learn to comprehend natural language, they can be reused by other models for tasks such as text classification or text retrieval. But more on this later.
 
 Still, these models did not really solve the inherent issue of the order of words in a sentence. The input of models of this generation still used a dummyfied version of the corpus to represent context, which loses a lot of information.
 
@@ -63,7 +64,7 @@ The ELMo model [@petersDeepContextualizedWord2018], which stands for Embeddings 
 
 ### Attention is all you need
 
-In their transformative paper "Attention is all you need", @vaswaniAttentionAllYou2023 described the transformer architecture.
+In their transformative paper "Attention is all you need", @vaswaniAttentionAllYou2023a described the transformer architecture.
 
 As the paper's title neatly suggests, the major breakthrough presented in this paper was the introduction of the so-called self-attention mechanism. This mechanism allows the model to "focus" on different parts of the input to a) determine the appropriate context for each word and b) to improve its performance on differing tasks by allowing the model to filter unnecessary information.
 
@@ -228,11 +229,11 @@ That their suggested architecture works is in part due to the utilisation of mul
 The outputs of the multiple heads are then concatenated and linearly transformed into the final output representation using a series of fully connected feed-forward layers.
 
 
-This small example is already pretty close to the general attention-mechanism described by @vaswaniAttentionAllYou2023 (see also @fig-multihead), though the actual language model learns its own weights for $Q$, $K$ and $V$.
+This small example is already pretty close to the general attention-mechanism described by @vaswaniAttentionAllYou2023a (see also @fig-multihead), though the actual language model learns its own weights for $Q$, $K$ and $V$.
 
-![Multi-headed attention as depicted in @vaswaniAttentionAllYou2023](../imgs/multi-head.png){#fig-multihead}
+![Multi-headed attention as depicted in @vaswaniAttentionAllYou2023a](../imgs/multi-head.png){#fig-multihead}
 
- Instead of 5x5 matrices, the attenion mechanism as described in the paper implements $d_n \times d_c$^[$\frac{d_n}{h} \times \frac{d_c}{h}$ actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce the computational cost.] matrices, where $d_n$ is the dimension of the embedding space^[I.e., the dimensionality used to represent each word's meaning. In the previous toy-example illustrating the concept of embeddings (@fig-embed), this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.] and $d_c$ is the size of the context window. In the original paper, @vaswaniAttentionAllYou2023 implement the context-window as the same size as the embedding space (i.e., $d_n = d_c$).
+ Instead of 5x5 matrices, the attenion mechanism as described in the paper implements $d_n \times d_c$^[$\frac{d_n}{h} \times \frac{d_c}{h}$ actually, the paper used feed-forward layers to reduce the dimensionality of each attention header to reduce the computational cost.] matrices, where $d_n$ is the dimension of the embedding space^[I.e., the dimensionality used to represent each word's meaning. In the previous toy-example illustrating the concept of embeddings (@fig-embed), this would be the width of the hidden layer (8). In the case of transformers, this is usually 512 or 1024. These embeddings are learned during training and are a simple transformation of the one-hot vectors returned by the models tokenizer.] and $d_c$ is the size of the context window. In the original paper, @vaswaniAttentionAllYou2023a implement the context-window as the same size as the embedding space (i.e., $d_n = d_c$).
  In @fig-illustratedAttention you can see a brilliant illustration of the multiheaded-attention mechanism at work.
 
 ![Illustration of the multi-headed attention mechanism. Taken from @hussainTutorialOpensourceLarge2024](../imgs/illustrated_attention.png){#fig-illustratedAttention .enlarge-onhover}
@@ -298,9 +299,9 @@ geom_tile() +
   scale_fill_distiller(palette = "Spectral", direction=1)
 ```
 
-These parts alltogether are all building-blocks of the basic transformer architecture. As you can see in @fig-classicTransformerPicture, all parts depicted by @vaswaniAttentionAllYou2023 are parts we have discussed until now.
+These parts alltogether are all building-blocks of the basic transformer architecture. As you can see in @fig-classicTransformerPicture, all parts depicted by @vaswaniAttentionAllYou2023a are parts we have discussed until now.
 
-![The transformer architecture as depicted in @vaswaniAttentionAllYou2023](../imgs/transformer_architecture.png){#fig-classicTransformerPicture}
+![The transformer architecture as depicted in @vaswaniAttentionAllYou2023a](../imgs/transformer_architecture.png){#fig-classicTransformerPicture}
 
 The Encoder half uses the embedding -> encoding -> multi-headed-attention -> feed-forward structure to create a semantic representation of the sequence. The Decoder half uses the same structure, but with an additional masked multi-head attention layer to prevent the model from looking at future tokens. This is necessary because we want to generate a sequence token by token.
 
@@ -309,12 +310,12 @@ Transformers outperform LSTMs with increasing context length.
 
 ![Comparison of Transformer- and LSTM-performance based on Model size and context length. Taken from @kaplanScalingLawsNeural2020a](../imgs/transformer_vs_lstm.png){#fig-TransformerVsLSTM .enlarge-onhover width=100%}
 
-Furthermore, @kaplanScalingLawsNeural2020a and @hoffmannTrainingComputeOptimalLarge2022 after them postulated performace power-laws (see also @fig-powerlaw) that suggest that the performance of a Transformer directly scales with the models size and data availability. Though the task of prediction of natural language poses a non-zero limit to the performance, it is suggested that this limit is not reached for any of the currently available models.^[Incidentally, we might run out of data to train on before reaching that limit [@villalobosPositionWillWe2024].]
+Furthermore, @kaplanScalingLawsNeural2020a and @hoffmannTrainingComputeOptimalLarge2022a after them postulated performace power-laws (see also @fig-powerlaw) that suggest that the performance of a Transformer directly scales with the models size and data availability. Though the task of prediction of natural language poses a non-zero limit to the performance, it is suggested that this limit is not reached for any of the currently available models.^[Incidentally, we might run out of data to train on before reaching that limit [@villalobosPositionWillWe2024].]
 
 ![Performance power law for transformer models. Taken from @kaplanScalingLawsNeural2020a](../imgs/power_law.png){#fig-powerlaw .enlarge-onhover width=100%}
 
 The advances made through leveraging transformer-based architectures for language modelling led to a family of general-purpose language models. Unlike the approaches before, these models were not trained for a specific task but rather on a general text base with the intention of allowing specific fine-tuning to adapt to a task.
-Classic examples of these early general-purpose natural language generating Transformer models are the Generative Pre-trained Transformer (the predecessor of ChatGPT you all know), first described in @radfordImprovingLanguageUnderstanding2018, and the "Bidirectional Encoder Representations from Transformers" (BERT) architecture and training procedure, described by @devlinBERTPretrainingDeep2019.
+Classic examples of these early general-purpose natural language generating Transformer models are the Generative Pre-trained Transformer (the predecessor of ChatGPT you all know), first described in @radfordImprovingLanguageUnderstanding2018, and the "Bidirectional Encoder Representations from Transformers" (BERT) architecture and training procedure, described by @devlinBERTPretrainingDeep2019a.
 
 This general-purpose architecture is the base of modern LLMs as we know them today and most applications we will discuss in this course.
 
@@ -359,7 +360,7 @@ In your project-groups, you will each have to build a small "Hello World"-style 
 
 * [This](https://heidloff.net/article/foundation-models-transformers-bert-and-gpt/) quite high-level blog-article about foundational models by @heidloffFoundationModelsTransformers2023
 
-* The Attention is all you need-paper [@vaswaniAttentionAllYou2023] and the brilliant video discussing it by Umar Jamil [@umarjamilAttentionAllYou2023]
+* The Attention is all you need-paper [@vaswaniAttentionAllYou2023a] and the brilliant video discussing it by Umar Jamil [@vaswaniAttentionAllYou2023a]
 
 * [This](https://stats.stackexchange.com/a/424127) *very* good answer on stack exchange that explains the attention-concept [@424127]
 
