@@ -1,5 +1,5 @@
 ---
-toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Embedding-based agent-systems</h3>'
+toc-title: '![](../imgs/rag.webp){width=240px}<br> <h3>Embedding-based agent-systems</h3>'
 ---
 
 # Embedding-based agent-systems
