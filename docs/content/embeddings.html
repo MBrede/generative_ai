@@ -90,6 +90,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -247,8 +276,15 @@ Embedding-based agent-systems<br>
    
   <ul>
   <li><a href="#semantic-embeddings-and-vector-stores" id="toc-semantic-embeddings-and-vector-stores" class="nav-link active" data-scroll-target="#semantic-embeddings-and-vector-stores">Semantic embeddings and vector stores</a></li>
-  <li><a href="#retrieval-augmented-and-interleaved-generation" id="toc-retrieval-augmented-and-interleaved-generation" class="nav-link" data-scroll-target="#retrieval-augmented-and-interleaved-generation">Retrieval augmented and interleaved generation</a></li>
+  <li><a href="#retrieval-augmented-generation" id="toc-retrieval-augmented-generation" class="nav-link" data-scroll-target="#retrieval-augmented-generation">Retrieval augmented generation</a>
+  <ul class="collapse">
+  <li><a href="#vector-databases" id="toc-vector-databases" class="nav-link" data-scroll-target="#vector-databases">Vector databases</a></li>
+  <li><a href="#rag" id="toc-rag" class="nav-link" data-scroll-target="#rag">RAG</a></li>
+  <li><a href="#document-chunking" id="toc-document-chunking" class="nav-link" data-scroll-target="#document-chunking">Document chunking</a></li>
+  <li><a href="#query-expansion" id="toc-query-expansion" class="nav-link" data-scroll-target="#query-expansion">Query Expansion</a></li>
+  </ul></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -283,25 +319,204 @@ Embedding-based agent-systems<br>
 <p>Though most modern LLMs are increasingly capable in answering basic knowledge-questions, the more comples a topic or the more relevant the factual basis of an answer is, the more it is important to base generated answers on actual data.</p>
 <section id="semantic-embeddings-and-vector-stores" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="semantic-embeddings-and-vector-stores">Semantic embeddings and vector stores</h2>
-<p>To empower an agent too look up information during its thought-process, one has to build a tool that allows an agent to use natural language to retrieve information necessary for a task. The fundamental principle to do this are so-called <em>semantic embeddings</em>. These are pretty close to the concept we introduced when talking about the foundations of LLMs (see <a href="getting_started_with_llms">here</a>) and can be understood as a way to map textual data into a vector space. The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Though one could use any kind of (L)LM to calculate these embeddings<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, it is advisable to use models specifically trained for this purpose. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> proposed <em>Sentence-BERT</em> which is a simple but effective approach to calculate semantic embeddings. SBERT and similar approaches are based on a (L)LM that was trained to predict missing words as we discussed before, resulting in a general representation of naturel language.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;and there are approaches to use LLMs to solve this taks i.e., <span class="citation" data-cites="jiangScalingSentenceEmbeddings2023a">Jiang et al. (<a href="#ref-jiangScalingSentenceEmbeddings2023a" role="doc-biblioref">2023</a>)</span></p></div></div><p>It is then used to embed a pair of sentences for which some measure of similarity is known. An example for a dataset containing such sentences is the <a href="https://aclanthology.org/D15-1075/">Stanford Natural Language Inferenc(SNLI) corpus <span class="citation" data-cites="bowmanLargeAnnotatedCorpus2015">Bowman et al. (<span>2015</span>)</span></a> which labels 550k pairs of sentences as either <em>entailment</em>, <em>contradiction</em> or <em>neutral</em>. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> then concated the both senteces embeddings and their element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls. The resulting network is highly effective in calculating semantic similarities between sentences. Newer iterations of the sentencetransformer module did also implement training routines</p>
+<p>To empower an agent too look up information during its thought-process, one has to build a tool that allows an agent to use natural language to retrieve information necessary for a task. The fundamental principle to do this are so-called <em>semantic embeddings</em>. These are pretty close to the concept we introduced when talking about the foundations of LLMs (see <a href="getting_started_with_llms">here</a>) and can be understood as a way to map textual data into a vector space. The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonibly small distance between them. The go-to standard to measure this distance is the <strong>cosine similarity</strong>, which has proven usefull enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in <a href="https://cookbook.openai.com/examples/recommendation_using_embeddings">OpenAI tutorials</a> and in <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/understand-embeddings">Azure embedding-applications</a>). The cosine similarity is defined as:</p>
+<p><span class="math display">\[
+\text{cosine\_similarity}(u, v) = \frac{u \cdot v}{\|u\| \|v\|} = \frac{\sum_{i=1}^{n} u_i v_i}{\sqrt{\sum_{i=1}^{n} u_i^2} \sqrt{\sum_{i=1}^{n} v_i^2}}
+\]</span> The rationale here is that sequences with semantically similar contents should point to similar directions in the high dimensional vector space. See <a href="#fig-cosineSimilarity" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> for an illustration of this and other common similarity concepts seen in semantic retrieval.</p>
+<div class="cell enlarge-onhover" data-layout-align="center">
+<div id="fig-cosineSimilarity" class="cell enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cosineSimilarity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="fig-cosineSimilarity-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Illustration of &quot;semantic embeddings&quot; of different word. The words &quot;good&quot;, &quot;nice&quot; and &quot;orange&quot; are all mapped to a vector space.">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-cosineSimilarity-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="embeddings_files/figure-html/fig-cosineSimilarity-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-cosineSimilarity" alt="Illustration of &quot;semantic embeddings&quot; of different word. The words &quot;good&quot;, &quot;nice&quot; and &quot;orange&quot; are all mapped to a vector space." width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-cosineSimilarity-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Illustration of “semantic embeddings” of different word.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div id="fig-cosineSimilarity-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Illustration of similarities between these words. 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan.">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-cosineSimilarity-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="embeddings_files/figure-html/fig-cosineSimilarity-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-cosineSimilarity" alt="Illustration of similarities between these words. 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan." width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-cosineSimilarity-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Illustration of 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan. dot product and cosine are taking the direction of the vector into account, while the cosine ignores the length of the vectors and the dot product does not. Manhattan and euclidean are both measuring the distance between two points in a vector space, but they do it differently. Euclidean is the straight line between two points, while manhattan is the sum of the absolute differences between the coordinates of the two points.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cosineSimilarity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;5.1: Illustration of common similarity metrics in semantic search.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>As always, there is not the one solution to all problems though and the applicability of cosine similarity might not be optimal for you usecase <span class="citation" data-cites="steckCosineSimilarityEmbeddingsReally2024 goyalComparativeAnalysisDifferent2022">(<a href="#ref-goyalComparativeAnalysisDifferent2022" role="doc-biblioref">Goyal &amp; Sharma, 2022</a>; <a href="#ref-steckCosineSimilarityEmbeddingsReally2024" role="doc-biblioref">Steck et al., 2024</a>)</span>.</p>
+<p>Though one could use any kind of (L)LM to calculate embeddings for this case<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, it is advisable to use models specifically trained for this purpose. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> proposed <em>Sentence-BERT</em> which is a simple but effective approach to calculate semantic embeddings. SBERT and similar approaches are based on a (L)LM that was trained to predict missing words as we discussed before, resulting in a general representation of natural language. In the case of the original paper, they used (among others) the BERT model <span class="citation" data-cites="devlinBERTPretrainingDeep2019a">Devlin et al. (<a href="#ref-devlinBERTPretrainingDeep2019a" role="doc-biblioref">2019</a>)</span> mentioned before.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;And there are approaches to use LLMs to solve this taks i.e., <span class="citation" data-cites="jiangScalingSentenceEmbeddings2023a">Jiang et al. (<a href="#ref-jiangScalingSentenceEmbeddings2023a" role="doc-biblioref">2023</a>)</span></p></div><div id="fn2"><p><sup>2</sup>&nbsp;The original BERT-paper did this by adding a pooling layer before the task-header that extracted and weighed the context-dependend embedding of the first token. The SBERT paper tried different pooling-strategies and used a mean over each embedding dimension of the sequence.</p></div></div><p>The authors then use this to embed a pair of sentences into one embedding-vector each<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, for which some measure of semantic similarity is known. An example for a dataset containing such sentences is the <a href="https://aclanthology.org/D15-1075/">Stanford Natural Language Inferenc(SNLI) corpus <span class="citation" data-cites="bowmanLargeAnnotatedCorpus2015">Bowman et al. (<span>2015</span>)</span></a> which labels 550k pairs of sentences as either <em>entailment</em>, <em>contradiction</em> or <em>neutral</em>. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> then concated the both senteces embeddings and their element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls. At inference, this classification head was removed and replaced as the cosine similarity as discussed above. The resulting network is highly effective in calculating semantic similarities between sentences.</p>
+<p>A look at the <a href="https://www.sbert.net/docs/sentence_transformer/loss_overview.html">sbert-website</a> shows that the module has somewhat grown and now does supply a series of learning paradigms that can be used to efficiently tune a model for your specific usecase<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. As the library has grown, so has the sheer amount of pretrained embedding-models in some way based on this architecture that are hosted on huggingface. The <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB-Leaderboard</a> is a good strat to search for a model for your application. One utilization of this model-family, which has already been implicitly used in this script, is their very efficient ability to semantically search for documents. If a model is very good at finding similar sentences, it can also be very good to find documents that are very similar to a question.</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;And this does not have to be expensive. <span class="citation" data-cites="tunstallEfficientFewShotLearning2022">Tunstall et al. (<a href="#ref-tunstallEfficientFewShotLearning2022" role="doc-biblioref">2022</a>)</span> have shown a highly efficient contrastive learning paradigm that limts the amount of necessary labels for a ridiuculously small amount of labels.</p></div></div><p>Look at the example illustrated in <a href="#fig-docRetrieval" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>. The question “why is the sky blue” embedded with the same model as our 5 documents stating some facts.</p>
+<div id="fig-docRetrieval" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-docRetrieval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src=".png" id="fig-docRetrieval" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-docRetrieval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;5.2
+</figcaption>
+</figure>
+</div>
+<p>We can then calculate the cosine-similarity between these embeddings and return the document, that has the highest similarity to our question.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Install the sentence-transformer package and download <a href="https://huggingface.co/datasets/tdiggelm/climate_fever">the climate_fever-dataset</a>.</p>
+<p>Choose one model from the <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB-Leaderboard</a> that you deem adequatly sized and appropriate for the task</p>
+<p>Test the different metrics for the first twenty claims of the dataset and a question you formulate.</p>
+<p>Use the similarity-implementations from <a href="https://scikit-learn.org/dev/api/sklearn.metrics.html#module-sklearn.metrics.pairwise">sklearn.metrics.pairwise</a>.</p>
+</div>
+</div>
+<p>This approach of using a model to embed documents and questions into a vector space is the basis for the so-called <em>Retrieval augmented generation</em>.</p>
 </section>
-<section id="retrieval-augmented-and-interleaved-generation" class="level2">
-<h2 class="anchored" data-anchor-id="retrieval-augmented-and-interleaved-generation">Retrieval augmented and interleaved generation</h2>
+<section id="retrieval-augmented-generation" class="level2">
+<h2 class="anchored" data-anchor-id="retrieval-augmented-generation">Retrieval augmented generation</h2>
+<p>Retrieval augmented generation (RAG) is a framework that does pretty much do what it says on the tin. You use a retrieval model to find documents that are similar to your question and then either return these documents our feed them into a generative model, which then generates an answer based on these documents. This process can additionally be wrapped as a tool to be used by an agent, so that your existing agent can now also use external knowledge sources to answer questions.</p>
+<p>Retrieval does not have to be semantics-based in this context - all kinds of data sources and databases can be made accessible for a LLM - we will focus on a purely embbedding based approach here though.</p>
+<p>Although the small example in the last task was working, it is not really scalable. It was fine for a limited set of examples, if you want to realistically make a whole knowledge base searchable, you need to use an appropriate database system.</p>
+<section id="vector-databases" class="level3">
+<h3 class="anchored" data-anchor-id="vector-databases">Vector databases</h3>
+<p>A vector database is a database that stores vectors and allows for efficient similarity searches. As can be seen in the <a href="https://db-engines.com/en/ranking">db-engines ranking</a> there has been a surge of interest in this area recently, with many new players entering the market. From the plethora of vector databases, these three are examples that virtue a honorary mention:</p>
+<ol type="1">
+<li><p><a href="https://www.trychroma.com/">Chroma</a> - a in-memory database for small applications that is especially easy to get to run.</p></li>
+<li><p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/bring-your-own-vectors.html">Elasticsearch</a> - a well established database that is the go to system for open source search engines and has recently (and kind of naturally) also branche out into vector databases.</p></li>
+<li><p><a href="https://qdrant.tech/">Qdrant</a> - the product of a Berlin-based startup that focusses on stability and scalability. It can also run in memory, but does natively support hard drive storage.</p></li>
+</ol>
+<p>The best way to use qdrant is to use <a href="https://qdrant.tech/documentation/quickstart/">docker</a> to run it and the python sdk to interact with it.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Install qdrant and the python sdk.</p>
+<p>Create a collection for the claims and one for the evidence in <a href="https://huggingface.co/datasets/tdiggelm/climate_fever">the climate_fever-dataset</a>. Add the first 200 entries to each of these collections.</p>
+<p>Test the similarity search on a question you formulate.</p>
+</div>
+</div>
+</section>
+<section id="rag" class="level3">
+<h3 class="anchored" data-anchor-id="rag">RAG</h3>
+<p>The last step to make this into a RAG pipeline is to use a generative model to answer the question based on the retrieved documents.</p>
+<p>Most agent frameworks provide integrations for a variety of vector databases.</p>
+<p>In terms of haystack, there are not just one but two tutorials on how to get qdrant to integrate into your pipeline, one from <a href="https://qdrant.tech/documentation/frameworks/haystack/">qdrant</a> for general integration and one from <a href="https://haystack.deepset.ai/cookbook/sparse_embedding_retrieval">haystack</a> for sparse vectors (though the procedure shown should also work for our dense case).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Build a haystack pipeline that allows you to chat with the climate_fever evidence.</p>
+<p><a href="https://haystack.deepset.ai/cookbook/conversational_rag_using_memory">This tutorial</a> might be helpful in approaching that task.</p>
+</div>
+</div>
+</section>
+<section id="document-chunking" class="level3">
+<h3 class="anchored" data-anchor-id="document-chunking">Document chunking</h3>
+<p>The examples we looked at until now were all working with short text-snippets that comforably fit into the context window of a LLM. If you think about usual usecases for RAG-systems, this is not the most common case though. Usually, you will have a base of documents that can span multiple 1000’s of tokens and you want to be able to answer questions about these documents. Furthermore, you do not only want to know which document might be relevant, but ideally also which part of the document matches your question best.</p>
+<p>This is where the process of doctument chunking or document splitting comes into play. There is a series of possible approaches to split a document, the most common, so called <strong>naive chunking</strong> method, is to use a structural element of the document though. This means that you parse the documents into sentences, paragraphs or pages and then use these as chunks that you individually embed and store in your vector database. To prevent loss of relevant context when splitting a document into chunks, it is additionally common to add some <strong>overlap</strong> between the chunks. This tries to solve the lost context problem, does however create reduncencies in the data.</p>
+<p>An alternative approach is to use <strong>semantic chunking</strong>. This means that you split a document into chunks based on their meaning. Jina.ai explained in a blogpost <span class="citation" data-cites="LateChunkingLongContext2024">(<a href="#ref-LateChunkingLongContext2024" role="doc-biblioref"><em>Late <span>Chunking</span> in <span>Long-Context Embedding Models</span></em>, 2024</a>)</span> their so called “late chunking” method. which iteratively runs the whole document through the attention head of the transformer to gain embeddings per token, and then averages these embeddings per naive chunk. This way, the chunks are still structure based but contain semantic information about the whole context. Haystack does not implement this feature yet, though <a href="https://github.com/deepset-ai/haystack/issues/8111">it is planned</a>.</p>
+<p>Another approach to semantic chunking is descirbed on the doc-pages of <a href="https://docs.llamaindex.ai/en/stable/examples/node_parsers/semantic_chunking/">LlamaIndex</a>. In their approach to semantic chunking, an adaptive splitting-rule is used, that splits the documents based on semantic similarity of sentences. This means that sentences that are semantically similar are grouped together into chunks.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement a document chunking strategy for a book of your choice from the <a href="https://huggingface.co/datasets/manu/project_gutenberg">project_gutenberg</a> dataset.</p>
+<p>You can use any approach you like, but you should explain your choice and why it is appropriate for this dataset.</p>
+</div>
+</div>
+</section>
+<section id="query-expansion" class="level3">
+<h3 class="anchored" data-anchor-id="query-expansion">Query Expansion</h3>
+<p>Until now, we have based our retrieval on the assumption, that the question the user formulates is a good representation of their information need. This is not always the case though. Often, users do not know what they are looking for or they use synonyms or paraphrases that are not present in the documents. If the question is not formulated well, or if it is too specific, the system might not be able to find relevant documents. To improve the quality of the questions, we can use <strong>query expansion</strong>. This means that we take the original question and expand it with additional information to make it more specific and to increase the chances of finding relevant documents. This can be done in multiple ways, one common approach is to use a generative model to generate multiple queries based on the original question. Another approach is to use a keyword extraction algorithm to extract keywords from the question and then use these keywords to expand the query.</p>
+<p>Haystack provides an implementation of query expansion using <a href="https://haystack.deepset.ai/cookbook/query-expansion">a custom pipeline component</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement query expansion for the climate_fever dataset using Haystack.</p>
+<p>Experiment with different prompts and temperatures.</p>
+</div>
+</div>
+</section>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<ul>
+<li><a href="https://www.deepset.ai/blog/llms-retrieval-augmentation">This blogpost</a> by DeepSet gives a good overview of the concept of RAG</li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-bowmanLargeAnnotatedCorpus2015" class="csl-entry" role="listitem">
 Bowman, S. R., Angeli, G., Potts, C., &amp; Manning, C. D. (2015). A large annotated corpus for learning natural language inference. In L. Màrquez, C. Callison-Burch, &amp; J. Su (Eds.), <em>Proceedings of the 2015 <span>Conference</span> on <span>Empirical Methods</span> in <span>Natural Language Processing</span></em> (pp. 632–642). Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/D15-1075">https://doi.org/10.18653/v1/D15-1075</a>
 </div>
+<div id="ref-devlinBERTPretrainingDeep2019a" class="csl-entry" role="listitem">
+Devlin, J., Chang, M.-W., Lee, K., &amp; Toutanova, K. (2019). <em><span>BERT</span>: <span class="nocase">Pre-training</span> of <span>Deep Bidirectional Transformers</span> for <span>Language Understanding</span></em> (arXiv:1810.04805). arXiv. <a href="https://doi.org/10.48550/arXiv.1810.04805">https://doi.org/10.48550/arXiv.1810.04805</a>
+</div>
+<div id="ref-goyalComparativeAnalysisDifferent2022" class="csl-entry" role="listitem">
+Goyal, K., &amp; Sharma, M. (2022). Comparative <span>Analysis</span> of <span>Different Vectorizing Techniques</span> for <span>Document Similarity</span> using <span>Cosine Similarity</span>. <em>2022 <span>Second International Conference</span> on <span>Advanced Technologies</span> in <span>Intelligent Control</span>, <span>Environment</span>, <span>Computing</span> &amp; <span>Communication Engineering</span> (<span>ICATIECE</span>)</em>, 1–5. <a href="https://doi.org/10.1109/ICATIECE56365.2022.10046766">https://doi.org/10.1109/ICATIECE56365.2022.10046766</a>
+</div>
 <div id="ref-jiangScalingSentenceEmbeddings2023a" class="csl-entry" role="listitem">
 Jiang, T., Huang, S., Luan, Z., Wang, D., &amp; Zhuang, F. (2023). <em>Scaling <span>Sentence Embeddings</span> with <span>Large Language Models</span></em> (arXiv:2307.16645). arXiv. <a href="https://doi.org/10.48550/arXiv.2307.16645">https://doi.org/10.48550/arXiv.2307.16645</a>
 </div>
+<div id="ref-LateChunkingLongContext2024" class="csl-entry" role="listitem">
+<em>Late <span>Chunking</span> in <span>Long-Context Embedding Models</span></em>. (2024). https://jina.ai/news/late-chunking-in-long-context-embedding-models.
+</div>
 <div id="ref-reimersSentenceBERTSentenceEmbeddings2019a" class="csl-entry" role="listitem">
 Reimers, N., &amp; Gurevych, I. (2019). <em>Sentence-<span>BERT</span>: <span>Sentence Embeddings</span> using <span>Siamese BERT-Networks</span></em> (arXiv:1908.10084). arXiv. <a href="https://doi.org/10.48550/arXiv.1908.10084">https://doi.org/10.48550/arXiv.1908.10084</a>
+</div>
+<div id="ref-steckCosineSimilarityEmbeddingsReally2024" class="csl-entry" role="listitem">
+Steck, H., Ekanadham, C., &amp; Kallus, N. (2024). Is <span>Cosine-Similarity</span> of <span>Embeddings Really About Similarity</span>? <em>Companion <span>Proceedings</span> of the <span>ACM Web Conference</span> 2024</em>, 887–890. <a href="https://doi.org/10.1145/3589335.3651526">https://doi.org/10.1145/3589335.3651526</a>
+</div>
+<div id="ref-tunstallEfficientFewShotLearning2022" class="csl-entry" role="listitem">
+Tunstall, L., Reimers, N., Jo, U. E. S., Bates, L., Korat, D., Wasserblat, M., &amp; Pereg, O. (2022). <em>Efficient <span>Few-Shot Learning Without Prompts</span></em> (arXiv:2209.11055). arXiv. <a href="https://arxiv.org/abs/2209.11055">https://arxiv.org/abs/2209.11055</a>
 </div>
 </div>
 </section>
