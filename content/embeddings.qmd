@@ -5,7 +5,7 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Embedding-based agent-sy
 # Embedding-based agent-systems
 
 All agents we discussed until here are using tools that allow them to use their generated inputs in some way.
-In a lot of usecases, we do not only want to generate text but to also inform the generation based on some kind of existing knowledge base.
+In most of the task we want to utilize agents, we do not only want to generate text but to also inform the generation based on some kind of existing knowledge base.
 Examples for these kinds of usecases include:
 
 - Answering questions about a specific topic (e.g., a company or product)
