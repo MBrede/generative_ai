@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -230,13 +250,13 @@ Agent basics<br>
   <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent framework</a>
   <ul class="collapse">
   <li><a href="#agent" id="toc-agent" class="nav-link" data-scroll-target="#agent">Agent</a></li>
+  <li><a href="#planning" id="toc-planning" class="nav-link" data-scroll-target="#planning">Planning</a></li>
   <li><a href="#tools" id="toc-tools" class="nav-link" data-scroll-target="#tools">Tools</a></li>
   <li><a href="#memory" id="toc-memory" class="nav-link" data-scroll-target="#memory">Memory</a></li>
-  <li><a href="#planning" id="toc-planning" class="nav-link" data-scroll-target="#planning">Planning</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">???</a></li>
   </ul></li>
   <li><a href="#examples-of-agent-frameworks-llamaindex-langchain-haystack" id="toc-examples-of-agent-frameworks-llamaindex-langchain-haystack" class="nav-link" data-scroll-target="#examples-of-agent-frameworks-llamaindex-langchain-haystack">Examples of agent-frameworks (Llamaindex, LangChain &amp; Haystack)</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -265,53 +285,129 @@ Agent basics<br>
 <!-- ## Fundamentals of agents and train-of-thought prompting -->
 <section id="what-is-an-agent" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-an-agent">What is an agent?</h2>
-<p>An AI agent is a system that uses an LLM to decide the control flow of an application. – Harrison Chase on <a href="https://blog.langchain.dev/what-is-an-agent/">the langchain blog</a></p>
+<p>“An AI agent is a system that uses an LLM to decide the control flow of an application.” <span class="citation" data-cites="WhatAIAgent2024">(<a href="#ref-WhatAIAgent2024" role="doc-biblioref"><span>“What Is an <span>AI</span> Agent?”</span> 2024</a>)</span></p>
 <p>In the context of large language models, agents are LLM-based systems that can solve complex tasks. Imagine asking a question like:</p>
 <p>“What were the key learnings from the Generative AI elective module in WiSe 24/25 at FH Kiel?”</p>
 <p>Could you just ask an LLM that question and expect a correct answer?</p>
 <p>It is in theory possible, that an LLM could answer that directly, but only if it was trained on this information, that is, if a text describing the module exists, is accessible from the web and was used in training the model. However, usually we can not expect the LLM to have this knowledge.</p>
-<p>Let’s think for a moment how a human would answer that(one that did not attend the module). We would probably try to get a copy of the script, maybe we saved the script to our hard drive or other data storage. Maybe we could search the web for a description or text version of the module. Having obtained a copy of the script, we would probably read it. Then, we would try to distill the information hidden therein, to answer the question.</p>
-<p>So, for our LLM to answer that question, it needs to be able to perform several tasks: - Searching the web for relevant documents - Reading and understanding a document - Summarizing the content of a document - Answering questions based on the summary of a document</p>
+<p>Let’s think for a moment how a human would answer that (one that did not attend the module). We would probably try to get a copy of the script, maybe we saved the script to our hard drive or other data storage. Maybe we could search the web for a description or text version of the module. Having obtained a copy of the script, we would probably read it. Then, we would try to distill the information hidden therein, to answer the question.</p>
+<p>So, for our LLM to answer that question, it needs to be able to perform several tasks:</p>
+<ul>
+<li>Searching the web for relevant documents</li>
+<li>searching in a local file storage or other database</li>
+<li>Reading and understanding a document</li>
+<li>Summarizing the content of a document</li>
+<li>Answering questions based on the summary of a document</li>
+</ul>
 <p>This is where agents come into play. Agents are LLM-based systems that can solve complex tasks by performing several subtasks in sequence, using an LLM to decide which subtask to perform next. In our example, the agent would first search the web for relevant documents, then read and understand them, summarize them and finally answer the question based on the summary.</p>
 </section>
 <section id="agent-framework" class="level2">
 <h2 class="anchored" data-anchor-id="agent-framework">Agent framework</h2>
-<p><img src="../imgs/agent-framework.png" class="img-fluid"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/agent-framework.png" class="img-fluid figure-img"></p>
+<figcaption>Architecture of the agent framework <span class="citation" data-cites="LLMAgentsNextra2024">(<a href="#ref-LLMAgentsNextra2024" role="doc-biblioref"><em><span>LLM Agents</span> – <span>Nextra</span></em>, 2024</a>)</span></figcaption>
+</figure>
+</div>
 <p>To facilitate this, an agent system consists of several components:</p>
 <ul>
 <li><strong>Agent</strong>: the agent core acting as coordinator</li>
-<li><strong>Planning</strong>: Assists the agent in breaking down the complex task into subtasks, deciding which tool to use for each subtask and how to combine the results of the subtasks to answer the question.</li>
-<li><strong>Tools</strong>: The tools are functions that the agent can use to perform a specific task. In our example, the tools would be a web search engine and a document reader.</li>
-<li><strong>Memory</strong>: The memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions.</li>
+<li><strong>Planning</strong>: Assists the agent in breaking down the complex task into subtasks</li>
+<li><strong>Tools</strong>: functions that the agent can use to perform a specific task</li>
+<li><strong>Memory</strong>: used to store information about previous interactions with the agent</li>
 </ul>
 <p>We will describe each of them below.</p>
 <section id="agent" class="level3">
 <h3 class="anchored" data-anchor-id="agent">Agent</h3>
 <p>This is a general-purpose LLM, that functions as the brain and main decision-making component of an agent. It determines which tools to use and how to combine their results to solve complex tasks. The agent core uses the output of the previous tool as input for the next tool. It also uses an LLM to decide when to stop using tools and return a final answer. The behavior of the agent and the tools, it has at its disposal is defined by a prompt template.</p>
 </section>
+<section id="planning" class="level3">
+<h3 class="anchored" data-anchor-id="planning">Planning</h3>
+<p>Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like chain-of-thought (CoT) prompting to generate a plan of action <span class="citation" data-cites="weiChainThoughtPromptingElicits2023">(<a href="#ref-weiChainThoughtPromptingElicits2023" role="doc-biblioref">Wei et al., 2023</a>)</span>. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include Tree-of-Thoughts (<span class="citation" data-cites="longLargeLanguageModel2023">Long (<a href="#ref-longLargeLanguageModel2023" role="doc-biblioref">2023</a>)</span>, <span class="citation" data-cites="yaoTreeThoughtsDeliberate2023">Yao, Yu, et al. (<a href="#ref-yaoTreeThoughtsDeliberate2023" role="doc-biblioref">2023</a>)</span>), ReAct <span class="citation" data-cites="yaoReActSynergizingReasoning2023">(<a href="#ref-yaoReActSynergizingReasoning2023" role="doc-biblioref">Yao, Zhao, et al., 2023</a>)</span> and Reflexion <span class="citation" data-cites="shinnReflexionLanguageAgents2023">(<a href="#ref-shinnReflexionLanguageAgents2023" role="doc-biblioref">Shinn et al., 2023</a>)</span>. <!-- We will discuss these in more detail later. --></p>
+</section>
 <section id="tools" class="level3">
 <h3 class="anchored" data-anchor-id="tools">Tools</h3>
-<p>Tools are functions that the agent can use to perform a specific task. They can be pre-defined or dynamically generated based on the user’s needs. Tools can be simple, such as a calculator, or complex, such as a web search engine. Tools can also be other agents, allowing for the creation of multi-agent systems.</p>
+<p>Tools are functions that the agent can use to perform a specific task. They can be pre-defined or dynamically generated based on the user’s needs. Tools can be simple, such as a calculator, or complex, such as a web search engine. Tools can also be other agents, allowing for the creation of multi-agent systems. In our example, the tools would be a web search engine and a document reader. Other popular tools are a data store or a python interpreter.</p>
 </section>
 <section id="memory" class="level3">
 <h3 class="anchored" data-anchor-id="memory">Memory</h3>
 <p>Memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions. Memory can be short-term, such as a conversation buffer, or long-term, such as a database. Memory can also be used to store the results of previous tool uses, allowing the agent to reuse them if necessary.</p>
 </section>
-<section id="planning" class="level3">
-<h3 class="anchored" data-anchor-id="planning">Planning</h3>
-<p>Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. Planning can be done in several ways:</p>
-</section>
-<section id="section" class="level3">
-<h3 class="anchored" data-anchor-id="section">???</h3>
-</section>
 </section>
 <section id="examples-of-agent-frameworks-llamaindex-langchain-haystack" class="level2">
 <h2 class="anchored" data-anchor-id="examples-of-agent-frameworks-llamaindex-langchain-haystack">Examples of agent-frameworks (Llamaindex, LangChain &amp; Haystack)</h2>
+<p>There are <em>a lot</em> of agent frameworks out there. In this module we will focus on three of them: LlamaIndex, LangChain and Haystack. They all have their own strengths and weaknesses, but they all share the same basic architecture as described above. We will describe each of them below.</p>
+<ul>
+<li><a href="https://github.com/run-llama/llama_index">Llamaindex</a>: LlamaIndex is a data framework for your LLM applications. It provides a central interface to connect your LLMs and your data. It also provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc.</li>
+<li><a href="https://github.com/hwchase17/langchain">LangChain</a>: LangChain is a framework for developing applications powered by language models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.</li>
+<li><a href="https://github.com/deepset-ai/haystack">Haystack</a>: Haystack is an open source NLP framework that enables you to build production-ready applications around LLMs and other models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.</li>
+</ul>
+<p><!-- - [AutoGen](https://github.com/microsoft/autogen): AutoGen is an open source framework for developing large language model (LLM) applications using multiple LLMs that can collaborate with each other. It enables the development of multi-agent systems, where each agent has a specific role and can communicate with other agents to solve complex tasks. --></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now it is your turn!</p>
+<p>Each group is to use one of the following frameworks to build a small demo agent:</p>
+<ul>
+<li><a href="https://docs.llamaindex.ai/en/stable/understanding/agent/">Llamaindex</a></li>
+<li><a href="https://python.langchain.com/docs/tutorials/agents/">Langchain</a></li>
+<li><a href="https://docs.haystack.deepset.ai/docs/agent_overview">Haystack</a></li>
+<li>(optional) another framework of your choice</li>
+</ul>
+<ol type="1">
+<li>Set up a local LLM (e.g.&nbsp;using Ollama or LM Studio) to be used by the agent.</li>
+<li>Choose a small task for your agent, e.g.&nbsp;answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)</li>
+<li>Implement the agent using one of the frameworks listed above.</li>
+<li>Present your results and your experiences with the frameworks in a short presentation.</li>
+<li>Submit your code and report on moodle.</li>
+</ol>
+</div>
+</div>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<ul>
+<li><a href="@wangSurveyLargeLanguage2024">This paper</a> compares different planning strategies</li>
+<li>In addition to the websites listed above see also <span class="citation" data-cites="IntroductionLLMAgents2023">(<a href="#ref-IntroductionLLMAgents2023" role="doc-biblioref"><span>“Introduction to <span>LLM Agents</span>,”</span> 2023</a>)</span></li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-IntroductionLLMAgents2023" class="csl-entry" role="listitem">
+Introduction to <span>LLM Agents</span>. (2023). In <em>NVIDIA Technical Blog</em>. https://developer.nvidia.com/blog/introduction-to-llm-agents/.
+</div>
+<div id="ref-LLMAgentsNextra2024" class="csl-entry" role="listitem">
+<em><span>LLM Agents</span> – <span>Nextra</span></em>. (2024). https://www.promptingguide.ai/research/llm-agents.
+</div>
+<div id="ref-longLargeLanguageModel2023" class="csl-entry" role="listitem">
+Long, J. (2023). <em>Large <span class="nocase">Language Model Guided Tree-of-Thought</span></em> (arXiv:2305.08291). arXiv. <a href="https://arxiv.org/abs/2305.08291">https://arxiv.org/abs/2305.08291</a>
+</div>
+<div id="ref-shinnReflexionLanguageAgents2023" class="csl-entry" role="listitem">
+Shinn, N., Cassano, F., Berman, E., Gopinath, A., Narasimhan, K., &amp; Yao, S. (2023). <em>Reflexion: <span>Language Agents</span> with <span>Verbal Reinforcement Learning</span></em> (arXiv:2303.11366). arXiv. <a href="https://doi.org/10.48550/arXiv.2303.11366">https://doi.org/10.48550/arXiv.2303.11366</a>
+</div>
+<div id="ref-weiChainThoughtPromptingElicits2023" class="csl-entry" role="listitem">
+Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, F., Chi, E., Le, Q., &amp; Zhou, D. (2023). <em>Chain-of-<span>Thought Prompting Elicits Reasoning</span> in <span>Large Language Models</span></em> (arXiv:2201.11903). arXiv. <a href="https://arxiv.org/abs/2201.11903">https://arxiv.org/abs/2201.11903</a>
+</div>
+<div id="ref-WhatAIAgent2024" class="csl-entry" role="listitem">
+What is an <span>AI</span> agent? (2024). In <em>LangChain Blog</em>. https://blog.langchain.dev/what-is-an-agent/.
+</div>
+<div id="ref-yaoTreeThoughtsDeliberate2023" class="csl-entry" role="listitem">
+Yao, S., Yu, D., Zhao, J., Shafran, I., Griffiths, T. L., Cao, Y., &amp; Narasimhan, K. (2023). <em>Tree of <span>Thoughts</span>: <span>Deliberate Problem Solving</span> with <span>Large Language Models</span></em> (arXiv:2305.10601). arXiv. <a href="https://arxiv.org/abs/2305.10601">https://arxiv.org/abs/2305.10601</a>
+</div>
+<div id="ref-yaoReActSynergizingReasoning2023" class="csl-entry" role="listitem">
+Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., &amp; Cao, Y. (2023). <em><span>ReAct</span>: <span>Synergizing Reasoning</span> and <span>Acting</span> in <span>Language Models</span></em> (arXiv:2210.03629). arXiv. <a href="https://doi.org/10.48550/arXiv.2210.03629">https://doi.org/10.48550/arXiv.2210.03629</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

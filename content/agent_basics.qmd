@@ -8,8 +8,7 @@ toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent basics</h3
 
 ## What is an agent? 
 
-An AI agent is a system that uses an LLM to decide the control flow of an application. -- Harrison Chase on [the langchain blog](https://blog.langchain.dev/what-is-an-agent/)
-
+"An AI agent is a system that uses an LLM to decide the control flow of an application." [@WhatAIAgent2024]
 
 In the context of large language models, agents are LLM-based systems that can solve complex tasks. Imagine asking a question like: 
 
@@ -19,11 +18,12 @@ Could you just ask an LLM that question and expect a correct answer?
 
 It is in theory possible, that an LLM could answer that directly, but only if it was trained on this information, that is, if a text describing the module exists, is accessible from the web and was used in training the model. However, usually we can not expect the LLM to have this knowledge. 
 
-Let's think for a moment how a human would answer that(one that did not attend the module). We would probably try to get a copy of the script, maybe we saved the script to our hard drive or other data storage. Maybe we could search the web for a description or text version of the module. Having obtained a copy of the script, we would probably read it. Then, we would try to distill the information hidden therein, to answer the question. 
+Let's think for a moment how a human would answer that (one that did not attend the module). We would probably try to get a copy of the script, maybe we saved the script to our hard drive or other data storage. Maybe we could search the web for a description or text version of the module. Having obtained a copy of the script, we would probably read it. Then, we would try to distill the information hidden therein, to answer the question. 
 
 So, for our LLM to answer that question, it needs to be able to perform several tasks:
 
 - Searching the web for relevant documents
+- searching in a local file storage or other database
 - Reading and understanding a document
 - Summarizing the content of a document
 - Answering questions based on the summary of a document
@@ -33,39 +33,76 @@ This is where agents come into play. Agents are LLM-based systems that can solve
 
 ## Agent framework
 
-![](../imgs/agent-framework.png)
+![Architecture of the agent framework [@LLMAgentsNextra2024]](../imgs/agent-framework.png)
 
 To facilitate this, an agent system consists of several components:
 
 - **Agent**: the agent core acting as coordinator
-- **Planning**: Assists the agent in breaking down the complex task into subtasks, deciding which tool to use for each subtask and how to combine the results of the subtasks to answer the question.
-- **Tools**: The tools are functions that the agent can use to perform a specific task. In our example, the tools would be a web search engine and a document reader.
-- **Memory**: The memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions.
+- **Planning**: Assists the agent in breaking down the complex task into subtasks
+- **Tools**: functions that the agent can use to perform a specific task
+- **Memory**: used to store information about previous interactions with the agent
 
 We will describe each of them below. 
+
 
 ### Agent
 
 This is a general-purpose LLM, that functions as the brain and main decision-making component of an agent. It determines which tools to use and how to combine their results to solve complex tasks. The agent core uses the output of the previous tool as input for the next tool. It also uses an LLM to decide when to stop using tools and return a final answer. The behavior of the agent and the tools, it has at its disposal is defined by a prompt template.
 
 
+### Planning
+
+Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like chain-of-thought (CoT) prompting to generate a plan of action [@weiChainThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include Tree-of-Thoughts (@longLargeLanguageModel2023, @yaoTreeThoughtsDeliberate2023), ReAct [@yaoReActSynergizingReasoning2023] and Reflexion [@shinnReflexionLanguageAgents2023]. 
+<!-- We will discuss these in more detail later. -->
+
+
 ### Tools
 
-Tools are functions that the agent can use to perform a specific task. They can be pre-defined or dynamically generated based on the user's needs. Tools can be simple, such as a calculator, or complex, such as a web search engine. Tools can also be other agents, allowing for the creation of multi-agent systems.
+Tools are functions that the agent can use to perform a specific task. They can be pre-defined or dynamically generated based on the user's needs. Tools can be simple, such as a calculator, or complex, such as a web search engine. Tools can also be other agents, allowing for the creation of multi-agent systems. In our example, the tools would be a web search engine and a document reader. Other popular tools are a data store or a python interpreter. 
+
 
 ### Memory
 
 Memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions. Memory can be short-term, such as a conversation buffer, or long-term, such as a database. Memory can also be used to store the results of previous tool uses, allowing the agent to reuse them if necessary.
 
-### Planning
 
-Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. Planning can be done in several ways:
-
-
-
-### ???
 
 ## Examples of agent-frameworks (Llamaindex, LangChain & Haystack)
 
+There are *a lot* of agent frameworks out there. In this module we will focus on three of them: LlamaIndex, LangChain and Haystack. They all have their own strengths and weaknesses, but they all share the same basic architecture as described above. We will describe each of them below.
+
+ - [Llamaindex](https://github.com/run-llama/llama_index): LlamaIndex is a data framework for your LLM applications. It provides a central interface to connect your LLMs and your data. It also provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc.
+ - [LangChain](https://github.com/hwchase17/langchain): LangChain is a framework for developing applications powered by language models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.
+ - [Haystack](https://github.com/deepset-ai/haystack): Haystack is an open source NLP framework that enables you to build production-ready applications around LLMs and other models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.
+
+ <!-- - [AutoGen](https://github.com/microsoft/autogen): AutoGen is an open source framework for developing large language model (LLM) applications using multiple LLMs that can collaborate with each other. It enables the development of multi-agent systems, where each agent has a specific role and can communicate with other agents to solve complex tasks. -->
+
+::: {.callout-note}
+## 📝 Task
+
+Now it is your turn!
+
+Each group is to use one of the following frameworks to build a small demo agent:
+
+- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/)
+- [Langchain](https://python.langchain.com/docs/tutorials/agents/)
+- [Haystack](https://docs.haystack.deepset.ai/docs/agent_overview)
+- (optional) another framework of your choice
+
+1. Set up a local LLM (e.g. using Ollama or LM Studio) to be used by the agent.
+2. Choose a small task for your agent, e.g. answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)
+3. Implement the agent using one of the frameworks listed above.
+4. Present your results and your experiences with the frameworks in a short presentation.
+5. Submit your code and report on moodle.
+:::
+
+
+
+
 ## Further Readings
 
+- [This paper](@wangSurveyLargeLanguage2024) compares different planning strategies
+- In addition to the websites listed above see also [@IntroductionLLMAgents2023]
+
+
+## References
