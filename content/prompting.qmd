@@ -131,7 +131,7 @@ The generation-pipeline does not just use the token with the highest probability
 This means, that even if the input is identical, the output will be different every time you run the model.
 
 The temperature parameter controls the steepness of the softmax-function and thus the randomness of the sampling process. A higher temperature value results in more random outputs, while a lower temperature value results in more "deterministic" outputs.
-The temperatur, indicated as a float between 0 and 1, is used to modulate the probabilities of the next token. This is done by adding a $\frac{1}{Temp}$ factor to the model-outputs before applying the softmax.
+The temperatur, indicated as a float between 0 and 1^[Depending on the implementation, temperatures above 1 are also allowed. Temperatures above 1 are resultsing in strange behaviours - see @fig-temp.], is used to modulate the probabilities of the next token. This is done by adding a $\frac{1}{Temp}$ factor to the model-outputs before applying the softmax.
 
 This effectively changes the Sofmax-fomula from 
 
@@ -175,7 +175,7 @@ calc_softmax = function( z, temp ) {
 z = sort(runif(16, -1, 1))
 
 tibble(
-    temp = seq(0.005,1,.005),
+    temp = seq(0.005,2,.005),
     softmax = map(temp, ~calc_softmax(z, .)),
 ) %>% 
   unnest_longer(softmax) %>% 

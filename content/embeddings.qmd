@@ -101,7 +101,7 @@ mutate(value = (value - min(value))/(max(value)-min(value))) %>%
 
 ```
 
-As always, there is not the one solution to all problems though and the applicability of cosine similarity might not be optimal for you usecase [@steckCosineSimilarityEmbeddingsReally2024; @goyalComparativeAnalysisDifferent2022].
+As always, there is not the one solution to all problems though and the applicability of cosine similarity might not be optimal for your usecase [@steckCosineSimilarityEmbeddingsReally2024; @goyalComparativeAnalysisDifferent2022].
 
 Though one could use any kind of (L)LM to calculate embeddings for this case^[And there are approaches to use LLMs to solve this taks i.e., @jiangScalingSentenceEmbeddings2023a], it is advisable to use models specifically trained for this purpose. 
 @reimersSentenceBERTSentenceEmbeddings2019a proposed *Sentence-BERT* which is a simple but effective approach to calculate semantic embeddings. SBERT and similar approaches are based on a (L)LM that was trained to predict missing words as we discussed before, resulting in a general representation of natural language. In the case of the original paper, they used (among others) the BERT model @devlinBERTPretrainingDeep2019a mentioned before.
@@ -157,7 +157,7 @@ From the plethora of vector databases, these three are examples that virtue a ho
 
 1. [Chroma](https://www.trychroma.com/) - a in-memory database for small applications that is especially easy to get to run. 
 
-2. [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/bring-your-own-vectors.html) - a well established database that is the go to system for open source search engines and has recently (and kind of naturally) also branche out into vector databases.
+2. [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/bring-your-own-vectors.html) - a well established database that is the go to system for open source search engines and has recently (and kind of naturally) also branched out into vector databases.
 
 3. [Qdrant](https://qdrant.tech/) - the product of a Berlin-based startup that focusses on stability and scalability. It can also run in memory, but does natively support hard drive storage.
 
