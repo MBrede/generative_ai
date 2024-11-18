@@ -12,7 +12,7 @@ toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent basics</h3
 
 In the context of large language models, agents are LLM-based systems that can solve complex tasks. Imagine asking a question like: 
 
-"What were the key learnings from the Generative AI elective module in WiSe 24/25 at FH Kiel?"
+__"What were the key learnings from the Generative AI elective module in WiSe 24/25 at FH Kiel?"__
 
 Could you just ask an LLM that question and expect a correct answer? 
 
@@ -52,7 +52,7 @@ This is a general-purpose LLM, that functions as the brain and main decision-mak
 
 ### Planning
 
-Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like chain-of-thought (CoT) prompting to generate a plan of action [@weiChainThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include Tree-of-Thoughts (@longLargeLanguageModel2023, @yaoTreeThoughtsDeliberate2023), ReAct [@yaoReActSynergizingReasoning2023] and Reflexion [@shinnReflexionLanguageAgents2023]. 
+Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ (@longLargeLanguageModel2023, @yaoTreeThoughtsDeliberate2023), __ReAct__ [@yaoReActSynergizingReasoning2023] and __Reflexion__ [@shinnReflexionLanguageAgents2023]. 
 <!-- We will discuss these in more detail later. -->
 
 
