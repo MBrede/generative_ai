@@ -11,14 +11,15 @@ permissions:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    container:
-      image: rocker/r2u:22.04
     permissions:
       contents: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Setup r2u
+        uses: eddelbuettel/github-actions/r2u-setup@master
+        
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
