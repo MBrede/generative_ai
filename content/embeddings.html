@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.36">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,10 +58,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-01c78b5cd655e4cd89133cf59d535862.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1052c83b22d40503221c7936d9896ba9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -328,7 +328,7 @@ Embedding-based agent-systems<br>
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cosineSimilarity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="fig-cosineSimilarity-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Illustration of &quot;semantic embeddings&quot; of different word. The words &quot;good&quot;, &quot;nice&quot; and &quot;orange&quot; are all mapped to a vector space.">
+<div id="fig-cosineSimilarity-1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Illustration of &quot;semantic embeddings&quot; of different word. The words &quot;good&quot;, &quot;nice&quot; and &quot;orange&quot; are all mapped to a vector space." data-fig-align="center">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-cosineSimilarity-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="embeddings_files/figure-html/fig-cosineSimilarity-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-cosineSimilarity" alt="Illustration of &quot;semantic embeddings&quot; of different word. The words &quot;good&quot;, &quot;nice&quot; and &quot;orange&quot; are all mapped to a vector space." width="768">
@@ -340,7 +340,7 @@ Embedding-based agent-systems<br>
 </div>
 </div>
 <div class="cell-output-display">
-<div id="fig-cosineSimilarity-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="Illustration of similarities between these words. 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan.">
+<div id="fig-cosineSimilarity-2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Illustration of similarities between these words. 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan." data-fig-align="center">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-cosineSimilarity-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="embeddings_files/figure-html/fig-cosineSimilarity-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" data-ref-parent="fig-cosineSimilarity" alt="Illustration of similarities between these words. 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan." width="768">
@@ -363,13 +363,13 @@ Fig&nbsp;5.1: Illustration of common similarity metrics in semantic search.
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;And there are approaches to use LLMs to solve this taks i.e., <span class="citation" data-cites="jiangScalingSentenceEmbeddings2023a">Jiang et al. (<a href="#ref-jiangScalingSentenceEmbeddings2023a" role="doc-biblioref">2023</a>)</span></p></div><div id="fn2"><p><sup>2</sup>&nbsp;The original BERT-paper did this by adding a pooling layer before the task-header that extracted and weighed the context-dependend embedding of the first token. The SBERT paper tried different pooling-strategies and used a mean over each embedding dimension of the sequence.</p></div></div><p>The authors then use this to embed a pair of sentences into one embedding-vector each<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, for which some measure of semantic similarity is known. An example for a dataset containing such sentences is the <a href="https://aclanthology.org/D15-1075/">Stanford Natural Language Inferenc(SNLI) corpus <span class="citation" data-cites="bowmanLargeAnnotatedCorpus2015">Bowman et al. (<span>2015</span>)</span></a> which labels 550k pairs of sentences as either <em>entailment</em>, <em>contradiction</em> or <em>neutral</em>. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> then concated the both senteces embeddings and their element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls. At inference, this classification head was removed and replaced as the cosine similarity as discussed above. The resulting network is highly effective in calculating semantic similarities between sentences.</p>
 <p>A look at the <a href="https://www.sbert.net/docs/sentence_transformer/loss_overview.html">sbert-website</a> shows that the module has somewhat grown and now does supply a series of learning paradigms that can be used to efficiently tune a model for your specific usecase<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. As the library has grown, so has the sheer amount of pretrained embedding-models in some way based on this architecture that are hosted on huggingface. The <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB-Leaderboard</a> is a good strat to search for a model for your application. One utilization of this model-family, which has already been implicitly used in this script, is their very efficient ability to semantically search for documents. If a model is very good at finding similar sentences, it can also be very good to find documents that are very similar to a question.</p>
 <div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;And this does not have to be expensive. <span class="citation" data-cites="tunstallEfficientFewShotLearning2022">Tunstall et al. (<a href="#ref-tunstallEfficientFewShotLearning2022" role="doc-biblioref">2022</a>)</span> have shown a highly efficient contrastive learning paradigm that limts the amount of necessary labels for a ridiuculously small amount of labels.</p></div></div><p>Look at the example illustrated in <a href="#fig-docRetrieval" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>. The question “why is the sky blue” embedded with the same model as our 5 documents stating some facts.</p>
-<div id="fig-docRetrieval" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-docRetrieval" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-docRetrieval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/retrieval_illustration.png" class="enlarge-onhover img-fluid figure-img">
+<img src=".png" id="fig-docRetrieval" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-docRetrieval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;5.2: Illustration of the usage of embedding-based distances in retrieval.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-docRetrieval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;5.2
 </figcaption>
 </figure>
 </div>
@@ -623,6 +623,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -733,6 +735,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
