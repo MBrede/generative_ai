@@ -164,7 +164,11 @@ The effect of this temperature can be seen in @fig-temp.
 #| fig-align: center
 #| classes: .enlarge-onhover
 #| label: fig-temp
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(purrr)
+
 set.seed(42)
 
 calc_softmax = function( z, temp ) {

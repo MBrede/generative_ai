@@ -5,3 +5,4 @@ Imports:
     rmarkdown
     knitr
     tidyr
+    purrr
