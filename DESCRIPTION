@@ -4,3 +4,4 @@ Imports:
     tibble
     rmarkdown
     knitr
+    tidyr
