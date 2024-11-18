@@ -1,8 +1,4 @@
 Imports:
-    ggplot2
-    dplyr
-    tibble
+    tidyverse
     rmarkdown
     knitr
-    tidyr
-    purrr
