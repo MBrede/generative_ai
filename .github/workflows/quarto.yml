@@ -1,4 +1,4 @@
-name: Quarto
+name: Quarto Publish
 
 on:
   push:
@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: write
-
-name: Quarto Publish
 
 jobs:
   build-deploy:
