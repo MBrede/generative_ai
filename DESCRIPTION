@@ -2,3 +2,5 @@ Imports:
     ggplot2
     dplyr
     tibble
+    rmarkdown
+    knitr
