@@ -40,10 +40,18 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: 4.4.1
-          cache: true
       - name: Install R packages
         run: |
-          Rscript -e 'if (!requireNamespace("tidyverse", quietly = TRUE)) install.packages("tidyverse")'
+          Rscript -e '
+            desc <- read.dcf("DESCRIPTION")
+            pkgs <- unlist(strsplit(desc[1, "Imports"], ","))
+            pkgs <- trimws(pkgs) 
+            for (pkg in pkgs) {
+              if (!requireNamespace(pkg, quietly = TRUE)) {
+                install.packages(pkg)
+              }
+            }
+          '
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
