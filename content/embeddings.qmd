@@ -64,9 +64,9 @@ Matrix <- as.matrix(vectors[3:4])
 sim <- Matrix / sqrt(rowSums(Matrix * Matrix))
 co_sim <- mat2df(sim %*% t(sim))
 
-euclidean_sim <- mat2df(as.matrix(1 / (1 + dist(Matrix, method = 'euclidean'))))
+euclidean_sim <- mat2df(1 / (1 + as.matrix(dist(Matrix, method = 'euclidean'))))
 
-manhattan_sim <- mat2df(as.matrix(1 / (1 + dist(Matrix, method = 'manhattan'))))
+manhattan_sim <- mat2df(1 / (1 + as.matrix(dist(Matrix, method = 'manhattan'))))
 
 dot_product_sim <- mat2df(Matrix %*% t(Matrix))
 
@@ -96,7 +96,7 @@ mutate(value = (value - min(value))/(max(value)-min(value))) %>%
     facet_wrap(~method) +
     labs(x = '', y = '') +
     theme_minimal() +
-    theme(legend.position = 'none') +
+    #theme(legend.position = 'none') +
     scale_fill_distiller(palette = "Spectral", direction=-1)
 
 ```
