@@ -52,8 +52,9 @@ This is a general-purpose LLM, that functions as the brain and main decision-mak
 
 ### Planning
 
-Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ (@longLargeLanguageModel2023, @yaoTreeThoughtsDeliberate2023), __ReAct__ [@yaoReActSynergizingReasoning2023] and __Reflexion__ [@shinnReflexionLanguageAgents2023]. 
-<!-- We will discuss these in more detail later. -->
+Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], [@hulbertUsingTreeThoughtPrompting2023] or __ReAct__ [@yaoReActSynergizingReasoning2023].
+ <!-- and __Reflexion__ [@shinnReflexionLanguageAgents2023].  -->
+We will discuss these in more detail later.
 
 
 ### Tools
@@ -66,12 +67,37 @@ Tools are functions that the agent can use to perform a specific task. They can 
 Memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions. Memory can be short-term, such as a conversation buffer, or long-term, such as a database. Memory can also be used to store the results of previous tool uses, allowing the agent to reuse them if necessary.
 
 
+### Chain-of-Thougth prompting
+
+Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e. without examples) by invoking the magical words "Let's think step by step" [@kojimaLargeLanguageModels2023]^[Note that these informations get old *fast*. Newer LLMs may have this functionality build in already]. 
+
+![Chain-of-Thought prompting illustrated [@weiChainThoughtPromptingElicits2023]](../imgs/chain_of_thought.png)
+
+
+### Tree of Thoughts
+
+Tree of Thoughts (ToT) is a generalization on CoT prompting. The papers on ToT are somewhat complex, so we will not discuss them in detail here. In short, LLMs are used to generate thoughts, that serve as intermediate steps towards the solution. The difference to CoT is basically, that several thougts are generated at each step, creating a tree-like structure. This tree is then searched using breadth-first search or depth-first search until a solution is found. A simplified example is given by [@hulbertUsingTreeThoughtPrompting2023]: 
+
+    Imagine three different experts are answering this question.
+    All experts will write down 1 step of their thinking,
+    then share it with the group.
+    Then all experts will go on to the next step, etc.
+    If any expert realises they're wrong at any point then they leave.
+    The question is...
+
+
+### ReAct
+
+ReAct (short for Synergizing Reasoning and Acting) is a technique based on CoT, that updates its reasoning after each step of tool use. This allows the agent to react (pun intended) to unforeseen results during the step-by-step solution i.e. failed tool use. The agent can then follow a different chain of thoughts. This makes it very well suited to tool use. An illustration is given in the figure below. 
+
+![Comparison of ReAct with other prompting techniques [@yaoReActSynergizingReasoning2023]](../imgs/ReAct.png)
+
 
 ## Examples of agent-frameworks (Llamaindex, LangChain & Haystack)
 
 There are *a lot* of agent frameworks out there. In this module we will focus on three of them: LlamaIndex, LangChain and Haystack. They all have their own strengths and weaknesses, but they all share the same basic architecture as described above. We will describe each of them below.
 
- - [Llamaindex](https://github.com/run-llama/llama_index): LlamaIndex is a data framework for your LLM applications. It provides a central interface to connect your LLMs and your data. It also provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc.
+ - [Llamaindex](https://github.com/run-llama/llama_index): LlamaIndex is a data framework for your LLM applications. It provides a central interface to connect your LLMs and your data. It also provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. combine this approach with [this notebook](https://docs.llamaindex.ai/en/stable/examples/llm/lmstudio/) to make it work with LM Studio.
  - [LangChain](https://github.com/hwchase17/langchain): LangChain is a framework for developing applications powered by language models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.
  - [Haystack](https://github.com/deepset-ai/haystack): Haystack is an open source NLP framework that enables you to build production-ready applications around LLMs and other models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.
 
