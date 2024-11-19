@@ -118,7 +118,7 @@ If a model is very good at finding similar sentences, it can also be very good t
 
 Look at the example illustrated in @fig-docRetrieval. The question "why is the sky blue" embedded with the same model as our 5 documents stating some facts.
 
-![](){#fig-docRetrieval}
+![Illustration of the usage of embedding-based distances in retrieval.](../imgs/retrieval_illustration.png){#fig-docRetrieval .enlarge-onhover}
 
 We can then calculate the cosine-similarity between these embeddings and return the document, that has the highest similarity to our question.
 
