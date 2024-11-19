@@ -1,0 +1,306 @@
+---
+title: "Session 2"
+author: Max
+format: ipynb
+---
+
+## Task 2:
+
+::: {.callout-note}
+## 📝 Task 
+
+**1.** Test the above-mentioned prompting strategies on the [MTOP Intent Dataset](https://huggingface.co/datasets/mteb/mtop_intent/viewer/de) and evaluate the results against each other. The dataset contains instructions and labels indicating on which task the instruction was intended to prompt. Use a python script to call one of the following three models in LM-Studio for this:
+
+1. [Phi 3.1 mini](https://model.lmstudio.ai/download/lmstudio-community/Phi-3.1-mini-128k-instruct-GGUF)
+2. [Gemma 2 2B](https://model.lmstudio.ai/download/lmstudio-community/gemma-2-2b-it-GGUF)
+3. [Llama 3.2 1B](https://model.lmstudio.ai/download/hugging-quants/Llama-3.2-1B-Instruct-Q8_0-GGUF)
+
+Use the [F1-score](https://en.wikipedia.org/wiki/F-score) implemented in [scikit learn](https://scikit-learn.org/1.5/modules/generated/sklearn.metrics.f1_score.html) to evaluate your results.
+pip
+**2.** You do sometimes read very specific tips on how to improve your results. Here are three, that you can find from time to time:
+
+* Do promise rewards (i.e., monetary tips) instead of threatening punishments
+* Do formulate using affirmation ("*Do the task*") instead of negating behaviours to be avoided ("*Don't do this mistake*")
+* Let the model reason about the problem before giving an answer
+    
+Check these strategies on whether they improve your results. If your first instruction already results in near-perfect classification, brainstorm a difficult task that you can validate qualitatively. Let the model write a recipe or describe Kiel for example.
+
+**3.** Present your results
+
+**3.** Upload your code to moodle
+:::
+
+Let's start by connecting to the llama model hosted in lmstudio and test the connection:
+
+```{python}
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key='lm-studio',  
+    base_url="http://localhost:1234/v1"
+)
+
+chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "user",
+            "content": "Say this is a test",
+        }
+    ],
+    model="llama-3.2-1b-instruct",
+)
+print(chat_completion.choices[0].message.content)
+```
+
+
+
+Since this seems to run but writing the whole interface every time feels like a lot of work, let's define a wrapper that does it for us:
+
+
+```{python}
+def get_answer(prompt, system = None): #<1>
+    if system is None: #<2>
+        system = {'role': 'system', #<2>
+                  'content': 'You are a helpful AI assistant.'} #<2>
+    chat_completion = client.chat.completions.create(
+    messages=[
+        system | {
+            "role": "user",
+            "content": prompt,
+        }
+    ],
+        model="llama-3.2-1b-instruct",
+    )
+    return chat_completion.choices[0].message.content
+
+
+def classify_one_example(example, prompt):
+    wrapper_prompt = """
+    ### Task
+    You will be given instructions to a classification task and an input.
+    Do answer with only the label you assign based on the instructions provided. 
+    The label should only be one word.
+
+    ### Instruction
+    {prompt}
+
+    ### Example
+    {example}
+
+    ### Label
+    """ #<3>
+    return get_answer(wrapper_prompt.format(prompt = prompt,
+                                    example = example))
+```
+
+1. A wrapper function that passes system-message and content to the LM and returns only the answer without the meta-information
+2. If no system message is provided, a default one is used
+3. A wrapper prompt that makes sure the model only returns the label and nothing else
+
+
+Let's test this on our first example:
+
+```{python}
+classify_one_example(
+    example = 'Franz war böse, als sein Antrag abgelehnt wurde.',
+    prompt = ('Classify the sentiment of the given example.' + 
+              'Only use positive, neutral or negative as classes.')
+)
+```
+
+
+Since the answer does look sensible, let's move to the mtop intent dataset. We will focus on the reduced task of binary classifying messages into GET_MESSAGE and OTHER. 
+The first step is to import and wrangle the JSONL data:
+
+```{python}
+import json
+data = []
+with open('data/de_test.jsonl', 'r') as f:
+    for line in f:
+        data.append(json.loads(line))
+
+possible_labels = list(set([entry['label_text'] for entry in data]))
+
+texts_to_classify = [
+    {'example': entry['text'],
+     'label': 'GET_MESSAGE' if entry['label_text'] == 'GET_MESSAGE' 
+              else 'OTHER'} for entry in data
+]
+```
+
+To test the different prompting-strategies against each other, we have to set up four prompts, each utilizing one of the possible strategies:
+
+```{python}
+prompt_1 = """
+Classify the task instructed by the given example.
+Only use 'GET_MESSAGE' or 'OTHER' as class-labels.
+""" #<1>
+
+prompt_2 = prompt_1 + """
+Think about which task the instruction prompts before you give the label. 
+Take note of verbs in the instruction hinting at the result the user 
+is expecting.
+""" #<2>
+
+prompt_3 = prompt_1 +"""
+Examples should be labeled 'GET_MESSAGE' if the request could be answered by
+looking up a message.
+In every other case, the label shoul be 'OTHER'.
+""" #<3>
+
+prompt_4 = """
+These are examples for possible labellings:
+Lass mich die Nachrichten von meiner Oma Marilyn sehen - GET_MESSAGE
+ache einen Videoanruf an Mariana per Whatsapp - OTHER
+""" #<4>
+
+for entry in texts_to_classify[0:20]: #<5>
+    entry['prompt_1'] = classify_one_example(entry['example'],
+                                             prompt_1).lower()
+    entry['prompt_2'] = classify_one_example(entry['example'],
+                                            prompt_2).lower()
+    entry['prompt_3'] = classify_one_example(entry['example'],
+                                             prompt_3).lower()
+    entry['prompt_4'] = classify_one_example(entry['example'],
+                                             prompt_4).lower()
+                                             
+```
+
+1. A base prompt that vaguely describes the task and possible labels
+2. A prompt that defines the task in as many small steps as possible
+3. A prompt that seperates is as literal and descriptive as possible and
+4. A prompt that provides few-shot examples
+5. Loop through 20 examples to test the prompts on
+Let's see how well our prompts perform:
+
+```{python}
+results = {
+    'prompt_1': [],
+    'prompt_2': [],
+    'prompt_3': [],
+    'prompt_4': [],
+    'y_true': []
+}
+
+classes = {'GET_MESSAGE': 1, 'OTHER': 0}
+for entry in texts_to_classify[0:20]:
+    try:
+        for k in [k for k in results.keys() if 'prompt' in k]:
+            results[k].append(0 if 'other' in entry[k] else 1) # <1>
+        results['y_true'].append(classes[entry['label']])
+    except KeyError:
+        break
+        
+from sklearn.metrics import f1_score, accuracy_score
+for k in [k for k in results.keys() if 'prompt' in k]:
+    y_pred = results[k]
+    y_true = results['y_true']
+    acc = accuracy_score(y_true, y_pred[0:len(y_true)])
+    f1 = f1_score(y_true, y_pred[0:len(y_true)])
+    print(f'Prompt number: {k}')
+    print(f'Examples: {len(y_pred)} Accuracy: {acc}, F1: {f1}')
+```
+
+1. since we are not entirely certain that the model will really answer in only one word, we check for the label by performing string-matching.
+
+The base-prompt seems to perform whe worst, while adding few-shot examples seems to improve the performance, only topped by providing small steps to the model. The somewhat arbitrary, more literal description of the task seems to help - though not by as much as the other strategies.
+
+Let's lastly test, how all four strategies perform combined:
+
+```{python}
+prompt = """
+Classify the task instructed by the given example. 
+Only use 'GET_MESSAGE' or 'OTHER' as class-labels.
+Think about which task the instruction prompts before you give the label. 
+Take note of verbs in the instruction hinting at the result the user is
+expecting.
+Examples should be labeled 'GET_MESSAGE' if the request could be answered
+by looking up a message.
+In every other case, the label shoul be 'OTHER'.
+These are examples for possible labellings:
+Lass mich die Nachrichten von meiner Oma Marilyn sehen - GET_MESSAGE
+ache einen Videoanruf an Mariana per Whatsapp - OTHER
+"""
+for entry in texts_to_classify[0:20]:
+    entry['all_prompts'] = classify_one_example(entry['example'],
+                                                prompt).lower()
+
+results = {
+    'prompt_1': [],
+    'prompt_2': [],
+    'prompt_3': [],
+    'prompt_4': [],
+    'all_prompts': [],
+    'y_true': []
+}
+
+classes = {'GET_MESSAGE': 1, 'OTHER': 0}
+for entry in texts_to_classify[0:20]:
+    try:
+        for k in [k for k in results.keys() if 'prompt' in k]:
+            results[k].append(0 if 'other' in entry[k] else 1)
+        results['y_true'].append(classes[entry['label']])
+    except KeyError:
+        break
+        
+from sklearn.metrics import f1_score, accuracy_score
+for k in [k for k in results.keys() if 'prompt' in k]:
+    y_pred = results[k]
+    y_true = results['y_true']
+    acc = accuracy_score(y_true, y_pred[0:len(y_true)])
+    f1 = f1_score(y_true, y_pred[0:len(y_true)])
+    print(f'Prompt number: {k}')
+    print(f'Examples: {len(y_pred)} Accuracy: {acc}, F1: {f1}')
+
+
+```
+
+The results got worse - the model classified each sentence as "get_message":
+
+```{python}
+print(set([t['all_prompts'] for t in texts_to_classify[0:20]]))
+```
+
+
+This goes to show that though the tips might work, there is such thing as too much instruction and that there is no such thing as the one-size-fits-all prompt.
+
+
+## Task 3
+
+::: {.callout-note}
+## 📝 Task 
+
+Using your script for batch-testing different prompts, generate synthetic data for a emotion detection task based on [Paul Ekman's](https://en.wikipedia.org/wiki/Paul_Ekman) six basic emotions: anger, disgust, fear, happiness, sadness and surprise^[Though this nomenclature has fallen a bit out of fashion].
+
+The generated data should consist of a sentence and the emotion that is expressed in it.
+Start by generating two examples for each emotion. Validate these results and adapt them if necessary.
+Then use these examples to generate 100 samples for each emotion.
+
+Use one of the above mentioned (non-manual) strategies to validate the data you generated.
+
+Upload your results to Moodle.
+:::
+
+::: {.callout-warning}
+## Note
+
+Since we did not have time to individually work on this task in session, we tried to solve it together.
+
+This solution is what we came up with during the session. We only had time to visually validate the results and weren't able to implement one of the other strategies.
+:::
+
+
+
+```{python}
+prompts = {'angry': "Write a sentence angrily",
+           'disgust' : "Write a disgusted sentence.",
+           'fear': "Write a fearful sentence",
+           'happiness': "Write a happy sentence"}
+
+for k, prompt in prompts.items():
+    for i in range(2):
+        print(f'{k}: {get_answer(prompt)}')
+```
+
+
