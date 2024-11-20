@@ -19,8 +19,8 @@ Students will be divided into teams of three at the start of the course, with pr
 
 Projects should allow students to apply what they've learned throughout the course. They must implement an LLM-based system that includes at least two of the following features:
 
-- Retrieval Augmentation/RAG
-- Data Analysis
+- Retrieval Augmentation/RAG (i.e., the system should query documents or other content in an index for its answers)
+- Data Analysis (i.e., the system should tak)
 - Multiple Agents
 - Fine-tuning on Synthetic Data
 

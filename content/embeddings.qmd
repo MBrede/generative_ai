@@ -167,10 +167,10 @@ The best way to use qdrant is to use [docker](https://qdrant.tech/documentation/
 
 #### 📝 Task
 
-Install the qdrant[fastembed] python-sdk.
+Install the qdrant-client python-sdk and fastembed.
 
 Create a collection for the claims and one for the evidence in [the climate_fever-dataset](https://huggingface.co/datasets/tdiggelm/climate_fever).
-Add the first 200 entries to each of these collections. Use qdrants [fastembemd](https://qdrant.tech/articles/fastembed/) to do this.
+Add the first 200 entries to each of these collections. Use qdrants [fastembemd](https://qdrant.tech/articles/fastembed/)-integration to do this.
 
 Test the similarity search on a question you formulate.
 
