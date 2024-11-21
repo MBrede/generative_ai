@@ -15,24 +15,3 @@ Each class meeting will follow this structure:
 
 Students will be divided into teams of three at the start of the course, with projects culminating in a final presentation to the class. The project grade will count towards your final course grade.
 
-## Project Details
-
-Projects should allow students to apply what they've learned throughout the course. They must implement an LLM-based system that includes at least two of the following features:
-
-- Retrieval Augmentation/RAG
-- Data Analysis
-- Multiple Agents
-- Fine-tuning on Synthetic Data
-
-The project should also include function-calling-based interface to an AI image generator.
-
-Students are free to choose their project topic, as long as it fits within the course scope and is approved by the instructor. All projects must be implemented in Python.
-
-**Example Project Ideas**:
-
-1. **LLM Tourist Guide**: Uses [TA.SH data](https://opendata.schleswig-holstein.de/dataset/poi-der-touristischen-landesdatenbank) to provide travel tips and enhances them with generated images.
-2. **Quarto Data Presentation Pipeline**: Builds and illustrates a Quarto presentation based on a given [open dataset](https://data.worldbank.org/).
-3. **Synthetic Author**: Generates commit-messages based on commit history/diff. It could also suggest GitHub issues illustrated with AI-generated images. 
-4. **AI Storyteller**: Creates illustrated short stories for children based on historical events.
-5. **AI Webdesigner** A tool that creates and illustrates a webpage based on a Amazon product page.
-

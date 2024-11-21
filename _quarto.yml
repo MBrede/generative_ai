@@ -22,11 +22,12 @@ book:
     - part: index.qmd
       chapters: 
         - content/orga.qmd
+        - content/project_details.qmd
     - part: "Language Models"
       chapters:
         - content/getting_started_with_llms.qmd
         - content/prompting.qmd
-        - content/agent_basics.qmd
+        - content/agent_basics_alternate.qmd
         - content/embeddings.qmd
         - content/function_calling.qmd
         - content/agent_interaction.qmd
