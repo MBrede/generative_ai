@@ -1,0 +1,112 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Function Calling</h3>'
+---
+
+
+- organizational stuff
+- function calling
+- agents recap
+
+- rag
+- multi agent systems (generator, reviewer, llm as a judge)
+- (pandas ai)
+
+# Function Calling
+
+We already got to know function calling agents in chapter 3 of this course. In this chapter, we will learn more about how to use them effectively and how they work under the hood.
+To this end, we want to first recap what we already know about LLMs, how to use them and what an agent does. Then, we will dive into function calling agents and see how they can be used to solve complex tasks that require multiple steps or external data sources. 
+<!-- We will also learn about the limitations of function calling agents and how to overcome them. -->
+
+## Recap: LLMs, Prompting and Agents
+
+### What is a Language Model?
+
+A language model (LM) is a statistical model that predicts the likelihood of a sequence of words given its history. It's like an autocomplete feature for text. LMs are trained on large amounts of data and can generate human-like text, translate languages, answer questions, summarize texts, etc.
+
+A large language model (LLM) is basically the same, only larger😜. It's a type of LM that has been trained on a massive amount of data, often billions of words or more. LLMs are capable of generating more coherent and contextually appropriate text than smaller models. 
+
+::: {.callout-note}
+## 📝 Task
+
+Let's have a look!
+
+1. Open a notebook and connect it with a local LLM using LM Studio. 
+2. Ask the model to write a short story about a robot that is trying to learn how to cook or something similar.
+3. in LM Studio, find the tab where you can see the model working. 
+4. Watch as the LLM generates the answer word by word (or token by token).
+:::
+
+
+### What is Prompting?
+
+Prompting is the process of designing a prompt that elicits the desired response from an LLM. A prompt is a string of text that provides context or instructions to the model. The quality and effectiveness of the prompt can greatly affect the output of the model.
+
+Good prompting techniques for solving complex tasks are Few-Shot Learning, Chain of Thought (CoT) and Tree of Thoughts (ToT).
+
+::: {.callout-note}
+## 📝 Task
+
+Hands on!
+
+1. Try letting your LLM solve a complex task e.g. "The cafeteria had 23 apples. If they used 20 to make lunch and bought 6 more, how many apples do they have?" using the standard prompt (i.e. using the question as is)
+2. Use Chain-of-Though prompting to solve the same task
+    - using few shot examples, with step by step walkthrough
+    - without examples but adding "let's think step by step." 
+3. Use Tree of Thoughts (ToT) to solve the same task. You can use the following prompt from [@hulbertUsingTreeThoughtPrompting2023]: 
+
+    Imagine three different experts are answering this question.
+    All experts will write down 1 step of their thinking,
+    then share it with the group.
+    Then all experts will go on to the next step, etc.
+    If any expert realises they're wrong at any point then they leave.
+    The question is...
+
+2. Try other, more interesting questions. 
+:::
+
+
+### What is an Agent?
+
+An agent is a software system that acts on behalf of a user to accomplish a task. In the context of LLMs, an agent is a program that uses one or more LMs to perform tasks such as answering questions, generating text, or making decisions. Agents can be simple or complex, and they can use different strategies to achieve their goals.
+
+### Function Calling Agents
+
+Function calling agents are a type of agent that can call functions to perform tasks that require external data sources or multiple steps. Functions are defined by the user and can be called by the agent when it determines that they are necessary to complete a task. Functions can return data to the agent, which can then be used in subsequent steps.
+
+### How Function Calling Agents Work
+
+Function calling agents work by first defining a set of functions that can be called to perform specific tasks. The agent then generates a prompt that includes the user's request and a description of the available functions. The prompt is sent to an LLM, which generates a response that may include one or more function calls. The agent then executes the function calls and uses the returned data to generate a final response.
+
+Since, apparently, repetition is the mother of learning, let's have another look at how function calling agents work:
+
+1. Define functions: The user defines a set of functions that can be called by the agent to perform specific tasks. Functions can take input arguments and return output data.
+2. Generate prompt: The agent generates a prompt that includes the user's request and a description of the available functions. The prompt is sent to an LLM.
+3. Generate response: The LLM generates a response that may include one or more function calls. Function calls are formatted as JSON objects with a "name" field indicating the name of the function to call, and an "arguments" field containing any input arguments for the function.
+4. Execute functions: The agent executes the function calls by calling the corresponding functions with the provided input arguments. The output data from each function is returned to the agent.
+5. Generate final response: The agent uses the output data from the function calls to generate a final response that satisfies the user's request.
+
+::: {.callout-note}
+## 📝 Task
+
+Let's try it out!
+
+1. Open a notebook and connect it with a local LLM using LM Studio.
+2. Define a function that can be called by the agent to get the current weather in a given location.
+3. initialize a ReAct agent using LLamaindex (we will use [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) as a starting point, since it reimplements the function calling agent and returns a step-by step breakdown of its thought process).
+4. have a look at the prompt, the agent gives to the LLM (you can find using `agent.get_prompts()`)
+5. Ask the agent to tell you the weather in a given location.
+6. (optional) Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
+:::
+
+
+
+## Code generation and function calling
+
+## Data analysis
+
+## Further Readings
+
+On the Llamaindex website on the ["examples" page](https://docs.llamaindex.ai/en/stable/examples/) you will find a **lot** of helpful material: examples, notebooks, recipes and more. I recommend to have a look at them! For our case, check the "agents" section. For an even more in-depth dive, go to the "workflows" part. 
+
+## References
+
