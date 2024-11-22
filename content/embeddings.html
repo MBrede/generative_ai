@@ -177,6 +177,11 @@ window.Quarto = {
   <a href="../content/orga.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Organizational Details</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/project_details.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Details</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -322,7 +327,7 @@ Embedding-based agent-systems<br>
 <p>To empower an agent too look up information during its thought-process, one has to build a tool that allows an agent to use natural language to retrieve information necessary for a task. The fundamental principle to do this are so-called <em>semantic embeddings</em>. These are pretty close to the concept we introduced when talking about the foundations of LLMs (see <a href="getting_started_with_llms">here</a>) and can be understood as a way to map textual data into a vector space. The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonibly small distance between them. The go-to standard to measure this distance is the <strong>cosine similarity</strong>, which has proven usefull enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in <a href="https://cookbook.openai.com/examples/recommendation_using_embeddings">OpenAI tutorials</a> and in <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/understand-embeddings">Azure embedding-applications</a>). The cosine similarity is defined as:</p>
 <p><span class="math display">\[
 \text{cosine\_similarity}(u, v) = \frac{u \cdot v}{\|u\| \|v\|} = \frac{\sum_{i=1}^{n} u_i v_i}{\sqrt{\sum_{i=1}^{n} u_i^2} \sqrt{\sum_{i=1}^{n} v_i^2}}
-\]</span> The rationale here is that sequences with semantically similar contents should point to similar directions in the high dimensional vector space. See <a href="#fig-cosineSimilarity" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> for an illustration of this and other common similarity concepts seen in semantic retrieval.</p>
+\]</span> The rationale here is that sequences with semantically similar contents should point to similar directions in the high dimensional vector space. See <a href="#fig-cosineSimilarity" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> for an illustration of this and other common similarity concepts seen in semantic retrieval.</p>
 <div class="cell enlarge-onhover" data-layout-align="center">
 <div id="fig-cosineSimilarity" class="cell enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
 <figure class="quarto-float quarto-float-fig figure">
@@ -353,7 +358,7 @@ Embedding-based agent-systems<br>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cosineSimilarity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;5.1: Illustration of common similarity metrics in semantic search.
+Fig&nbsp;6.1: Illustration of common similarity metrics in semantic search.
 </figcaption>
 </figure>
 </div>
@@ -362,14 +367,14 @@ Fig&nbsp;5.1: Illustration of common similarity metrics in semantic search.
 <p>Though one could use any kind of (L)LM to calculate embeddings for this case<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, it is advisable to use models specifically trained for this purpose. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> proposed <em>Sentence-BERT</em> which is a simple but effective approach to calculate semantic embeddings. SBERT and similar approaches are based on a (L)LM that was trained to predict missing words as we discussed before, resulting in a general representation of natural language. In the case of the original paper, they used (among others) the BERT model <span class="citation" data-cites="devlinBERTPretrainingDeep2019a">Devlin et al. (<a href="#ref-devlinBERTPretrainingDeep2019a" role="doc-biblioref">2019</a>)</span> mentioned before.</p>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;And there are approaches to use LLMs to solve this taks i.e., <span class="citation" data-cites="jiangScalingSentenceEmbeddings2023a">Jiang et al. (<a href="#ref-jiangScalingSentenceEmbeddings2023a" role="doc-biblioref">2023</a>)</span></p></div><div id="fn2"><p><sup>2</sup>&nbsp;The original BERT-paper did this by adding a pooling layer before the task-header that extracted and weighed the context-dependend embedding of the first token. The SBERT paper tried different pooling-strategies and used a mean over each embedding dimension of the sequence.</p></div></div><p>The authors then use this to embed a pair of sentences into one embedding-vector each<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, for which some measure of semantic similarity is known. An example for a dataset containing such sentences is the <a href="https://aclanthology.org/D15-1075/">Stanford Natural Language Inferenc(SNLI) corpus <span class="citation" data-cites="bowmanLargeAnnotatedCorpus2015">Bowman et al. (<span>2015</span>)</span></a> which labels 550k pairs of sentences as either <em>entailment</em>, <em>contradiction</em> or <em>neutral</em>. <span class="citation" data-cites="reimersSentenceBERTSentenceEmbeddings2019a">Reimers &amp; Gurevych (<a href="#ref-reimersSentenceBERTSentenceEmbeddings2019a" role="doc-biblioref">2019</a>)</span> then concated the both senteces embeddings and their element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls. At inference, this classification head was removed and replaced as the cosine similarity as discussed above. The resulting network is highly effective in calculating semantic similarities between sentences.</p>
 <p>A look at the <a href="https://www.sbert.net/docs/sentence_transformer/loss_overview.html">sbert-website</a> shows that the module has somewhat grown and now does supply a series of learning paradigms that can be used to efficiently tune a model for your specific usecase<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. As the library has grown, so has the sheer amount of pretrained embedding-models in some way based on this architecture that are hosted on huggingface. The <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB-Leaderboard</a> is a good strat to search for a model for your application. One utilization of this model-family, which has already been implicitly used in this script, is their very efficient ability to semantically search for documents. If a model is very good at finding similar sentences, it can also be very good to find documents that are very similar to a question.</p>
-<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;And this does not have to be expensive. <span class="citation" data-cites="tunstallEfficientFewShotLearning2022">Tunstall et al. (<a href="#ref-tunstallEfficientFewShotLearning2022" role="doc-biblioref">2022</a>)</span> have shown a highly efficient contrastive learning paradigm that limts the amount of necessary labels for a ridiuculously small amount of labels.</p></div></div><p>Look at the example illustrated in <a href="#fig-docRetrieval" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>. The question “why is the sky blue” embedded with the same model as our 5 documents stating some facts.</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;And this does not have to be expensive. <span class="citation" data-cites="tunstallEfficientFewShotLearning2022">Tunstall et al. (<a href="#ref-tunstallEfficientFewShotLearning2022" role="doc-biblioref">2022</a>)</span> have shown a highly efficient contrastive learning paradigm that limts the amount of necessary labels for a ridiuculously small amount of labels.</p></div></div><p>Look at the example illustrated in <a href="#fig-docRetrieval" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>. The question “why is the sky blue” embedded with the same model as our 5 documents stating some facts.</p>
 <div id="fig-docRetrieval" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-docRetrieval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/retrieval_illustration.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-docRetrieval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;5.2: Illustration of the usage of embedding-based distances in retrieval.
+Fig&nbsp;6.2: Illustration of the usage of embedding-based distances in retrieval.
 </figcaption>
 </figure>
 </div>

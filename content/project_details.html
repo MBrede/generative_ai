@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Organizational Details – Generative AI</title>
+<title>Project Details – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/project_details.html" rel="next">
-<link href="../index.html" rel="prev">
+<link href="../content/getting_started_with_llms.html" rel="next">
+<link href="../content/orga.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../index.html">Introduction</a></li><li class="breadcrumb-item"><a href="../content/orga.html"><span class="chapter-title">Organizational Details</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../index.html">Introduction</a></li><li class="breadcrumb-item"><a href="../content/project_details.html"><span class="chapter-title">Project Details</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -125,12 +125,12 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/orga.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Organizational Details</span></a>
+  <a href="../content/orga.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Organizational Details</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/project_details.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Details</span></a>
+  <a href="../content/project_details.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Project Details</span></a>
   </div>
 </li>
       </ul>
@@ -223,24 +223,15 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
-    <h2 id="toc-title"><img src="../imgs/cover.jpg" class="img-fluid" width="240"><br><br>
-</h2><h3 class="anchored"><br>
-Orgaization Details<br>
-</h3>
-   
-  <ul>
-  <li><a href="#planned-class-structure" id="toc-planned-class-structure" class="nav-link active" data-scroll-target="#planned-class-structure">Planned Class Structure</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../index.html">Introduction</a></li><li class="breadcrumb-item"><a href="../content/orga.html"><span class="chapter-title">Organizational Details</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../index.html">Introduction</a></li><li class="breadcrumb-item"><a href="../content/project_details.html"><span class="chapter-title">Project Details</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Organizational Details</span></h1>
+<h1 class="title"><span class="chapter-title">Project Details</span></h1>
 </div>
 
 
@@ -257,18 +248,34 @@ Orgaization Details<br>
 </header>
 
 
-<section id="planned-class-structure" class="level2">
-<h2 class="anchored" data-anchor-id="planned-class-structure">Planned Class Structure</h2>
-<p>Each class meeting will follow this structure:</p>
+<p>Projects should allow students to apply what they’ve learned throughout the course. They must implement an LLM-based system that includes at least two of the following features:</p>
+<ul>
+<li>Retrieval Augmentation/RAG (i.e., the system should query documents or other content in an index for its answers and reference the sources of its generation)</li>
+<li>Data Analysis (i.e., the system should “talk” to a dataset and decide on which analysis-steps are to be taken to then execute them)</li>
+<li>Multiple Agents (i.e., at least two agents should work in tandem, for example in a generator-reviewer arrangement)</li>
+<li>Fine-tuning on (Synthetic) Data (i.e., a small LM or SDM should be finetuned on (synthetic) data to adapt it to your needs. You could as an example train a model to only answer in nouns.)</li>
+</ul>
+<p>The project should also include function-calling-based interface (“a tool”) to an AI image generator.</p>
+<p>Students are free to choose their project topic, as long as it fits within the course scope and is approved by the instructor. All projects must be implemented in Python.</p>
+<p>The active participation on the course will be taken into account before grading. This means that all tasks asking the students to upload their results to moodle should be completed. If more than one of the required tasks is missing, the student will not be graded.</p>
+<p>The projects are to be presented in the last session of the course. The students of each group need to take part in this session. The presentation will become part of the overall grade. The presentation can but does not have to be prepared in PPT, any other mode of presentation (including a live-demo based on a nice notebook) is fine.</p>
+<p>The project will then be graded based on these contents in addition to the following criteria:</p>
 <ol type="1">
-<li><strong>Instructional Session</strong>: We’ll introduce new concepts and techniques.</li>
-<li><strong>Practice Exercise</strong>: Students will apply these concepts through an exercise.</li>
-<li><strong>Project Worktime</strong>: Students will work on their team projects.</li>
+<li>The minimum of components mentioned above <strong>have</strong> to be used</li>
+<li>The more components are used, the better the grade</li>
+<li>The project-solution has to work.(Since we are talking about LLMs it does not have to generate perfect results, the pipeline has to generally work though.)</li>
+<li>The students have to hand in code the instructors can run. The code has to be documented. This can be done either in sensible docstrings, appropriately commented notebooks or a report. The students can choose the mode. It is possible and recommended to create a github repository with the code and the documentation.</li>
 </ol>
-<p>Students will be divided into teams of three at the start of the course, with projects culminating in a final presentation to the class. The project grade will count towards your final course grade.</p>
+<p><strong>Example Project Ideas</strong>:</p>
+<ol type="1">
+<li><strong>LLM Tourist Guide</strong>: Uses <a href="https://opendata.schleswig-holstein.de/dataset/poi-der-touristischen-landesdatenbank">TA.SH data</a> to provide travel tips and enhances them with generated images.</li>
+<li><strong>Quarto Data Presentation Pipeline</strong>: Builds and illustrates a Quarto presentation based on a given <a href="https://data.worldbank.org/">open dataset</a>.</li>
+<li><strong>Synthetic Author</strong>: Generates commit-messages based on commit history/diff. It could also suggest GitHub issues illustrated with AI-generated images.</li>
+<li><strong>AI Storyteller</strong>: Creates illustrated short stories for children based on historical events.</li>
+<li><strong>AI Webdesigner</strong> A tool that creates and illustrates a webpage based on a Amazon product page.</li>
+</ol>
 
 
-</section>
 
 </main> <!-- /main -->
 <script>
@@ -711,13 +718,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../index.html" class="pagination-link" aria-label="Introduction">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
+      <a href="../content/orga.html" class="pagination-link" aria-label="Organizational Details">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Organizational Details</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/project_details.html" class="pagination-link" aria-label="Project Details">
-        <span class="nav-page-text"><span class="chapter-title">Project Details</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/getting_started_with_llms.html" class="pagination-link" aria-label="Getting started with (L)LMs">
+        <span class="nav-page-text"><span class="chapter-title">Getting started with (L)LMs</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -729,7 +736,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>All images are generated using Python, R, draw.io, Flux or Stable Diffusion XL if not indicated otherwise.</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

@@ -177,6 +177,11 @@ window.Quarto = {
   <a href="../content/orga.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Organizational Details</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/project_details.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Details</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -310,14 +315,14 @@ Prompting<br>
 <p>Prompting can be used for various tasks such as text generation, summarization, question answering, and many more.</p>
 <section id="instruct-tuned-models" class="level2">
 <h2 class="anchored" data-anchor-id="instruct-tuned-models">Instruct-tuned models</h2>
-<p>Instruct-tuned models are trained on a dataset (for an example, see <a href="#fig-instructData" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>) that consists of instructions and their corresponding outputs. This is different from the pretraining phase of language models where they were trained on large amounts of text data without any specific task in mind. The goal of instruct-tuning is to make the model better at following instructions and generating more accurate and relevant outputs.</p>
+<p>Instruct-tuned models are trained on a dataset (for an example, see <a href="#fig-instructData" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>) that consists of instructions and their corresponding outputs. This is different from the pretraining phase of language models where they were trained on large amounts of text data without any specific task in mind. The goal of instruct-tuning is to make the model better at following instructions and generating more accurate and relevant outputs.</p>
 <div id="fig-instructData" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-instructData-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/instruct_dataset.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-instructData-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;3.1: An example for a dataset that can be used for instruct-finetuning. This dataset can be found on <a href="https://huggingface.co/datasets/rajpurkar/squad">huggingface</a>
+Fig&nbsp;4.1: An example for a dataset that can be used for instruct-finetuning. This dataset can be found on <a href="https://huggingface.co/datasets/rajpurkar/squad">huggingface</a>
 </figcaption>
 </figure>
 </div>
@@ -369,7 +374,7 @@ Fig&nbsp;3.1: An example for a dataset that can be used for instruct-finetuning.
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-poems-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;3.2: A poem and a “poem”
+Fig&nbsp;4.2: A poem and a “poem”
 </figcaption>
 </figure>
 </div>
@@ -455,7 +460,7 @@ Too many labels. Reduce the label count for the task -->
 <p>Yes, it should. And it does.</p>
 <p>Remember that a language model trained on language generation as we discussed in the first session ends in a softmax-layer that returns probabilities for each token in the vocabulary. The generation-pipeline does not just use the token with the highest probability though, but samples from this distribution. This means, that even if the input is identical, the output will be different every time you run the model.</p>
 <p>The temperature parameter controls the steepness of the softmax-function and thus the randomness of the sampling process. A higher temperature value results in more random outputs, while a lower temperature value results in more “deterministic” outputs. The temperatur, indicated as a float between 0 and 1<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, is used to modulate the probabilities of the next token. This is done by adding a <span class="math inline">\(\frac{1}{Temp}\)</span> factor to the model-outputs before applying the softmax.</p>
-<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Depending on the implementation, temperatures above 1 are also allowed. Temperatures above 1 are resultsing in strange behaviours - see <a href="#fig-temp" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>.</p></div></div><p>This effectively changes the Sofmax-fomula from</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Depending on the implementation, temperatures above 1 are also allowed. Temperatures above 1 are resultsing in strange behaviours - see <a href="#fig-temp" class="quarto-xref">Figure&nbsp;<span>4.3</span></a>.</p></div></div><p>This effectively changes the Sofmax-fomula from</p>
 <p><span class="math display">\[
 p_{Token} = \frac{e^{z_{Token}}}{\sum_{i=1}^k e^{z_{i}}}
 \]</span></p>
@@ -468,16 +473,16 @@ p_{Token}(Temp) = \frac{e^{\frac{z_{Token}}{Temp}}}{\sum_{i=1}^k e ^{\frac{z_{i}
 <li><span class="math inline">\(k\)</span> is the size of the vocabulary</li>
 <li><span class="math inline">\(Temp\)</span> is the temperature parameter (0 &lt; <span class="math inline">\(Temp\)</span> &lt;= 1)</li>
 </ul>
-<p>The effect of this temperature can be seen in <a href="#fig-temp" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>.</p>
+<p>The effect of this temperature can be seen in <a href="#fig-temp" class="quarto-xref">Figure&nbsp;<span>4.3</span></a>.</p>
 <div class="cell enlarge-onhover" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-temp" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token." data-fig-align="center">
+<div id="fig-temp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-temp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="prompting_files/figure-html/fig-temp-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token." width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-temp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;3.3: The effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token.
+Fig&nbsp;4.3: The effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token.
 </figcaption>
 </figure>
 </div>
