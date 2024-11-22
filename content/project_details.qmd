@@ -1,0 +1,43 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Project Details</h3>'
+---
+
+
+# Project Details
+
+Projects should allow students to apply what they've learned throughout the course. They must implement an LLM-based system that includes at least two of the following features:
+
+- Retrieval Augmentation/RAG (i.e., the system should query documents or other content in an index for its answers and reference the sources of its generation)
+- Data Analysis (i.e., the system should "talk" to a dataset and decide on which analysis-steps are to be taken to then execute them)
+- Multiple Agents (i.e., at least two agents should work in tandem, for example in a generator-reviewer arrangement)
+- Fine-tuning on (Synthetic) Data (i.e., a small LM or SDM should be finetuned on (synthetic) data to adapt it to your needs. You could as an example train a model to only answer in nouns.)
+
+The project should also include function-calling-based interface ("a tool") to an AI image generator.
+
+Students are free to choose their project topic, as long as it fits within the course scope and is approved by the instructor. All projects must be implemented in Python.
+
+The active participation on the course will be taken into account before grading. This means that all tasks asking the students to upload their results to moodle should be completed.
+If more than one of the required tasks is missing, the student will not be graded.
+
+The projects are to be presented in the last session of the course.
+The students of each group need to take part in this session. 
+The presentation will become part of the overall grade.
+The presentation can but does not have to be prepared in PPT, any other mode of presentation (including a live-demo based on a nice notebook) is fine.
+
+
+The project will then be graded based on these contents in addition to the following criteria:
+
+1. The minimum of components mentioned above __have__ to be used
+2. The more components are used, the better the grade
+3. The project-solution has to work.(Since we are talking about LLMs it does not have to generate perfect results, the pipeline has to generally work though.)
+4. The students have to hand in code the instructors can run. The code has to be documented. This can be done either in sensible docstrings, appropriately commented notebooks or a report. The students can choose the mode. It is possible and recommended to create a github repository with the code and the documentation.
+
+
+
+**Example Project Ideas**:
+
+1. **LLM Tourist Guide**: Uses [TA.SH data](https://opendata.schleswig-holstein.de/dataset/poi-der-touristischen-landesdatenbank) to provide travel tips and enhances them with generated images.
+2. **Quarto Data Presentation Pipeline**: Builds and illustrates a Quarto presentation based on a given [open dataset](https://data.worldbank.org/).
+3. **Synthetic Author**: Generates commit-messages based on commit history/diff. It could also suggest GitHub issues illustrated with AI-generated images. 
+4. **AI Storyteller**: Creates illustrated short stories for children based on historical events.
+5. **AI Webdesigner** A tool that creates and illustrates a webpage based on a Amazon product page.
