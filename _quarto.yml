@@ -27,7 +27,7 @@ book:
       chapters:
         - content/getting_started_with_llms.qmd
         - content/prompting.qmd
-        - content/agent_basics_alternate.qmd
+        - content/agent_basics.qmd
         - content/embeddings.qmd
         - content/function_calling.qmd
         - content/agent_interaction.qmd
