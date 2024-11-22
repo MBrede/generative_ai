@@ -4,9 +4,78 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Function Calling</h3>'
 
 # Function Calling
 
+Function calling is a technique used in large language models (LLMs) and AI agents to enhance their capability to provide more accurate and relevant responses, especially when handling complex tasks or questions that require specialized knowledge or external data.
+
+We already got to know function calling in chapter 3 of this course. There, we introduced agents, that already came with the ability to call predefined functions. In this chapter, we will go back to the basics of function calling using LLMs. 
+
+
 ## Code generation and function calling
 
-## Data analysis
+The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken by the agent and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that:
+
+1. **Code generation**: Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation.
+2. **Function calling**: Here, we ask the LLM to generate a function call from the user input. This approach has the advantage of being more robust and accurate than code generation, as it is easier for the LLM to generate a correct function call than a complete python script. However, it requires that the functions that can be called are already defined and that they are properly documented.
+
+Here, we will focus on function calling. Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
+
+1. using a large, generalized LLM (e.g. GPT-4) with good prompt engineering and
+2. using a smaller model fine tuned to generate function calls.
+
+
+### Function definition
+
+The first step in using function calling is to define the functions that the LLM can call. This is done by providing a JSON schema that describes the name of the function, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: 
+
+    {
+        "name": "get_current_weather",  
+        "description": "Get the current weather in a given location",  
+        "arguments": {    
+            "location": {"type": "string"},    
+            "unit": {"type": "string"}  
+            } 
+    }
+
+### Prompting
+
+The second step is to provide a good prompt. The promot should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for function calling:
+
+    You are a helpful assistant that generates function calls based on user input. Only use the functions you have been provided with.
+
+    {function definition as described above}
+
+Hopefully, if the user were to input something like
+
+    User: What's the weather like in Berlin?
+
+The LLM should respond:
+
+    Assistant: {
+        "name": "get_current_weather",
+        "arguments": {"location": "Berlin", "unit": "celsius"}
+    }
+
+
+
+### Function execution
+
+The third step is to execute the function call. This is done by parsing the JSON output of the LLM and calling the function with the provided arguments. Here is an example:
+
+    import json
+    from typing import Union
+
+    def get_current_weather(location: str, unit: str) -> Union[str, dict]:
+        # This is a dummy function that returns a random weather report
+        return f"The current weather in {location} is 20 degrees {unit}"
+
+    response = '{ "name": "get_current_weather", "arguments": {"location": "Berlin", "unit": "celsius"} }'
+   
+
+<!-- The main challenge is here to get the LLM to generate valid python code. This is not always easy, as LLMs are not usually super safe coders.  -->
+
+
+## Agents recap
+
+We introduced agents already back in chapter 3. To give a quick recap, an agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request better. The agent has several modules at its disposal, the memory, some tools and a planning tool. The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e. the LLM) along with the system prompt and the current user input.
 
 ## Further Readings
 
