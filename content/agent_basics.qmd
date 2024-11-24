@@ -52,7 +52,7 @@ This is a general-purpose LLM, that functions as the brain and main decision-mak
 
 ### Planning
 
-Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], [@hulbertUsingTreeThoughtPrompting2023] or __ReAct__ [@yaoReActSynergizingReasoning2023].
+Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainofThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], [@hulbertUsingTreeThoughtPrompting2023] or __ReAct__ [@yaoReActSynergizingReasoning2023].
  <!-- and __Reflexion__ [@shinnReflexionLanguageAgents2023].  -->
 We will discuss these in more detail later.
 
@@ -69,9 +69,9 @@ Memory is used to store information about previous interactions with the agent. 
 
 ### Chain-of-Thougth prompting
 
-Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e. without examples) by invoking the magical words "Let's think step by step" [@kojimaLargeLanguageModels2023]^[Note that these informations get old *fast*. Newer LLMs may have this functionality build in already]. 
+Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e. without examples) by invoking the magical words "Let's think step by step" [@kojimaLargeLanguageModels2023a]^[Note that these informations get old *fast*. Newer LLMs may have this functionality build in already]. 
 
-![Chain-of-Thought prompting illustrated [@weiChainThoughtPromptingElicits2023]](../imgs/chain_of_thought.png)
+![Chain-of-Thought prompting illustrated [@weiChainofThoughtPromptingElicits2023]](../imgs/chain_of_thought.png)
 
 
 ### Tree of Thoughts
