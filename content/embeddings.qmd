@@ -180,16 +180,44 @@ Test the similarity search on a question you formulate.
 
 The last step to make this into a RAG pipeline is to use a generative model to answer the question based on the retrieved documents.
 
+This means, that we do collect the relevant documents like we did before, still based on a natural language question, but instead of returning the hits we got from the index, we feed them into a LLM and ask it to generate an answer based on these documents. This is where the name retrieval augmented generation comes from - we use the retrieval step to augment the generative model with additional information. The diagram in @fig-rag illustrates this process.
+
+![Illustration of a RAG-system.](../imgs/rag.png){#fig-rag .enlarge-onhover}
+
+::: {.callout-note}
+
+#### 📝 Task
+
+Implement a RAG pipeline for the climate_fever dataset using qdrant as vector database and a LLM of your choice for the summarization.
+
+Try to find a prompt that results in the LLM
+
+a) using the information given 
+b) not inventing new information
+c) referencing the source of the information it uses
+
+
+Upload your results until here (embedder, database and summarization) to moodle.
+:::
+
+
 Most agent frameworks provide integrations for a variety of vector databases. 
 
 In terms of llamaindex, there are not just one but two tutorials on how to get qdrant to integrate into your agent, one from [qdrant](https://qdrant.tech/documentation/frameworks/llama-index/) for general integration and one from [llamaindex](https://docs.llamaindex.ai/en/stable/examples/vector_stores/QdrantIndexDemo/).
 
+The pipeline is pretty close to what we discussed until here, it just uses the llamaindex-typical wrapper classes. See @tip-llamaindexRag for an example RAG-system implemented in Llamaindex.
+
+:::{#tip-llamaindexRag .callout-tip collapse="true" appearance="minimal"}
+
+{{< include llamaindex_rag.md >}}
 
 ::: {.callout-note}
 
 #### 📝 Task
 
 Build a llamaindex-application that allows you to [chat](https://docs.llamaindex.ai/en/stable/examples/chat_engine/chat_engine_best/) with the climate_fever evidence.
+:::
+
 :::
 
 ### Document chunking
