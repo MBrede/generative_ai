@@ -1,0 +1,240 @@
+---
+title: "Llamaindex Rag"
+format: commonmark
+execute: 
+  echo: True
+  eval: True
+  cache: True
+---
+
+The first thing in both the Llamaindex and the manual way of creating a retrieval pipeline is the setup of a vector database:
+
+```{python}
+from qdrant_client import QdrantClient
+from qdrant_client.models import Distance, VectorParams, Batch
+DIMENSIONS = 384
+client = QdrantClient(location=":memory:")
+```
+
+To store data and query the database, we have to load a embedding-model.
+As in the manual way of creating a retrieval pipeline discussed before, we can use a huggingface-SentenceTranformer model. But instead of using the SentenceTransformer class from the sentence_transformers library, we have to use the HuggingFaceEmbedding class from Llamaindex. This model is entered into the Llamaindex-Settings.
+
+
+```{python}
+from llama_index.core import Settings
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L12-v2")
+Settings.embed_model = embed_model
+```
+
+The next step is to wrap the vector-store into a Llamaindex-VectorStoreIndex. This index can be used to add our documents to the database.
+
+```{python}
+from llama_index.vector_stores.qdrant import QdrantVectorStore
+
+vector_store = QdrantVectorStore(client=client, collection_name="paper")
+```
+
+As an example, we will add the "Attention is all you need" paper. 
+This is how the head of our txt-file looks like:
+
+```{python}
+#| echo: false
+
+try:
+    with open("../data/attention_is_all_you_need.txt") as f:
+        text = f.read()
+except FileNotFoundError:
+    with open("data/attention_is_all_you_need.txt") as f:
+        text = f.read()
+
+print(text[400:940])
+```
+
+Since we can not just dump the document at once, we will chunk it in sentences (more about that later).
+This can be done like this (ignore the parameters by now, we will look at them later):
+
+```{python}
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core import Document
+
+node_parser = SentenceSplitter(chunk_size=20, chunk_overlap=5)
+
+nodes = node_parser.get_nodes_from_documents(
+    [Document(text=text)], show_progress=False
+)
+```
+
+These documents are then added to our database and transformed in an *index* llamaindex can use:
+
+```{python}
+from llama_index.core import VectorStoreIndex
+
+index = VectorStoreIndex(
+    nodes=nodes,
+    vector_store=vector_store,
+)
+```
+
+This index can already be used to retrieve documents from the database (by converting it to a *retriever*).
+
+```{python}
+retriever = index.as_retriever(similarity_top_k=10)
+retriever.retrieve('What do the terms Key, Value and Query stand for in self-attention?')
+```
+
+The retriever can then directly be use as a tool to answer questions about our documents:
+
+```{python}
+from llama_index.core.tools import BaseTool, FunctionTool
+
+def find_references(question: str) -> str:
+    """Query a database containing the paper "Attention is all you Need" in parts.
+    This paper introduced the mechanism of self-attention to the NLP-literature.
+    Returns a collection of scored text-snippets that are relevant to your question."""
+    return '\n'.join([f'{round(n.score,2)} - {n.node.text}' for n in retriever.retrieve(q)])
+
+
+find_references_tool = FunctionTool.from_defaults(fn=find_references)
+
+```
+
+This tool can then be added to an agent as we discussed before:
+
+```{python}
+from llama_index.core.agent import ReActAgent
+
+from llama_index.llms.lmstudio import LMStudio
+
+
+llm = LMStudio(model_name="llama-3.2-1b-instruct",
+        base_url="http://localhost:1234/v1",
+    temperature=0.5,
+    request_timeout=600)
+
+
+agent = ReActAgent.from_tools(tools=[find_references_tool],llm=llm, verbose=True)
+```
+
+Which can then be used to answer chat-requests:
+
+```{python}
+#| error: true
+
+response = agent.chat("What is the meaning of Query, Key and Value in the context of self-attention?")
+print(str(response))
+```
+
+As you can see, the model request ends up with errors. The model is not powerful enough to answer in the structured manner we need for the function-calling of the tool.
+To circumvent this, we can try a function-calling-finetuned model:
+
+We can try to solve this issue by using a language model that is finetuned on function calling:
+
+```{python}
+fc_llm = LMStudio(model_name="phi-3-mini-4k-instruct-function-calling",
+        base_url="http://localhost:1234/v1",
+    temperature=0.2,
+    request_timeout=600)
+
+agent = ReActAgent.from_tools(tools=[find_references_tool],llm=fc_llm, verbose=True)
+response = agent.chat("What is the meaning of Query, Key and Value in the context of self-attention?")
+print(str(response))
+```
+
+This model does not run into an issue with the structured output, it does not try to use the tool anymore though.
+
+One way to try to solve this issue is to adapt the agent-prompt:
+
+```{python}
+print(agent.get_prompts()['agent_worker:system_prompt'].template)
+```
+
+This we can adapt in the following way:
+
+```{python}
+from llama_index.core import PromptTemplate
+new_agent_template_str = """
+You are designed to help answer questions based on a collection of paper-excerpts.
+
+## Tools
+
+You have access to tools that allow you to query paper-content. You are responsible for using the tools in any sequence you deem appropriate to complete the task at hand.
+This may require breaking the task into subtasks and using different tools to complete each subtask. Do not answer without tool-usage if a tool can be used to answer a question. Do try to find a text passage to back up your claims whenever possible. Do not answer without reference if the appropriate text is available in the tools you have access to.
+
+You have access to the following tools:
+{tool_desc}
+
+
+## Output Format
+
+Please answer in the same language as the question and use the following format:
+
+\`\`\`
+Thought: The current language of the user is: (user's language). I need to use a tool to help me answer the question.
+Action: tool name (one of {tool_names}) if using a tool.
+Action Input: the input to the tool, in a JSON format representing the kwargs (e.g. {{"input": "hello world", "num_beams": 5}})
+\`\`\`
+
+
+Please ALWAYS start with a Thought.
+
+NEVER surround your response with markdown code markers. You may use code markers within your response if you need to.
+...
+## Current Conversation
+
+Below is the current conversation consisting of interleaving human and assistant messages.
+"""
+new_agent_template = PromptTemplate(new_agent_template_str)
+agent.update_prompts(
+    {"agent_worker:system_prompt": new_agent_template}
+)
+```
+
+We can test this new prompt with the same question:
+
+```{python}
+response = agent.chat("What is the meaning of Query, Key and Value in the context of self-attention?")
+print(str(response))
+```
+
+The model still tries to answer without the tool.
+
+Let's try to ask a more specific question:
+
+```{python}
+response = agent.chat("How does the paper 'Attention is all you need' define the term self attention?")
+print(str(response))
+```
+
+Still no dice.
+
+One solution to this problem is to just use a bigger model:
+
+```{python}
+llm = LMStudio(model_name="llama-3.2-3b-instruct", #3 Billion instead of 1
+        base_url="http://localhost:1234/v1",
+    temperature=0.2,
+    request_timeout=600)
+
+
+agent = ReActAgent.from_tools(tools=[find_references_tool],llm=llm, verbose=True)
+
+response = agent.chat("How does the paper 'Attention is all you need' define the term self attention?")
+print(str(response))
+```
+
+This is not always feasible though. 
+
+Another way to use the retrieval-pipeline is to not give a weak model the opportunity to mess up the tool calling.
+This can be implemented by using a query-engine instead of the retriever. This directly wraps the retrieval in a LLM-Summarization-Module that only returns summaries.
+
+Doing this, we can use two separate models for each part of the task - one for the planning and answering and one for the structured summarization:
+
+
+```{python}
+query_engine = index.as_query_engine(use_async=False, llm=fc_llm, verbose=True)
+response = query_engine.query("What is the meaning of Query, Key and Value in the context of self-attention?")
+print(str(response))
+```
+
+Finally an answer we can work with!

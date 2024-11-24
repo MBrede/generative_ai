@@ -17,6 +17,15 @@ facts = [
     "Blue's Clues is an American interactive educational children's television series created by Traci Paige Johnson, Todd Kessler, and Angela C. Santomero. It premiered on Nickelodeon's Nick Jr. block on September 8, 1996,[2] and concluded its run on August 6, 2006,[1] with a total of six seasons and 143 episodes"
 ]
 
+sentences = [
+    'What do the terms "Query", "Key" and "Value" stand for in the context of Language transformers?',
+    'An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors.',
+    'The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.',
+    'In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q.'
+]
+
+cosine_similarity(model.encode(sentences))
+
 embeddings = model.encode([question] + facts)
 
 dists = cosine_similarity(embeddings)[0]

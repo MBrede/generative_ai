@@ -257,14 +257,14 @@
   abstract = {Deploying large language models (LLMs) is challenging because they are memory inefficient and compute-intensive for practical applications. In reaction, researchers train smaller task-specific models by either finetuning with human labels or distilling using LLM-generated labels. However, finetuning and distillation require large amounts of training data to achieve comparable performance to LLMs. We introduce Distilling step-by-step, a new mechanism that (a) trains smaller models that outperform LLMs, and (b) achieves so by leveraging less training data needed by finetuning or distillation. Our method extracts LLM rationales as additional supervision for training small models within a multi-task framework. We present three findings across 4 NLP benchmarks: First, compared to both finetuning and distillation, our mechanism achieves better performance with much fewer labeled/unlabeled training examples. Second, compared to few-shot prompted LLMs, we achieve better performance using substantially smaller model sizes. Third, we reduce both the model size and the amount of data required to outperform LLMs; our finetuned 770M T5 model outperforms the few-shot prompted 540B PaLM model using only 80\% of available data on a benchmark, whereas standard finetuning the same T5 model struggles to match even by using 100\% of the dataset. We release the code at: https://github.com/google-research/distilling-step-by-step .},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
-  file = {C\:\\Users\\Alwin\\Zotero\\storage\\PLQRFHEI\\Hsieh et al. - 2023 - Distilling Step-by-Step! Outperforming Larger Language Models with Less Training Data and Smaller Mo.pdf;C\:\\Users\\Alwin\\Zotero\\storage\\HYUSD5UD\\2305.html}
+  file = {/home/brede/Zotero/storage/PLQRFHEI/Hsieh et al. - 2023 - Distilling Step-by-Step! Outperforming Larger Language Models with Less Training Data and Smaller Mo.pdf;/home/brede/Zotero/storage/HYUSD5UD/2305.html}
 }
 
 @misc{HttpsArxivorgPdf,
   title = {{{https://arxiv.org/pdf/2007.11301}}},
   urldate = {2024-11-20},
   howpublished = {https://arxiv.org/pdf/2007.11301},
-  file = {C:\Users\Alwin\Zotero\storage\P5BGZDY6\2007.pdf}
+  file = {/home/brede/Zotero/storage/P5BGZDY6/2007.pdf}
 }
 
 @misc{hulbertUsingTreeThoughtPrompting2023,
@@ -340,7 +340,7 @@
   abstract = {Low-rank adaptation is a popular parameter-efficient fine-tuning method for large language models. In this paper, we analyze the impact of low-rank updating, as implemented in LoRA. Our findings suggest that the low-rank updating mechanism may limit the ability of LLMs to effectively learn and memorize new knowledge. Inspired by this observation, we propose a new method called MoRA, which employs a square matrix to achieve high-rank updating while maintaining the same number of trainable parameters. To achieve it, we introduce the corresponding non-parameter operators to reduce the input dimension and increase the output dimension for the square matrix. Furthermore, these operators ensure that the weight can be merged back into LLMs, which makes our method can be deployed like LoRA. We perform a comprehensive evaluation of our method across five tasks: instruction tuning, mathematical reasoning, continual pretraining, memory and pretraining. Our method outperforms LoRA on memory-intensive tasks and achieves comparable performance on other tasks.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
-  file = {C\:\\Users\\Alwin\\Zotero\\storage\\LRHDEERF\\Jiang et al. - 2024 - MoRA High-Rank Updating for Parameter-Efficient F.pdf;C\:\\Users\\Alwin\\Zotero\\storage\\IRGF8SXT\\2405.html}
+  file = {/home/brede/Zotero/storage/LRHDEERF/Jiang et al. - 2024 - MoRA High-Rank Updating for Parameter-Efficient F.pdf;/home/brede/Zotero/storage/IRGF8SXT/2405.html}
 }
 
 @misc{jiangScalingSentenceEmbeddings2023a,
@@ -407,7 +407,7 @@
   file = {C:\Users\Alwin\Zotero\storage\SZNRK78C\Klinger et al. - 2016 - Automatic Emotion Detection for antitative Literar.pdf}
 }
 
-@misc{kojimaLargeLanguageModels2023,
+@misc{kojimaLargeLanguageModels2023a,
   title = {Large {{Language Models}} Are {{Zero-Shot Reasoners}}},
   author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
   year = {2023},
@@ -416,11 +416,11 @@
   eprint = {2205.11916},
   publisher = {arXiv},
   doi = {10.48550/arXiv.2205.11916},
-  urldate = {2024-11-19},
+  urldate = {2024-11-24},
   abstract = {Pretrained large language models (LLMs) are widely used in many sub-fields of natural language processing (NLP) and generally known as excellent few-shot learners with task-specific exemplars. Notably, chain of thought (CoT) prompting, a recent technique for eliciting complex multi-step reasoning through step-by-step answer examples, achieved the state-of-the-art performances in arithmetics and symbolic reasoning, difficult system-2 tasks that do not follow the standard scaling laws for LLMs. While these successes are often attributed to LLMs' ability for few-shot learning, we show that LLMs are decent zero-shot reasoners by simply adding "Let's think step by step" before each answer. Experimental results demonstrate that our Zero-shot-CoT, using the same single prompt template, significantly outperforms zero-shot LLM performances on diverse benchmark reasoning tasks including arithmetics (MultiArith, GSM8K, AQUA-RAT, SVAMP), symbolic reasoning (Last Letter, Coin Flip), and other logical reasoning tasks (Date Understanding, Tracking Shuffled Objects), without any hand-crafted few-shot examples, e.g. increasing the accuracy on MultiArith from 17.7\% to 78.7\% and GSM8K from 10.4\% to 40.7\% with large InstructGPT model (text-davinci-002), as well as similar magnitudes of improvements with another off-the-shelf large model, 540B parameter PaLM. The versatility of this single prompt across very diverse reasoning tasks hints at untapped and understudied fundamental zero-shot capabilities of LLMs, suggesting high-level, multi-task broad cognitive capabilities may be extracted by simple prompting. We hope our work not only serves as the minimal strongest zero-shot baseline for the challenging reasoning benchmarks, but also highlights the importance of carefully exploring and analyzing the enormous zero-shot knowledge hidden inside LLMs before crafting finetuning datasets or few-shot exemplars.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
-  file = {C\:\\Users\\Alwin\\Zotero\\storage\\D4JFAQ8F\\Kojima et al. - 2023 - Large Language Models are Zero-Shot Reasoners.pdf;C\:\\Users\\Alwin\\Zotero\\storage\\6Z9U7TZ6\\2205.html}
+  file = {/home/brede/Zotero/storage/WA38AIVW/Kojima et al. - 2023 - Large Language Models are Zero-Shot Reasoners.pdf;/home/brede/Zotero/storage/NNZZFV9W/2205.html}
 }
 
 @misc{kumarSelectiveFinetuningLLMlabeled2024,
@@ -455,17 +455,6 @@
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language},
   file = {C\:\\Users\\Alwin\\Zotero\\storage\\2G3IDYWX\\Kuratov et al. - 2024 - BABILong Testing the Limits of LLMs with Long Context Reasoning-in-a-Haystack.pdf;C\:\\Users\\Alwin\\Zotero\\storage\\JZLP98WJ\\2406.html}
-}
-
-@misc{LateChunkingLongContext2024,
-  title = {Late {{Chunking}} in {{Long-Context Embedding Models}}},
-  year = {2024},
-  month = aug,
-  urldate = {2024-11-17},
-  abstract = {Chunking long documents while preserving contextual information is challenging. We introduce the "Late Chunking" that leverages long-context embedding models to generate contextual chunk embeddings for better retrieval applications.},
-  howpublished = {https://jina.ai/news/late-chunking-in-long-context-embedding-models},
-  langid = {american},
-  file = {C:\Users\Alwin\Zotero\storage\2WVMQYN8\late-chunking-in-long-context-embedding-models.html}
 }
 
 @inproceedings{leDistributedRepresentationsSentences2014a,
@@ -787,7 +776,7 @@
   urldate = {2024-11-08},
   abstract = {We investigate the potential constraints on LLM scaling posed by the availability of public human-generated text data. We forecast the growing demand for training data based on current trends and estimate the total stock of public human text data. Our findings indicate that if current LLM development trends continue, models will be trained on datasets roughly equal in size to the available stock of public human text data between 2026 and 2032, or slightly earlier if models are overtrained. We explore how progress in language modeling can continue when human-generated text datasets cannot be scaled any further. We argue that synthetic data generation, transfer learning from data-rich domains, and data efficiency improvements might support further progress.},
   langid = {english},
-  file = {C:\Users\Alwin\Zotero\storage\W3X2ZPU7\Villalobos et al. - 2024 - Position Will we run out of data Limits of LLM scaling based on human-generated data.pdf}
+  file = {/home/brede/Zotero/storage/W3X2ZPU7/Villalobos et al. - 2024 - Position Will we run out of data Limits of LLM scaling based on human-generated data.pdf}
 }
 
 @misc{wangComprehensiveSurveySmall2024,
@@ -804,7 +793,7 @@
   abstract = {Large language models (LLM) have demonstrated emergent abilities in text generation, question answering, and reasoning, facilitating various tasks and domains. Despite their proficiency in various tasks, LLMs like LaPM 540B and Llama-3.1 405B face limitations due to large parameter sizes and computational demands, often requiring cloud API use which raises privacy concerns, limits real-time applications on edge devices, and increases fine-tuning costs. Additionally, LLMs often underperform in specialized domains such as healthcare and law due to insufficient domain-specific knowledge, necessitating specialized models. Therefore, Small Language Models (SLMs) are increasingly favored for their low inference latency, cost-effectiveness, efficient development, and easy customization and adaptability. These models are particularly well-suited for resource-limited environments and domain knowledge acquisition, addressing LLMs' challenges and proving ideal for applications that require localized data handling for privacy, minimal inference latency for efficiency, and domain knowledge acquisition through lightweight fine-tuning. The rising demand for SLMs has spurred extensive research and development. However, a comprehensive survey investigating issues related to the definition, acquisition, application, enhancement, and reliability of SLM remains lacking, prompting us to conduct a detailed survey on these topics. The definition of SLMs varies widely, thus to standardize, we propose defining SLMs by their capability to perform specialized tasks and suitability for resource-constrained settings, setting boundaries based on the minimal size for emergent abilities and the maximum size sustainable under resource constraints. For other aspects, we provide a taxonomy of relevant models/methods and develop general frameworks for each category to enhance and utilize SLMs effectively.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
-  file = {C:\Users\Alwin\Zotero\storage\VI2M96SI\Wang et al. - 2024 - A Comprehensive Survey of Small Language Models in the Era of Large Language Models Techniques, Enh.pdf}
+  file = {/home/brede/Zotero/storage/VI2M96SI/Wang et al. - 2024 - A Comprehensive Survey of Small Language Models in the Era of Large Language Models Techniques, Enh.pdf}
 }
 
 @misc{wangImprovingTextEmbeddings2024,
@@ -879,7 +868,7 @@
   file = {C:\Users\Alwin\Zotero\storage\Q2IUISKX\Wang et al. - 2024 - A Survey on Large Language Model based Autonomous Agents.pdf}
 }
 
-@misc{weiChainThoughtPromptingElicits2023,
+@misc{weiChainofThoughtPromptingElicits2023,
   title = {Chain-of-{{Thought Prompting Elicits Reasoning}} in {{Large Language Models}}},
   author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
   year = {2023},
@@ -888,12 +877,13 @@
   eprint = {2201.11903},
   primaryclass = {cs},
   publisher = {arXiv},
-  urldate = {2024-11-17},
-  abstract = {We explore how generating a chain of thought---a series of intermediate reasoning steps---significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain-ofthought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a PaLM 540B with just eight chain-of-thought exemplars achieves state-of-the-art accuracy on the GSM8K benchmark of math word problems, surpassing even finetuned GPT-3 with a verifier.},
+  doi = {10.48550/arXiv.2201.11903},
+  urldate = {2024-11-24},
+  abstract = {We explore how generating a chain of thought -- a series of intermediate reasoning steps -- significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain of thought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain of thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a 540B-parameter language model with just eight chain of thought exemplars achieves state of the art accuracy on the GSM8K benchmark of math word problems, surpassing even finetuned GPT-3 with a verifier.},
   archiveprefix = {arXiv},
   langid = {english},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language},
-  file = {C:\Users\Alwin\Zotero\storage\448JLPNQ\Wei et al. - 2023 - Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.pdf}
+  file = {/home/brede/Zotero/storage/GSMW9SNS/Wei et al. - 2023 - Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.pdf;/home/brede/Zotero/storage/6832SE8M/2201.html}
 }
 
 @misc{WhatAIAgent2024,
