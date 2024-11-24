@@ -331,7 +331,7 @@ Agent basics<br>
 </section>
 <section id="planning" class="level3">
 <h3 class="anchored" data-anchor-id="planning">Planning</h3>
-<p>Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like <strong>chain-of-thought</strong> (CoT) prompting to generate a plan of action <span class="citation" data-cites="weiChainThoughtPromptingElicits2023">(<a href="#ref-weiChainThoughtPromptingElicits2023" role="doc-biblioref"><strong>weiChainThoughtPromptingElicits2023?</strong></a>)</span>. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include <strong>Tree-of-Thoughts</strong> <span class="citation" data-cites="longLargeLanguageModel2023">(<a href="#ref-longLargeLanguageModel2023" role="doc-biblioref">Long, 2023</a>)</span>, <span class="citation" data-cites="yaoTreeThoughtsDeliberate2023">(<a href="#ref-yaoTreeThoughtsDeliberate2023" role="doc-biblioref">Yao, Yu, et al., 2023</a>)</span>, <span class="citation" data-cites="hulbertUsingTreeThoughtPrompting2023">(<a href="#ref-hulbertUsingTreeThoughtPrompting2023" role="doc-biblioref">Hulbert, 2023</a>)</span> or <strong>ReAct</strong> <span class="citation" data-cites="yaoReActSynergizingReasoning2023">(<a href="#ref-yaoReActSynergizingReasoning2023" role="doc-biblioref">Yao, Zhao, et al., 2023</a>)</span>. <!-- and __Reflexion__ [@shinnReflexionLanguageAgents2023].  --> We will discuss these in more detail later.</p>
+<p>Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like <strong>chain-of-thought</strong> (CoT) prompting to generate a plan of action <span class="citation" data-cites="weiChainofThoughtPromptingElicits2023">(<a href="#ref-weiChainofThoughtPromptingElicits2023" role="doc-biblioref">Wei et al., 2023</a>)</span>. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include <strong>Tree-of-Thoughts</strong> <span class="citation" data-cites="longLargeLanguageModel2023">(<a href="#ref-longLargeLanguageModel2023" role="doc-biblioref">Long, 2023</a>)</span>, <span class="citation" data-cites="yaoTreeThoughtsDeliberate2023">(<a href="#ref-yaoTreeThoughtsDeliberate2023" role="doc-biblioref">Yao, Yu, et al., 2023</a>)</span>, <span class="citation" data-cites="hulbertUsingTreeThoughtPrompting2023">(<a href="#ref-hulbertUsingTreeThoughtPrompting2023" role="doc-biblioref">Hulbert, 2023</a>)</span> or <strong>ReAct</strong> <span class="citation" data-cites="yaoReActSynergizingReasoning2023">(<a href="#ref-yaoReActSynergizingReasoning2023" role="doc-biblioref">Yao, Zhao, et al., 2023</a>)</span>. <!-- and __Reflexion__ [@shinnReflexionLanguageAgents2023].  --> We will discuss these in more detail later.</p>
 </section>
 <section id="tools" class="level3">
 <h3 class="anchored" data-anchor-id="tools">Tools</h3>
@@ -343,11 +343,11 @@ Agent basics<br>
 </section>
 <section id="chain-of-thougth-prompting" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="chain-of-thougth-prompting">Chain-of-Thougth prompting</h3>
-<p>Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e.&nbsp;without examples) by invoking the magical words “Let’s think step by step” <span class="citation" data-cites="kojimaLargeLanguageModels2023">(<a href="#ref-kojimaLargeLanguageModels2023" role="doc-biblioref">Kojima et al., 2023</a>)</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e.&nbsp;without examples) by invoking the magical words “Let’s think step by step” <span class="citation" data-cites="kojimaLargeLanguageModels2023a">(<a href="#ref-kojimaLargeLanguageModels2023a" role="doc-biblioref">Kojima et al., 2023</a>)</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Note that these informations get old <em>fast</em>. Newer LLMs may have this functionality build in already</p></div></div><div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../imgs/chain_of_thought.png" class="img-fluid figure-img"></p>
-<figcaption>Chain-of-Thought prompting illustrated <span class="citation" data-cites="weiChainThoughtPromptingElicits2023">(<a href="#ref-weiChainThoughtPromptingElicits2023" role="doc-biblioref"><strong>weiChainThoughtPromptingElicits2023?</strong></a>)</span></figcaption>
+<figcaption>Chain-of-Thought prompting illustrated <span class="citation" data-cites="weiChainofThoughtPromptingElicits2023">(<a href="#ref-weiChainofThoughtPromptingElicits2023" role="doc-biblioref">Wei et al., 2023</a>)</span></figcaption>
 </figure>
 </div>
 </section>
@@ -426,7 +426,7 @@ Hulbert, D. (2023). <em>Using <span class="nocase">Tree-of-Thought Prompting</sp
 <div id="ref-IntroductionLLMAgents2023" class="csl-entry" role="listitem">
 Introduction to <span>LLM Agents</span>. (2023). In <em>NVIDIA Technical Blog</em>. https://developer.nvidia.com/blog/introduction-to-llm-agents/.
 </div>
-<div id="ref-kojimaLargeLanguageModels2023" class="csl-entry" role="listitem">
+<div id="ref-kojimaLargeLanguageModels2023a" class="csl-entry" role="listitem">
 Kojima, T., Gu, S. S., Reid, M., Matsuo, Y., &amp; Iwasawa, Y. (2023). <em>Large <span>Language Models</span> are <span>Zero-Shot Reasoners</span></em> (arXiv:2205.11916). arXiv. <a href="https://doi.org/10.48550/arXiv.2205.11916">https://doi.org/10.48550/arXiv.2205.11916</a>
 </div>
 <div id="ref-LLMAgentsNextra2024" class="csl-entry" role="listitem">
@@ -434,6 +434,9 @@ Kojima, T., Gu, S. S., Reid, M., Matsuo, Y., &amp; Iwasawa, Y. (2023). <em>Large
 </div>
 <div id="ref-longLargeLanguageModel2023" class="csl-entry" role="listitem">
 Long, J. (2023). <em>Large <span class="nocase">Language Model Guided Tree-of-Thought</span></em> (arXiv:2305.08291). arXiv. <a href="https://arxiv.org/abs/2305.08291">https://arxiv.org/abs/2305.08291</a>
+</div>
+<div id="ref-weiChainofThoughtPromptingElicits2023" class="csl-entry" role="listitem">
+Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, F., Chi, E., Le, Q., &amp; Zhou, D. (2023). <em>Chain-of-<span>Thought Prompting Elicits Reasoning</span> in <span>Large Language Models</span></em> (arXiv:2201.11903). arXiv. <a href="https://doi.org/10.48550/arXiv.2201.11903">https://doi.org/10.48550/arXiv.2201.11903</a>
 </div>
 <div id="ref-WhatAIAgent2024" class="csl-entry" role="listitem">
 What is an <span>AI</span> agent? (2024). In <em>LangChain Blog</em>. https://blog.langchain.dev/what-is-an-agent/.
