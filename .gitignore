@@ -9,3 +9,7 @@ _freeze
 _cache/
 data/
 docs/
+example_solutions/
+*.drawio
+*.db
+.jupyter*
