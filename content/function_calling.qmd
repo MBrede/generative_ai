@@ -24,7 +24,8 @@ Here, we will focus on function calling. Still the challenge is to get the LLM t
 
 ### Function definition
 
-The first step in using function calling is to define the functions that the LLM can call. This is done by providing a JSON schema that describes the name of the function, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: 
+The first step in using function calling is to define the functions that the LLM can call. This is done by providing a JSON schema that describes the name of the function, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: ^[Note, that this is not an executable implementation but just a description of the function for the LLM.]
+
 
     {
         "name": "get_current_weather",  
@@ -37,45 +38,112 @@ The first step in using function calling is to define the functions that the LLM
 
 ### Prompting
 
-The second step is to provide a good prompt. The promot should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for function calling:
+The second step is to provide a good prompt. The prompt should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for function calling:
 
     You are a helpful assistant that generates function calls based on user input. Only use the functions you have been provided with.
 
     {function definition as described above}
 
-Hopefully, if the user were to input something like
-
     User: What's the weather like in Berlin?
-
-The LLM should respond:
 
     Assistant: {
         "name": "get_current_weather",
         "arguments": {"location": "Berlin", "unit": "celsius"}
     }
 
+::: {.callout-note}
+## 📝 Task
 
+Try it!
 
-### Function execution
+1. Open a notebook and connect to a local LLM using LM Studio.
+2. Define the function `get_current_weather` as shown above.
+3.  Write a prompt that asks the LLM to generate a function call based on user input.
+4.  Test the prompt with an example input.
+5.  Define other functions and try other inputs and see if the LLM generates valid output.
+6. upload on moodle.
 
-The third step is to execute the function call. This is done by parsing the JSON output of the LLM and calling the function with the provided arguments. Here is an example:
+:::
 
-    import json
-    from typing import Union
+### Challenges, finetuned models and the influence of size
 
-    def get_current_weather(location: str, unit: str) -> Union[str, dict]:
-        # This is a dummy function that returns a random weather report
-        return f"The current weather in {location} is 20 degrees {unit}"
+The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
 
-    response = '{ "name": "get_current_weather", "arguments": {"location": "Berlin", "unit": "celsius"} }'
-   
+ - They can hallucinate functions or arguments that do not exist.
+  - They can forget to call a function.
+  - They can forget to provide all required arguments.
+  - They can provide the wrong type for an argument.
+  - They can provide invalid values for an argument.
 
-<!-- The main challenge is here to get the LLM to generate valid python code. This is not always easy, as LLMs are not usually super safe coders.  -->
+There are several strategies to mitigate these issues:
+
+1. **Prompt engineering**: A good prompt can help to guide the LLM towards generating valid output. This is especially true for larger models, as they have a better understanding of the world and can therefore generate more accurate responses.
+2. **Finetuning**: Finetuning a model on a specific task can improve its performance on that task. This is especially useful for smaller models, as they are less likely to hallucinate functions or arguments that do not exist.
+3. **Size**: Larger models are better at generating valid output than smaller models. However, larger models are also more expensive to run and require more computational resources.
+
+::: {.callout-note}
+## 📝 Task
+
+Test it! (we can do it together, if your hardware does not allow you to run the model)
+
+As above, but this time
+
+1. use a very small model (e.g [a small Llama model](https://huggingface.co/lmstudio-community/Llama-3.2-1B-Instruct-GGUF))
+2. use a model finetuned for the task (you could try [this one](https://huggingface.co/bartowski/llama-3-8B-function-calling-GGUF))
+3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF))
+
+:::
+
 
 
 ## Agents recap
 
-We introduced agents already back in chapter 3. To give a quick recap, an agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request better. The agent has several modules at its disposal, the memory, some tools and a planning tool. The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e. the LLM) along with the system prompt and the current user input.
+We introduced agents already back in chapter 3. To give a quick recap, an agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request better. The agent has several modules at its disposal, the memory, some tools and a planning tool. 
+
+The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e. the LLM) along with the system prompt and the current user input. 
+
+The planning module then decides which tools to use, if any, to answer the user request. The output of the planning module is a response message containing one or several tool calls (or a final answer). The agent then executes the tool calls by first parsing the response, then executing the functions. Based on the tool outputs, a final answer is generated and sent back to the user.
+
+
+### React agents
+
+There a several types of agent. Now, we want to fucus on the ReAct agent introduced by [@yaoReActSynergizingReasoning2023]. The ReAct agent is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
+
+
+### Llamaindex
+
+LLamaindex is a framework that  makes it easy to implement and use agents. In Llamaindex an agent consists a an *agent runner* and an *agent_worker*. Think of the agent runner as the agent core in the architecture schematics and the agent worker as the planning module. The tools are functions implemented in python that can be executed by the agent worker. Finally, the memory module consists of a simple text buffer, logging the conversation history between the user and the agent and between the agent and the tools.
+
+
+::: {.callout-note}
+## 📝 Task
+
+Let's have a look!
+
+1. Open a notebook and connect it with a local LLM using LM Studio.
+2. Define a function that can be called by the agent to get the current weather in a given location. (Implement it this time, it doesn't need to work, just return random weather)
+3. Initialize a ReAct agent using LLamaindex (you can use [this tutorial](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as the starting point)
+<!-- (we will use [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) as a starting point, since it reimplements the function calling agent and returns a step-by step breakdown of its thought process). -->
+4. Have a look at the prompt, the agent gives to the LLM (you can find it using `agent.get_prompts()`)
+5. Discuss the prompt with the group! What does it do? How does it do it?
+6. Ask the agent to tell you the weather in a given location.
+7. Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
+8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into infinity loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
+9. Upload to moodle
+
+:::
+
+
+
+
+
 
 ## Further Readings
 
+On the Llamaindex website on the ["examples" page](https://docs.llamaindex.ai/en/stable/examples/) you will find a **lot** of helpful material: examples, notebooks, recipes and more. I recommend to have a look at them! For our case, check the "agents" section. For an even more in-depth dive, go to the "workflows" part.
+
+- In [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) you find an agent implementation that returns a step-by-step breakdown of its thought process.
+- To go even more low level then that see [this example](https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/) that will walk you through setting up a Workflow to construct a function calling agent from scratch.
+
+
+## References
