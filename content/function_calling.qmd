@@ -128,7 +128,7 @@ Let's have a look!
 5. Discuss the prompt with the group! What does it do? How does it do it?
 6. Ask the agent to tell you the weather in a given location.
 7. Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
-8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into infinity loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
+8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into an infinite loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
 9. Upload to moodle
 
 :::
@@ -144,6 +144,7 @@ On the Llamaindex website on the ["examples" page](https://docs.llamaindex.ai/en
 
 - In [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) you find an agent implementation that returns a step-by-step breakdown of its thought process.
 - To go even more low level then that see [this example](https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/) that will walk you through setting up a Workflow to construct a function calling agent from scratch.
+- [Here](https://blog.dottxt.co/say-what-you-mean.html) is a *very* nice paper about generating structured output. 
 
 
 ## References

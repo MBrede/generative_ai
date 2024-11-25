@@ -6,7 +6,7 @@ toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent basics</h3
 
 <!-- ## Fundamentals of agents and train-of-thought prompting -->
 
-Before we get into agents proper, let us first discuss prompting strategies for solving complex problems. Below are two examples for using custom prompts that help the LLM in answering more complex problems by first divide the problem into smaller steps before solving each step separately. 
+Before we get into agents proper, let us first discuss prompting strategies for solving complex problems. Below are two examples for using custom prompts that help the LLM in answering more complex problems by first dividing the problem into smaller steps before solving each step separately. 
 
 
 ### Chain-of-Thought prompting
