@@ -277,4 +277,6 @@ Experiment with different prompts and temperatures.
 
 * [This blogpost](https://www.deepset.ai/blog/llms-retrieval-augmentation) by DeepSet gives a good overview of the concept of RAG
 
+* [This blogpost](https://qdrant.tech/articles/what-is-a-vector-database/) by qdrant about (their) vector store and its inner workings
+
 ## References
