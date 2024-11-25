@@ -258,7 +258,7 @@ Agent basics<br>
   <li><a href="#planning" id="toc-planning" class="nav-link" data-scroll-target="#planning">Planning</a></li>
   <li><a href="#tools" id="toc-tools" class="nav-link" data-scroll-target="#tools">Tools</a></li>
   <li><a href="#memory" id="toc-memory" class="nav-link" data-scroll-target="#memory">Memory</a></li>
-  <li><a href="#chain-of-thougth-prompting" id="toc-chain-of-thougth-prompting" class="nav-link" data-scroll-target="#chain-of-thougth-prompting">Chain-of-Thougth prompting</a></li>
+  <li><a href="#chain-of-thought-prompting" id="toc-chain-of-thought-prompting" class="nav-link" data-scroll-target="#chain-of-thought-prompting">Chain-of-Thought prompting</a></li>
   <li><a href="#tree-of-thoughts" id="toc-tree-of-thoughts" class="nav-link" data-scroll-target="#tree-of-thoughts">Tree of Thoughts</a></li>
   <li><a href="#react" id="toc-react" class="nav-link" data-scroll-target="#react">ReAct</a></li>
   </ul></li>
@@ -341,8 +341,8 @@ Agent basics<br>
 <h3 class="anchored" data-anchor-id="memory">Memory</h3>
 <p>Memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions. Memory can be short-term, such as a conversation buffer, or long-term, such as a database. Memory can also be used to store the results of previous tool uses, allowing the agent to reuse them if necessary.</p>
 </section>
-<section id="chain-of-thougth-prompting" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="chain-of-thougth-prompting">Chain-of-Thougth prompting</h3>
+<section id="chain-of-thought-prompting" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="chain-of-thought-prompting">Chain-of-Thought prompting</h3>
 <p>Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e.&nbsp;without examples) by invoking the magical words “Let’s think step by step” <span class="citation" data-cites="kojimaLargeLanguageModels2023a">(<a href="#ref-kojimaLargeLanguageModels2023a" role="doc-biblioref">Kojima et al., 2023</a>)</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Note that these informations get old <em>fast</em>. Newer LLMs may have this functionality build in already</p></div></div><div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -353,7 +353,7 @@ Agent basics<br>
 </section>
 <section id="tree-of-thoughts" class="level3">
 <h3 class="anchored" data-anchor-id="tree-of-thoughts">Tree of Thoughts</h3>
-<p>Tree of Thoughts (ToT) is a generalization on CoT prompting. The papers on ToT are somewhat complex, so we will not discuss them in detail here. In short, LLMs are used to generate thoughts, that serve as intermediate steps towards the solution. The difference to CoT is basically, that several thougts are generated at each step, creating a tree-like structure. This tree is then searched using breadth-first search or depth-first search until a solution is found. A simplified example is given by <span class="citation" data-cites="hulbertUsingTreeThoughtPrompting2023">(<a href="#ref-hulbertUsingTreeThoughtPrompting2023" role="doc-biblioref">Hulbert, 2023</a>)</span>:</p>
+<p>Tree of Thoughts (ToT) is a generalization on CoT prompting. The papers on ToT are somewhat complex, so we will not discuss them in detail here. In short, LLMs are used to generate thoughts, that serve as intermediate steps towards the solution. The difference to CoT is basically, that several thoughts are generated at each step, creating a tree-like structure. This tree is then searched using breadth-first search or depth-first search until a solution is found. A simplified example is given by <span class="citation" data-cites="hulbertUsingTreeThoughtPrompting2023">(<a href="#ref-hulbertUsingTreeThoughtPrompting2023" role="doc-biblioref">Hulbert, 2023</a>)</span>:</p>
 <pre><code>Imagine three different experts are answering this question.
 All experts will write down 1 step of their thinking,
 then share it with the group.
