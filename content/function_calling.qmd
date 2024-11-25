@@ -11,9 +11,9 @@ We already got to know function calling in chapter 3 of this course. There, we i
 
 ## Code generation and function calling
 
-The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken by the agent and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that:
+The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that:
 
-1. **Code generation**: Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation.
+1. **Code generation**: Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation. It can also pose a severe security issue because this approach hinges on running generated code on your machine. 
 2. **Function calling**: Here, we ask the LLM to generate a function call from the user input. This approach has the advantage of being more robust and accurate than code generation, as it is easier for the LLM to generate a correct function call than a complete python script. However, it requires that the functions that can be called are already defined and that they are properly documented.
 
 Here, we will focus on function calling. Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
@@ -58,10 +58,10 @@ Try it!
 
 1. Open a notebook and connect to a local LLM using LM Studio.
 2. Define the function `get_current_weather` as shown above.
-3.  Write a prompt that asks the LLM to generate a function call based on user input.
-4.  Test the prompt with an example input.
-5.  Define other functions and try other inputs and see if the LLM generates valid output.
-6. upload on moodle.
+3. Write a prompt that asks the LLM to generate a function call based on user input.
+4. Test the prompt with an example input.
+5. Define other functions and try other inputs and see if the LLM generates valid output.
+6. Upload to Moodle.
 
 :::
 
@@ -84,7 +84,7 @@ There are several strategies to mitigate these issues:
 ::: {.callout-note}
 ## 📝 Task
 
-Test it! (we can do it together, if your hardware does not allow you to run the model)
+Test it! (we can do it together, if your hardware does not allow you to run the model.)
 
 As above, but this time
 
