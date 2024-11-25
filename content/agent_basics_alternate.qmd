@@ -6,11 +6,61 @@ toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent basics</h3
 
 <!-- ## Fundamentals of agents and train-of-thought prompting -->
 
+Before we get into agents proper, let us first discuss prompting strategies for solving complex problems. Below are two examples for using custom prompts that help the LLM in answering more complex problems by first divide the problem into smaller steps before solving each step separately. 
+
+
+### Chain-of-Thought prompting
+
+Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above [@weiChainThoughtPromptingElicits2023]. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e. without examples) by invoking the magical words "Let's think step by step" [@kojimaLargeLanguageModels2023]^[Note that these informations get old *fast*. Newer LLMs may have this functionality build in already]. 
+
+![Chain-of-Thought prompting illustrated [@weiChainThoughtPromptingElicits2023]](../imgs/chain_of_thought.png)
+
+
+::: {.callout-note}
+## 📝 Task
+
+Now it is your turn!
+
+1. Open a notebook and connect it with a local LLM (e.g. using Ollama or LM Studio).
+2. Try letting your LLM solve a complex task e.g. the one given above ("The cafeteria had 23 apples. If they used 20 to
+make lunch and bought 6 more, how many apples
+do they have?")
+    - using the standard prompt (i.e. using the question as is)
+    - using few shot examples, with step by step walkthrough
+    - without examples but adding "let's think step by step." 
+3. Try other, more interesting questions. 
+:::
+
+
+### Tree of Thoughts
+
+Tree of Thoughts (ToT) is a generalization on CoT prompting. The papers on ToT [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], are somewhat complex, so we will not discuss them in detail here. In short, LLMs are used to generate thoughts, that serve as intermediate steps towards the solution. The difference to CoT is basically, that several thougts are generated at each step, creating a tree-like structure. This tree is then searched using breadth-first search or depth-first search until a solution is found. A simplified example using just a custom prompt is given by [@hulbertUsingTreeThoughtPrompting2023]: 
+
+    Imagine three different experts are answering this question.
+    All experts will write down 1 step of their thinking,
+    then share it with the group.
+    Then all experts will go on to the next step, etc.
+    If any expert realises they're wrong at any point then they leave.
+    The question is...
+
+
+::: {.callout-note}
+## 📝 Task
+
+- Try it: in your notebook, also use the prompt above to answer your questions. 
+
+:::
+
+Now that we have the prompting strategies covered, we can start asking the important questions. 
+
+
 ## What is an agent? 
 
 "An AI agent is a system that uses an LLM to decide the control flow of an application." [@WhatAIAgent2024]
 
-In the context of large language models, agents are LLM-based systems that can solve complex tasks. Imagine asking a question like: 
+In the context of large language models, agents are LLM-based systems that can solve complex tasks. In slightly more technical terms, an agent is a wrapper layer around an LLM, that uses specialized prompts to repeatedly call LLMs to solve complicated tasks step by step. Additionally, an agent also has a set of tools, that it can decide to call for solving steps it cannot solve on its own. Let's illustrate this with an example.
+
+Imagine asking a question like: 
 
 __"What were the key learnings from the Generative AI elective module in WiSe 24/25 at FH Kiel?"__
 
@@ -52,9 +102,11 @@ This is a general-purpose LLM, that functions as the brain and main decision-mak
 
 ### Planning
 
-Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainofThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], [@hulbertUsingTreeThoughtPrompting2023] or __ReAct__ [@yaoReActSynergizingReasoning2023].
- <!-- and __Reflexion__ [@shinnReflexionLanguageAgents2023].  -->
-We will discuss these in more detail later.
+Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques similar to CoT or ToT prompting to generate a plan of action.  
+
+<!-- or __ReAct__ [@yaoReActSynergizingReasoning2023].
+ and __Reflexion__ [@shinnReflexionLanguageAgents2023]. 
+We will discuss these in more detail later. -->
 
 
 ### Tools
@@ -66,29 +118,9 @@ Tools are functions that the agent can use to perform a specific task. They can 
 
 Memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions. Memory can be short-term, such as a conversation buffer, or long-term, such as a database. Memory can also be used to store the results of previous tool uses, allowing the agent to reuse them if necessary.
 
-
-### Chain-of-Thought prompting
-
-Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e. without examples) by invoking the magical words "Let's think step by step" [@kojimaLargeLanguageModels2023a]^[Note that these informations get old *fast*. Newer LLMs may have this functionality build in already]. 
-
-![Chain-of-Thought prompting illustrated [@weiChainofThoughtPromptingElicits2023]](../imgs/chain_of_thought.png)
-
-
-### Tree of Thoughts
-
-Tree of Thoughts (ToT) is a generalization on CoT prompting. The papers on ToT are somewhat complex, so we will not discuss them in detail here. In short, LLMs are used to generate thoughts, that serve as intermediate steps towards the solution. The difference to CoT is basically, that several thoughts are generated at each step, creating a tree-like structure. This tree is then searched using breadth-first search or depth-first search until a solution is found. A simplified example is given by [@hulbertUsingTreeThoughtPrompting2023]: 
-
-    Imagine three different experts are answering this question.
-    All experts will write down 1 step of their thinking,
-    then share it with the group.
-    Then all experts will go on to the next step, etc.
-    If any expert realises they're wrong at any point then they leave.
-    The question is...
-
-
 ### ReAct
 
-ReAct (short for Synergizing Reasoning and Acting) is a technique based on CoT, that updates its reasoning after each step of tool use. This allows the agent to react (pun intended) to unforeseen results during the step-by-step solution i.e. failed tool use. The agent can then follow a different chain of thoughts. This makes it very well suited to tool use. An illustration is given in the figure below. 
+ReAct (short for Synergizing Reasoning and Acting) is a technique based on CoT, that updates its reasoning after each step of tool use [@yaoReActSynergizingReasoning2023]. This allows the agent to react (pun intended) to unforeseen results during the step-by-step solution i.e. failed tool use. The agent can then follow a different chain of thoughts. This makes it very well suited to tool use. An illustration is given in the figure below. 
 
 ![Comparison of ReAct with other prompting techniques [@yaoReActSynergizingReasoning2023]](../imgs/ReAct.png)
 
@@ -105,21 +137,16 @@ There are *a lot* of agent frameworks out there. In this module we will focus on
 ::: {.callout-note}
 ## 📝 Task
 
-Now it is your turn!
+Let's try them!
 
-Each group is to use one of the following frameworks to build a small demo agent:
+1. Choose one of the frameworks below. Llamaindex seems like a good starting point, but feel free to take one of the other if you feel confident. In your notebook, build an agent, that can use your local LLM. 
+    - [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) combine this approach with [this notebook](https://docs.llamaindex.ai/en/stable/examples/llm/lmstudio/) to make it work with LM Studio.
 
-- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) combine this approach with [this notebook](https://docs.llamaindex.ai/en/stable/examples/llm/lmstudio/) to make it work with LM Studio.
-
-- [Langchain](https://python.langchain.com/docs/tutorials/agents/)
-- [Haystack](https://docs.haystack.deepset.ai/docs/agent_overview)
-- (optional) another framework of your choice
-
-1. Set up a local LLM (e.g. using Ollama or LM Studio) to be used by the agent.
+    - [Langchain](https://python.langchain.com/docs/tutorials/agents/)
+    - [Haystack](https://docs.haystack.deepset.ai/docs/agent_overview)
+    - (optional) another framework of your choice
 2. Choose a small task for your agent, e.g. answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)
-3. Implement the agent using one of the frameworks listed above.
-4. Present your results and your experiences with the frameworks in a short presentation.
-5. Submit your code and report on moodle.
+3. Create more tools to be used by the agent. 
 :::
 
 
