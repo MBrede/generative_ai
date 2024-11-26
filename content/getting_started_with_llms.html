@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,10 +58,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e7487e7a4381536fe475b2c47bc1c20c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -533,7 +533,7 @@ PE_{(pos, 2i+1)} &amp;=&amp; cos(\frac{pos}{10000^{\frac{2i}{d_{model}}}})
 <p>Where <span class="math inline">\(i\)</span> is the dimension and <span class="math inline">\(pos\)</span> is the position. Those 2 formulas are not the most intuitive, what they do is to add a unique offset to each embedding though, that allows the model to infer and weigh the token’s positions in the matrix on it’s own. <a href="#fig-positional" class="quarto-xref">Figure&nbsp;<span>3.8</span></a> illustrates the pattern this specific combination of sin and cos creates for each sequence-position and embedding-dimension.</p>
 <div class="cell enlarge-onhover" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-positional" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The x-axis represents the position and the y-axis represents the dimension. The color represents the value of the encoding.">
+<div id="fig-positional" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The x-axis represents the position and the y-axis represents the dimension. The color represents the value of the encoding." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-positional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="getting_started_with_llms_files/figure-html/fig-positional-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The x-axis represents the position and the y-axis represents the dimension. The color represents the value of the encoding." width="672">
@@ -784,8 +784,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -896,7 +894,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
