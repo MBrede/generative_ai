@@ -58,7 +58,7 @@ This can be done like this (ignore the parameters by now, we will look at them l
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core import Document
 
-node_parser = SentenceSplitter(chunk_size=20, chunk_overlap=5)
+node_parser = SentenceSplitter(chunk_size=100, chunk_overlap=20)
 
 nodes = node_parser.get_nodes_from_documents(
     [Document(text=text)], show_progress=False
@@ -92,7 +92,7 @@ def find_references(question: str) -> str:
     """Query a database containing the paper "Attention is all you Need" in parts.
     This paper introduced the mechanism of self-attention to the NLP-literature.
     Returns a collection of scored text-snippets that are relevant to your question."""
-    return '\n'.join([f'{round(n.score,2)} - {n.node.text}' for n in retriever.retrieve(q)])
+    return '\n'.join([f'{round(n.score,2)} - {n.node.text}' for n in retriever.retrieve(question)])
 
 
 find_references_tool = FunctionTool.from_defaults(fn=find_references)
