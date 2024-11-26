@@ -1,5 +1,5 @@
 ---
-toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Function Calling</h3>'
+toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Function Calling</h3>'
 ---
 
 # Function Calling
@@ -129,13 +129,9 @@ Let's have a look!
 6. Ask the agent to tell you the weather in a given location.
 7. Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
 8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into an infinite loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
-9. Upload to moodle
+9. Upload to Moodle
 
 :::
-
-
-
-
 
 
 ## Further Readings
