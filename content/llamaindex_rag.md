@@ -1,4 +1,4 @@
-## Llamaindex RAG
+# Llamaindex Rag
 
 
 The first thing in both the Llamaindex and the manual way of creating a
@@ -58,14 +58,12 @@ the parameters by now, we will look at them later):
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core import Document
 
-node_parser = SentenceSplitter(chunk_size=20, chunk_overlap=5)
+node_parser = SentenceSplitter(chunk_size=100, chunk_overlap=20)
 
 nodes = node_parser.get_nodes_from_documents(
     [Document(text=text)], show_progress=False
 )
 ```
-
-    Metadata length (0) is close to chunk size (20). Resulting chunks are less than 50 tokens. Consider increasing the chunk size or decreasing the size of your metadata to avoid this.
 
 These documents are then added to our database and transformed in an
 *index* llamaindex can use:
@@ -87,16 +85,16 @@ retriever = index.as_retriever(similarity_top_k=10)
 retriever.retrieve('What do the terms Key, Value and Query stand for in self-attention?')
 ```
 
-    [NodeWithScore(node=TextNode(id_='f179163e-b751-462b-bc33-878bd1d4e8e8', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='a91dc640-1e5f-4ae0-9b12-2d299c219be9', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='2d5b4fe94c35c42fb9f0851b43257320ec9ad5c63b127e463fa2215993f117fc'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='01a0f046-3e0f-457c-a37e-7ba8ea82cca5', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='b8e28f60c384f88a38758a9b8df2ec53ef4316e372031c3bbd60f545ae0ae44f')}, text='attention function can be described as mapping a query and a set of key-value pairs to an output,', mimetype='text/plain', start_char_idx=11228, end_char_idx=11325, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.6689261429690226),
-     NodeWithScore(node=TextNode(id_='2b89faef-3d46-401f-b3b0-26006401feef', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='e1d5b4df-5d1c-439d-9775-5088c63eb9f3', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='b39aebf8977b80cbe0d8dd5fa04a19223f1e818c235371d6af215d0556100bc0'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='0aa4a8f3-4af2-4fe0-9358-1ae72fe8786f', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='d6c4dee83e22dc8559d7a39700c28e907b50c8e479fd5af1941db4408208cf69')}, text='In a self-attention layer all of the keys,', mimetype='text/plain', start_char_idx=16067, end_char_idx=16109, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.6140070285724392),
-     NodeWithScore(node=TextNode(id_='44972890-4447-4cb5-852f-e1486eed0bdd', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='055b5c0c-7837-405b-b65a-5dd5057880e3', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='aa669bf3b7256481cc8755c1c78352a123179dc767de25754ca48fbf23b689bc'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='747a4331-c2ea-4a00-b419-0b08d418ddcd', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='a642151581faab17008e1e3c622d5eec5ed6e9cbea16178e5ac24dafefa4acd8')}, text='of performing a single attention function with dmodel -dimensional keys, values and queries,', mimetype='text/plain', start_char_idx=13777, end_char_idx=13869, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.6003160602014549),
-     NodeWithScore(node=TextNode(id_='18e49238-7647-4909-bfe4-23a35d4c5ca3', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='95f73bbf-b989-433a-b1a6-ebd858241187', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='f6cbc386d726e01d6d2a7c175368263f644c5ce71b85c105929e485dcf0b9203'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='efc76fc4-7ee5-494a-935d-06a9efd571d9', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='5439b8ee1db45977a39995f337377707d150ef741a4180c98a55ce744ac13692')}, text='we vary the number of attention heads and the attention key and value dimensions,', mimetype='text/plain', start_char_idx=32587, end_char_idx=32668, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5878171880241171),
-     NodeWithScore(node=TextNode(id_='a0d046f8-7251-4b55-8457-78e688ef82d1', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='b4b6a870-d5e7-43b8-a98b-e5660829fa7e', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='7f9189e6569cc76c3e4c706c4a298ce83039920dda5ff4b64ec3d2a2ecd17d16'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='dad4c0dd-260f-43cb-8997-8668ac1ca95e', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='5cf958d495be43203293644ac0c78bb1ae632d95f5eac85a487a134eeb8f83e1')}, text='keys and values we then perform the attention function in parallel,', mimetype='text/plain', start_char_idx=14085, end_char_idx=14152, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5599990554034037),
-     NodeWithScore(node=TextNode(id_='5aeffddb-5e61-4bd2-b7c7-0908b617345c', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='20d4b9c4-38cb-4c61-9ae9-2d79fa770f8b', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='8be71b432f8f0abcddbd647735091a419597e3c6b174d427210c39d82d3357db'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='85add884-1b17-487d-8136-3faed207f79a', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='8e3333b3547e738a6d3fffa8d21dcbd4a8d6b56b6f8cd8f1ccf263541439d80e')}, text='2.\nSelf-attention, sometimes called intra-attention is an attention mechanism relating different', mimetype='text/plain', start_char_idx=8000, end_char_idx=8096, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5510363892301526),
-     NodeWithScore(node=TextNode(id_='e14b73d1-ee56-46c4-974b-6d6f2401304b', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='2ceaf2a5-d16b-46a8-bd1a-6ab3eb650c52', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='d99e4e0b99cb6641047a17c6e9da3a59b0d4ea0df2f0b213ca47d30d333ebac1'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='c23c3273-7cf2-47c8-9fd5-b47f2cf6e10f', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='4aa20349e1dd87216ce6467799ecd9f96716d0de4be21cdd0d33d83cd860c3f1')}, text='of the sequence. Self-attention has been\nused successfully in a variety of tasks including reading comprehension,', mimetype='text/plain', start_char_idx=8165, end_char_idx=8278, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5396821423481503),
-     NodeWithScore(node=TextNode(id_='7ca1930d-752c-4f19-aa10-0f1b26a06f3b', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='10642476-b727-4743-b01b-52096a29fce9', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='a153765fee9f0efcfb6804fd5bc8312f9f13f9c282fd03dd49247f24dbc0c25b'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='fd1e0285-6636-428c-be1d-d29707f22d2f', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='7b536fd47292343852aa48f5586a9d0c1290c7c340aeb49708c8f7ebc2b2da5a')}, text='In practice, we compute the attention function on a set of queries simultaneously,', mimetype='text/plain', start_char_idx=12231, end_char_idx=12313, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5200972369180269),
-     NodeWithScore(node=TextNode(id_='747a4331-c2ea-4a00-b419-0b08d418ddcd', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='44972890-4447-4cb5-852f-e1486eed0bdd', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='5bfecc13dc676c3effef63180d8e345a59aee3b00971ee632c28a5beb3e936d4'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='35eabe69-ac0e-4d8f-af59-d8c3a75e0394', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='5190a75cc39636a77d1a3db884b7cb86f0afe3c8c5fba1701abbb266740d5bdd')}, text='values and queries,\nwe found it beneficial to linearly project the queries,', mimetype='text/plain', start_char_idx=13850, end_char_idx=13925, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5128181572746763),
-     NodeWithScore(node=TextNode(id_='c310de50-a2a5-4642-be1c-cdea5d9afcf1', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='7fda0fb0-6e63-4560-b1f6-e5bc9722ab1a', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='69ab46ef913b8936b3669fb47d6b591b43a5dd0ca37a3e2dbf0ce04d8c703765'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='ff0f74c7-ddfe-461b-aa5f-ed4e49cb9e8f', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='8d64e319bfdf6f04a0917a395eada4c0a280701c07b475000ff2de68606bca76'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='72169dc7-1426-4e59-a91e-b6ddd4c850d6', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='78736791801c79f892ed19fd6161ad7c8524bc7a9c57b4c0c01121be99dddb18')}, text='Operations\n      Self-Attention', mimetype='text/plain', start_char_idx=18618, end_char_idx=18649, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5069105137924549)]
+    [NodeWithScore(node=TextNode(id_='04c12537-5f33-4d41-a4d4-df30d2aed6e4', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='22d5c0dc-d921-4790-ac6e-4f6a6d5f336f', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='772c092906000e119c69ad2e5cb90148a6c8b113d54a20fb9d5984d6a9695ee8'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='893d077f-a8ab-4a3f-9765-69ef72d46ec4', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='df269253fe4504ec666a0a40380f9399466c5bd366c7ce6c853ee45b31d4bc84')}, text='of the values, where the weight assigned to each value is computed by a compatibility function of the\nquery with the corresponding key.\n\n3.2.1   Scaled Dot-Product Attention\nWe call our particular attention "Scaled Dot-Product Attention" (Figure 2). The input consists of\nqueries and keys of dimension dk , and\n                                    √ values of dimension dv .', mimetype='text/plain', start_char_idx=11715, end_char_idx=12088, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.588352239002419),
+     NodeWithScore(node=TextNode(id_='c42d8e8c-24ac-447a-8058-d62d198ce9eb', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='e961df5f-04be-4bf8-bba0-b30b346e6e3e', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='944203475caa494a68b2ca15140cea2278792db8546209bcc538388bf227b57d'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='12962f1d-060f-49d3-9ff9-be2dceb23736', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='46773d9899458459b747af4980832a961621033663b11cb056304074633c0f14')}, text='Self-attention, sometimes called intra-attention is an attention mechanism relating different positions\nof a single sequence in order to compute a representation of the sequence. Self-attention has been\nused successfully in a variety of tasks including reading comprehension, abstractive summarization,\ntextual entailment and learning task-independent sentence representations [4, 27, 28, 22].', mimetype='text/plain', start_char_idx=8003, end_char_idx=8396, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5581949233902119),
+     NodeWithScore(node=TextNode(id_='893d077f-a8ab-4a3f-9765-69ef72d46ec4', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='04c12537-5f33-4d41-a4d4-df30d2aed6e4', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='4dc2893909c949675d444324e091b9dcae176eafe0faeb456e4f571f79863ac8'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='e48f428a-1d0f-4830-8aca-82cbf4cd4b67', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='4a7481ff7440b3355d18a8f77fdbcf637903e138a37a44c74d4fd287baf610f2')}, text='We compute the dot products of the\nquery with all keys, divide each by dk , and apply a softmax function to obtain the weights on the\nvalues.\nIn practice, we compute the attention function on a set of queries simultaneously, packed together\ninto a matrix Q. The keys and values are also packed together into matrices K and V .', mimetype='text/plain', start_char_idx=12089, end_char_idx=12415, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5557579023667499),
+     NodeWithScore(node=TextNode(id_='0146f53a-f1b1-4d80-a333-26746920ab9d', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='c0f333cd-8860-48e5-b177-649855617c5a', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='c5cea5e4a2c19b51c1912e3fbb06fd9f445f2ab46a888146c9540685c513a907'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='5d433fd9-785b-4f25-b3b0-5cd206b0ca37', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='e52e557964f178c114303403bfab945ce6fc6bc18fbc723bc2c110071beaf965')}, text='• The encoder contains self-attention layers. In a self-attention layer all of the keys, values\n           and queries come from the same place, in this case, the output of the previous layer in the\n           encoder. Each position in the encoder can attend to all positions in the previous layer of the\n           encoder.', mimetype='text/plain', start_char_idx=16021, end_char_idx=16345, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5531707169222685),
+     NodeWithScore(node=TextNode(id_='22d5c0dc-d921-4790-ac6e-4f6a6d5f336f', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='71788dae-10dc-4341-8ebd-250a8836bce5', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='f1c9e10879cdc5796376d70528c5ccd9d988818269ef633ea539e6d2df1922d1'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='04c12537-5f33-4d41-a4d4-df30d2aed6e4', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='4dc2893909c949675d444324e091b9dcae176eafe0faeb456e4f571f79863ac8')}, text='3.2   Attention\n\nAn attention function can be described as mapping a query and a set of key-value pairs to an output,\nwhere the query, keys, values, and output are all vectors. The output is computed as a weighted sum\n\n\n                                                  3\n\x0c           Scaled Dot-Product Attention                                  Multi-Head Attention\n\n\n\n\nFigure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several\nattention layers running in parallel.', mimetype='text/plain', start_char_idx=11208, end_char_idx=11712, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5503383930857552),
+     NodeWithScore(node=TextNode(id_='55481635-fcaa-4e90-9625-9b0c3bfa3109', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='923d6eec-1ba9-4972-b457-47cc1cb5e5a7', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='534fa8133845bae34a1c58d14d5fe840710190a12c4951fa24b1acaaa4ed8e35'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='ea0b511f-4179-4f64-8e5b-1cf5f6d76404', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='a958edeb1ca826ae9eb259fb9846f6fe7d822b9462583eea56914ae0383170e5')}, text='.                       .              .\n                                                                                                                 <EOS>       <EOS>            <EOS>                 <EOS>\n                                                                                                                  <pad>      <pad>             <pad>                <pad>\n\n\n\n\n     Full attentions for head 5. Bottom: Isolated attentions from just the word ‘its’ for attention heads 5\n     Figure 4: Two attention heads, also in layer 5 of 6, apparently involved in anaphora resolution.', mimetype='text/plain', start_char_idx=55980, end_char_idx=56574, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.46287885047540767),
+     NodeWithScore(node=TextNode(id_='04b195bd-26e4-4d8c-afdc-780e96bdd345', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='c28b6b26-7bbf-4682-9399-a7804be460ae', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='c3ad5697d4d156dd0b4c85c17741ee433c10899ddffbd3575904ce08cd6736de'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='c0f333cd-8860-48e5-b177-649855617c5a', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='c5cea5e4a2c19b51c1912e3fbb06fd9f445f2ab46a888146c9540685c513a907')}, text='3.2.3    Applications of Attention in our Model\nThe Transformer uses multi-head attention in three different ways:\n\n         • In "encoder-decoder attention" layers, the queries come from the previous decoder layer,\n           and the memory keys and values come from the output of the encoder. This allows every\n           position in the decoder to attend over all positions in the input sequence.', mimetype='text/plain', start_char_idx=15478, end_char_idx=15877, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.4550194901912972),
+     NodeWithScore(node=TextNode(id_='d93b8e55-28cb-417e-838a-a22abf7cfbc9', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='398e22c4-5cd8-42ed-ba1d-43f213413bc2', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='cd837bc3b60f4cff2ab7f296f85515886d65e8ca7c2a3fb9c7b10fb1c6904949'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='e9ffed0b-00f1-4408-bd5d-512f5d05138d', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='d0057b6da67faef5766281c2cae5a165b6e5396059cd7c09222a6d9e77ca985c')}, text='On each of these projected versions of\nqueries, keys and values we then perform the attention function in parallel, yielding dv -dimensional\n   4\n     To illustrate why the dot products get large, assume that the components of q and k are independent random\nvariables with mean 0 and variance 1. Then their dot product, q · k = di=1\n                                                                        P k\n                                                                              qi ki , has mean 0 and variance dk .', mimetype='text/plain', start_char_idx=14037, end_char_idx=14560, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.45141889186813816),
+     NodeWithScore(node=TextNode(id_='158309a7-9a7a-47e6-ac58-1a4e98eee41b', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='e4e96748-8e42-4c45-a1b3-3e0b2a179475', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='162e546ee2aace8fdcf9330a044ed33bc46d32219ec57c876b93a1fad69425e7'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='8229d93a-1fb8-492f-9227-2b13658180f7', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='e9431f13405886d724857fa8ba6e9d0bd84affbaf2d35beedeeda36e79d95de8')}, text='4     Why Self-Attention\nIn this section we compare various aspects of self-attention layers to the recurrent and convolu-\ntional layers commonly used for mapping one variable-length sequence of symbol representations\n(x1 , ..., xn ) to another sequence of equal length (z1 , ..., zn ), with xi , zi ∈ Rd , such as a hidden\nlayer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we\nconsider three desiderata.', mimetype='text/plain', start_char_idx=20488, end_char_idx=20939, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.4348473100243987),
+     NodeWithScore(node=TextNode(id_='721c5981-90a9-4046-a757-4593a362ddf7', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={<NodeRelationship.SOURCE: '1'>: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=<ObjectType.DOCUMENT: '4'>, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), <NodeRelationship.PREVIOUS: '2'>: RelatedNodeInfo(node_id='a07f95e3-64fb-4637-ac18-4a928541df80', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='b11620062050474b2e5a6317e981c8ad07b227f032ebe169b1cb4f87c8994aa6'), <NodeRelationship.NEXT: '3'>: RelatedNodeInfo(node_id='165241f9-efb1-433a-896b-b6ea61168d3f', node_type=<ObjectType.TEXT: '1'>, metadata={}, hash='559f529f69207d17371f20407b6f1b4691910f9c8a90c9cefbb741e95fbf5de9')}, text='Operations\n      Self-Attention                      O(n2 · d)             O(1)                O(1)\n      Recurrent', mimetype='text/plain', start_char_idx=18618, end_char_idx=18733, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.4276254505797798)]
 
 The retriever can then directly be use as a tool to answer questions
 about our documents:
@@ -108,7 +106,7 @@ def find_references(question: str) -> str:
     """Query a database containing the paper "Attention is all you Need" in parts.
     This paper introduced the mechanism of self-attention to the NLP-literature.
     Returns a collection of scored text-snippets that are relevant to your question."""
-    return '\n'.join([f'{round(n.score,2)} - {n.node.text}' for n in retriever.retrieve(q)])
+    return '\n'.join([f'{round(n.score,2)} - {n.node.text}' for n in retriever.retrieve(question)])
 
 
 find_references_tool = FunctionTool.from_defaults(fn=find_references)
@@ -143,27 +141,29 @@ response = agent.chat("What is the meaning of Query, Key and Value in the contex
 print(str(response))
 ```
 
-    > Running step e29ee90e-3a6a-4863-8356-f24382cd4f7b. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
+    > Running step 062240ab-0d21-4fdb-a603-fb386970c32f. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
     Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step a49b74d8-09cf-4a51-87c0-e193bb82c5d9. Step input: None
+    > Running step 2a291a80-5090-4373-945d-3a647ac2b758. Step input: None
     Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step e9da34c8-e36f-4ba0-93aa-2871e5f5cb81. Step input: None
+    > Running step 908425d7-8f06-4830-8585-4ff312b43c45. Step input: None
     Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step 6f6775ff-5c83-46e0-b130-53726789cb61. Step input: None
+    > Running step 543ab12f-e5e7-4a59-b103-b7fc7bd0a3fe. Step input: None
     Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step 20563141-4fb7-42dc-8ad7-6d7113468fa9. Step input: None
-    Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step 280d7afb-c916-4b54-91aa-0764560b0f14. Step input: None
-    Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step e61a4039-d100-4ce6-9043-ef10c85bf8f0. Step input: None
-    Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step 6cb20084-238d-4822-90d9-3d5429482ef2. Step input: None
-    Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
-    > Running step 6eab1685-2ed3-4144-9d3d-6c7b871e60c9. Step input: None
-    Thought: In the context of self-attention, Query, Key and Value refer to three important components used in the process of computing attention scores for a given input sequence.
-    Action: I'll
-    Action Input: {'input': 'hello world', 'num_beams': 5}
-    Observation: Error: No such tool named `I'll`.
+    > Running step 1b3cb4e3-e976-4420-a489-906b8f6c5776. Step input: None
+    Thought: Let's break down what Query, Key, and Value mean in the context of self-attention.
+    Action: Use
+    Action Input: {'input': "What are the most relevant words for the sentence 'The quick brown fox jumps over the lazy dog'?", 'num_beams': 5}
+    Observation: Error: No such tool named `Use`.
+    > Running step 1101520e-54ff-42db-b327-d9d902acb957. Step input: None
+    Thought: I need to find a way to input the query and parameters into a tool.
+    Action: Use
+    Action Input: {'input': "What are the most relevant words for the sentence 'The quick brown fox jumps over the lazy dog'?", 'num_beams': 5}
+    Observation: Error: No such tool named `Use`.
+    > Running step 47c5a9f6-5055-4f8c-9a3b-49f1db40abcb. Step input: None
+    Thought: I'm using a different tool to find references. Let me check if it supports finding relevant text snippets for the given query.
+    Action: find_references
+    Action Input: {'properties': AttributedDict([('question', "What are the most relevant words for the sentence 'The quick brown fox jumps over the lazy dog'?"), ('num_beams', 5)]), 'required': ['query', 'parameters']}
+    Observation: Error: find_references() got an unexpected keyword argument 'properties'
 
     ValueError: Reached max iterations.
     [0;31m---------------------------------------------------------------------------[0m
@@ -294,18 +294,18 @@ response = agent.chat("What is the meaning of Query, Key and Value in the contex
 print(str(response))
 ```
 
-    > Running step 717acece-81ed-4bda-9cad-23a7184fc33c. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
+    > Running step 78c0a52b-55fa-4241-ade5-67c0b92b9bf3. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
     Thought: (Implicit) I can answer without any more tools!
-    Answer:  In the context of self-attention, "Query" refers to a vector that represents the current input or query. It acts as a filter for determining which parts of the input should be attended to more heavily.
-
-    "Key" refers to another set of vectors associated with each element in the input sequence. These keys are used by the self-attention mechanism to determine how much attention should be given to each part of the input. The output of the query-key computation is a weighting factor that determines the relative importance of each element in the input.
-
-    Finally, "Value" refers to the actual content associated with each element in the input sequence. These values are combined with the weighted keys using a specified operation (usually some form of matrix multiplication) to produce an output vector that represents the attended-to information from the input.
-     In the context of self-attention, "Query" refers to a vector that represents the current input or query. It acts as a filter for determining which parts of the input should be attended to more heavily.
-
-    "Key" refers to another set of vectors associated with each element in the input sequence. These keys are used by the self-attention mechanism to determine how much attention should be given to each part of the input. The output of the query-key computation is a weighting factor that determines the relative importance of each element in the input.
-
-    Finally, "Value" refers to the actual content associated with each element in the input sequence. These values are combined with the weighted keys using a specified operation (usually some form of matrix multiplication) to produce an output vector that represents the attended-to information from the input.
+    Answer:  In the context of self-attention, "Query", "Key" and "Value" are terms used to describe different components of a neural network architecture. Here's what they mean:
+    1. Query - The query component is used to retrieve information from memory banks during attention computation. It represents a set of learned parameters that enable the model to focus on specific parts of an input sequence when processing it. In other words, the query function defines how much importance we should give to each part of our input data while computing self-attention weights.
+    2. Key - The key component is used to determine which parts of the input sequence are most relevant for a particular output location in the model's memory bank. It represents another set of learned parameters that help us identify important features in an input sequence during attention computation. In other words, the key function helps us decide what we should focus on when computing self-attention weights.
+    3. Value - The value component is used to store the actual data corresponding to each memory bank location in a neural network architecture. It represents our stored knowledge or "memory" that can be retrieved later during attention computation. In other words, the value function holds all of the information we need to compute an output based on self-attention weights.
+    In summary, query, key and value are components of a neural network architecture used in self-attention that help us focus on specific parts of our input sequence, identify important features within it, and retrieve relevant stored knowledge/memory to compute outputs.
+     In the context of self-attention, "Query", "Key" and "Value" are terms used to describe different components of a neural network architecture. Here's what they mean:
+    1. Query - The query component is used to retrieve information from memory banks during attention computation. It represents a set of learned parameters that enable the model to focus on specific parts of an input sequence when processing it. In other words, the query function defines how much importance we should give to each part of our input data while computing self-attention weights.
+    2. Key - The key component is used to determine which parts of the input sequence are most relevant for a particular output location in the model's memory bank. It represents another set of learned parameters that help us identify important features in an input sequence during attention computation. In other words, the key function helps us decide what we should focus on when computing self-attention weights.
+    3. Value - The value component is used to store the actual data corresponding to each memory bank location in a neural network architecture. It represents our stored knowledge or "memory" that can be retrieved later during attention computation. In other words, the value function holds all of the information we need to compute an output based on self-attention weights.
+    In summary, query, key and value are components of a neural network architecture used in self-attention that help us focus on specific parts of our input sequence, identify important features within it, and retrieve relevant stored knowledge/memory to compute outputs.
 
 This model does not run into an issue with the structured output, it
 does not try to use the tool anymore though.
@@ -413,18 +413,20 @@ response = agent.chat("What is the meaning of Query, Key and Value in the contex
 print(str(response))
 ```
 
-    > Running step 6d31cdb7-9acb-4322-8b13-42e869d76a8d. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
+    > Running step d5fb46ea-de7a-4e8b-ace7-7ed3ae6a9706. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
     Thought: (Implicit) I can answer without any more tools!
-    Answer:  In the context of self-attention, "Query" refers to a vector that represents the current input or query. It acts as a filter for determining which parts of the input should be attended to more heavily.
-
-    "Key" refers to another set of vectors associated with each element in the input sequence. These keys are used by the self-attention mechanism to determine how much attention should be given to each part of the input. The output of the query-key computation is a weighting factor that determines the relative importance of each element in the input.
-
-    Finally, "Value" refers to the actual content associated with each element in the input sequence. These values are combined with the weighted keys using a specified operation (usually some form of matrix multiplication) to produce an output vector that represents the attended-to information from the input.
-     In the context of self-attention, "Query" refers to a vector that represents the current input or query. It acts as a filter for determining which parts of the input should be attended to more heavily.
-
-    "Key" refers to another set of vectors associated with each element in the input sequence. These keys are used by the self-attention mechanism to determine how much attention should be given to each part of the input. The output of the query-key computation is a weighting factor that determines the relative importance of each element in the input.
-
-    Finally, "Value" refers to the actual content associated with each element in the input sequence. These values are combined with the weighted keys using a specified operation (usually some form of matrix multiplication) to produce an output vector that represents the attended-to information from the input.
+    Answer:  In the context of natural language processing (NLP), "Query", "Key" and "Value" are used as components for a type of neural network architecture called Transformer model. The Transformer model employs self-attention mechanism to improve its ability to process sequential data such as text or audio. 
+    Here's how these terms relate to the model:
+    1. Query - A query is an input vector that represents the current state of a sequence being processed by the transformer network. It contains information about which words or tokens are currently being attended to, and helps guide the attention mechanism towards relevant parts of the input sequence.
+    2. Key - The key component in a transformer model refers to a set of learned weights that help determine how much importance should be given to each word or token during self-attention computation. These keys are computed for all words or tokens in an input sequence and they form part of the attention mechanism used by the Transformer network.
+    3. Value - The value component is responsible for storing information from a specific memory slot corresponding to a particular input token in the transformer model. It represents the output produced when we apply a transformation function on the query vector (which contains contextual information about the current word or token being processed) using learned weights, and then weighted-summed with the key vectors.
+    In summary, Query, Key and Value are components of a neural network architecture used in Transformer models for NLP that help us process sequential data such as text by guiding attention towards relevant parts of an input sequence, identifying important features within it, and computing outputs based on self-attention weights.
+     In the context of natural language processing (NLP), "Query", "Key" and "Value" are used as components for a type of neural network architecture called Transformer model. The Transformer model employs self-attention mechanism to improve its ability to process sequential data such as text or audio. 
+    Here's how these terms relate to the model:
+    1. Query - A query is an input vector that represents the current state of a sequence being processed by the transformer network. It contains information about which words or tokens are currently being attended to, and helps guide the attention mechanism towards relevant parts of the input sequence.
+    2. Key - The key component in a transformer model refers to a set of learned weights that help determine how much importance should be given to each word or token during self-attention computation. These keys are computed for all words or tokens in an input sequence and they form part of the attention mechanism used by the Transformer network.
+    3. Value - The value component is responsible for storing information from a specific memory slot corresponding to a particular input token in the transformer model. It represents the output produced when we apply a transformation function on the query vector (which contains contextual information about the current word or token being processed) using learned weights, and then weighted-summed with the key vectors.
+    In summary, Query, Key and Value are components of a neural network architecture used in Transformer models for NLP that help us process sequential data such as text by guiding attention towards relevant parts of an input sequence, identifying important features within it, and computing outputs based on self-attention weights.
 
 The model still tries to answer without the tool.
 
@@ -435,10 +437,12 @@ response = agent.chat("How does the paper 'Attention is all you need' define the
 print(str(response))
 ```
 
-    > Running step 550e01a4-d723-4c9b-ab96-44f163f1284f. Step input: How does the paper 'Attention is all you need' define the term self attention?
+    > Running step 3c1b3050-f4a0-4b46-9006-366161df0219. Step input: How does the paper 'Attention is all you need' define the term self attention?
     Thought: (Implicit) I can answer without any more tools!
-    Answer:  The paper "Attention Is All You Need" defines self-attention as a mechanism for computing a weighted sum of values, where the weights are computed by performing a dot product between keys and queries, followed by applying a softmax function to obtain normalized probabilities. This allows each element in the input sequence to attend selectively to other elements based on their relative importance, which is determined by the similarity between the key and query vectors. The resulting weighted sum of values forms the output representation for that particular position in the sequence.
-     The paper "Attention Is All You Need" defines self-attention as a mechanism for computing a weighted sum of values, where the weights are computed by performing a dot product between keys and queries, followed by applying a softmax function to obtain normalized probabilities. This allows each element in the input sequence to attend selectively to other elements based on their relative importance, which is determined by the similarity between the key and query vectors. The resulting weighted sum of values forms the output representation for that particular position in the sequence.
+    Answer:  In the paper "Attention Is All You Need", the authors present a novel Transformer model that relies heavily on an attention mechanism to improve its ability to process sequential data such as text or audio. The paper introduces several key concepts related to this mechanism, including the notion of "self-attention". 
+    Self-attention is defined in the paper as follows: given a sequence of input tokens (or words), self-attention enables us to compute contextualized representations for each token by computing attention weights over all other tokens in the sequence. These attention weights reflect how much importance we should give to each token when computing our output representation. In particular, during training, these weights are learned based on the input data itself and can be adjusted dynamically as new inputs come in. The resulting contextualized representations produced by self-attention provide a rich source of information for downstream tasks like language modeling or machine translation.
+     In the paper "Attention Is All You Need", the authors present a novel Transformer model that relies heavily on an attention mechanism to improve its ability to process sequential data such as text or audio. The paper introduces several key concepts related to this mechanism, including the notion of "self-attention". 
+    Self-attention is defined in the paper as follows: given a sequence of input tokens (or words), self-attention enables us to compute contextualized representations for each token by computing attention weights over all other tokens in the sequence. These attention weights reflect how much importance we should give to each token when computing our output representation. In particular, during training, these weights are learned based on the input data itself and can be adjusted dynamically as new inputs come in. The resulting contextualized representations produced by self-attention provide a rich source of information for downstream tasks like language modeling or machine translation.
 
 Still no dice.
 
@@ -457,30 +461,86 @@ response = agent.chat("How does the paper 'Attention is all you need' define the
 print(str(response))
 ```
 
-    > Running step ca2821e4-0d40-4619-9291-dc8594d537c8. Step input: How does the paper 'Attention is all you need' define the term self attention?
+    > Running step 9326aba5-48cf-40dd-8b85-b5da82554e5c. Step input: How does the paper 'Attention is all you need' define the term self attention?
     Thought: The current language of the user is English. I need to use a tool to help me answer the question.
     Action: find_references
-    Action Input: {'question': 'What defines self-attention in the context of Attention is all you Need', 'properties': AttributedDict([('title', 'Question'), ('type', 'string')])}
+    Action Input: {'properties': AttributedDict([('question', AttributedDict([('title', 'self-attention definition'), ('type', 'string')]))]), 'required': ['question'], 'type': 'object'}
     Observation: Error: find_references() got an unexpected keyword argument 'properties'
-    > Running step 99f9538c-7098-44b5-b2f8-700a6cd08da8. Step input: None
-    Thought: The tool find_references does not accept a 'properties' argument. I should have checked the documentation before using the tool.
-    Action: research
-    Action Input: {'query': 'self-attention in Attention is all you need paper definition', 'num_results': 3}
-    Observation: Error: No such tool named `research`.
-    > Running step 49191a4e-3189-4c4a-a313-82f437e44cf4. Step input: None
-    Thought: I don't have a tool called 'research'. I should have used find_references again to get the definition of self-attention.
+    > Running step b9bd6255-c348-473e-a031-2fd1e4e74cdf. Step input: None
+    Thought: The current language of the user is English. I need to use a tool to help me answer the question, but it seems like find_references doesn't support the properties argument.
     Action: find_references
-    Action Input: {'question': 'What defines self-attention in the context of Attention is all you need'}
-    Observation: Error: name 'q' is not defined
-    > Running step 170262a7-dacd-4b04-b583-735f06972b4d. Step input: None
-    Thought: The tool find_references expects a JSON object with a 'question' key, but I passed it as a keyword argument. I should have used the 'question' string directly.
-    Action: find_references
-    Action Input: {'question': 'What defines self-attention in the context of Attention is all you need'}
-    Observation: Error: name 'q' is not defined
-    > Running step c3dc0f39-6af7-45f0-a68f-8c22a7c3a570. Step input: None
-    Thought: The error message still indicates that 'q' is not defined, but I passed a valid 'question' string. This suggests that there might be an issue with the tool's implementation.
-    Answer: Self-attention in the context of the paper "Attention is all you Need" refers to a mechanism where the model attends to all positions in an input sequence simultaneously and weighs their importance. It's a key component of the Transformer architecture, introduced by Vaswani et al. in their 2017 paper, not just "Attention is all you Need".
-    Self-attention in the context of the paper "Attention is all you Need" refers to a mechanism where the model attends to all positions in an input sequence simultaneously and weighs their importance. It's a key component of the Transformer architecture, introduced by Vaswani et al. in their 2017 paper, not just "Attention is all you Need".
+    Action Input: {'question': "How does the paper 'Attention is all you Need' define the term self attention?"}
+    Observation: 0.69 - Self-attention, sometimes called intra-attention is an attention mechanism relating different positions
+    of a single sequence in order to compute a representation of the sequence. Self-attention has been
+    used successfully in a variety of tasks including reading comprehension, abstractive summarization,
+    textual entailment and learning task-independent sentence representations [4, 27, 28, 22].
+    0.52 - .                       .              .
+                                                                                                                     <EOS>       <EOS>            <EOS>                 <EOS>
+                                                                                                                      <pad>      <pad>             <pad>                <pad>
+
+
+
+
+         Full attentions for head 5. Bottom: Isolated attentions from just the word ‘its’ for attention heads 5
+         Figure 4: Two attention heads, also in layer 5 of 6, apparently involved in anaphora resolution.
+    0.5 - <EOS>
+                                                                                                                                               <pad>
+                                                                                                                                                       <pad>
+                                                                                                                                                       <pad>
+                                                                                                                                                               <pad>
+                                                                                                                                                                       <pad>
+                                                                                                                                                                               <pad>
+    Figure 3: An example of the attention mechanism following long-distance dependencies in the
+    encoder self-attention in layer 5 of 6. Many of the attention heads attend to a distant dependency of
+    the verb ‘making’, completing the phrase ‘making...more difficult’.
+    0.5 - Each layer has two
+    sub-layers. The first is a multi-head self-attention mechanism, and the second is a simple, position-
+    wise fully connected feed-forward network. We employ a residual connection [11] around each of
+    the two sub-layers, followed by layer normalization [1].
+    0.49 - 4     Why Self-Attention
+    In this section we compare various aspects of self-attention layers to the recurrent and convolu-
+    tional layers commonly used for mapping one variable-length sequence of symbol representations
+    (x1 , ..., xn ) to another sequence of equal length (z1 , ..., zn ), with xi , zi ∈ Rd , such as a hidden
+    layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we
+    consider three desiderata.
+    0.47 - In the following sections, we will describe the Transformer, motivate
+    self-attention and discuss its advantages over models such as [17, 18] and [9].
+
+
+    3   Model Architecture
+
+    Most competitive neural sequence transduction models have an encoder-decoder structure [5, 2, 35].
+    Here, the encoder maps an input sequence of symbol representations (x1 , ..., xn ) to a sequence
+    of continuous representations z = (z1 , ..., zn ).
+    0.45 - .                       .             .
+                                                                                                                  <EOS>       <EOS>            <EOS>                <EOS>
+                                                                                                                   <pad>      <pad>             <pad>               <pad>
+
+
+
+
+         sentence. We give two such examples above, from two different heads from the encoder self-attention
+         Figure 5: Many of the attention heads exhibit behaviour that seems related to the structure of the
+    0.44 - Operations
+          Self-Attention                      O(n2 · d)             O(1)                O(1)
+          Recurrent
+    0.43 - • The encoder contains self-attention layers. In a self-attention layer all of the keys, values
+               and queries come from the same place, in this case, the output of the previous layer in the
+               encoder. Each position in the encoder can attend to all positions in the previous layer of the
+               encoder.
+    0.42 - As side benefit, self-attention could yield more interpretable models. We inspect attention distributions
+    from our models and present and discuss examples in the appendix. Not only do individual attention
+    heads clearly learn to perform different tasks, many appear to exhibit behavior related to the syntactic
+    and semantic structure of the sentences.
+
+
+    5     Training
+
+    This section describes the training regime for our models.
+    > Running step ac9c9225-596e-4c84-8e86-1518a4fd7d55. Step input: None
+    Thought: The current language of the user is English. I was able to retrieve relevant information about self-attention from the paper "Attention is all you Need". It seems that the authors define self-attention as an attention mechanism that relates different positions of a single sequence in order to compute a representation of the sequence.
+    Answer: Self-attention, also known as intra-attention, is an attention mechanism that computes a representation of a sequence by attending to different positions within the same sequence. It has been used successfully in various tasks such as reading comprehension, abstractive summarization, textual entailment, and learning task-independent sentence representations.
+    Self-attention, also known as intra-attention, is an attention mechanism that computes a representation of a sequence by attending to different positions within the same sequence. It has been used successfully in various tasks such as reading comprehension, abstractive summarization, textual entailment, and learning task-independent sentence representations.
 
 This is not always feasible though.
 
@@ -499,6 +559,6 @@ response = query_engine.query("What is the meaning of Query, Key and Value in th
 print(str(response))
 ```
 
-     In the context of self-attention, a "query" represents the input to be processed by the attention mechanism, while "keys" and "values" are derived from the same input. The keys correspond to specific features or aspects of the input data, while the values represent the corresponding outputs that result from applying those key-value pairs through an attention function. Essentially, these three components help facilitate selective focus on different parts of the input data during processing by assigning varying weights to different elements based on their importance in achieving a desired outcome.
+     In the context of self-attention, "Query" refers to the keys that are used to retrieve relevant information from a sequence. "Key" represents the values associated with each element in the sequence, which determine their importance or relevance. "Value" corresponds to the actual data being processed by the attention mechanism.
 
 Finally an answer we can work with!
