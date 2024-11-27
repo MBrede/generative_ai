@@ -35,9 +35,9 @@ This approach has a number of benefits as well as drawbacks.
     - It is easy to use different prompts for generation and evaluation.
   - Drawbacks:
     - The evaluation can be very expensive, since it requires several calls to the LLM.
-    - The evaluation can be biased, since it is based on the LLMs' own evaluation of itself.
+    - The evaluation can be biased, since it is based on the LLMs' own evaluation of itself. Indeed many LLMs tend to like their own creations.
     - The evaluation can be subjective, since it is based on the LLMs' interpretation of the prompt.
-    - The evaluation can be misleading, since it is based on the LLMs' interpretation of the generated text, which may not be the same as the human interpretation.
+    - The evaluation can be misleading, since it is based on the LLMs' interpretation of the generated text, which may not be the same as the human interpretation. For example, many LLMs seem to prefer long answers over shorter ones. 
 
 
 ## A basic multi-agent system
@@ -51,9 +51,10 @@ To do this, we will build a multi-agent system that consists of three agents:
 1. An Anki card generator that generates Anki flashcards from the extracted text.
 2. A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.
 3. An Editor, that generates a new set of Anki flashcards based on the reviewer's feedback.
+4. An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop. 
 
+We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation. 
 
-We could also implement an orchestrator agent that manages the interaction between the two agents. This would allow us to add more agents in the future without having to change the code of the existing agents. We will stick with our three agents for now. 
 <!-- 
 Let us first define the cards. We will use pydantic for that. A card consists of a question, an answer and some additional information. All of these are strings. 
 
