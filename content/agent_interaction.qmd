@@ -23,7 +23,7 @@ The solution to this problem is, of course, to use an LLM to read and evaluate t
 - to improve the model itself (e.g., for fine-tuning it on the generated text and its evaluation).
 - to get an LLM to improve the text based on the evaluation.
 
-This approach is called LLM as a judge. It is a system that uses several calls to one or several LLMs to solve a problem. As such, it is an example of a multi-agent system. 
+This approach is called LLM as a judge. It is a system that uses several calls to one or several LLMs to solve a problem. As such, it can be implemented as a multi-agent system. 
 
 This approach has a number of benefits as well as drawbacks. 
 
@@ -42,7 +42,7 @@ This approach has a number of benefits as well as drawbacks.
 
 ## A basic multi-agent system
 
- Let us now look at a simple example of a multi-agent system. We will use the following scenario: We want to generate Anki flashcards from text.^[The following is loosely based on [@BuildingMultiAgentFramework2024], though I took the liberty to streamline and simplify the code a bit.]
+ Let us now look at a simple example of a multi-agent system. We will use the following scenario: We want to generate Anki flashcards from text.^[The following is loosely based on @BuildingMultiAgentFramework2024, though I took the liberty to streamline and simplify the code a bit.]
 
 To do this, we will build a multi-agent system that consists of three agents:
 
