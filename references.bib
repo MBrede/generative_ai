@@ -105,6 +105,17 @@
   keywords = {Computer Science - Computation and Language}
 }
 
+@misc{BuildingMultiAgentFramework2024,
+  title = {Building a {{Multi-Agent Framework}} from {{Scratch}} with {{LlamaIndex}}},
+  year = {2024},
+  month = oct,
+  journal = {DEV Community},
+  urldate = {2024-11-26},
+  abstract = {Learn how to build a sophisticated multi-agent system using LlamaIndex to generate high-quality Anki flashcards. This tutorial guides you through the process of creating a modular and robust framework, from a basic single-agent setup to a complex orchestrated system.},
+  howpublished = {https://dev.to/yukooshima/building-a-multi-agent-framework-from-scratch-with-llamaindex-5ecn},
+  langid = {english}
+}
+
 @misc{cerUniversalSentenceEncoder2018a,
   title = {Universal {{Sentence Encoder}}},
   author = {Cer, Daniel and Yang, Yinfei and Kong, Sheng-yi and Hua, Nan and Limtiaco, Nicole and John, Rhomni St and Constant, Noah and {Guajardo-Cespedes}, Mario and Yuan, Steve and Tar, Chris and Sung, Yun-Hsuan and Strope, Brian and Kurzweil, Ray},
@@ -119,6 +130,22 @@
   abstract = {We present models for encoding sentences into embedding vectors that specifically target transfer learning to other NLP tasks. The models are efficient and result in accurate performance on diverse transfer tasks. Two variants of the encoding models allow for trade-offs between accuracy and compute resources. For both variants, we investigate and report the relationship between model complexity, resource consumption, the availability of transfer task training data, and task performance. Comparisons are made with baselines that use word level transfer learning via pretrained word embeddings as well as baselines do not use any transfer learning. We find that transfer learning using sentence embeddings tends to outperform word level transfer. With transfer learning via sentence embeddings, we observe surprisingly good performance with minimal amounts of supervised training data for a transfer task. We obtain encouraging results on Word Embedding Association Tests (WEAT) targeted at detecting model bias. Our pre-trained sentence encoding models are made freely available for download and on TF Hub.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computation and Language}
+}
+
+@misc{ConstitutionalAIHarmlessness,
+  title = {Constitutional {{AI}}: {{Harmlessness}} from {{AI Feedback}}},
+  shorttitle = {Constitutional {{AI}}},
+  urldate = {2024-11-26},
+  abstract = {Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.},
+  howpublished = {https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback},
+  langid = {english}
+}
+
+@misc{ConstitutionalAIOpen,
+  title = {Constitutional {{AI}} with {{Open LLMs}}},
+  urldate = {2024-11-26},
+  abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
+  howpublished = {https://huggingface.co/blog/constitutional\_ai}
 }
 
 @misc{dettmersQLoRAEfficientFinetuning2023,
@@ -398,6 +425,21 @@
   title = {Automatic {{Emotion Detection}} for {{Quantitative Literary Studies}}},
   author = {Klinger, Roman and Suliya, Surayya Samat and Reiter, Nils},
   year = {2016}
+}
+
+@misc{kojimaLargeLanguageModels2023,
+  title = {Large {{Language Models}} Are {{Zero-Shot Reasoners}}},
+  author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
+  year = {2023},
+  month = jan,
+  number = {arXiv:2205.11916},
+  eprint = {2205.11916},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2205.11916},
+  urldate = {2024-11-19},
+  abstract = {Pretrained large language models (LLMs) are widely used in many sub-fields of natural language processing (NLP) and generally known as excellent few-shot learners with task-specific exemplars. Notably, chain of thought (CoT) prompting, a recent technique for eliciting complex multi-step reasoning through step-by-step answer examples, achieved the state-of-the-art performances in arithmetics and symbolic reasoning, difficult system-2 tasks that do not follow the standard scaling laws for LLMs. While these successes are often attributed to LLMs' ability for few-shot learning, we show that LLMs are decent zero-shot reasoners by simply adding "Let's think step by step" before each answer. Experimental results demonstrate that our Zero-shot-CoT, using the same single prompt template, significantly outperforms zero-shot LLM performances on diverse benchmark reasoning tasks including arithmetics (MultiArith, GSM8K, AQUA-RAT, SVAMP), symbolic reasoning (Last Letter, Coin Flip), and other logical reasoning tasks (Date Understanding, Tracking Shuffled Objects), without any hand-crafted few-shot examples, e.g. increasing the accuracy on MultiArith from 17.7\% to 78.7\% and GSM8K from 10.4\% to 40.7\% with large InstructGPT model (text-davinci-002), as well as similar magnitudes of improvements with another off-the-shelf large model, 540B parameter PaLM. The versatility of this single prompt across very diverse reasoning tasks hints at untapped and understudied fundamental zero-shot capabilities of LLMs, suggesting high-level, multi-task broad cognitive capabilities may be extracted by simple prompting. We hope our work not only serves as the minimal strongest zero-shot baseline for the challenging reasoning benchmarks, but also highlights the importance of carefully exploring and analyzing the enormous zero-shot knowledge hidden inside LLMs before crafting finetuning datasets or few-shot exemplars.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @misc{kojimaLargeLanguageModels2023a,
@@ -879,6 +921,22 @@
   urldate = {2024-11-24},
   abstract = {We explore how generating a chain of thought -- a series of intermediate reasoning steps -- significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain of thought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain of thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a 540B-parameter language model with just eight chain of thought exemplars achieves state of the art accuracy on the GSM8K benchmark of math word problems, surpassing even finetuned GPT-3 with a verifier.},
   archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
+}
+
+@misc{weiChainThoughtPromptingElicits2023,
+  title = {Chain-of-{{Thought Prompting Elicits Reasoning}} in {{Large Language Models}}},
+  author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
+  year = {2023},
+  month = jan,
+  number = {arXiv:2201.11903},
+  eprint = {2201.11903},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-11-17},
+  abstract = {We explore how generating a chain of thought---a series of intermediate reasoning steps---significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain-ofthought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a PaLM 540B with just eight chain-of-thought exemplars achieves state-of-the-art accuracy on the GSM8K benchmark of math word problems, surpassing even finetuned GPT-3 with a verifier.},
+  archiveprefix = {arXiv},
+  langid = {english},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
 }
 
