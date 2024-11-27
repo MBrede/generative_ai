@@ -171,7 +171,7 @@ Constitutional AI [@ConstitutionalAIOpen] is a method for fine-tuning language m
 
 Constitutional AI has been used to improve the safety and reliability of language models in a variety of applications, including chatbots, question-answering systems, and text generation. It has also been used to improve the fairness and transparency of language models by specifying constraints on the types of information that they can access or generate.
 
-![Illustration of the CAI training process (from [@ConstitutionalAIOpen])](../imgs/CAI_illustration.png)
+![Illustration of the CAI training process (from @ConstitutionalAIOpen)](../imgs/CAI_illustration.png)
 
 The basic idea is to define a "Constitution" that specifies the rules and constraints that the model should follow. These could be rules like
 
