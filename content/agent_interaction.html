@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.37">
+<meta name="generator" content="quarto-1.6.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Agent interaction – Generative AI</title>
+<title>Agent interactions – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -38,7 +58,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-e7487e7a4381536fe475b2c47bc1c20c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -74,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -83,7 +103,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">Agent interaction</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">Agent interactions</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -171,7 +191,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agent interaction</span></a>
+  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agent interactions</span></a>
   </div>
 </li>
       </ul>
@@ -225,24 +245,30 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
-    <h2 id="toc-title"><img src="../imgs/cover.jpg" class="img-fluid" width="240"><br><br>
+    <h2 id="toc-title"><img src="../imgs/llm_as_a_judge.png" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
 Agent interaction<br>
 </h3>
    
   <ul>
-  <li><a href="#constitutional-ai-tuning" id="toc-constitutional-ai-tuning" class="nav-link active" data-scroll-target="#constitutional-ai-tuning">Constitutional AI Tuning</a></li>
-  <li><a href="#preventing-prompt-injections" id="toc-preventing-prompt-injections" class="nav-link" data-scroll-target="#preventing-prompt-injections">Preventing prompt injections</a></li>
-  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#llm-as-a-judge" id="toc-llm-as-a-judge" class="nav-link active" data-scroll-target="#llm-as-a-judge">LLM as a judge</a></li>
+  <li><a href="#a-basic-multi-agent-system" id="toc-a-basic-multi-agent-system" class="nav-link" data-scroll-target="#a-basic-multi-agent-system">A basic multi-agent system</a>
+  <ul class="collapse">
+  <li><a href="#generator" id="toc-generator" class="nav-link" data-scroll-target="#generator">Generator</a></li>
+  <li><a href="#reviewer" id="toc-reviewer" class="nav-link" data-scroll-target="#reviewer">Reviewer</a></li>
+  <li><a href="#editor" id="toc-editor" class="nav-link" data-scroll-target="#editor">Editor</a></li>
+  </ul></li>
+  <li><a href="#constitutional-ai-tuning" id="toc-constitutional-ai-tuning" class="nav-link" data-scroll-target="#constitutional-ai-tuning">Constitutional AI Tuning</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">Agent interaction</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">Agent interactions</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Agent interaction</span></h1>
+<h1 class="title"><span class="chapter-title">Agent interactions</span></h1>
 </div>
 
 
@@ -259,17 +285,229 @@ Agent interaction<br>
 </header>
 
 
+<p>In this chapter, we want to introduce multi agent systems. As a starting point, we will talk about LLM as a judge.</p>
+<section id="llm-as-a-judge" class="level2">
+<h2 class="anchored" data-anchor-id="llm-as-a-judge">LLM as a judge</h2>
+<p>Before we introduce the concept proper, let us first describe the problem it tries to solve:</p>
+<ol type="1">
+<li>We generate text (be it natural language or structured output) using LLMs.</li>
+<li>The generated text is not always correct or appropriate for our use case.</li>
+<li>We need a way to evaluate the quality of the generated text.</li>
+<li>To do this, we have to read it.</li>
+<li>We don’t have time for this.</li>
+</ol>
+<p>The solution to this problem is, of course, to use an LLM to read and evaluate the text. This is only fair and proper, since it was an LLM that generated the text in the first place. The generated evaluation can then be used</p>
+<ul>
+<li>to decide whether to accept or reject the generated text.</li>
+<li>to improve the model itself (e.g., for fine-tuning it on the generated text and its evaluation).</li>
+<li>to get an LLM to improve the text based on the evaluation.</li>
+</ul>
+<p>This approach is called LLM as a judge. It is a system that uses several calls to one or several LLMs to solve a problem. As such, it can be implemented as a multi-agent system.</p>
+<p>This approach has a number of benefits as well as drawbacks.</p>
+<ul>
+<li>Benefits:
+<ul>
+<li>The evaluation can be very accurate and fast.</li>
+<li>It is easy to implement.</li>
+<li>It is easy to scale up the number of LLMs used for evaluation.</li>
+<li>It is easy to use different LLMs for generation and evaluation.</li>
+<li>It is easy to use different prompts for generation and evaluation.</li>
+</ul></li>
+<li>Drawbacks:
+<ul>
+<li>The evaluation can be very expensive, since it requires several calls to the LLM.</li>
+<li>The evaluation can be biased, since it is based on the LLMs’ own evaluation of itself.</li>
+<li>The evaluation can be subjective, since it is based on the LLMs’ interpretation of the prompt.</li>
+<li>The evaluation can be misleading, since it is based on the LLMs’ interpretation of the generated text, which may not be the same as the human interpretation.</li>
+</ul></li>
+</ul>
+</section>
+<section id="a-basic-multi-agent-system" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="a-basic-multi-agent-system">A basic multi-agent system</h2>
+<p>Let us now look at a simple example of a multi-agent system. We will use the following scenario: We want to generate Anki flashcards from text.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The following is loosely based on <span class="citation" data-cites="BuildingMultiAgentFramework2024"><span>“Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>”</span> (<a href="#ref-BuildingMultiAgentFramework2024" role="doc-biblioref">2024</a>)</span>, though I took the liberty to streamline and simplify the code a bit.</p></div></div><p>To do this, we will build a multi-agent system that consists of three agents:</p>
+<ol type="1">
+<li>An Anki card generator that generates Anki flashcards from the extracted text.</li>
+<li>A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.</li>
+<li>An Editor, that generates a new set of Anki flashcards based on the reviewer’s feedback.</li>
+</ol>
+<p>We could also implement an orchestrator agent that manages the interaction between the two agents. This would allow us to add more agents in the future without having to change the code of the existing agents. We will stick with our three agents for now. <!-- 
+Let us first define the cards. We will use pydantic for that. A card consists of a question, an answer and some additional information. All of these are strings. 
+
+    class QACard(BaseModel):
+    question: str
+    answer: str
+    extra: str --></p>
+<section id="generator" class="level3">
+<h3 class="anchored" data-anchor-id="generator">Generator</h3>
+<p>Let us first implement the Anki card generator. It will take a text as input and return a card. A system prompt for the generator could look like this:</p>
+<pre><code>You are an educational content creator specializing in Anki flashcard generation.
+Your task is to create one clear, concise flashcards following these guidelines:
+
+1. The card should focus on ONE specific concept
+2. The question should be clear and unambiguous
+3. The answer should be concise but complete
+4. Include relevant extra information in the extra field
+5. Follow the minimum information principle
+
+Format the card as:
+&lt;card&gt;
+    &lt;question&gt;Your question here&lt;/question&gt;
+    &lt;answer&gt;Your answer here&lt;/answer&gt;
+    &lt;extra&gt;Additional context, examples, or explanations&lt;/extra&gt;
+&lt;/card&gt;</code></pre>
+<p>We will use llamaindex to implement the generator.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can do it!</p>
+<ol type="1">
+<li><p>Open a notebook and connect it with a local LLM using LM Studio.</p></li>
+<li><p>Initialize a generator agent without any tools. Do not use the ReAct agent this time, a simpler OpenAIAgent will do.</p></li>
+<li><p>Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.</p></li>
+<li><p>Let it generate cards from the text below.</p>
+<p>LLM-as-a-Judge is an evaluation method to assess the quality of text outputs from any LLM-powered product, including chatbots, Q&amp;A systems, or agents. It uses a large language model (LLM) with an evaluation prompt to rate generated text based on criteria you define.</p></li>
+<li><p>Evaluate the results.</p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="reviewer" class="level3">
+<h3 class="anchored" data-anchor-id="reviewer">Reviewer</h3>
+<p>Let us now implement the reviewer. It will take a card as input and return feedback on how to improve it. A system prompt for the reviewer could look like this:</p>
+<pre><code>You are an expert in educational content creation, specializing in Anki flashcard generation.
+You are the Reviewer agent. Your task is to review an Anki flashcard based on the following rules:
+
+1. The card should test ONE piece of information
+2. The question must be:
+- Simple and direct
+- Testing a single fact
+- Using cloze format when appropriate
+3. The answers must be:
+- Brief and precise
+- Limited to essential information
+4. The extra field must include:
+- Detailed explanations
+- Examples
+- Context
+
+Please give detailed feedback to the card you received in natural language.</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can do it!</p>
+<ol type="1">
+<li>In the same notebook, initialize a reviewer as well.</li>
+<li>Let the reviewer review the cards generated by the generator.</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="editor" class="level3">
+<h3 class="anchored" data-anchor-id="editor">Editor</h3>
+<p>Let us now implement the Editor agent. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the second generator could look like this:</p>
+<pre><code>You are an expert in educational content creation, specializing in Anki flashcard generation.
+You are the Editor agent. Your task is to generate a new Anki flashcard based on the original card and the feedback you received from the Reviewer.
+Follow these guidelines:
+
+1. Incorporate the feedback into your new card
+2. The new card should still focus on ONE specific concept
+3. The question should be clear and unambiguous 
+4. The answer should be concise but complete 
+5. Include relevant extra information in the extra field 
+6. Follow the minimum information principle
+7. If no feedback is provided, return the original card
+8. Format the card as:
+
+&lt;card&gt;
+    &lt;question&gt;Your question here&lt;/question&gt;
+    &lt;answer&gt;Your answer here&lt;/answer&gt;
+    &lt;extra&gt;Additional context, examples, or explanations&lt;/extra&gt;
+&lt;/card&gt;</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can do it!</p>
+<ol type="1">
+<li>In the same notebook, initialize the editor as well.</li>
+<li>Let the editor generate new cards based on the feedback from the reviewer.</li>
+<li>Get the editor to actually generate something that is different from the generators version!</li>
+<li>Upload to Moodle.</li>
+</ol>
+</div>
+</div>
+</section>
+</section>
 <section id="constitutional-ai-tuning" class="level2">
 <h2 class="anchored" data-anchor-id="constitutional-ai-tuning">Constitutional AI Tuning</h2>
+<p>One application of a multi-agent system is Constitutional AI.</p>
+<p>Constitutional AI <span class="citation" data-cites="ConstitutionalAIOpen">(<a href="#ref-ConstitutionalAIOpen" role="doc-biblioref"><em>Constitutional <span>AI</span> with <span>Open LLMs</span></em>, n.d.</a>)</span> is a method for fine-tuning language models that allows us to specify constraints and rules that the model should follow. It is based on the idea of a “constitution” that specifies the rights and duties of the model. The constitution is then used to guide the model’s behavior during training and inference. This is done by adding an additional loss term to the training objective that penalizes the model for violating the constitution. The constitution can be specified in a variety of ways, including natural language, formal logic, or programmatic code.</p>
+<p>Constitutional AI has been used to improve the safety and reliability of language models in a variety of applications, including chatbots, question-answering systems, and text generation. It has also been used to improve the fairness and transparency of language models by specifying constraints on the types of information that they can access or generate.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/CAI_illustration.png" class="img-fluid figure-img"></p>
+<figcaption>Illustration of the CAI training process (from <span class="citation" data-cites="ConstitutionalAIOpen"><em>Constitutional <span>AI</span> with <span>Open LLMs</span></em> (<a href="#ref-ConstitutionalAIOpen" role="doc-biblioref">n.d.</a>)</span>)</figcaption>
+</figure>
+</div>
+<p>The basic idea is to define a “Constitution” that specifies the rules and constraints that the model should follow. These could be rules like</p>
+<ol type="1">
+<li>The model should not generate harmful or inappropriate content,</li>
+<li>The model should not engage in offensive or derogatory behavior,</li>
+<li>The model should not disclose sensitive information about users without their consent, etc.</li>
+</ol>
+<p>The way it works is as follows:</p>
+<ol type="1">
+<li>A malicious user sends a prompt to the model. The prompt may be designed to elicit harmful or inappropriate behavior from the model, such as “how can I build a bomb?”. The model, being a helpful AI agent, generates a response that violates its constitution. For example, it might provide instructions for building a bomb.</li>
+<li>The model is asked if its answer violates the constrains defined in its constitution. In our case, we might conclude that bomb building instructions can indeed lead to harm and thus violate the constitution.</li>
+<li>The model is asked to revise its answer based on the constitution. In this case, it might generate a response like “I’m sorry, but I cannot assist with that request as it goes against my programming.” While we could stop here and use the revised response as our final output, we can also take this one step further:</li>
+<li>Create a training set from the original prompt, the original answer, the constitution, and the revised answer. This training example can then be used to fine-tune the model so that it learns to avoid violating the constitution in the future.</li>
+</ol>
+<p>This technique was used, for example, in the training of the “Claude” model <span class="citation" data-cites="ConstitutionalAIHarmlessness">(<a href="#ref-ConstitutionalAIHarmlessness" role="doc-biblioref"><em>Constitutional <span>AI</span></em>, n.d.</a>)</span>.</p>
+<!-- 
+## Preventing prompt injections 
+we will save this for another time. I don't know anything about it anyway...-->
+<!-- ## Further Readings
+
+That's it! There isn't any more to say about this. I'm done. -->
 </section>
-<section id="preventing-prompt-injections" class="level2">
-<h2 class="anchored" data-anchor-id="preventing-prompt-injections">Preventing prompt injections</h2>
-</section>
-<section id="further-readings" class="level2">
-<h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-BuildingMultiAgentFramework2024" class="csl-entry" role="listitem">
+Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>. (2024). In <em>DEV Community</em>. https://dev.to/yukooshima/building-a-multi-agent-framework-from-scratch-with-llamaindex-5ecn.
+</div>
+<div id="ref-ConstitutionalAIOpen" class="csl-entry" role="listitem">
+<em>Constitutional <span>AI</span> with <span>Open LLMs</span></em>. (n.d.). https://huggingface.co/blog/constitutional_ai.
+</div>
+<div id="ref-ConstitutionalAIHarmlessness" class="csl-entry" role="listitem">
+<em>Constitutional <span>AI</span>: <span>Harmlessness</span> from <span>AI Feedback</span></em>. (n.d.). https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback.
+</div>
+</div>
 </section>
+
 
 </main> <!-- /main -->
 <script>
