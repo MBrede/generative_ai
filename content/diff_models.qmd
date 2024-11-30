@@ -1,0 +1,28 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>AI image generation</h3>'
+---
+
+# AI image generation
+
+This and the following chapters will focus on the topic of AI image generation. This is a very broad field, so we will start with some basics and then move on to more specific topics. We will also try to give an overview of the current state of the art in this field.
+
+## AI image generator basics
+
+You can not talk about the history of AI image generation without talking about GANs. 
+To have a nicer chunking of the courses contents though, we will talk about them in the chapter @sec-GANS and focus on more recent approaches here.
+GANs are the architecture behind the page [thispersondoesnotexist.com](www.thispersondoesnotexist.com) and its [clones](https://thisxdoesnotexist.com/).
+
+Though the results this family of models could produce, they have some core limitations. 1) They are notoriously hard to train. 2) They are notoriously hard to control. 3) They are notoriously hard to scale.
+
+## Variational Autoencoder (VAE)
+
+## Diffusion Models
+
+## Multimodal Models
+
+### Unidiffuser
+
+### Llama 3.2
+
+## Further Readings
+

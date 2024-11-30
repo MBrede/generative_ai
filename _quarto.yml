@@ -33,8 +33,9 @@ book:
         - content/agent_interaction.qmd
     - part: "Image Generation"
       chapters:
-        - content/generator_basics.qmd
-        - content/augmentation.qmd
+        - content/diff_models.qmd
+        - content/gans_and_augmentation.qmd
+        - content/generation_in_agent_pipelines.qmd
     - part: "Finetuning"
       chapters: 
         - content/finetuning_approaches.qmd
