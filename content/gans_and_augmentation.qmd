@@ -2,7 +2,7 @@
 toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image datasets</h3>'
 ---
 
-# AI image generation II
+# AI image generation II {#sec-GANS}
 
 ## Generative Adversial Networks (GAN)
 
