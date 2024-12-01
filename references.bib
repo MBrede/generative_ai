@@ -51,6 +51,31 @@
   archiveprefix = {arXiv}
 }
 
+@inproceedings{baoAllAreWorth2022,
+  title = {All Are Worth Words: A Vit Backbone for Score-Based Diffusion Models},
+  shorttitle = {All Are Worth Words},
+  booktitle = {{{NeurIPS}} 2022 {{Workshop}} on {{Score-Based Methods}}},
+  author = {Bao, Fan and Li, Chongxuan and Cao, Yue and Zhu, Jun},
+  year = {2022},
+  urldate = {2024-12-01}
+}
+
+@misc{baoOneTransformerFits2023,
+  title = {One {{Transformer Fits All Distributions}} in {{Multi-Modal Diffusion}} at {{Scale}}},
+  author = {Bao, Fan and Nie, Shen and Xue, Kaiwen and Li, Chongxuan and Pu, Shi and Wang, Yaole and Yue, Gang and Cao, Yue and Su, Hang and Zhu, Jun},
+  year = {2023},
+  month = may,
+  number = {arXiv:2303.06555},
+  eprint = {2303.06555},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2303.06555},
+  urldate = {2024-12-01},
+  abstract = {This paper proposes a unified diffusion framework (dubbed UniDiffuser) to fit all distributions relevant to a set of multi-modal data in one model. Our key insight is -- learning diffusion models for marginal, conditional, and joint distributions can be unified as predicting the noise in the perturbed data, where the perturbation levels (i.e. timesteps) can be different for different modalities. Inspired by the unified view, UniDiffuser learns all distributions simultaneously with a minimal modification to the original diffusion model -- perturbs data in all modalities instead of a single modality, inputs individual timesteps in different modalities, and predicts the noise of all modalities instead of a single modality. UniDiffuser is parameterized by a transformer for diffusion models to handle input types of different modalities. Implemented on large-scale paired image-text data, UniDiffuser is able to perform image, text, text-to-image, image-to-text, and image-text pair generation by setting proper timesteps without additional overhead. In particular, UniDiffuser is able to produce perceptually realistic samples in all tasks and its quantitative results (e.g., the FID and CLIP score) are not only superior to existing general-purpose models but also comparable to the bespoken models (e.g., Stable Diffusion and DALL-E 2) in representative tasks (e.g., text-to-image generation).},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning}
+}
+
 @misc{BlogArticlesMulti_agentsmd,
   title = {Blog/Articles/Multi\_agents.Md at Main {$\cdot$} {{YukoOshima}}/{{Blog}}},
   journal = {GitHub},
@@ -182,6 +207,48 @@
   keywords = {Computer Science - Computation and Language}
 }
 
+@inproceedings{dhariwalDiffusionModelsBeat2021,
+  title = {Diffusion {{Models Beat GANs}} on {{Image Synthesis}}},
+  booktitle = {Advances in {{Neural Information Processing Systems}}},
+  author = {Dhariwal, Prafulla and Nichol, Alexander},
+  year = {2021},
+  volume = {34},
+  pages = {8780--8794},
+  publisher = {Curran Associates, Inc.},
+  urldate = {2024-11-30}
+}
+
+@misc{doerschTutorialVariationalAutoencoders2021,
+  title = {Tutorial on {{Variational Autoencoders}}},
+  author = {Doersch, Carl},
+  year = {2021},
+  month = jan,
+  number = {arXiv:1606.05908},
+  eprint = {1606.05908},
+  primaryclass = {stat},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1606.05908},
+  urldate = {2024-12-01},
+  abstract = {In just three years, Variational Autoencoders (VAEs) have emerged as one of the most popular approaches to unsupervised learning of complicated distributions. VAEs are appealing because they are built on top of standard function approximators (neural networks), and can be trained with stochastic gradient descent. VAEs have already shown promise in generating many kinds of complicated data, including handwritten digits, faces, house numbers, CIFAR images, physical models of scenes, segmentation, and predicting the future from static images. This tutorial introduces the intuitions behind VAEs, explains the mathematics behind them, and describes some empirical behavior. No prior knowledge of variational Bayesian methods is assumed.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning}
+}
+
+@misc{esserTamingTransformersHighResolution2021,
+  title = {Taming {{Transformers}} for {{High-Resolution Image Synthesis}}},
+  author = {Esser, Patrick and Rombach, Robin and Ommer, Bj{\"o}rn},
+  year = {2021},
+  month = jun,
+  number = {arXiv:2012.09841},
+  eprint = {2012.09841},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2012.09841},
+  urldate = {2024-12-01},
+  abstract = {Designed to learn long-range interactions on sequential data, transformers continue to show state-of-the-art results on a wide variety of tasks. In contrast to CNNs, they contain no inductive bias that prioritizes local interactions. This makes them expressive, but also computationally infeasible for long sequences, such as high-resolution images. We demonstrate how combining the effectiveness of the inductive bias of CNNs with the expressivity of transformers enables them to model and thereby synthesize high-resolution images. We show how to (i) use CNNs to learn a context-rich vocabulary of image constituents, and in turn (ii) utilize transformers to efficiently model their composition within high-resolution images. Our approach is readily applied to conditional synthesis tasks, where both non-spatial information, such as object classes, and spatial information, such as segmentations, can control the generated image. In particular, we present the first results on semantically-guided synthesis of megapixel images with transformers and obtain the state of the art among autoregressive models on class-conditional ImageNet. Code and pretrained models can be found at https://github.com/CompVis/taming-transformers .},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition}
+}
+
 @article{ganesanEmpiricalEvaluationPretrained2021,
   title = {Empirical {{Evaluation}} of {{Pre-trained Transformers}} for {{Human-Level NLP}}: {{The Role}} of {{Sample Size}} and {{Dimensionality}}},
   shorttitle = {Empirical {{Evaluation}} of {{Pre-trained Transformers}} for {{Human-Level NLP}}},
@@ -196,6 +263,22 @@
   abstract = {In human-level NLP tasks, such as predicting mental health, personality, or demographics, the number of observations is often smaller than the standard 768+ hidden state sizes of each layer within modern transformer-based language models, limiting the ability to effectively leverage transformers. Here, we provide a systematic study on the role of dimension reduction methods (principal components analysis, factorization techniques, or multi-layer auto-encoders) as well as the dimensionality of embedding vectors and sample sizes as a function of predictive performance. We first find that fine-tuning large models with a limited amount of data pose a significant difficulty which can be overcome with a pre-trained dimension reduction regime. RoBERTa consistently achieves top performance in human-level tasks, with PCA giving benefit over other reduction methods in better handling users that write longer texts. Finally, we observe that a majority of the tasks achieve results comparable to the best performance with just 112 of the embedding dimensions.},
   pmcid = {PMC8294338},
   pmid = {34296226}
+}
+
+@misc{goodfellowGenerativeAdversarialNetworks2014,
+  title = {Generative {{Adversarial Networks}}},
+  author = {Goodfellow, Ian J. and {Pouget-Abadie}, Jean and Mirza, Mehdi and Xu, Bing and {Warde-Farley}, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+  year = {2014},
+  month = jun,
+  number = {arXiv:1406.2661},
+  eprint = {1406.2661},
+  primaryclass = {stat},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1406.2661},
+  urldate = {2024-12-01},
+  abstract = {We propose a new framework for estimating generative models via an adversarial process, in which we simultaneously train two models: a generative model G that captures the data distribution, and a discriminative model D that estimates the probability that a sample came from the training data rather than G. The training procedure for G is to maximize the probability of D making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions G and D, a unique solution exists, with G recovering the training data distribution and D equal to 1/2 everywhere. In the case where G and D are defined by multilayer perceptrons, the entire system can be trained with backpropagation. There is no need for any Markov chains or unrolled approximate inference networks during either training or generation of samples. Experiments demonstrate the potential of the framework through qualitative and quantitative evaluation of the generated samples.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning}
 }
 
 @misc{GoogleGemma2bHugging2024,
@@ -257,14 +340,6 @@
   abstract = {Since I'm excited by the incredible capabilities which technologies like ChatGPT and Bard provide, I'm trying to understand better how they work. This post summarizes my current understanding about foundation models, transformers, BERT and GPT.},
   howpublished = {https://heidloff.net/article/foundation-models-transformers-bert-and-gpt/},
   langid = {english}
-}
-
-@misc{HighResolutionImageSynthesis,
-  title = {High-{{Resolution Image Synthesis}} with {{Latent Diffusion Models}}},
-  journal = {Computer Vision \& Learning Group},
-  urldate = {2024-11-30},
-  abstract = {By decomposing the image formation process into a sequential application of denoising autoencoders, diffusion models (DMs) achieve state-of-the-art synthesis results on image data and beyond. Stable diffusion.},
-  langid = {american}
 }
 
 @misc{hoffmannTrainingComputeOptimalLarge2022a,
@@ -429,6 +504,16 @@
   urldate = {2024-11-02}
 }
 
+@article{kingmaAutoencodingVariationalBayes2013,
+  title = {Auto-Encoding Variational Bayes},
+  author = {Kingma, Diederik P.},
+  year = {2013},
+  journal = {arXiv preprint arXiv:1312.6114},
+  eprint = {1312.6114},
+  urldate = {2024-12-01},
+  archiveprefix = {arXiv}
+}
+
 @article{klingerAutomaticEmotionDetection2016a,
   title = {Automatic {{Emotion Detection}} for {{Quantitative Literary Studies}}},
   author = {Klinger, Roman and Suliya, Surayya Samat and Reiter, Nils},
@@ -519,6 +604,16 @@
   keywords = {Computation and Language (cs.CL),FOS: Computer and information sciences}
 }
 
+@misc{Llama32Revolutionizing,
+  title = {Llama 3.2: {{Revolutionizing}} Edge {{AI}} and Vision with Open, Customizable Models},
+  shorttitle = {Llama 3.2},
+  journal = {Meta AI},
+  urldate = {2024-12-01},
+  abstract = {Today, we're releasing Llama 3.2, which includes small and medium-sized vision LLMs, and lightweight, text-only models that fit onto edge and mobile devices.},
+  howpublished = {https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/},
+  langid = {english}
+}
+
 @misc{LLMAgentsNextra2024,
   title = {{{LLM Agents}} -- {{Nextra}}},
   year = {2024},
@@ -600,6 +695,37 @@
   urldate = {2024-06-13}
 }
 
+@inproceedings{radfordLearningTransferableVisual2021,
+  title = {Learning {{Transferable Visual Models From Natural Language Supervision}}},
+  booktitle = {Proceedings of the 38th {{International Conference}} on {{Machine Learning}}},
+  author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
+  year = {2021},
+  month = jul,
+  pages = {8748--8763},
+  publisher = {PMLR},
+  issn = {2640-3498},
+  urldate = {2024-11-30},
+  abstract = {State-of-the-art computer vision systems are trained to predict a fixed set of predetermined object categories. This restricted form of supervision limits their generality and usability since additional labeled data is needed to specify any other visual concept. Learning directly from raw text about images is a promising alternative which leverages a much broader source of supervision. We demonstrate that the simple pre-training task of predicting which caption goes with which image is an efficient and scalable way to learn SOTA image representations from scratch on a dataset of 400 million (image, text) pairs collected from the internet. After pre-training, natural language is used to reference learned visual concepts (or describe new ones) enabling zero-shot transfer of the model to downstream tasks. We study the performance of this approach by benchmarking on over 30 different existing computer vision datasets, spanning tasks such as OCR, action recognition in videos, geo-localization, and many types of fine-grained object classification. The model transfers non-trivially to most tasks and is often competitive with a fully supervised baseline without the need for any dataset specific training. For instance, we match the accuracy of the original ResNet-50 on ImageNet zero-shot without needing to use any of the 1.28 million training examples it was trained on.},
+  langid = {english}
+}
+
+@misc{rameshZeroShotTexttoImageGeneration2021,
+  title = {Zero-{{Shot Text-to-Image Generation}}},
+  author = {Ramesh, Aditya and Pavlov, Mikhail and Goh, Gabriel and Gray, Scott and Voss, Chelsea and Radford, Alec and Chen, Mark and Sutskever, Ilya},
+  year = {2021},
+  month = feb,
+  number = {arXiv:2102.12092},
+  eprint = {2102.12092},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2102.12092},
+  urldate = {2024-11-30},
+  abstract = {Text-to-image generation has traditionally focused on finding better modeling assumptions for training on a fixed dataset. These assumptions might involve complex architectures, auxiliary losses, or side information such as object part labels or segmentation masks supplied during training. We describe a simple approach for this task based on a transformer that autoregressively models the text and image tokens as a single stream of data. With sufficient data and scale, our approach is competitive with previous domain-specific models when evaluated in a zero-shot fashion.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning}
+}
+
 @misc{reimersMakingMonolingualSentence2020a,
   title = {Making {{Monolingual Sentence Embeddings Multilingual}} Using {{Knowledge Distillation}}},
   author = {Reimers, Nils and Gurevych, Iryna},
@@ -638,6 +764,22 @@
   booktitle = {Proceedings of the {{Seventh International Conference}} on {{Language Resources}} and {{Evaluation}} ({{LREC}}'10)},
   author = {Remus, Robert and Quasthoff, Uwe and Heyer, Gerhard},
   year = {2010}
+}
+
+@misc{rombachHighResolutionImageSynthesis2022,
+  title = {High-{{Resolution Image Synthesis}} with {{Latent Diffusion Models}}},
+  author = {Rombach, Robin and Blattmann, Andreas and Lorenz, Dominik and Esser, Patrick and Ommer, Bj{\"o}rn},
+  year = {2022},
+  month = apr,
+  number = {arXiv:2112.10752},
+  eprint = {2112.10752},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2112.10752},
+  urldate = {2024-12-01},
+  abstract = {By decomposing the image formation process into a sequential application of denoising autoencoders, diffusion models (DMs) achieve state-of-the-art synthesis results on image data and beyond. Additionally, their formulation allows for a guiding mechanism to control the image generation process without retraining. However, since these models typically operate directly in pixel space, optimization of powerful DMs often consumes hundreds of GPU days and inference is expensive due to sequential evaluations. To enable DM training on limited computational resources while retaining their quality and flexibility, we apply them in the latent space of powerful pretrained autoencoders. In contrast to previous work, training diffusion models on such a representation allows for the first time to reach a near-optimal point between complexity reduction and detail preservation, greatly boosting visual fidelity. By introducing cross-attention layers into the model architecture, we turn diffusion models into powerful and flexible generators for general conditioning inputs such as text or bounding boxes and high-resolution synthesis becomes possible in a convolutional manner. Our latent diffusion models (LDMs) achieve a new state of the art for image inpainting and highly competitive performance on various tasks, including unconditional image generation, semantic scene synthesis, and super-resolution, while significantly reducing computational requirements compared to pixel-based DMs. Code is available at https://github.com/CompVis/latent-diffusion .},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition}
 }
 
 @misc{sardanaChinchillaOptimalAccountingInference2024,
@@ -711,6 +853,16 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
 }
 
+@inproceedings{sohl-dicksteinDeepUnsupervisedLearning2015,
+  title = {Deep Unsupervised Learning Using Nonequilibrium Thermodynamics},
+  booktitle = {International Conference on Machine Learning},
+  author = {{Sohl-Dickstein}, Jascha and Weiss, Eric and Maheswaranathan, Niru and Ganguli, Surya},
+  year = {2015},
+  pages = {2256--2265},
+  publisher = {PMLR},
+  urldate = {2024-11-30}
+}
+
 @article{songScoreBasedGenerativeModeling2020,
   title = {Score-{{Based Generative Modeling}} through {{Stochastic Differential Equations}}},
   author = {Song, Yang and {Sohl-Dickstein}, Jascha Narain and Kingma, Diederik P. and Kumar, Abhishek and Ermon, Stefano and Poole, Ben},
@@ -749,7 +901,7 @@
   doi = {10.1145/3589335.3651526},
   urldate = {2024-11-17},
   abstract = {Cosine-similarity is the cosine of the angle between two vectors, or equivalently the dot product between their normalizations. A popular application is to quantify semantic similarity between high-dimensional objects by applying cosine-similarity to a learned low-dimensional feature embedding. This can work better but sometimes also worse than the unnormalized dot-product between embedded vectors in practice. To gain insight into this empirical observation, we study embeddings derived from regularized linear models, where closed-form solutions facilitate analytical insights. We derive analytically how cosine-similarity can yield arbitrary and therefore meaningless 'similarities.' For some linear models the similarities are not even unique, while for others they are implicitly controlled by the regularization. We discuss implications beyond linear models: a combination of different regularizations are employed when learning deep models; these have implicit and unintended effects when taking cosine-similarities of the resulting embeddings, rendering results opaque and possibly arbitrary. Based on these insights, we caution against blindly using cosine-similarity and outline alternatives.},
-  isbn = {9798400701726}
+  isbn = {979-8-4007-0172-6}
 }
 
 @misc{touvronLLaMAOpenEfficient2023a,
