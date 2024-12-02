@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Finetuning Approaches – Generative AI</title>
+<title>AI image generation – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/rank_adaptation.html" rel="next">
-<link href="../content/generation_in_agent_pipelines.html" rel="prev">
+<link href="../content/gans_and_augmentation.html" rel="next">
+<link href="../content/agent_interaction.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/finetuning_approaches.html">Finetuning</a></li><li class="breadcrumb-item"><a href="../content/finetuning_approaches.html"><span class="chapter-title">Finetuning Approaches</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/diff_models.html"><span class="chapter-title">AI image generation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -187,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/diff_models.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI image generation</span></a>
+  <a href="../content/diff_models.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">AI image generation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -213,7 +213,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Finetuning Approaches</span></a>
+  <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Finetuning Approaches</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -232,12 +232,18 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title"><img src="../imgs/cover.jpg" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
-Finetuning Approaches<br>
+AI image generation<br>
 </h3>
    
   <ul>
-  <li><a href="#basics-of-finetuning-strategies" id="toc-basics-of-finetuning-strategies" class="nav-link active" data-scroll-target="#basics-of-finetuning-strategies">Basics of Finetuning strategies</a></li>
-  <li><a href="#alignment-and-finetuning-of-llms" id="toc-alignment-and-finetuning-of-llms" class="nav-link" data-scroll-target="#alignment-and-finetuning-of-llms">Alignment and Finetuning of (L)LMs</a></li>
+  <li><a href="#ai-image-generator-basics" id="toc-ai-image-generator-basics" class="nav-link active" data-scroll-target="#ai-image-generator-basics">AI image generator basics</a></li>
+  <li><a href="#variational-autoencoder-vae" id="toc-variational-autoencoder-vae" class="nav-link" data-scroll-target="#variational-autoencoder-vae">Variational Autoencoder (VAE)</a></li>
+  <li><a href="#diffusion-models" id="toc-diffusion-models" class="nav-link" data-scroll-target="#diffusion-models">Diffusion Models</a></li>
+  <li><a href="#multimodal-models" id="toc-multimodal-models" class="nav-link" data-scroll-target="#multimodal-models">Multimodal Models</a>
+  <ul class="collapse">
+  <li><a href="#unidiffuser" id="toc-unidiffuser" class="nav-link" data-scroll-target="#unidiffuser">Unidiffuser</a></li>
+  <li><a href="#llama-3.2" id="toc-llama-3.2" class="nav-link" data-scroll-target="#llama-3.2">Llama 3.2</a></li>
+  </ul></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -245,9 +251,9 @@ Finetuning Approaches<br>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/finetuning_approaches.html">Finetuning</a></li><li class="breadcrumb-item"><a href="../content/finetuning_approaches.html"><span class="chapter-title">Finetuning Approaches</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/diff_models.html"><span class="chapter-title">AI image generation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Finetuning Approaches</span></h1>
+<h1 class="title"><span class="chapter-title">AI image generation</span></h1>
 </div>
 
 
@@ -264,11 +270,26 @@ Finetuning Approaches<br>
 </header>
 
 
-<section id="basics-of-finetuning-strategies" class="level2">
-<h2 class="anchored" data-anchor-id="basics-of-finetuning-strategies">Basics of Finetuning strategies</h2>
+<p>This and the following chapters will focus on the topic of AI image generation. This is a very broad field, so we will start with some basics and then move on to more specific topics. We will also try to give an overview of the current state of the art in this field.</p>
+<section id="ai-image-generator-basics" class="level2">
+<h2 class="anchored" data-anchor-id="ai-image-generator-basics">AI image generator basics</h2>
+<p>You can not talk about the history of AI image generation without talking about GANs. To have a nicer chunking of the courses contents though, we will talk about them in the chapter <span class="quarto-unresolved-ref">?sec-GANS</span> and focus on more recent approaches here. GANs are the architecture behind the page <a href="www.thispersondoesnotexist.com">thispersondoesnotexist.com</a> and its <a href="https://thisxdoesnotexist.com/">clones</a>.</p>
+<p>Though the results this family of models could produce, they have some core limitations. 1) They are notoriously hard to train. 2) They are notoriously hard to control. 3) They are notoriously hard to scale.</p>
 </section>
-<section id="alignment-and-finetuning-of-llms" class="level2">
-<h2 class="anchored" data-anchor-id="alignment-and-finetuning-of-llms">Alignment and Finetuning of (L)LMs</h2>
+<section id="variational-autoencoder-vae" class="level2">
+<h2 class="anchored" data-anchor-id="variational-autoencoder-vae">Variational Autoencoder (VAE)</h2>
+</section>
+<section id="diffusion-models" class="level2">
+<h2 class="anchored" data-anchor-id="diffusion-models">Diffusion Models</h2>
+</section>
+<section id="multimodal-models" class="level2">
+<h2 class="anchored" data-anchor-id="multimodal-models">Multimodal Models</h2>
+<section id="unidiffuser" class="level3">
+<h3 class="anchored" data-anchor-id="unidiffuser">Unidiffuser</h3>
+</section>
+<section id="llama-3.2" class="level3">
+<h3 class="anchored" data-anchor-id="llama-3.2">Llama 3.2</h3>
+</section>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
@@ -714,13 +735,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/generation_in_agent_pipelines.html" class="pagination-link" aria-label="AI image generation III">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">AI image generation III</span></span>
+      <a href="../content/agent_interaction.html" class="pagination-link" aria-label="Agent interactions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Agent interactions</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/rank_adaptation.html" class="pagination-link" aria-label="Rank adaptation">
-        <span class="nav-page-text"><span class="chapter-title">Rank adaptation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/gans_and_augmentation.html" class="pagination-link" aria-label="AI image generation II">
+        <span class="nav-page-text"><span class="chapter-title">AI image generation II</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

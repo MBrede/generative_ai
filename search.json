@@ -24,7 +24,7 @@
     "href": "index.html#schedule",
     "title": "Generative AI",
     "section": "Schedule:",
-    "text": "Schedule:\n\nCourse schedule\n\n\n\n\n\n\n\n\n\nNumber:\nCW:\nDate:\nTitle:\nTopics:\n\n\n\n\n1\n46\n12.11.\nGetting started with (L)LMs\nLanguage Model Basics\n\n\n\n\n\n\nChoosing open source models\n\n\n\n\n\n\nBasics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)\n\n\n2\n46\n13.11.\nPrompting\nPrompting strategies\n\n\n\n\n\n\nGeneration of synthetic texts\n\n\n3\n47\n19.11.\nAgent basics\nFundamentals of agents and chain-of-thought prompting\n\n\n\n\n\n\nExamples of agent-frameworks (Llamaindex, LangChain & Haystack)\n\n\n4\n47\n20.11.\nEmbedding-based agent-systems\nSemantic embeddings and vector stores\n\n\n\n\n\n\nRetrieval augmented and interleaved generation\n\n\n5\n48\n26.11.\nFunction Calling\nCode generation and function calling\n\n\n\n\n\n\nData analysis\n\n\n6\n48\n27.11.\nAgent interaction\nConstitutional AI Tuning\n\n\n\n\n\n\nPreventing prompt injections\n\n\n7\n49\n3.12.\nAI image generation I\nAI image generator basics\n\n\n\n\n\n\nBasics of using Open Source AI image generation models\n\n\n\n\n\n\nGenerative Adversarial Networks (GANs)\n\n\n8\n49\n4.12.\nAI image generation II\nMultimodal embeddings\n\n\n\n\n\n\nVariational Autoencoders / Diffusion Models\n\n\n9\n50\n10.12.\nAugmentation of image datasets\n(Generative) approaches for image dataset augmentation\n\n\n10\n50\n11.12.\nFinetuning Basics\nBasics of Finetuning strategies\n\n\n\n\n\n\nAlignment and Finetuning of (L)LMs\n\n\n11\n51\n17.12.\nRank adaptation\nFundamentals of High and Low-Rank Adaptation of Language and Diffusion Models\n\n\n\n\n\n\n(Q)LoRA fine-tuning using Unsloth\n\n\n12\n51\n18.12.\nProject presentations",
+    "text": "Schedule:\n\nCourse schedule\n\n\n\n\n\n\n\n\n\nNumber:\nCW:\nDate:\nTitle:\nTopics:\n\n\n\n\n1\n46\n12.11.\nGetting started with (L)LMs\nLanguage Model Basics\n\n\n\n\n\n\nChoosing open source models\n\n\n\n\n\n\nBasics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)\n\n\n2\n46\n13.11.\nPrompting\nPrompting strategies\n\n\n\n\n\n\nGeneration of synthetic texts\n\n\n3\n47\n19.11.\nAgent basics\nFundamentals of agents and chain-of-thought prompting\n\n\n\n\n\n\nExamples of agent-frameworks (Llamaindex, LangChain & Haystack)\n\n\n4\n47\n20.11.\nEmbedding-based agent-systems\nSemantic embeddings and vector stores\n\n\n\n\n\n\nRetrieval augmented and interleaved generation\n\n\n5\n48\n26.11.\nFunction Calling\nCode generation and function calling\n\n\n6\n48\n27.11.\nAgent interaction\nLLM as a Judge\n\n\n\n\n\n\nConstitutional AI\n\n\n7\n49\n3.12.\nAI image generation I\nAI image generator basics\n\n\n\n\n\n\nDiffusion Models and Variational Autoencoders\n\n\n\n\n\n\nMultimodal models\n\n\n8\n49\n4.12.\nAI image generation II\nGenerative Adversarial Networks (GANs)\n\n\n\n\n\n\n(Generative) approaches for image dataset augmentation\n\n\n9\n50\n10.12.\nAI image generation III\nUsing Open Source AI image generation models\n\n\n\n\n\n\nAI image generators in agent systems\n\n\n10\n50\n11.12.\nFinetuning Basics\nBasics of Finetuning strategies\n\n\n\n\n\n\nAlignment and Finetuning of (L)LMs\n\n\n11\n51\n17.12.\nRank adaptation\nFundamentals of High and Low-Rank Adaptation of Language and Diffusion Models\n\n\n\n\n\n\n(Q)LoRA fine-tuning using Unsloth\n\n\n12\n51\n18.12.\nProject presentations",
     "crumbs": [
       "Introduction"
     ]
@@ -448,69 +448,135 @@
     ]
   },
   {
-    "objectID": "content/generator_basics.html",
-    "href": "content/generator_basics.html",
+    "objectID": "content/diff_models.html",
+    "href": "content/diff_models.html",
     "title": "AI image generation",
+    "section": "",
+    "text": "AI image generator basics\nThis and the following chapters will focus on the topic of AI image generation. This is a very broad field, so we will start with some basics and then move on to more specific topics. We will also try to give an overview of the current state of the art in this field.\nYou can not talk about the history of AI image generation without talking about GANs. To have a nicer chunking of the courses contents though, we will talk about them in the chapter ?sec-GANS and focus on more recent approaches here. GANs are the architecture behind the page thispersondoesnotexist.com and its clones.\nThough the results this family of models could produce, they have some core limitations. 1) They are notoriously hard to train. 2) They are notoriously hard to control. 3) They are notoriously hard to scale.",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/diff_models.html#variational-autoencoder-vae",
+    "href": "content/diff_models.html#variational-autoencoder-vae",
+    "title": "AI image generation",
+    "section": "Variational Autoencoder (VAE)",
+    "text": "Variational Autoencoder (VAE)",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/diff_models.html#diffusion-models",
+    "href": "content/diff_models.html#diffusion-models",
+    "title": "AI image generation",
+    "section": "Diffusion Models",
+    "text": "Diffusion Models",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/diff_models.html#multimodal-models",
+    "href": "content/diff_models.html#multimodal-models",
+    "title": "AI image generation",
+    "section": "Multimodal Models",
+    "text": "Multimodal Models\n\nUnidiffuser\n\n\nLlama 3.2",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/diff_models.html#further-readings",
+    "href": "content/diff_models.html#further-readings",
+    "title": "AI image generation",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+    ]
+  },
+  {
+    "objectID": "content/gans_and_augmentation.html",
+    "href": "content/gans_and_augmentation.html",
+    "title": "AI image generation II",
+    "section": "",
+    "text": "Generative Adversial Networks (GAN)",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>AI image generation II</span>"
+    ]
+  },
+  {
+    "objectID": "content/gans_and_augmentation.html#generative-approaches-for-image-dataset-augmentation",
+    "href": "content/gans_and_augmentation.html#generative-approaches-for-image-dataset-augmentation",
+    "title": "AI image generation II",
+    "section": "(Generative) approaches for image dataset augmentation",
+    "text": "(Generative) approaches for image dataset augmentation",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>AI image generation II</span>"
+    ]
+  },
+  {
+    "objectID": "content/gans_and_augmentation.html#further-readings",
+    "href": "content/gans_and_augmentation.html#further-readings",
+    "title": "AI image generation II",
+    "section": "Further Readings",
+    "text": "Further Readings",
+    "crumbs": [
+      "Image Generation",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>AI image generation II</span>"
+    ]
+  },
+  {
+    "objectID": "content/generation_in_agent_pipelines.html",
+    "href": "content/generation_in_agent_pipelines.html",
+    "title": "AI image generation III",
     "section": "",
     "text": "AI image generator basics",
     "crumbs": [
       "Image Generation",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"
     ]
   },
   {
-    "objectID": "content/generator_basics.html#basics-of-using-open-source-ai-image-generation-models",
-    "href": "content/generator_basics.html#basics-of-using-open-source-ai-image-generation-models",
-    "title": "AI image generation",
+    "objectID": "content/generation_in_agent_pipelines.html#basics-of-using-open-source-ai-image-generation-models",
+    "href": "content/generation_in_agent_pipelines.html#basics-of-using-open-source-ai-image-generation-models",
+    "title": "AI image generation III",
     "section": "Basics of using Open Source AI image generation models",
     "text": "Basics of using Open Source AI image generation models",
     "crumbs": [
       "Image Generation",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"
     ]
   },
   {
-    "objectID": "content/generator_basics.html#generative-adversarial-networks-gans",
-    "href": "content/generator_basics.html#generative-adversarial-networks-gans",
-    "title": "AI image generation",
+    "objectID": "content/generation_in_agent_pipelines.html#generative-adversarial-networks-gans",
+    "href": "content/generation_in_agent_pipelines.html#generative-adversarial-networks-gans",
+    "title": "AI image generation III",
     "section": "Generative Adversarial Networks (GANs)",
     "text": "Generative Adversarial Networks (GANs)",
     "crumbs": [
       "Image Generation",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"
     ]
   },
   {
-    "objectID": "content/generator_basics.html#further-readings",
-    "href": "content/generator_basics.html#further-readings",
-    "title": "AI image generation",
+    "objectID": "content/generation_in_agent_pipelines.html#further-readings",
+    "href": "content/generation_in_agent_pipelines.html#further-readings",
+    "title": "AI image generation III",
     "section": "Further Readings",
     "text": "Further Readings",
     "crumbs": [
       "Image Generation",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>AI image generation</span>"
-    ]
-  },
-  {
-    "objectID": "content/augmentation.html",
-    "href": "content/augmentation.html",
-    "title": "Augmentation of image datasets",
-    "section": "",
-    "text": "(Generative) approaches for image dataset augmentation",
-    "crumbs": [
-      "Image Generation",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Augmentation of image datasets</span>"
-    ]
-  },
-  {
-    "objectID": "content/augmentation.html#further-readings",
-    "href": "content/augmentation.html#further-readings",
-    "title": "Augmentation of image datasets",
-    "section": "Further Readings",
-    "text": "Further Readings",
-    "crumbs": [
-      "Image Generation",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Augmentation of image datasets</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"
     ]
   },
   {
@@ -521,7 +587,7 @@
     "text": "Basics of Finetuning strategies",
     "crumbs": [
       "Finetuning",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Finetuning Approaches</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Finetuning Approaches</span>"
     ]
   },
   {
@@ -532,7 +598,7 @@
     "text": "Alignment and Finetuning of (L)LMs",
     "crumbs": [
       "Finetuning",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Finetuning Approaches</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Finetuning Approaches</span>"
     ]
   },
   {
@@ -543,7 +609,7 @@
     "text": "Further Readings",
     "crumbs": [
       "Finetuning",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Finetuning Approaches</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Finetuning Approaches</span>"
     ]
   },
   {
@@ -554,7 +620,7 @@
     "text": "Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models",
     "crumbs": [
       "Finetuning",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Rank adaptation</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Rank adaptation</span>"
     ]
   },
   {
@@ -565,7 +631,7 @@
     "text": "(Q)LoRA fine-tuning using Unsloth",
     "crumbs": [
       "Finetuning",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Rank adaptation</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Rank adaptation</span>"
     ]
   },
   {
@@ -576,7 +642,7 @@
     "text": "Further Readings",
     "crumbs": [
       "Finetuning",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Rank adaptation</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Rank adaptation</span>"
     ]
   }
 ]
