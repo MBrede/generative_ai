@@ -25,7 +25,14 @@ This model was trained on a dataset containing image-caption pairs in two parts:
 The resulting 1024 image-tokens can then be fed into the decoder-Block of the VAE to generate an image.
 An illustration of the training-process can be seen in @fig-dVAE.
 
-<!-- ![Illustration of the DALL-E architecture.](../imgs/dalle_architecture.png){#fig-dVAE .enlarge-onhover} -->
+::: {#fig-dVAE}
+
+![Illustration of the DALL-E-VAE.](../imgs/dalle_vae.webp){.enlarge-onhover}
+
+![Illustration of the whole DALL-E-Stack.](../imgs/dalle_stack.webp){.enlarge-onhover}
+
+Both images are taken from @abideenHowOpenAIsDALLE2023.
+:::
 
 ### CLIP
 
