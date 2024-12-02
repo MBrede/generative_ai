@@ -81,7 +81,7 @@ This architecture has been widely adopted and is used as a foundation^[Or at lea
 
 Test out a SD-model!
 
-Use the colab-Notebook you can find [here]() to test out Stable Diffusion using the huggingface `diffusers`-module and generate some images.
+Use the [colab](https://colab.research.google.com/)-Notebook you can find [here]() to test out Stable Diffusion using the huggingface `diffusers`-module and generate some images.
 
 1. Print out the model architecture and try to map the components of the model to the description above.
 
