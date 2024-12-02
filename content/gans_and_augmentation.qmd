@@ -2,7 +2,9 @@
 toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image datasets</h3>'
 ---
 
-# Augmentation of image datasets
+# AI image generation II
+
+## Generative Adversial Networks (GAN)
 
 ## (Generative) approaches for image dataset augmentation
 

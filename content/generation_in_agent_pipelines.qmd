@@ -2,7 +2,7 @@
 toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>AI image generation</h3>'
 ---
 
-# AI image generation
+# AI image generation III
 
 ## AI image generator basics
 
