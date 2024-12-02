@@ -1,5 +1,5 @@
 ---
-toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>AI image generation</h3>'
+toc-title: '![](../imgs/diff_models.jpg){width=240px}<br> <h3>AI image generation</h3>'
 ---
 
 # AI image generation
