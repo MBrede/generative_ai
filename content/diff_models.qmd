@@ -35,7 +35,7 @@ The paper, which introduced a contrastive^[Contrastive also being the namesake o
 ![Illustration of the contrastive learning paradigm used in CLIP, taken from @radfordLearningTransferableVisual2021](../imgs/clip.png){#fig-CLIP .enlarge-onhover}
 
 A matrix of all combinations of images and text descriptions is created. The model then learns to predict the correct image for a given text description and vice versa. This is done by encoding both the image and the text into a vector space, which is then used to calculate the similarity between the two vectors.
-This is done by training both a vision- and a text-transformer as encoders to maximize the cosine similarity between the encoded image and text for each pair in the matrix and minimizing it for all other pairs.
+to do this, both a vision- and a text-transformer are trained as encoders to maximize the cosine similarity between the encoded image and text for each pair in the matrix and minimizing it for all other pairs.
 The authors also show that this method can be used to transfer the learned representations to other tasks, such as zero-shot classification.
 
 ## Diffusion Models
@@ -44,20 +44,38 @@ Though models like DALL-E and CLIP represented significant milestones in the jou
 
 The GAN-architecture (first published in 2014) was the de-facto standard for quite some time and though the central principle of their successors diffusion models was published in 2015 [@sohl-dicksteinDeepUnsupervisedLearning2015], it took until 2020 for them to beat GANs on most benchmarks [@dhariwalDiffusionModelsBeat2021].
 
-The diffusion model's central principle is the training on a sequence of gradually noised images. This is realized by systematically adding noise to an image over a series of steps, transforming the original image into pure noise. At each step, the diffusion model is then trained to reverse this process, effectively learning to denoise or reconstruct towards the original image from its noised versions^[Actually, the model is learning to predict the _noise_ in the image, not the _denoised image_ itself. This is due to some Bayes magic (namely the actually so-called re-parameterization trick [@kingmaAutoencodingVariationalBayes2013]). ]. This is illustrated in @fig-diffusion.
+The diffusion model's central principle is the training on a sequence of gradually noised images. Here's the updated snippet with the two reasons for step-by-step noise addition included:
+
+The diffusion model's central principle is training on a sequence of gradually noised images. This process involves systematically adding noise to an image over a series of steps, progressively transforming the original image into pure noise. The model is trained to reverse this process by predicting the noise added to each image, based on the current step in the noising sequence and the noisy image itself.
+
+This step-by-step noise addition serves two main purposes:
+
+* **Gradual Complexity:** By progressively corrupting the image, the model can learn to reverse the process in manageable steps, leading to a better understanding of how to reconstruct data at each stage.
+* **Mathematical Framework:** This approach aligns with the stochastic differential equation (SDE) framework, enabling the model to map the noise distribution back to the original data distribution iteratively.
+
+This approach, rather than predicting the denoised image directly, also offers practical advantages: it allows for efficient parallelization during training since the noise is parameterized by a scheduler and can be applied dynamically. This stepwise noise-addition is visually represented in @fig-diffusion.
 
 ![Illustration of the diffusion process. The first row shows a 2-d swiss roll gradually getting more noisy, the second row shows the corresponding outputs of the diffusion model. Image taken from @sohl-dicksteinDeepUnsupervisedLearning2015.](../imgs/diffusion_process.png){#fig-diffusion .enlarge-onhover}
 
 @rombachHighResolutionImageSynthesis2022 build upon this principle when suggesting their Latent Diffusion Model architecture and introduced a few key innovations to achieve their state-of-the-art results:
 
-1. They introduce a method called latent diffusion, which allows them to generate high-resolution images more efficiently by operating on a lower-dimensional representation of the image data. This is achieved by using an autoencoder (VAE) to compress the original image into a smaller latent space and then applying the diffusion process to this compressed representation. This process is built on work by @esserTamingTransformersHighResolution2021 and is conceptually similar to the dVAE-approach utilized by DALL-E 
-2. They use a denoising diffusion probabilistic model (DDPM) as the fundamental generation-process for their architecture, which allows them to generate high-quality images with fewer steps compared to previous methods. This DDPM-model is implemented as a time-conditional UNet. 
-2. To improve the quality of generated images and reduce artifacts, they additionally introduce a technique called classifier guidance. This involves using a pretrained text-to-image model (like CLIP) to guide the diffusion process towards generating images that align better with the input text prompt. This is implemented by augmenting the UNet-architecture with a cross-attention-mechanism that allows the denoising to consider additional multimodel embeddings in the denoising-process (see @fig-ldm for an illustration of the architecture).
+* They introduce a method called latent diffusion, which allows them to generate high-resolution images more efficiently by operating on a lower-dimensional representation of the image data. This is achieved by using an autoencoder (VAE) to compress the original image into a smaller latent space and then applying the diffusion process to this compressed representation. This process is built on work by @esserTamingTransformersHighResolution2021 and is conceptually similar to the dVAE-approach utilized by DALL-E.
 
+* They use a denoising diffusion probabilistic model (DDPM) as the fundamental generation process for their architecture, which allows them to generate high-quality images with fewer steps compared to previous methods. This DDPM model is implemented as a time-conditional UNet.
+
+* To improve the quality of generated images and reduce artifacts, they integrate a cross-attention mechanism into the UNet architecture. This mechanism conditions the denoising process directly on the input text embeddings, allowing the diffusion process to generate images that align better with the given text prompt. 
+
+To improve the results on inference, they additionally utilize classifier-free guidance [@hoClassifierFreeDiffusionGuidance2022], a technique where the model is run once with the prompt ("conditional on the prompt") and once with an empty pseudo-prompt ("unconditional"). A weighted combination of the conditioned and unconditioned predictions is used to enhance the alignment with the text prompt while preserving image quality. This is done using the following formula:
+
+$$
+\text{Guided Prediction} = \text{Unconditioned Prediction} + w \cdot (\text{Conditioned Prediction} - \text{Unconditioned Prediction})
+$$
+
+Where $w$ is the weight with which the conditioned prediction is preferred over the unconditioned one.
 
 ![Illustration of the Latent Diffusion Model architecture. Image taken from @rombachHighResolutionImageSynthesis2022](../imgs/ldm.png){#fig-ldm .enlarge-onhover}
 
-This architecture has been widely adopted and is used as a foundation for many state-of-the-art text-to-image models, including Stable Diffusion, as well as DALL-E 2.
+This architecture has been widely adopted and is used as a foundation^[Or at least as an orientation.] for many state-of-the-art text-to-image models, including Stable Diffusion, as well as DALL-E 2.
 
 ::: {.callout-note}
 
