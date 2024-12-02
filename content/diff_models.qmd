@@ -14,7 +14,7 @@ GANs are the architecture behind the page [thispersondoesnotexist.com](www.thisp
 
 ### DALL-E
 
-The raining position of GANs as the de-facto standard for AI image generation was challenged by the release of DALL-E by OpenAI in January 2021.
+The reigning position of GANs as the de-facto standard for AI image generation was challenged by the release of DALL-E by OpenAI in January 2021.
 DALL-E is a text-to-image model, which means that it can generate images based on a text description.
 
 This model was trained on a dataset containing image-caption pairs in two parts:
@@ -25,7 +25,7 @@ This model was trained on a dataset containing image-caption pairs in two parts:
 The resulting 1024 image-tokens can then be fed into the decoder-Block of the VAE to generate an image.
 An illustration of the training-process can be seen in @fig-dVAE.
 
-<!-- ![Illustration of the DALL-E training process.](../imgs/dalle_architecture.png){#fig-dVAE .enlarge-onhover} -->
+<!-- ![Illustration of the DALL-E architecture.](../imgs/dalle_architecture.png){#fig-dVAE .enlarge-onhover} -->
 
 ### CLIP
 
@@ -43,8 +43,6 @@ The authors also show that this method can be used to transfer the learned repre
 Though models like DALL-E and CLIP represented significant milestones in the journey of text-to-image generation, the field continued to evolve rapidly, leading to the advent of Stable Diffusion. This evolution was partly inspired by the need for more control over the generation process and a desire for higher-quality outputs at lower computational costs.
 
 The GAN-architecture (first published in 2014) was the de-facto standard for quite some time and though the central principle of their successors diffusion models was published in 2015 [@sohl-dicksteinDeepUnsupervisedLearning2015], it took until 2020 for them to beat GANs on most benchmarks [@dhariwalDiffusionModelsBeat2021].
-
-The diffusion model's central principle is the training on a sequence of gradually noised images. Here's the updated snippet with the two reasons for step-by-step noise addition included:
 
 The diffusion model's central principle is training on a sequence of gradually noised images. This process involves systematically adding noise to an image over a series of steps, progressively transforming the original image into pure noise. The model is trained to reverse this process by predicting the noise added to each image, based on the current step in the noising sequence and the noisy image itself.
 
@@ -87,7 +85,7 @@ Use the colab-Notebook you can find [here]() to test out Stable Diffusion using 
 
 1. Print out the model architecture and try to map the components of the model to the description above.
 
-2. Generate some images using different prompts and seeds. What do you observe?
+2. Generate some images using different prompts, guidance_scales and seeds. What do you observe?
 
 3. There are _many_ pages with tips on how to "correctly" prompt SD-models to improve their performance. Find one and test the described tips out. What do you find?
 
@@ -118,10 +116,9 @@ These embeddings are then used to train a U-ViT [@baoAllAreWorth2022] model, whi
 
 ## 📝 Task 
 
-Use [this]() colab notebook to test out Unidiffuser using the huggingface `diffusers`-module and generate some images and text.
+Use the same colab-notebook as before to test out Unidiffuser using the huggingface `diffusers`-module and generate some images and text.
 
-Try the tips you tested on the basic SD-model and test whether the model accurately generates descriptions for you generated images.
-
+Try the tips you tested on the basic SD-model and test whether the model accurately generates descriptions for your generated images.
 
 Present your results of both tasks to the course and upload your adapted notebook to moodle.
 :::
@@ -143,5 +140,7 @@ The encoder and adapter were then trained using image-text pairs to correctly ge
 * [This](https://medium.com/@zaiinn440/how-openais-dall-e-works-da24ac6c12fa9) Medium-article about how the first DALL-E worked
 
 * The tutorial-paper by @doerschTutorialVariationalAutoencoders2021 about the intuition and mathematics of VAEs
+
+* Computerphile did some very nice videos about [SD](https://www.youtube.com/watch?v=1CIpzeNxIhU) and [CLIP](https://www.youtube.com/watch?v=KcSXcpluDe4)
 
 ## References
