@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -70,11 +90,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -236,20 +285,24 @@ AI image generation<br>
 </h3>
    
   <ul>
-  <li><a href="#ai-image-generator-basics" id="toc-ai-image-generator-basics" class="nav-link active" data-scroll-target="#ai-image-generator-basics">AI image generator basics</a></li>
-  <li><a href="#variational-autoencoder-vae" id="toc-variational-autoencoder-vae" class="nav-link" data-scroll-target="#variational-autoencoder-vae">Variational Autoencoder (VAE)</a></li>
+  <li><a href="#ai-image-generator-basics" id="toc-ai-image-generator-basics" class="nav-link active" data-scroll-target="#ai-image-generator-basics">AI image generator basics</a>
+  <ul class="collapse">
+  <li><a href="#dall-e" id="toc-dall-e" class="nav-link" data-scroll-target="#dall-e">DALL-E</a></li>
+  <li><a href="#clip" id="toc-clip" class="nav-link" data-scroll-target="#clip">CLIP</a></li>
+  </ul></li>
   <li><a href="#diffusion-models" id="toc-diffusion-models" class="nav-link" data-scroll-target="#diffusion-models">Diffusion Models</a></li>
   <li><a href="#multimodal-models" id="toc-multimodal-models" class="nav-link" data-scroll-target="#multimodal-models">Multimodal Models</a>
   <ul class="collapse">
   <li><a href="#unidiffuser" id="toc-unidiffuser" class="nav-link" data-scroll-target="#unidiffuser">Unidiffuser</a></li>
   <li><a href="#llama-3.2" id="toc-llama-3.2" class="nav-link" data-scroll-target="#llama-3.2">Llama 3.2</a></li>
   </ul></li>
-  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further Reading</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/diff_models.html"><span class="chapter-title">AI image generation</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -271,31 +324,217 @@ AI image generation<br>
 
 
 <p>This and the following chapters will focus on the topic of AI image generation. This is a very broad field, so we will start with some basics and then move on to more specific topics. We will also try to give an overview of the current state of the art in this field.</p>
-<section id="ai-image-generator-basics" class="level2">
+<section id="ai-image-generator-basics" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="ai-image-generator-basics">AI image generator basics</h2>
-<p>You can not talk about the history of AI image generation without talking about GANs. To have a nicer chunking of the courses contents though, we will talk about them in the chapter <span class="quarto-unresolved-ref">?sec-GANS</span> and focus on more recent approaches here. GANs are the architecture behind the page <a href="www.thispersondoesnotexist.com">thispersondoesnotexist.com</a> and its <a href="https://thisxdoesnotexist.com/">clones</a>.</p>
-<p>Though the results this family of models could produce, they have some core limitations. 1) They are notoriously hard to train. 2) They are notoriously hard to control. 3) They are notoriously hard to scale.</p>
+<p>You can not talk about the history of AI image generation without talking about GANs <span class="citation" data-cites="goodfellowGenerativeAdversarialNetworks2014">(<a href="#ref-goodfellowGenerativeAdversarialNetworks2014" role="doc-biblioref">Goodfellow et al., 2014</a>)</span>. To have a nicer chunking of the courses contents though, we will talk about them in the chapter <a href="gans_and_augmentation.html" class="quarto-xref"><span>AI image generation II</span></a> and focus on more recent approaches here. GANs are the architecture behind the page <a href="www.thispersondoesnotexist.com">thispersondoesnotexist.com</a> and its <a href="https://thisxdoesnotexist.com/">clones</a>.</p>
+<section id="dall-e" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="dall-e">DALL-E</h3>
+<p>The reigning position of GANs as the de-facto standard for AI image generation was challenged by the release of DALL-E by OpenAI in January 2021. DALL-E is a text-to-image model, which means that it can generate images based on a text description.</p>
+<p>This model was trained on a dataset containing image-caption pairs in two parts:</p>
+<ol type="1">
+<li>A Variational Autoencoder (VAE)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> to compress the image data into a latent space. This means, that each image was compressed into a 32x32 grid, for which each grid cell was encoded as a discrete probability distribution with 8192 dimensions. This latent “token”-space is, although the architecture is pretty different, quite close to what our text-transformers outputted in the MLM-task.</li>
+<li>A Transformer to learn the relationship between text-captions and the latent space. This was done by encoding images using the pretrained VAE und argmax choosing the 32x32-token-representation of the image. The text-captions were limited to 256 tokens and concatenated with the 1024-dimensional image-tokens. The model is then trained to predict the next token in the sequence, which is either a text or an image token, similarly to the learning-paradigm we discussed when talking about the transformer-training.</li>
+</ol>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Since the latent space these images are compressed to is of a defined set of classes, the authors call the model a discrete VAE which makes a lot of sense.</p></div></div><p>The resulting 1024 image-tokens can then be fed into the decoder-Block of the VAE to generate an image. An illustration of the training-process can be seen in <a href="#fig-dVAE" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>.</p>
+<div id="fig-dVAE" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dVAE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/dalle_vae.webp" class="enlarge-onhover img-fluid figure-img"></p>
+<figcaption>Illustration of the DALL-E-VAE.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/dalle_stack.webp" class="enlarge-onhover img-fluid figure-img"></p>
+<figcaption>Illustration of the whole DALL-E-Stack.</figcaption>
+</figure>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dVAE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;9.1: Both images are taken from <span class="citation" data-cites="abideenHowOpenAIsDALLE2023">Abideen (<a href="#ref-abideenHowOpenAIsDALLE2023" role="doc-biblioref">2023</a>)</span>.
+</figcaption>
+</figure>
+</div>
 </section>
-<section id="variational-autoencoder-vae" class="level2">
-<h2 class="anchored" data-anchor-id="variational-autoencoder-vae">Variational Autoencoder (VAE)</h2>
+<section id="clip" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="clip">CLIP</h3>
+<p>Close to the release of DALL-E, the team at OpenAI did also publish CLIP <span class="citation" data-cites="radfordLearningTransferableVisual2021">(<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">Radford et al., 2021</a>)</span>. The paper, which introduced a contrastive<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> method to learn visual representations from images and text descriptions, bridged the gap between image and text embeddings. This contrastive principle is illustrated in <a href="#fig-CLIP" class="quarto-xref">Figure&nbsp;<span>9.2</span></a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Contrastive also being the namesake of the method (Contrastive Language-Image Pre-training)</p></div></div><div id="fig-CLIP" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-CLIP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/clip.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CLIP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;9.2: Illustration of the contrastive learning paradigm used in CLIP, taken from <span class="citation" data-cites="radfordLearningTransferableVisual2021">Radford et al. (<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">2021</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>A matrix of all combinations of images and text descriptions is created. The model then learns to predict the correct image for a given text description and vice versa. This is done by encoding both the image and the text into a vector space, which is then used to calculate the similarity between the two vectors. to do this, both a vision- and a text-transformer are trained as encoders to maximize the cosine similarity between the encoded image and text for each pair in the matrix and minimizing it for all other pairs. The authors also show that this method can be used to transfer the learned representations to other tasks, such as zero-shot classification.</p>
 </section>
-<section id="diffusion-models" class="level2">
+</section>
+<section id="diffusion-models" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="diffusion-models">Diffusion Models</h2>
+<p>Though models like DALL-E and CLIP represented significant milestones in the journey of text-to-image generation, the field continued to evolve rapidly, leading to the advent of Stable Diffusion. This evolution was partly inspired by the need for more control over the generation process and a desire for higher-quality outputs at lower computational costs.</p>
+<p>The GAN-architecture (first published in 2014) was the de-facto standard for quite some time and though the central principle of their successors diffusion models was published in 2015 <span class="citation" data-cites="sohl-dicksteinDeepUnsupervisedLearning2015">(<a href="#ref-sohl-dicksteinDeepUnsupervisedLearning2015" role="doc-biblioref">Sohl-Dickstein et al., 2015</a>)</span>, it took until 2020 for them to beat GANs on most benchmarks <span class="citation" data-cites="dhariwalDiffusionModelsBeat2021">(<a href="#ref-dhariwalDiffusionModelsBeat2021" role="doc-biblioref">Dhariwal &amp; Nichol, 2021</a>)</span>.</p>
+<p>The diffusion model’s central principle is training on a sequence of gradually noised images. This process involves systematically adding noise to an image over a series of steps, progressively transforming the original image into pure noise. The model is trained to reverse this process by predicting the noise added to each image, based on the current step in the noising sequence and the noisy image itself.</p>
+<p>This step-by-step noise addition serves two main purposes:</p>
+<ul>
+<li><strong>Gradual Complexity:</strong> By progressively corrupting the image, the model can learn to reverse the process in manageable steps, leading to a better understanding of how to reconstruct data at each stage.</li>
+<li><strong>Mathematical Framework:</strong> This approach aligns with the stochastic differential equation (SDE) framework, enabling the model to map the noise distribution back to the original data distribution iteratively.</li>
+</ul>
+<p>This approach, rather than predicting the denoised image directly, also offers practical advantages: it allows for efficient parallelization during training since the noise is parameterized by a scheduler and can be applied dynamically. This stepwise noise-addition is visually represented in <a href="#fig-diffusion" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>.</p>
+<div id="fig-diffusion" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-diffusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/diffusion_process.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diffusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;9.3: Illustration of the diffusion process. The first row shows a 2-d swiss roll gradually getting more noisy, the second row shows the corresponding outputs of the diffusion model. Image taken from <span class="citation" data-cites="sohl-dicksteinDeepUnsupervisedLearning2015">Sohl-Dickstein et al. (<a href="#ref-sohl-dicksteinDeepUnsupervisedLearning2015" role="doc-biblioref">2015</a>)</span>.
+</figcaption>
+</figure>
+</div>
+<p><span class="citation" data-cites="rombachHighResolutionImageSynthesis2022">Rombach et al. (<a href="#ref-rombachHighResolutionImageSynthesis2022" role="doc-biblioref">2022</a>)</span> build upon this principle when suggesting their Latent Diffusion Model architecture and introduced a few key innovations to achieve their state-of-the-art results:</p>
+<ul>
+<li><p>They introduce a method called latent diffusion, which allows them to generate high-resolution images more efficiently by operating on a lower-dimensional representation of the image data. This is achieved by using an autoencoder (VAE) to compress the original image into a smaller latent space and then applying the diffusion process to this compressed representation. This process is built on work by <span class="citation" data-cites="esserTamingTransformersHighResolution2021">Esser et al. (<a href="#ref-esserTamingTransformersHighResolution2021" role="doc-biblioref">2021</a>)</span> and is conceptually similar to the dVAE-approach utilized by DALL-E.</p></li>
+<li><p>They use a denoising diffusion probabilistic model (DDPM) as the fundamental generation process for their architecture, which allows them to generate high-quality images with fewer steps compared to previous methods. This DDPM model is implemented as a time-conditional UNet.</p></li>
+<li><p>To improve the quality of generated images and reduce artifacts, they integrate a cross-attention mechanism into the UNet architecture. This mechanism conditions the denoising process directly on the input text embeddings, allowing the diffusion process to generate images that align better with the given text prompt.</p></li>
+</ul>
+<p>To improve the results on inference, they additionally utilize classifier-free guidance <span class="citation" data-cites="hoClassifierFreeDiffusionGuidance2022">(<a href="#ref-hoClassifierFreeDiffusionGuidance2022" role="doc-biblioref">Ho &amp; Salimans, 2022</a>)</span>, a technique where the model is run once with the prompt (“conditional on the prompt”) and once with an empty pseudo-prompt (“unconditional”). A weighted combination of the conditioned and unconditioned predictions is used to enhance the alignment with the text prompt while preserving image quality. This is done using the following formula:</p>
+<p><span class="math display">\[
+\text{Guided Prediction} = \text{Unconditioned Prediction} + w \cdot (\text{Conditioned Prediction} - \text{Unconditioned Prediction})
+\]</span></p>
+<p>Where <span class="math inline">\(w\)</span> is the weight with which the conditioned prediction is preferred over the unconditioned one.</p>
+<div id="fig-ldm" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ldm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/ldm.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ldm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;9.4: Illustration of the Latent Diffusion Model architecture. Image taken from <span class="citation" data-cites="rombachHighResolutionImageSynthesis2022">Rombach et al. (<a href="#ref-rombachHighResolutionImageSynthesis2022" role="doc-biblioref">2022</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>This architecture has been widely adopted and is used as a foundation<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for many state-of-the-art text-to-image models, including Stable Diffusion, as well as DALL-E 2.</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Or at least as an orientation.</p></div></div><div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Test out a SD-model!</p>
+<p>Use the <a href="https://colab.research.google.com/">colab</a>-Notebook you can find <a href="https://github.com/MBrede/generative_ai/blob/main/colab_notebooks/stable_diffusion.ipynb">here</a> to test out Stable Diffusion using the huggingface <code>diffusers</code>-module and generate some images.</p>
+<ol type="1">
+<li><p>Print out the model architecture and try to map the components of the model to the description above.</p></li>
+<li><p>Generate some images using different prompts, guidance_scales and seeds. What do you observe?</p></li>
+<li><p>There are <em>many</em> pages with tips on how to “correctly” prompt SD-models to improve their performance. Find one and test the described tips out. What do you find?</p></li>
+<li><p>Test the <code>num_inference_steps</code>-parameter. How does it affect the quality of the generated image?</p></li>
+</ol>
+</div>
+</div>
 </section>
 <section id="multimodal-models" class="level2">
 <h2 class="anchored" data-anchor-id="multimodal-models">Multimodal Models</h2>
+<p>So called multimodal models are models that are trained to fit one latent distribution for multiple modalities. This means that instead of only using the image encoder and decoder with some kind of informed diffusion model to generate images in between, encoders and decoders for multiple modalities are trained to map onto the same latent space. This results in a family of models that can take inputs in multiple modalities and create outputs in a similar fashion. There are different approaches to solve this task, of which two will be discussed in the following section</p>
 <section id="unidiffuser" class="level3">
 <h3 class="anchored" data-anchor-id="unidiffuser">Unidiffuser</h3>
+<p>One of the first multimodal models is Unidiffuser, an architecture described in <span class="citation" data-cites="baoOneTransformerFits2023">Bao et al. (<a href="#ref-baoOneTransformerFits2023" role="doc-biblioref">2023</a>)</span>. The architecture is illustrated in <a href="#fig-unidiffuser" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>.</p>
+<div id="fig-unidiffuser" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-unidiffuser-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/unidiffuser.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-unidiffuser-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;9.5: Illustration of the Unidiffuser architecture. Image taken from <span class="citation" data-cites="baoOneTransformerFits2023">Bao et al. (<a href="#ref-baoOneTransformerFits2023" role="doc-biblioref">2023</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>The model is based on a transformer-encoder and decoder that are trained to map inputs of multiple modalities onto the same latent space. In the text-image implementation, there are two encoders and two decoders. The image encoder consists of two parts. One is the VAE-encoder from Stable Diffusion, which maps the input image into a lower dimensional representation. This is appended by the CLIP-image-embedder described in <span class="citation" data-cites="radfordLearningTransferableVisual2021">Radford et al. (<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">2021</a>)</span>. The text gets also encoded by the CLIP-trained model used in Stable Diffusion.</p>
+<p>For image-decoding, the Stable Diffusion VAE-decoder is used to map the latent space back into an image. For text-decoding, a GPT-2-based <span class="citation" data-cites="radfordLanguageModelsAre2019">(<a href="#ref-radfordLanguageModelsAre2019" role="doc-biblioref">Radford et al., 2019</a>)</span>model is finetuned to take the latent space embeddings as a prefix-embedding and to autoregressively generate text. During finetuning, the CLIP-embeddings were held constant and only the GPT-2-parameters were updated. This means that the already defined latent space learned by the CLIP-model is used to map the GPT-2 decoder onto it.</p>
+<p>These embeddings are then used to train a U-ViT <span class="citation" data-cites="baoAllAreWorth2022">(<a href="#ref-baoAllAreWorth2022" role="doc-biblioref">Bao et al., 2022</a>)</span> model, which takes the concated time-step-tokens, noised text- and image-embeddings as input-tokens and outputs the estimated noise-vector for the denoising process.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the same colab-notebook as before to test out Unidiffuser using the huggingface <code>diffusers</code>-module and generate some images and text.</p>
+<p>Try the tips you tested on the basic SD-model and test whether the model accurately generates descriptions for your generated images.</p>
+<p>Present your results of both tasks to the course and upload your adapted notebook to moodle.</p>
+</div>
+</div>
 </section>
 <section id="llama-3.2" class="level3">
 <h3 class="anchored" data-anchor-id="llama-3.2">Llama 3.2</h3>
+<p>Llama 3.2 introduced image-understanding to the Llama-model family. Similarly to the decoder-training in the unidiffuser case, this was done by mapping existing embeddings onto a new latent space. Instead of finetuning a part of the model on a constant other embedding though, Meta describes a slightly different approach in their launch-blogpost <span class="citation" data-cites="Llama32Revolutionizing">(<a href="#ref-Llama32Revolutionizing" role="doc-biblioref"><span>“Llama 3.2,”</span> n.d.</a>)</span>.</p>
+<p>They describe a procedure in which they use both a pretrained image encoder as well as a fixed pretrained language model. The embeddings of both models are aligned using a special third adapter model, that builds on multiple cross-attention layers to map the encoded image onto the language models text-embedding space. The encoder and adapter were then trained using image-text pairs to correctly generate the text-labels for the images.</p>
 </section>
 </section>
-<section id="further-readings" class="level2">
-<h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
+<ul>
+<li><p><a href="https://gregorygundersen.com/blog/2018/04/29/reparameterization/">This blogpost</a> about the reparametrization trick</p></li>
+<li><p><a href="https://medium.com/@zaiinn440/how-openais-dall-e-works-da24ac6c12fa9">This</a> Medium-article about how the first DALL-E worked</p></li>
+<li><p>The tutorial-paper by <span class="citation" data-cites="doerschTutorialVariationalAutoencoders2021">Doersch (<a href="#ref-doerschTutorialVariationalAutoencoders2021" role="doc-biblioref">2021</a>)</span> about the intuition and mathematics of VAEs</p></li>
+<li><p>Computerphile did some very nice videos about <a href="https://www.youtube.com/watch?v=1CIpzeNxIhU">SD</a> and <a href="https://www.youtube.com/watch?v=KcSXcpluDe4">CLIP</a></p></li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-abideenHowOpenAIsDALLE2023" class="csl-entry" role="listitem">
+Abideen, Z. ul. (2023). How <span>OpenAI</span>’s <span>DALL-E</span> works? In <em>Medium</em>.
+</div>
+<div id="ref-baoAllAreWorth2022" class="csl-entry" role="listitem">
+Bao, F., Li, C., Cao, Y., &amp; Zhu, J. (2022). All are worth words: A vit backbone for score-based diffusion models. <em><span>NeurIPS</span> 2022 <span>Workshop</span> on <span>Score-Based Methods</span></em>.
+</div>
+<div id="ref-baoOneTransformerFits2023" class="csl-entry" role="listitem">
+Bao, F., Nie, S., Xue, K., Li, C., Pu, S., Wang, Y., Yue, G., Cao, Y., Su, H., &amp; Zhu, J. (2023). <em>One <span>Transformer Fits All Distributions</span> in <span>Multi-Modal Diffusion</span> at <span>Scale</span></em> (arXiv:2303.06555). arXiv. <a href="https://doi.org/10.48550/arXiv.2303.06555">https://doi.org/10.48550/arXiv.2303.06555</a>
+</div>
+<div id="ref-dhariwalDiffusionModelsBeat2021" class="csl-entry" role="listitem">
+Dhariwal, P., &amp; Nichol, A. (2021). Diffusion <span>Models Beat GANs</span> on <span>Image Synthesis</span>. <em>Advances in <span>Neural Information Processing Systems</span></em>, <em>34</em>, 8780–8794.
+</div>
+<div id="ref-doerschTutorialVariationalAutoencoders2021" class="csl-entry" role="listitem">
+Doersch, C. (2021). <em>Tutorial on <span>Variational Autoencoders</span></em> (arXiv:1606.05908). arXiv. <a href="https://doi.org/10.48550/arXiv.1606.05908">https://doi.org/10.48550/arXiv.1606.05908</a>
+</div>
+<div id="ref-esserTamingTransformersHighResolution2021" class="csl-entry" role="listitem">
+Esser, P., Rombach, R., &amp; Ommer, B. (2021). <em>Taming <span>Transformers</span> for <span>High-Resolution Image Synthesis</span></em> (arXiv:2012.09841). arXiv. <a href="https://doi.org/10.48550/arXiv.2012.09841">https://doi.org/10.48550/arXiv.2012.09841</a>
+</div>
+<div id="ref-goodfellowGenerativeAdversarialNetworks2014" class="csl-entry" role="listitem">
+Goodfellow, I. J., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., Courville, A., &amp; Bengio, Y. (2014). <em>Generative <span>Adversarial Networks</span></em> (arXiv:1406.2661). arXiv. <a href="https://doi.org/10.48550/arXiv.1406.2661">https://doi.org/10.48550/arXiv.1406.2661</a>
+</div>
+<div id="ref-hoClassifierFreeDiffusionGuidance2022" class="csl-entry" role="listitem">
+Ho, J., &amp; Salimans, T. (2022). <em>Classifier-<span>Free Diffusion Guidance</span></em> (arXiv:2207.12598). arXiv. <a href="https://doi.org/10.48550/arXiv.2207.12598">https://doi.org/10.48550/arXiv.2207.12598</a>
+</div>
+<div id="ref-Llama32Revolutionizing" class="csl-entry" role="listitem">
+Llama 3.2: <span>Revolutionizing</span> edge <span>AI</span> and vision with open, customizable models. (n.d.). In <em>Meta AI</em>. https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/.
+</div>
+<div id="ref-radfordLearningTransferableVisual2021" class="csl-entry" role="listitem">
+Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., Sastry, G., Askell, A., Mishkin, P., Clark, J., Krueger, G., &amp; Sutskever, I. (2021). Learning <span>Transferable Visual Models From Natural Language Supervision</span>. <em>Proceedings of the 38th <span>International Conference</span> on <span>Machine Learning</span></em>, 8748–8763.
+</div>
+<div id="ref-radfordLanguageModelsAre2019" class="csl-entry" role="listitem">
+Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., &amp; Sutskever, I. (2019). Language models are unsupervised multitask learners. <em>OpenAI Blog</em>, <em>1</em>(8), 9.
+</div>
+<div id="ref-rombachHighResolutionImageSynthesis2022" class="csl-entry" role="listitem">
+Rombach, R., Blattmann, A., Lorenz, D., Esser, P., &amp; Ommer, B. (2022). <em>High-<span>Resolution Image Synthesis</span> with <span>Latent Diffusion Models</span></em> (arXiv:2112.10752). arXiv. <a href="https://doi.org/10.48550/arXiv.2112.10752">https://doi.org/10.48550/arXiv.2112.10752</a>
+</div>
+<div id="ref-sohl-dicksteinDeepUnsupervisedLearning2015" class="csl-entry" role="listitem">
+Sohl-Dickstein, J., Weiss, E., Maheswaranathan, N., &amp; Ganguli, S. (2015). Deep unsupervised learning using nonequilibrium thermodynamics. <em>International Conference on Machine Learning</em>, 2256–2265.
+</div>
+</div>
 </section>
+
 
 </main> <!-- /main -->
 <script>
