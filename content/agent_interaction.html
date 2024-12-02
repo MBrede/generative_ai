@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.38">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,10 +58,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e7487e7a4381536fe475b2c47bc1c20c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a4b06bbf1bc75695243c75be1d4318a3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -257,8 +257,11 @@ Agent interaction<br>
   <li><a href="#generator" id="toc-generator" class="nav-link" data-scroll-target="#generator">Generator</a></li>
   <li><a href="#reviewer" id="toc-reviewer" class="nav-link" data-scroll-target="#reviewer">Reviewer</a></li>
   <li><a href="#editor" id="toc-editor" class="nav-link" data-scroll-target="#editor">Editor</a></li>
+  <li><a href="#orchestrator" id="toc-orchestrator" class="nav-link" data-scroll-target="#orchestrator">Orchestrator</a></li>
+  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow">Workflow</a></li>
   </ul></li>
   <li><a href="#constitutional-ai-tuning" id="toc-constitutional-ai-tuning" class="nav-link" data-scroll-target="#constitutional-ai-tuning">Constitutional AI Tuning</a></li>
+  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -316,28 +319,31 @@ Agent interaction<br>
 <li>Drawbacks:
 <ul>
 <li>The evaluation can be very expensive, since it requires several calls to the LLM.</li>
-<li>The evaluation can be biased, since it is based on the LLMs’ own evaluation of itself.</li>
+<li>The evaluation can be biased, since it is based on the LLMs’ own evaluation of itself. Indeed many LLMs tend to like their own creations.</li>
 <li>The evaluation can be subjective, since it is based on the LLMs’ interpretation of the prompt.</li>
-<li>The evaluation can be misleading, since it is based on the LLMs’ interpretation of the generated text, which may not be the same as the human interpretation.</li>
+<li>The evaluation can be misleading, since it is based on the LLMs’ interpretation of the generated text, which may not be the same as the human interpretation. For example, many LLMs seem to prefer long answers over shorter ones.</li>
 </ul></li>
 </ul>
 </section>
 <section id="a-basic-multi-agent-system" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="a-basic-multi-agent-system">A basic multi-agent system</h2>
+<!-- TODO: add informative diagrams -->
 <p>Let us now look at a simple example of a multi-agent system. We will use the following scenario: We want to generate Anki flashcards from text.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The following is loosely based on <span class="citation" data-cites="BuildingMultiAgentFramework2024"><span>“Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>”</span> (<a href="#ref-BuildingMultiAgentFramework2024" role="doc-biblioref">2024</a>)</span>, though I took the liberty to streamline and simplify the code a bit.</p></div></div><p>To do this, we will build a multi-agent system that consists of three agents:</p>
 <ol type="1">
 <li>An Anki card generator that generates Anki flashcards from the extracted text.</li>
 <li>A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.</li>
 <li>An Editor, that generates a new set of Anki flashcards based on the reviewer’s feedback.</li>
+<li>An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop.</li>
 </ol>
-<p>We could also implement an orchestrator agent that manages the interaction between the two agents. This would allow us to add more agents in the future without having to change the code of the existing agents. We will stick with our three agents for now. <!-- 
+<p>We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation.</p>
+<!-- 
 Let us first define the cards. We will use pydantic for that. A card consists of a question, an answer and some additional information. All of these are strings. 
 
     class QACard(BaseModel):
     question: str
     answer: str
-    extra: str --></p>
+    extra: str -->
 <section id="generator" class="level3">
 <h3 class="anchored" data-anchor-id="generator">Generator</h3>
 <p>Let us first implement the Anki card generator. It will take a text as input and return a card. A system prompt for the generator could look like this:</p>
@@ -387,18 +393,19 @@ You are the Reviewer agent. Your task is to review an Anki flashcard based on th
 
 1. The card should test ONE piece of information
 2. The question must be:
-- Simple and direct
-- Testing a single fact
-- Using cloze format when appropriate
+    - Simple and direct
+    - Testing a single fact
+    - Using cloze format (cloze deletion or occlusion) when appropriate
 3. The answers must be:
-- Brief and precise
-- Limited to essential information
+    - Brief and precise
+    - Limited to essential information
 4. The extra field must include:
-- Detailed explanations
-- Examples
-- Context
+    - Detailed explanations
+    - Examples
+    - Context
+5. information should not be repeated, i.e. the extra information should not repeat the answer. 
 
-Please give detailed feedback to the card you received in natural language.</code></pre>
+Please give brief and concise feedback to the card you received in natural language. </code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -409,10 +416,11 @@ Please give detailed feedback to the card you received in natural language.</cod
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You can do it!</p>
+<p>Let’s build us a very judgemental robot!</p>
 <ol type="1">
 <li>In the same notebook, initialize a reviewer as well.</li>
-<li>Let the reviewer review the cards generated by the generator.</li>
+<li>Let the reviewer review the cards generated by the generator. You may find that the reviewer always thinks the cards are great. This happens a lot. So:</li>
+<li>Get the reviewer to actually find stuff to improve.</li>
 </ol>
 </div>
 </div>
@@ -448,15 +456,88 @@ Follow these guidelines:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You can do it!</p>
+<p>You have been edited!</p>
 <ol type="1">
 <li>In the same notebook, initialize the editor as well.</li>
 <li>Let the editor generate new cards based on the feedback from the reviewer.</li>
-<li>Get the editor to actually generate something that is different from the generators version!</li>
+<li>Get the editor to actually generate something that is different from the generators version! (Play around with models, prompts and/or input text. In this example, this only worked for me when using a weaker model as a generator and a larger one as reviewer and editor.)</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="orchestrator" class="level3">
+<h3 class="anchored" data-anchor-id="orchestrator">Orchestrator</h3>
+<p>While we’re at it, we can implement the orchestrator as well. Let us think for a moment what the orchestrators job should be. Its task should be decision making. That is, it’s the orchestrators job to decide which of the other agents to call next. It is also responsible for deciding whether the job is finished or not, i.e.&nbsp;whether to call any more agents. In terms of input and output, the orchestrator should get a current state of affairs along with the current chat history and output a decision. So the output can be one of the other agents or a stop signal.</p>
+<p>An example prompt for our case would be:</p>
+<pre><code>You are the Orchestrator agent. Your task is to coordinate the interaction between all agents to create high-quality flashcards.
+
+Available agents:
+* Generator - Creates flashcards
+* Reviewer - Improves card quality
+* Editor
+
+Decision Guidelines:
+- Use Generator to create cards
+- Use Reviewer to generate feedback
+- Use Editor to improve cards based on feedback.
+- Choose END when the cards are ready
+
+Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END")</code></pre>
+</section>
+<section id="workflow" class="level3">
+<h3 class="anchored" data-anchor-id="workflow">Workflow</h3>
+<p>Now, all we have to do is integrate our agents into a pipeline. The basic idea is to call the orchestrator at each step and let it decide which agent to call next or wether to stop. For this, the agent will need an understanding of the basic state of affairs and the past interaction. This is easily implemented like this:</p>
+<pre><code>state = {
+    "input_text": text,
+    "qa_card": "",
+    "review_status": "pending",
+    "edit_status": "pending"
+    }
+
+memory = ChatMemoryBuffer.from_defaults(token_limit=8000) # using LLamaindex here</code></pre>
+<p>The memory can be read using the <code>memory.get()</code> method.</p>
+<p>Then we define our workflow as an iterative process. Below is a piece of pseudocode illustrating the basic idea:</p>
+<pre><code># pseudocode
+initialize:
+    generator
+    reviewer
+    editor
+    orchestrator
+    state
+    memory
+
+while true
+    send state and memory to orchestrator -&gt; response
+    if response == "end" 
+        stop
+    if response == "generator" 
+        send input text to generator -&gt; card, change state and memory
+    (same for the other agents)
+return state</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Time to play!</p>
+<ol type="1">
+<li>In the same notebook, initialize the orchestrator as well.</li>
+<li>Implement the workflow shown above in real code.</li>
+<li>Watch happily as it all works without any issues whatsoever.</li>
 <li>Upload to Moodle.</li>
 </ol>
 </div>
 </div>
+<p><strong>What we did not cover</strong> but what would be a great idea:</p>
+<ul>
+<li>Right now, we just assume that generator and editor return valid output. It would be better to build an automated check using a pydantic class for that.</li>
+<li>We let the orchestrator agent decide for how long this process lasts. &lt;sarcasm&gt;I cannot imagine that leading to problems under any circumstances.&lt;/sarcasm&gt; It would be better to give it a timeout or maximal number of iterations.</li>
+</ul>
 </section>
 </section>
 <section id="constitutional-ai-tuning" class="level2">
@@ -487,9 +568,13 @@ Follow these guidelines:
 <!-- 
 ## Preventing prompt injections 
 we will save this for another time. I don't know anything about it anyway...-->
-<!-- ## Further Readings
-
-That's it! There isn't any more to say about this. I'm done. -->
+</section>
+<section id="further-readings" class="level2">
+<h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ewLMYLCWvcI">Here</a> is a video describing other multi-agent systems, including an <a href="https://arxiv.org/abs/2405.02957">agent hospital</a> and a <a href="https://arxiv.org/html/2405.11804v1">multi-agent translator</a></li>
+</ul>
+<!-- That's it! There isn't any more to say about this. I'm done. -->
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
