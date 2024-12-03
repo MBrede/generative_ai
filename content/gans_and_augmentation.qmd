@@ -4,13 +4,23 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image da
 
 # AI image generation II
 
+In AI Image Generation I we mentioned GANs without going into details. In this chapter, we will take a closer look at them.
+
 ## Generative Adversarial Nets (GAN)
 
-"The generative model can be thought of as analogous to a team of counterfeiters,
-trying to produce fake currency and use it without detection, while the discriminative model is
-analogous to the police, trying to detect the counterfeit currency. Competition in this game drives
-both teams to improve their methods until the counterfeits are indistiguishable from the genuine
-articles."
+Generative Adversarial Nets, as first proposed by @goodfellowGenerativeAdversarialNetworks2014, are a class of generative models that can be used to generate new data samples from a given dataset. They consist of two components: a generator and a discriminator. The generator takes random noise as input and tries to produce realistic-looking data samples, while the discriminator takes data samples as input and tries to distinguish between real and fake samples. The generator and discriminator are trained simultaneously in a game-theoretic framework, with the goal of minimizing the difference between the distribution of real and fake samples. To use the authors own words:
+
+>"The generative model can be thought of as analogous to a team of counterfeiters, trying to produce fake currency and use it without detection, while the discriminative model is analogous to the police, trying to detect the counterfeit currency. Competition in this game drives both teams to improve their methods until the counterfeits are indistiguishable from the genuine articles."
+
+While the rest of the paper goes into mathematical depth, that is not really recommended for the casual reader, the basic concept behind it is surprisingly simple. The following figure illustrates the concept:
+
+![GAN architecture shown here for a model trained on the MNIST dataset, from @PyTorchGANBasic](../imgs/gan_architecture.png){width=50%}
+
+The generator takes random noise as input and tries to produce realistic-looking data samples, while the discriminator takes data samples as input and tries to distinguish between real and fake samples. The generator and discriminator are trained simultaneously in a game-theoretic framework, with the goal of minimizing the difference between the distribution of real and fake samples.
+
+## Challenges
+
+While GANs have shown promising results in various applications, they also come with their own set of challenges. Some of these include:
 
 - architechture: generator, discriminator, see quote above
 - game theory, math
@@ -21,8 +31,7 @@ problems (challenges)
 
 - unstable -> start small (e.g. 4x4), then grow larger
 - mode collapse (helvetica scenario) when generator better than discriminator -> half-solution (overtrain discriminator) two time-scale update rule (TTUR), 
-- Vanishing gradient when discriminator better than generator
-
+- Vanishing gradient when discriminator better than generator -> Wasserstein GAN
 
 
 ## (Generative) approaches for image dataset augmentation
