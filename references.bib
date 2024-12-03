@@ -632,6 +632,13 @@
   langid = {english}
 }
 
+@article{liuGANBasedImageData,
+  title = {{{GAN-Based Image Data Augmentation}}},
+  author = {Liu, David and Hu, Nathan},
+  abstract = {Generative adversarial networks (GANs) are powerful generative models that have lead to breakthroughs in image generation. In this project, we investigate the use of GANs in generating synthetic data from the MNIST dataset to either augment or replace the original data when training classifiers. We demonstrate that training classifiers on purely synthetic data achieves comparable results to those trained solely on pure data and show that for small sets of training data, augmenting the dataset by first training GANs on the data can lead to dramatic improvement in classifier performance. We also begin to explore using GAN-generated data to recursively train other GANs.},
+  langid = {english}
+}
+
 @misc{liuRoBERTaRobustlyOptimized2019a,
   title = {{{RoBERTa}}: {{A Robustly Optimized BERT Pretraining Approach}}},
   shorttitle = {{{RoBERTa}}},
@@ -912,16 +919,6 @@
   urldate = {2024-11-30}
 }
 
-@inproceedings{sohl-dicksteinDeepUnsupervisedLearning2015,
-  title = {Deep Unsupervised Learning Using Nonequilibrium Thermodynamics},
-  booktitle = {International Conference on Machine Learning},
-  author = {{Sohl-Dickstein}, Jascha and Weiss, Eric and Maheswaranathan, Niru and Ganguli, Surya},
-  year = {2015},
-  pages = {2256--2265},
-  publisher = {PMLR},
-  urldate = {2024-11-30}
-}
-
 @article{songScoreBasedGenerativeModeling2020a,
   title = {Score-{{Based Generative Modeling}} through {{Stochastic Differential Equations}}},
   author = {Song, Yang and {Sohl-Dickstein}, Jascha Narain and Kingma, Diederik P. and Kumar, Abhishek and Ermon, Stefano and Poole, Ben},
@@ -978,6 +975,21 @@
   abstract = {We introduce LLaMA, a collection of foundation language models ranging from 7B to 65B parameters. We train our models on trillions of tokens, and show that it is possible to train state-of-the-art models using publicly available datasets exclusively, without resorting to proprietary and inaccessible datasets. In particular, LLaMA-13B outperforms GPT-3 (175B) on most benchmarks, and LLaMA-65B is competitive with the best models, Chinchilla-70B and PaLM-540B. We release all our models to the research community.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computation and Language}
+}
+
+@misc{trabuccoEffectiveDataAugmentation2023,
+  title = {Effective {{Data Augmentation With Diffusion Models}}},
+  author = {Trabucco, Brandon and Doherty, Kyle and Gurinas, Max and Salakhutdinov, Ruslan},
+  year = {2023},
+  month = may,
+  number = {arXiv:2302.07944},
+  eprint = {2302.07944},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2302.07944},
+  urldate = {2024-12-03},
+  abstract = {Data augmentation is one of the most prevalent tools in deep learning, underpinning many recent advances, including those from classification, generative models, and representation learning. The standard approach to data augmentation combines simple transformations like rotations and flips to generate new images from existing ones. However, these new images lack diversity along key semantic axes present in the data. Current augmentations cannot alter the high-level semantic attributes, such as animal species present in a scene, to enhance the diversity of data. We address the lack of diversity in data augmentation with image-to-image transformations parameterized by pre-trained text-to-image diffusion models. Our method edits images to change their semantics using an off-the-shelf diffusion model, and generalizes to novel visual concepts from a few labelled examples. We evaluate our approach on few-shot image classification tasks, and on a real-world weed recognition task, and observe an improvement in accuracy in tested domains.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition}
 }
 
 @misc{tunstallEfficientFewShotLearning2022,
