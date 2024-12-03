@@ -2,7 +2,7 @@
 toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image datasets</h3>'
 ---
 
-# AI image generation II
+# AI image generation II {#sec-GANS}
 
 In AI Image Generation I we mentioned GANs without going into details. In this chapter, we will take a closer look at them.
 
