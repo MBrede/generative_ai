@@ -4,7 +4,7 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image da
 
 # AI image generation II {#sec-GANS}
 
-In AI Image Generation I we mentioned GANs without going into details. In this chapter, we will take a closer look at them. We will also briefly touch on image augmentation. 
+In [AI Image Generation I](@sec-diffModels) we mentioned GANs without going into details. In this chapter, we will take a closer look at them. We will also briefly touch on image augmentation. 
 
 ## Generative Adversarial Nets (GAN)
 
