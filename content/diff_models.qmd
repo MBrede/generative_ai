@@ -2,7 +2,7 @@
 toc-title: '![](../imgs/diff_models.jpg){width=240px}<br> <h3>AI image generation</h3>'
 ---
 
-# AI image generation
+# AI image generation {#sec-diffModels}
 
 This and the following chapters will focus on the topic of AI image generation. This is a very broad field, so we will start with some basics and then move on to more specific topics. We will also try to give an overview of the current state of the art in this field.
 
@@ -10,7 +10,7 @@ This and the following chapters will focus on the topic of AI image generation. 
 
 You can not talk about the history of AI image generation without talking about GANs [@goodfellowGenerativeAdversarialNetworks2014]. 
 To have a nicer chunking of the courses contents though, we will talk about them in the chapter @sec-GANS and focus on more recent approaches here.
-GANs are the architecture behind the page [thispersondoesnotexist.com](www.thispersondoesnotexist.com) and its [clones](https://thisxdoesnotexist.com/).
+GANs are the architecture behind the page [thispersondoesnotexist.com](https://www.thispersondoesnotexist.com) and its [clones](https://thisxdoesnotexist.com/).
 
 ### DALL-E
 
