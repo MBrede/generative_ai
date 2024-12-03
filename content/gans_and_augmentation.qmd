@@ -12,9 +12,9 @@ Generative Adversarial Nets, as first proposed by @goodfellowGenerativeAdversari
 
 >"The generative model can be thought of as analogous to a team of counterfeiters, trying to produce fake currency and use it without detection, while the discriminative model is analogous to the police, trying to detect the counterfeit currency. Competition in this game drives both teams to improve their methods until the counterfeits are indistiguishable from the genuine articles."
 
-While the rest of the paper goes into mathematical depth, that is not really recommended for the casual reader, the basic concept behind it is surprisingly simple. The following figure illustrates the concept:
+While the rest of the paper goes into mathematical depth that is not really recommendable for the casual reader, the basic concept behind it is surprisingly simple. The following figure illustrates the concept:
 
-![GAN architecture shown here for a model trained on the MNIST dataset, from @PyTorchGANBasic](../imgs/gan_architecture.png){width=50%}
+![GAN architecture shown here for a model trained on the MNIST dataset, from @PyTorchGANBasic](../imgs/gan_architecture.png)
 
 The generator takes random noise as input and tries to produce realistic-looking data samples, while the discriminator takes data samples as input and tries to distinguish between real and fake samples. The generator and discriminator are trained simultaneously in a game-theoretic framework, with the goal of minimizing the difference between the distribution of real and fake samples.
 
