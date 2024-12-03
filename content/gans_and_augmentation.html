@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -74,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -236,14 +256,26 @@ Augmentation of image datasets<br>
 </h3>
    
   <ul>
-  <li><a href="#generative-adversial-networks-gan" id="toc-generative-adversial-networks-gan" class="nav-link active" data-scroll-target="#generative-adversial-networks-gan">Generative Adversial Networks (GAN)</a></li>
-  <li><a href="#generative-approaches-for-image-dataset-augmentation" id="toc-generative-approaches-for-image-dataset-augmentation" class="nav-link" data-scroll-target="#generative-approaches-for-image-dataset-augmentation">(Generative) approaches for image dataset augmentation</a></li>
-  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#generative-adversarial-nets-gan" id="toc-generative-adversarial-nets-gan" class="nav-link active" data-scroll-target="#generative-adversarial-nets-gan">Generative Adversarial Nets (GAN)</a>
+  <ul class="collapse">
+  <li><a href="#challenges" id="toc-challenges" class="nav-link" data-scroll-target="#challenges">Challenges</a></li>
+  <li><a href="#variants-of-gans" id="toc-variants-of-gans" class="nav-link" data-scroll-target="#variants-of-gans">Variants of GANs</a></li>
+  </ul></li>
+  <li><a href="#generative-approaches-for-image-dataset-augmentation" id="toc-generative-approaches-for-image-dataset-augmentation" class="nav-link" data-scroll-target="#generative-approaches-for-image-dataset-augmentation">(Generative) approaches for image dataset augmentation</a>
+  <ul class="collapse">
+  <li><a href="#classical-image-augmentation" id="toc-classical-image-augmentation" class="nav-link" data-scroll-target="#classical-image-augmentation">Classical image augmentation</a></li>
+  <li><a href="#generative-image-augmentation" id="toc-generative-image-augmentation" class="nav-link" data-scroll-target="#generative-image-augmentation">Generative image augmentation</a></li>
+  <li><a href="#inpainting" id="toc-inpainting" class="nav-link" data-scroll-target="#inpainting">Inpainting</a></li>
+  <li><a href="#image-to-image" id="toc-image-to-image" class="nav-link" data-scroll-target="#image-to-image">Image to image</a></li>
+  <li><a href="#image-variation" id="toc-image-variation" class="nav-link" data-scroll-target="#image-variation">Image variation</a></li>
+  <li><a href="#controlnet" id="toc-controlnet" class="nav-link" data-scroll-target="#controlnet">ControlNet</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/gans_and_augmentation.html"><span class="chapter-title">AI image generation II</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -264,17 +296,191 @@ Augmentation of image datasets<br>
 </header>
 
 
-<section id="generative-adversial-networks-gan" class="level2">
-<h2 class="anchored" data-anchor-id="generative-adversial-networks-gan">Generative Adversial Networks (GAN)</h2>
+<p>In <a href="@sec-diffModels">AI Image Generation I</a> we mentioned GANs without going into details. In this chapter, we will take a closer look at them. We will also briefly touch on image augmentation.</p>
+<section id="generative-adversarial-nets-gan" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="generative-adversarial-nets-gan">Generative Adversarial Nets (GAN)</h2>
+<p>Generative Adversarial Nets, as first proposed by <span class="citation" data-cites="goodfellowGenerativeAdversarialNetworks2014">Goodfellow et al. (<a href="#ref-goodfellowGenerativeAdversarialNetworks2014" role="doc-biblioref">2014</a>)</span>, are a class of generative models that can be used to generate new data samples from a given dataset. They consist of two components: a generator and a discriminator. The generator takes random noise as input and tries to produce realistic-looking data samples, while the discriminator takes data samples as input and tries to distinguish between real and fake samples. The generator and discriminator are trained simultaneously in a game-theoretic framework, with the goal of minimizing the difference between the distribution of real and fake samples. To use the authors own words:</p>
+<blockquote class="blockquote">
+<p>“The generative model can be thought of as analogous to a team of counterfeiters, trying to produce fake currency and use it without detection, while the discriminative model is analogous to the police, trying to detect the counterfeit currency. Competition in this game drives both teams to improve their methods until the counterfeits are indistiguishable from the genuine articles.”</p>
+</blockquote>
+<p>While the rest of the paper goes into mathematical depth and is not really recommendable for the casual reader, the basic concept behind it is surprisingly simple. The following figure illustrates the concept:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/gan_architecture.png" class="img-fluid figure-img"></p>
+<figcaption>GAN architecture shown here for a model trained on the MNIST dataset, from <span class="citation" data-cites="PyTorchGANBasic"><em><span>PyTorch</span>🔥 <span>GAN Basic Tutorial</span> for Beginner</em> (<a href="#ref-PyTorchGANBasic" role="doc-biblioref">n.d.</a>)</span></figcaption>
+</figure>
+</div>
+<p>The generator is usually fed with noise, that is then transformed into a latent space, comparable with the embeddings, we talked about earlier. This latent vector is then passed through the generator network to generate an image. So, in this framework, the generator is analogue to the decoder of a VAE and the discriminator is analogue to the encoder, transferring the input data into a latent space and then using a classification head to decide whether the input is real or fake.</p>
+<p>Usually, GANs make heavy use of convolutional neural networks (CNN) in both the generator and discriminator part, but in principle they can use any architecture. Additionally, while they were developed in the context of image generation, they are not limited to this domain and have been used for text generation as well.</p>
+<section id="challenges" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="challenges">Challenges</h3>
+<p>While GANs have shown promising results in various applications, they also come with their own set of challenges. Some of these include:</p>
+<ul>
+<li>They tend to be unstable in training, often requiring careful tuning of hyperparameters and training techniques to achieve good performance. One possible solution is to first train on smaller images and then later in the training process scale up the size of the images.</li>
+<li>If the discriminator is too bad early on, a situation can emerge where, by accident, one or a few classes of possible generated output perform better than others. This can lead to <strong>mode collapse</strong>, where the generator only produces samples from this class and ignores all other classes. In the example of the MNIST dataset, it could learn to only produce images of the number 5. In the original paper, this is referred to as the “helvetica scenario”.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To avoid mode collapse, often the discriminator is trained more often then the generator to make it better. However, this can lead to the following problem.</li>
+<li>The generator and discriminator can get stuck in a state where the generator produces low-quality samples that are easily distinguishable from real data, while the discriminator becomes too good at distinguishing between real and fake samples. In this case, it will be very hard for the generator to improve its performance over time. This is often referred to as vanishing gradients. To avoid this, techniques like Wasserstein GANs (WGAN) have been proposed, which use a different loss function that can help stabilize training and prevent mode collapse.</li>
+<li>They can be computationally expensive to train, especially when dealing with high-dimensional data such as images.</li>
+</ul>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Apparently, this is a reference to a british parody science show, see <a href="https://datascience.stackexchange.com/questions/49744/where-can-i-find-out-about-the-helvetica-scenario">here</a>.</p></div></div></section>
+<section id="variants-of-gans" class="level3">
+<h3 class="anchored" data-anchor-id="variants-of-gans">Variants of GANs</h3>
+<p>There are many variants of GANs that have been proposed in the literature to address some of these challenges and improve their performance. Some examples include:</p>
+<ul>
+<li>Deep Convolutional Generative Adversarial Networks (DCGAN), which use convolutional layers in both the generator and discriminator to generate high-quality images. <!-- @radfordUnsupervisedRepresentationLearning2015 --></li>
+<li>Wasserstein GAN (WGAN), which uses the Wasserstein distance as a loss function instead of the traditional cross-entropy loss to improve stability and convergence properties. <!-- @arjovskyWassersteinGenerativeAdversarialNetworks2017 --></li>
+<li>StyleGAN, which uses a novel architecture that allows for fine-grained control over the style and content of generated images. It also introduces a new technique called style mixing, which allows for the creation of new styles by combining existing ones. <!-- @karrasStyleBasedGeneratorArchitecture2019 --></li>
+<li>BigGAN, which uses a large batch size and spectral normalization to improve stability and convergence properties. <!-- @brockLargeScaleGANTraining2018 --></li>
+<li>Progressive Growing GAN (PGGAN), which gradually increases the resolution of generated images over time to improve quality and stability. <!-- @karrasProgressiveGrowingGenerativeAdversarialNetworks2017 --></li>
+<li>CycleGAN, which uses a cycle consistency loss to enable unsupervised image-to-image translation between two domains without the need for paired data. <!-- @zhuUnpairedImageToImageTranslation2017 --></li>
+<li>StarGAN, which enables unsupervised image-to-image translation between multiple domains by learning a single mapping function that can transform images from one domain to any other domain. <!-- @choiStarGANDeepLearningBasedFaceAttributeManipulation2018 --></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Train one yourself!</p>
+<p>(or, at least, try it. GANs are notoriously bad to train, also there are hardware concerns.)</p>
+<ul>
+<li>implement a simple GAN architecture in pytorch (you can use <a href="https://www.kaggle.com/code/songseungwon/pytorch-gan-basic-tutorial-for-beginner">this noteook on kaggle</a>) and train it on the <a href="https://huggingface.co/datasets/ylecun/mnist">MNIST dataset</a></li>
+<li>Have a look at <a href="https://github.com/eriklindernoren/PyTorch-GAN">this GAN zoo implemented in pytorch</a>. Find one that might be interesting for your use case.</li>
+<li>(optional) train that one on this or another dataset (see <a href="https://pytorch.org/vision/stable/datasets.html">the pytorch vision dataset page</a> for datasets already implemented in pytorch.)</li>
+</ul>
+<p>No need to upload to Moodle this time.</p>
+</div>
+</div>
+</section>
 </section>
 <section id="generative-approaches-for-image-dataset-augmentation" class="level2">
 <h2 class="anchored" data-anchor-id="generative-approaches-for-image-dataset-augmentation">(Generative) approaches for image dataset augmentation</h2>
+<p>Image augmentation is used to generate more training images a limited number of original training images. This can help improve the performance of machine learning models by increasing the size and diversity of the training data, which can help prevent overfitting and improve generalization. Image augmentation techniques can be applied during the preprocessing stage of the machine learning pipeline, before the data is fed into a model for training.</p>
+<section id="classical-image-augmentation" class="level3">
+<h3 class="anchored" data-anchor-id="classical-image-augmentation">Classical image augmentation</h3>
+<p>There are many different image augmentation techniques that can be used to generate new training images from existing ones. Some common techniques include:</p>
+<ul>
+<li>Random cropping and resizing: This involves randomly selecting a region of an image and resizing it to a fixed size, which can help improve the robustness of models to variations in object scale and position.</li>
+<li>Flipping and rotation: These simple transformations can help increase the amount of training data by creating new images that are similar but not identical to the original ones.</li>
+<li>Color jittering: This involves randomly adjusting the brightness, contrast, saturation, or hue of an image, which can help improve the robustness of models to variations in lighting and color.</li>
+<li>Elastic transformations: These involve applying a series of small, random deformations to an image, which can help increase the amount of training data by creating new images that are similar but not identical to the original ones.</li>
+<li>Cutout: This involves randomly masking out a region of an image with a fixed size and filling it with a constant value (e.g., black or white), which can help improve the robustness of models to occlusions and other types of noise.</li>
+<li>Mixup: This involves combining two images in a weighted manner, along with their corresponding labels, to create a new image and label pair. This can help increase the amount of training data by creating new examples that are intermediate between existing ones.</li>
+</ul>
+<p>Most of these are already implemented in pytorch’s <a href="https://pytorch.org/vision/stable/transforms.html">torchvision.transforms.v2</a> module.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s have a look!</p>
+<ul>
+<li>Have a look at the datasets in the <a href="https://pytorch.org/vision/stable/datasets.html">pytorch vision dataset page</a> and find one that might be interesting for you.</li>
+<li>Load that dataset with pytorch’s <code>DataLoader</code> class, apply some transformations to it using the <a href="https://pytorch.org/vision/stable/transforms.html">torchvision.transforms.v2</a> module and visualize some of the results.</li>
+</ul>
+</div>
+</div>
 </section>
-<section id="further-readings" class="level2">
-<h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<section id="generative-image-augmentation" class="level3">
+<h3 class="anchored" data-anchor-id="generative-image-augmentation">Generative image augmentation</h3>
+<p>GANs can be used for image augmentation as well <span class="citation" data-cites="liuGANBasedImageData">(<a href="#ref-liuGANBasedImageData" role="doc-biblioref">Liu &amp; Hu, n.d.</a>)</span>. They can generate new images that are similar to the original ones but not identical, which can help increase the size and diversity of the training data. GANs can be trained on a dataset of real images, and then used to generate new images by sampling from the latent space of the generator network. The generated images can then be added to the training set to improve the performance of machine learning models.</p>
+<p>There are, of course, techniques other than GANs to augment existing image datasets using generative models. One example are diffusers, we talked about last time. <span class="citation" data-cites="trabuccoEffectiveDataAugmentation2023">Trabucco et al. (<a href="#ref-trabuccoEffectiveDataAugmentation2023" role="doc-biblioref">2023</a>)</span> make the case for using these for data augmentation.</p>
+<p>In the following, we will introduce some types of image augmentation using diffusers, without claiming this to be an exhaustive list.</p>
+</section>
+<section id="inpainting" class="level3">
+<h3 class="anchored" data-anchor-id="inpainting">Inpainting</h3>
+<p>When using inpainting, a section of the image is masked and then the model is prompted to fill the gap. This is most often used to remove unwanted content from images.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/inpainting.png" class="img-fluid figure-img"></p>
+<figcaption>Inpainting, from the <a href="https://huggingface.co/docs/diffusers/using-diffusers/inpaint">example on huggingface</a>.</figcaption>
+</figure>
+</div>
+</section>
+<section id="image-to-image" class="level3">
+<h3 class="anchored" data-anchor-id="image-to-image">Image to image</h3>
+<p>In this case, an image is given to the model in addition to the prompt, conditioning the model to generate a specific output. This can be used to generate images from sketches or change the artistic style of a painting.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/image2image.png" class="img-fluid figure-img"></p>
+<figcaption>Image to image generation, from <a href="https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/img2img">huggingface</a>.</figcaption>
+</figure>
+</div>
+<p>Another way of generating an image from another image is to first generate a description from an image and then using it as a prompt to generate another image. Hopefully, the second image will be similar to the initial image.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/img2txt2img.png" class="img-fluid figure-img"></p>
+<figcaption>Image to text to image generation, also from <a href="https://huggingface.co/docs/diffusers/api/pipelines/unidiffuser#image-variation">huggingface</a>.</figcaption>
+</figure>
+</div>
+</section>
+<section id="image-variation" class="level3">
+<h3 class="anchored" data-anchor-id="image-variation">Image variation</h3>
+<p>There is also a version of stable diffusion <a href="https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/image_variation">on huggingface</a> that is finetuned on image variation. At first glance the result is underwhelming, but give it a shot!</p>
+</section>
+<section id="controlnet" class="level3">
+<h3 class="anchored" data-anchor-id="controlnet">ControlNet</h3>
+<p>Another type of image-to-image generation is ControlNet. Here, you would typically give the model a prompt and in addition an sketch, human pose or canny edge to condition the model. In the example given below, a canny sketch is made from a painting, then a new painting is generated based on the canny sketch and a prompt detailing the desired image (in this case “Mona Lisa”)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/ControlNet.png" class="img-fluid figure-img"></p>
+<figcaption>Example for ControlNet, again from <a href="https://huggingface.co/docs/diffusers/using-diffusers/controlnet">huggingface</a>.</figcaption>
+</figure>
+</div>
+<!-- 
+Other methods for image augmentation using generative approaches include: [Variational Autoencoders (VAEs)](https://arxiv.org/abs/1512.09300) and [Diffusion Models](https://arxiv.org/abs/2006.11239). VAEs are a type of generative model that learn to encode data into a latent space, from which new samples can be generated by sampling from the learned distribution. Diffusion models are a type of generative model that learn to gradually denoise random noise to generate new samples. Both VAEs and diffusion models can be used for image augmentation by generating new images that are similar to the original ones but not identical, which can help increase the size and diversity of the training data. -->
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Give it a go!</p>
+<ul>
+<li>Open a notebook, locally or on <a href="https://colab.research.google.com/">google colab</a>.</li>
+<li>Test the generative image augmentation techniques and models introduced above.</li>
+<li>Upload your notebook to Moodle.</li>
+</ul>
+</div>
+</div>
+<!-- ## Further Readings
+
+- @liuGANBasedImageData use GANs specifically for data augmentation.
+- @trabuccoEffectiveDataAugmentation2023 make the case for using diffusion models for data augmentation.  -->
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-goodfellowGenerativeAdversarialNetworks2014" class="csl-entry" role="listitem">
+Goodfellow, I. J., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., Courville, A., &amp; Bengio, Y. (2014). <em>Generative <span>Adversarial Networks</span></em> (arXiv:1406.2661). arXiv. <a href="https://doi.org/10.48550/arXiv.1406.2661">https://doi.org/10.48550/arXiv.1406.2661</a>
+</div>
+<div id="ref-liuGANBasedImageData" class="csl-entry" role="listitem">
+Liu, D., &amp; Hu, N. (n.d.). <em><span>GAN-Based Image Data Augmentation</span></em>.
+</div>
+<div id="ref-PyTorchGANBasic" class="csl-entry" role="listitem">
+<em><span>PyTorch</span>🔥 <span>GAN Basic Tutorial</span> for beginner</em>. (n.d.). https://kaggle.com/code/songseungwon/pytorch-gan-basic-tutorial-for-beginner.
+</div>
+<div id="ref-trabuccoEffectiveDataAugmentation2023" class="csl-entry" role="listitem">
+Trabucco, B., Doherty, K., Gurinas, M., &amp; Salakhutdinov, R. (2023). <em>Effective <span>Data Augmentation With Diffusion Models</span></em> (arXiv:2302.07944). arXiv. <a href="https://doi.org/10.48550/arXiv.2302.07944">https://doi.org/10.48550/arXiv.2302.07944</a>
+</div>
+</div>
 </section>
+
 
 </main> <!-- /main -->
 <script>
