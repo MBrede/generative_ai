@@ -4,7 +4,26 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image da
 
 # AI image generation II
 
-## Generative Adversial Networks (GAN)
+## Generative Adversarial Nets (GAN)
+
+"The generative model can be thought of as analogous to a team of counterfeiters,
+trying to produce fake currency and use it without detection, while the discriminative model is
+analogous to the police, trying to detect the counterfeit currency. Competition in this game drives
+both teams to improve their methods until the counterfeits are indistiguishable from the genuine
+articles."
+
+- architechture: generator, discriminator, see quote above
+- game theory, math
+- convolutions, deconvolutions
+- latent space, noise
+
+problems (challenges)
+
+- unstable -> start small (e.g. 4x4), then grow larger
+- mode collapse (helvetica scenario) when generator better than discriminator -> half-solution (overtrain discriminator) two time-scale update rule (TTUR), 
+- Vanishing gradient when discriminator better than generator
+
+
 
 ## (Generative) approaches for image dataset augmentation
 
