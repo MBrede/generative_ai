@@ -1,5 +1,5 @@
 ---
-toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Augmentation of image datasets</h3>'
+toc-title: '![](../imgs/robot_painter_2.png){width=240px}<br> <h3>Augmentation of image datasets</h3>'
 ---
 
 # AI image generation II {#sec-GANS}
