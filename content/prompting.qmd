@@ -2,13 +2,13 @@
 toc-title: '![](../imgs/prompting.jpg){width=240px}<br> <h3>Prompting</h3>'
 ---
 
-# Prompting
+# Prompting {#sec-prompting}
 
 Prompting describes the utilization of the ability of language models to use zero or few-shot instrutions to perform a task. This ability, which we briefly touched on when we were discussing the history of language models (i.e., the paper by @radfordLanguageModelsAre2019), is one of the most important aspects of modern large language models.
 
 Prompting can be used for various tasks such as text generation, summarization, question answering, and many more. 
 
-## Instruct-tuned models
+## Instruct-tuned models {#sec-instruct}
 
 Instruct-tuned models are trained on a dataset (for an example, see @fig-instructData) that consists of instructions and their corresponding outputs. This is different from the pretraining phase of language models where they were trained on large amounts of text data without any specific task in mind. The goal of instruct-tuning is to make the model better at following instructions and generating more accurate and relevant outputs.
 

@@ -1,0 +1,9 @@
+---
+title: "Ressources full finetuning"
+format: commonmark
+execute: 
+  echo: True
+  eval: True
+  cache: True
+---
+
