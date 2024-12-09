@@ -4,11 +4,76 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>AI image generation</h3>
 
 # AI image generation III
 
-## AI image generator basics
 
 ## Basics of using Open Source AI image generation models
 
-## Generative Adversarial Networks (GANs)
+<!-- - AUTOMATIC1111 -->
+
+One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. We will cover finetuning next time. This time we want to focus on using image generation models locally. 
+
+ For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2024. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: [AUTOMATIC1111's Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui). 
+ 
+ <!-- Let us use this tool to see how we can run an AI image generator on our laptops, using the open source model [SDXL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) from StabilityAI. This is a very short summary of the features of AUTOMATIC1111's web UI, which we will use in this article for running an AI image generator on our laptops:   -->
+
+::: {.callout-note}
+
+## 📝 Task 
+
+Let's have a look!
+
+ - Install AUTOMATIC1111's Stable Diffusion web UI on your laptop using [these instructions](https://github.com/AUTOMATIC1111/stable-diffusion-webui#installation-and-running).
+- Start the server, open the webUI.
+- Start generating images.🎉
+- Change some of the settings and see what happens.
+- What does the ``Sampling steps`` parameter do?
+
+:::
+
+This tool surely does make image generation more convenient. Most of the time, however, we do not want to deal with a web UI, but with an API endpoint. Fortunately, A1111's webUI also has an API mode, which is quite easy to use and supports all features of the web UI (and some more).
+We are mostly interested in the `txt2img`  API endpoint, which allows us to generate images from a text prompt. Let's have a look at how this works:
+
+::: {.callout-note}
+
+## 📝 Task 
+
+- Open [the documentation](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API) of the API.
+- Run the web UI in API mode.
+- in a notebook, run an example call to the ``txt2img`` endpoint.
+
+:::
+
+We now know how to easily generate images using a local model. The next steps would be to try different models, and to add Lora (or other) adapters to them. 
+
+
+
+## AI image generators in agent systems or pipelines
+
+In this section we want to explore the use of AI image generators as components in an agent system or a pipeline. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. 
+The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).
+
+
+
+
+<!-- Example: Illustrator for teaching script
+
+- input: keywords
+
+Tasks:
+
+- keywords to text (generate or read)
+- text to prompt
+- prompt to img
+
+Then Quality Assurance
+
+- img to emb
+- txt to emb
+- compare
+
+Finally return -->
+
+
+
 
 ## Further Readings
 
