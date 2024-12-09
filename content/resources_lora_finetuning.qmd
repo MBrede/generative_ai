@@ -1,5 +1,5 @@
 ---
-title: "Resource consumption full finetuning"
+title: "Resource consumption LoRA finetuning"
 format: commonmark
 execute: 
   echo: True
