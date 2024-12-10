@@ -4,11 +4,146 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>AI image generation</h3>
 
 # AI image generation III
 
-## AI image generator basics
 
 ## Basics of using Open Source AI image generation models
 
-## Generative Adversarial Networks (GANs)
+<!-- - AUTOMATIC1111 -->
 
-## Further Readings
+One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. We will cover finetuning next time. This time we want to focus on using image generation models locally. 
+
+ For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2024. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: [AUTOMATIC1111's Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui). 
+ 
+ <!-- Let us use this tool to see how we can run an AI image generator on our laptops, using the open source model [SDXL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) from StabilityAI. This is a very short summary of the features of AUTOMATIC1111's web UI, which we will use in this article for running an AI image generator on our laptops:   -->
+
+::: {.callout-note}
+
+## 📝 Task 
+
+Let's have a look!
+
+ - Install AUTOMATIC1111's Stable Diffusion web UI on your laptop using [these instructions](https://github.com/AUTOMATIC1111/stable-diffusion-webui#installation-and-running).
+- Start the server, open the webUI.
+- Start generating images.🎉
+- Change some of the settings and see what happens.
+- What does the ``Sampling steps`` parameter do?
+
+:::
+
+This tool surely does make image generation more convenient. Most of the time, however, we do not want to deal with a web UI, but with an API endpoint. Fortunately, A1111's webUI also has an API mode, which is quite easy to use and supports all features of the web UI (and some more).
+We are mostly interested in the `txt2img`  API endpoint, which allows us to generate images from a text prompt. Let's have a look at how this works:
+
+::: {.callout-note}
+
+## 📝 Task 
+
+- Open [the documentation](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API) of the API.
+- Run the web UI in API mode.
+- in a notebook, run an example call to the ``txt2img`` endpoint.
+
+:::
+
+We now know how to easily generate images using a local model. The next steps would be to try different models, and to add Lora (or other) adapters to them. 
+
+
+
+## AI image generators in agent systems or pipelines
+
+In this section we want to explore the use of AI image generators as components in an agent system or a pipeline. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. 
+The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).
+
+We covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will:
+
+- generate or retrieve a text based on some input keywords.
+- use this text as context for generating an image generation prompt.
+- generate an image from the prompt.
+- implement quality assurance by comparing the original text embedding with the generated image embedding. 
+
+Most agent frameworks we already introduced support building pipelines in addition to agents. See for example [this tutorial](https://docs.llamaindex.ai/en/stable/examples/pipeline/query_pipeline/) on how to implement query pipelines in llamaindex or [this documentation](https://docs.haystack.deepset.ai/docs/pipelines) for pipelines in haystack. To get a full understanding of the basic principles, it is most educational to implement a pipeline from scratch. 
+
+
+### Text generation or retrieval
+
+The pipeline we are about to build starts with some input given by the user. In previous chapters we covered several ways of doing this. You could:
+
+- use a local LLM to generate the text for you.
+- use a retrieval function from a vector store or other text database.
+- combine both approaches in a RAG system.
+
+
+::: {.callout-note}
+
+## 📝 Task 
+
+Let's get started!
+
+- Open a notebook and implement a simple text generation or retrieval function.
+- Get a text from an input. 
+
+:::
+
+
+### Image generation
+
+The next step is to to generate an images that fits the text. While we could just send the full text to the image generator and let it do its thing, a better approach is to generate a special prompt for the image generator. This prompt is then used to generate an image. 
+
+::: {.callout-note}
+
+## 📝 Task 
+
+
+- In your notebook, implement a call to an LLM that generates in image generation prompt from your text. 
+- Also implement a call to an image generator. 
+- Connect to an LLM (if not already done so) and to an image generation model. 
+- Generate an image for your text. 
+
+:::
+
+
+### Quality assurance
+
+Now that we have the image, we want to assure that it fits the text. There are several ways of doing this. We could, for instance, evaluate text and images manually (or, rather, by eyeballing it). This works well for small amounts of images. However, it is not scalable for larger amounts. 
+
+One way of automating the examination is to check, if the image matches the text semantically, i.e. in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g. cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. On both cases, we need a predefined criterion, i.e. a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one. 
+
+::: {.callout-note}
+
+## 📝 Task 
+
+Let's have a look!
+
+- In your notebook, implement a function that displays text and image for manual inspection. 
+- Implement an automated similarity rater for text and images. You can use [CLIP](https://github.com/openai/CLIP) for that task. 
+
+:::
+
+
+### Pipeline
+
+Finally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. this is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined matching criterion is matched. 
+
+    ## pseudocode
+    define pipeline(user_input):
+        get_text(user_input) -> text
+        generate_image_prompt(text) -> image_prompt
+        for in in range 5:
+            generate_image(image_prompt) -> image
+            rate_image(image) -> rate_value
+        find_best_rated_image(images, rate_values) -> best_image
+        return best_image
+
+
+::: {.callout-note}
+
+## 📝 Task 
+
+Let's finalize
+
+- In your notebook, implement the pipeline outlined above. 
+- Make a few test runs.
+- Upload your notebook to Moodle. 
+
+:::
+
+
+<!-- ## Further Readings -->
 
