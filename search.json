@@ -562,7 +562,7 @@
     "href": "content/generation_in_agent_pipelines.html",
     "title": "AI image generation III",
     "section": "",
-    "text": "AI image generator basics",
+    "text": "Basics of using Open Source AI image generation models\nOne of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. We will cover finetuning next time. This time we want to focus on using image generation models locally.\nFor large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2024. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: AUTOMATIC1111’s Stable Diffusion web UI.\nThis tool surely does make image generation more convenient. Most of the time, however, we do not want to deal with a web UI, but with an API endpoint. Fortunately, A1111’s webUI also has an API mode, which is quite easy to use and supports all features of the web UI (and some more). We are mostly interested in the txt2img API endpoint, which allows us to generate images from a text prompt. Let’s have a look at how this works:\nWe now know how to easily generate images using a local model. The next steps would be to try different models, and to add Lora (or other) adapters to them.",
     "crumbs": [
       "Image Generation",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"
@@ -572,30 +572,19 @@
     "objectID": "content/generation_in_agent_pipelines.html#basics-of-using-open-source-ai-image-generation-models",
     "href": "content/generation_in_agent_pipelines.html#basics-of-using-open-source-ai-image-generation-models",
     "title": "AI image generation III",
-    "section": "Basics of using Open Source AI image generation models",
-    "text": "Basics of using Open Source AI image generation models",
+    "section": "",
+    "text": "📝 Task\n\n\n\nLet’s have a look!\n\nInstall AUTOMATIC1111’s Stable Diffusion web UI on your laptop using these instructions.\nStart the server, open the webUI.\nStart generating images.🎉\nChange some of the settings and see what happens.\nWhat does the Sampling steps parameter do?\n\n\n\n\n\n\n\n\n\n\n📝 Task\n\n\n\n\nOpen the documentation of the API.\nRun the web UI in API mode.\nin a notebook, run an example call to the txt2img endpoint.",
     "crumbs": [
       "Image Generation",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"
     ]
   },
   {
-    "objectID": "content/generation_in_agent_pipelines.html#generative-adversarial-networks-gans",
-    "href": "content/generation_in_agent_pipelines.html#generative-adversarial-networks-gans",
+    "objectID": "content/generation_in_agent_pipelines.html#ai-image-generators-in-agent-systems-or-pipelines",
+    "href": "content/generation_in_agent_pipelines.html#ai-image-generators-in-agent-systems-or-pipelines",
     "title": "AI image generation III",
-    "section": "Generative Adversarial Networks (GANs)",
-    "text": "Generative Adversarial Networks (GANs)",
-    "crumbs": [
-      "Image Generation",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"
-    ]
-  },
-  {
-    "objectID": "content/generation_in_agent_pipelines.html#further-readings",
-    "href": "content/generation_in_agent_pipelines.html#further-readings",
-    "title": "AI image generation III",
-    "section": "Further Readings",
-    "text": "Further Readings",
+    "section": "AI image generators in agent systems or pipelines",
+    "text": "AI image generators in agent systems or pipelines\nIn this section we want to explore the use of AI image generators as components in an agent system or a pipeline. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).\nWe covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will:\n\ngenerate or retrieve a text based on some input keywords.\nuse this text as context for generating an image generation prompt.\ngenerate an image from the prompt.\nimplement quality assurance by comparing the original text embedding with the generated image embedding.\n\nMost agent frameworks we already introduced support building pipelines in addition to agents. See for example this tutorial on how to implement query pipelines in llamaindex or this documentation for pipelines in haystack. To get a full understanding of the basic principles, it is most educational to implement a pipeline from scratch.\n\nText generation or retrieval\nThe pipeline we are about to build starts with some input given by the user. In previous chapters we covered several ways of doing this. You could:\n\nuse a local LLM to generate the text for you.\nuse a retrieval function from a vector store or other text database.\ncombine both approaches in a RAG system.\n\n\n\n\n\n\n\n📝 Task\n\n\n\nLet’s get started!\n\nOpen a notebook and implement a simple text generation or retrieval function.\nGet a text from an input.\n\n\n\n\n\nImage generation\nThe next step is to to generate an images that fits the text. While we could just send the full text to the image generator and let it do its thing, a better approach is to generate a special prompt for the image generator. This prompt is then used to generate an image.\n\n\n\n\n\n\n📝 Task\n\n\n\n\nIn your notebook, implement a call to an LLM that generates in image generation prompt from your text.\nAlso implement a call to an image generator.\nConnect to an LLM (if not already done so) and to an image generation model.\nGenerate an image for your text.\n\n\n\n\n\nQuality assurance\nNow that we have the image, we want to assure that it fits the text. There are several ways of doing this. We could, for instance, evaluate text and images manually (or, rather, by eyeballing it). This works well for small amounts of images. However, it is not scalable for larger amounts.\nOne way of automating the examination is to check, if the image matches the text semantically, i.e. in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g. cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. On both cases, we need a predefined criterion, i.e. a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one.\n\n\n\n\n\n\n📝 Task\n\n\n\nLet’s have a look!\n\nIn your notebook, implement a function that displays text and image for manual inspection.\nImplement an automated similarity rater for text and images. You can use CLIP for that task.\n\n\n\n\n\nPipeline\nFinally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. this is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined matching criterion is matched.\n## pseudocode\ndefine pipeline(user_input):\n    get_text(user_input) -&gt; text\n    generate_image_prompt(text) -&gt; image_prompt\n    for in in range 5:\n        generate_image(image_prompt) -&gt; image\n        rate_image(image) -&gt; rate_value\n    find_best_rated_image(images, rate_values) -&gt; best_image\n    return best_image\n\n\n\n\n\n\n📝 Task\n\n\n\nLet’s finalize\n\nIn your notebook, implement the pipeline outlined above.\nMake a few test runs.\nUpload your notebook to Moodle.",
     "crumbs": [
       "Image Generation",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>AI image generation III</span>"

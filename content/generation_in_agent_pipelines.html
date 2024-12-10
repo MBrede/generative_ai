@@ -236,10 +236,14 @@ AI image generation<br>
 </h3>
    
   <ul>
-  <li><a href="#ai-image-generator-basics" id="toc-ai-image-generator-basics" class="nav-link active" data-scroll-target="#ai-image-generator-basics">AI image generator basics</a></li>
-  <li><a href="#basics-of-using-open-source-ai-image-generation-models" id="toc-basics-of-using-open-source-ai-image-generation-models" class="nav-link" data-scroll-target="#basics-of-using-open-source-ai-image-generation-models">Basics of using Open Source AI image generation models</a></li>
-  <li><a href="#generative-adversarial-networks-gans" id="toc-generative-adversarial-networks-gans" class="nav-link" data-scroll-target="#generative-adversarial-networks-gans">Generative Adversarial Networks (GANs)</a></li>
-  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#basics-of-using-open-source-ai-image-generation-models" id="toc-basics-of-using-open-source-ai-image-generation-models" class="nav-link active" data-scroll-target="#basics-of-using-open-source-ai-image-generation-models">Basics of using Open Source AI image generation models</a></li>
+  <li><a href="#ai-image-generators-in-agent-systems-or-pipelines" id="toc-ai-image-generators-in-agent-systems-or-pipelines" class="nav-link" data-scroll-target="#ai-image-generators-in-agent-systems-or-pipelines">AI image generators in agent systems or pipelines</a>
+  <ul class="collapse">
+  <li><a href="#text-generation-or-retrieval" id="toc-text-generation-or-retrieval" class="nav-link" data-scroll-target="#text-generation-or-retrieval">Text generation or retrieval</a></li>
+  <li><a href="#image-generation" id="toc-image-generation" class="nav-link" data-scroll-target="#image-generation">Image generation</a></li>
+  <li><a href="#quality-assurance" id="toc-quality-assurance" class="nav-link" data-scroll-target="#quality-assurance">Quality assurance</a></li>
+  <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -265,19 +269,167 @@ AI image generation<br>
 </header>
 
 
-<section id="ai-image-generator-basics" class="level2">
-<h2 class="anchored" data-anchor-id="ai-image-generator-basics">AI image generator basics</h2>
-</section>
 <section id="basics-of-using-open-source-ai-image-generation-models" class="level2">
 <h2 class="anchored" data-anchor-id="basics-of-using-open-source-ai-image-generation-models">Basics of using Open Source AI image generation models</h2>
+<!-- - AUTOMATIC1111 -->
+<p>One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. We will cover finetuning next time. This time we want to focus on using image generation models locally.</p>
+<p>For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2024. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111’s Stable Diffusion web UI</a>.</p>
+<p><!-- Let us use this tool to see how we can run an AI image generator on our laptops, using the open source model [SDXL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) from StabilityAI. This is a very short summary of the features of AUTOMATIC1111's web UI, which we will use in this article for running an AI image generator on our laptops:   --></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s have a look!</p>
+<ul>
+<li>Install AUTOMATIC1111’s Stable Diffusion web UI on your laptop using <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui#installation-and-running">these instructions</a>.</li>
+<li>Start the server, open the webUI.</li>
+<li>Start generating images.🎉</li>
+<li>Change some of the settings and see what happens.</li>
+<li>What does the <code>Sampling steps</code> parameter do?</li>
+</ul>
+</div>
+</div>
+<p>This tool surely does make image generation more convenient. Most of the time, however, we do not want to deal with a web UI, but with an API endpoint. Fortunately, A1111’s webUI also has an API mode, which is quite easy to use and supports all features of the web UI (and some more). We are mostly interested in the <code>txt2img</code> API endpoint, which allows us to generate images from a text prompt. Let’s have a look at how this works:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Open <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API">the documentation</a> of the API.</li>
+<li>Run the web UI in API mode.</li>
+<li>in a notebook, run an example call to the <code>txt2img</code> endpoint.</li>
+</ul>
+</div>
+</div>
+<p>We now know how to easily generate images using a local model. The next steps would be to try different models, and to add Lora (or other) adapters to them.</p>
 </section>
-<section id="generative-adversarial-networks-gans" class="level2">
-<h2 class="anchored" data-anchor-id="generative-adversarial-networks-gans">Generative Adversarial Networks (GANs)</h2>
+<section id="ai-image-generators-in-agent-systems-or-pipelines" class="level2">
+<h2 class="anchored" data-anchor-id="ai-image-generators-in-agent-systems-or-pipelines">AI image generators in agent systems or pipelines</h2>
+<p>In this section we want to explore the use of AI image generators as components in an agent system or a pipeline. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).</p>
+<p>We covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will:</p>
+<ul>
+<li>generate or retrieve a text based on some input keywords.</li>
+<li>use this text as context for generating an image generation prompt.</li>
+<li>generate an image from the prompt.</li>
+<li>implement quality assurance by comparing the original text embedding with the generated image embedding.</li>
+</ul>
+<p>Most agent frameworks we already introduced support building pipelines in addition to agents. See for example <a href="https://docs.llamaindex.ai/en/stable/examples/pipeline/query_pipeline/">this tutorial</a> on how to implement query pipelines in llamaindex or <a href="https://docs.haystack.deepset.ai/docs/pipelines">this documentation</a> for pipelines in haystack. To get a full understanding of the basic principles, it is most educational to implement a pipeline from scratch.</p>
+<section id="text-generation-or-retrieval" class="level3">
+<h3 class="anchored" data-anchor-id="text-generation-or-retrieval">Text generation or retrieval</h3>
+<p>The pipeline we are about to build starts with some input given by the user. In previous chapters we covered several ways of doing this. You could:</p>
+<ul>
+<li>use a local LLM to generate the text for you.</li>
+<li>use a retrieval function from a vector store or other text database.</li>
+<li>combine both approaches in a RAG system.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s get started!</p>
+<ul>
+<li>Open a notebook and implement a simple text generation or retrieval function.</li>
+<li>Get a text from an input.</li>
+</ul>
+</div>
+</div>
 </section>
-<section id="further-readings" class="level2">
-<h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<section id="image-generation" class="level3">
+<h3 class="anchored" data-anchor-id="image-generation">Image generation</h3>
+<p>The next step is to to generate an images that fits the text. While we could just send the full text to the image generator and let it do its thing, a better approach is to generate a special prompt for the image generator. This prompt is then used to generate an image.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>In your notebook, implement a call to an LLM that generates in image generation prompt from your text.</li>
+<li>Also implement a call to an image generator.</li>
+<li>Connect to an LLM (if not already done so) and to an image generation model.</li>
+<li>Generate an image for your text.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="quality-assurance" class="level3">
+<h3 class="anchored" data-anchor-id="quality-assurance">Quality assurance</h3>
+<p>Now that we have the image, we want to assure that it fits the text. There are several ways of doing this. We could, for instance, evaluate text and images manually (or, rather, by eyeballing it). This works well for small amounts of images. However, it is not scalable for larger amounts.</p>
+<p>One way of automating the examination is to check, if the image matches the text semantically, i.e.&nbsp;in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g.&nbsp;cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. On both cases, we need a predefined criterion, i.e.&nbsp;a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s have a look!</p>
+<ul>
+<li>In your notebook, implement a function that displays text and image for manual inspection.</li>
+<li>Implement an automated similarity rater for text and images. You can use <a href="https://github.com/openai/CLIP">CLIP</a> for that task.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="pipeline">Pipeline</h3>
+<p>Finally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. this is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined matching criterion is matched.</p>
+<pre><code>## pseudocode
+define pipeline(user_input):
+    get_text(user_input) -&gt; text
+    generate_image_prompt(text) -&gt; image_prompt
+    for in in range 5:
+        generate_image(image_prompt) -&gt; image
+        rate_image(image) -&gt; rate_value
+    find_best_rated_image(images, rate_values) -&gt; best_image
+    return best_image</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s finalize</p>
+<ul>
+<li>In your notebook, implement the pipeline outlined above.</li>
+<li>Make a few test runs.</li>
+<li>Upload your notebook to Moodle.</li>
+</ul>
+</div>
+</div>
+<!-- ## Further Readings -->
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
