@@ -27,13 +27,15 @@ Full finetuning is the simplest approach to finetuning. As the name says, it is 
 This means that all weights of the model are updated during training using regular gradient descent or a variant thereof.
 The main advantage of this approach is that it is very simple and easy to implement. Complete (few-shot) fine-tuning has also shown to perform better in the domain of finetuning and in Out-of-domain tasks when compared to Few-Shot-Prompt-approaches @mosbachFewshotFinetuningVs2023.
 However, it also has some disadvantages.
-Firstly, it can be computationally expensive as it requires training all parameters of the model. @tip-fineTuningResources illustrates the relationship between necessary resources for finetuning compared to inference.
+Firstly, it can be computationally expensive as it requires training all parameters of the model. 
+
+<!-- @tip-fineTuningResources illustrates the relationship between necessary resources for finetuning compared to inference.
 
 :::{#tip-fineTuningResources .callout-tip collapse="true" appearance="minimal"}
 
 {{< include resources_full_finetuning.md >}}
 
-:::
+::: -->
 
 Secondly, it can lead to catastrophic forgetting, i.e., the model forgets what it has learned during pre-training when adapting to new data [@luoEmpiricalStudyCatastrophic2024].
 
@@ -83,11 +85,34 @@ The main contribution of Prompt-Tuning over Prefix-Tuning is a) that they showed
 <!-- ### Multitask prompt tuning
  -->
 
-@tip-softPromptFineTuningResources illustrates the amount of resources that can be saved when using soft-prompting-based finetuning compared to full finetuning.
+<!-- @tip-softPromptFineTuningResources illustrates the amount of resources that can be saved when using soft-prompting-based finetuning compared to full finetuning.
 
 :::{#tip-softPromptFineTuningResources .callout-tip collapse="true" appearance="minimal"}
 
 {{< include resources_softprompt_finetuning.md >}}
+
+::: -->
+
+
+:::{.callout-note}
+
+### 📝 Task
+
+Your turn!
+
+The [huggingface-page on prompt-based finetuning](https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting) describes three more variants of soft-prompt finetuning:
+
+1. [P-Tuning](https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting)
+2. [Multitask prompt tuning](https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting)
+3. [Context-Aware prompt tuning](https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting)
+
+Select one of the three and try to answer the following questions in a markdown-file:
+
+1. What is the core principle?
+2. What is the context in which this tuning method is most efficient?
+3. How much memory can be saved by leveraging this technique (if you can find this indication)
+
+Present your results to the group.
 
 :::
 
@@ -138,13 +163,13 @@ display_a_multiplication(mat1,
 ```
 
 
-@tip-LoRAFineTuningResources illustrates the amount of resources that can be saved when using LoRA-based finetuning compared to full finetuning.
+<!-- @tip-LoRAFineTuningResources illustrates the amount of resources that can be saved when using LoRA-based finetuning compared to full finetuning.
 
 :::{#tip-LoRAFineTuningResources .callout-tip collapse="true" appearance="minimal"}
 
 {{< include resources_lora_finetuning.md >}}
 
-:::
+::: -->
 
 #### QLoRA (Quantized Low-Rank Adaptation)
 
@@ -171,6 +196,26 @@ This is mostly done by a far more efficient Gradient Descent algorithm that is s
 
 They additionally introduced dynamic quantization to their models, which allows them to further reduce the memory footprint without losing too much performance.
 
+:::{.callout-note}
+
+### 📝 Task
+
+Your turn!
+
+The [huggingface-page on adapter-based finetuning](https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter) describes a good handfull of other variants for adapter-based finetuning. Select one of the following two:
+
+1. [OFT](https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#orthogonal-finetuning-oft)
+2. [BONE](https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#bone)
+
+Try to answer the following questions in the same markdown-file as before:
+
+1. What is the core principle?
+2. How does this method compare to  LoRA?
+3. How much memory can be saved by leveraging this technique (if you can find this indication)
+
+Present your results to the group and upload the markdown-file to moodle.
+
+:::
 
 ### (IA)³
 
@@ -184,19 +229,6 @@ They also report their adaptation-strategy to work better and in a less resource
 ![ Performance of (IA)³ compared to other parameter-efficient finetuning approaches. Image taken from @liuFewShotParameterEfficientFineTuning2022](../imgs/ia3_performance.png){#fig-ia3performance .enlarge-onhover}
 
 Additionally, they report a super-human performance of 75.8% on the RAFT, which provides only 50 training examples per task.
-
-<!-- :::{.callout-note}
-
-### 📝 Task
-
-Your turn!
-
-Use the (IA)³ implementation in the huggingface PEFT-module to finetune a small QWEN-model.
-
-* Use the 1.8B version of [QWEN](https://huggingface.co/Qwen/Qwen1.5-1.8B) to base your finetuning on
-
-
-::: -->
 
 
 ## Further Readings
