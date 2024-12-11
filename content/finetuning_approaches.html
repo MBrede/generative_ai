@@ -393,7 +393,7 @@ Fig&nbsp;12.2: Results of Prompt-tuning compared to prompt-engineering and compl
 <li>What is the context in which this tuning method is most efficient?</li>
 <li>How much memory can be saved by leveraging this technique (if you can find this indication)</li>
 </ol>
-<p>Present your results to the group.</p>
+<p>Present your results to the group. Upload your results to moodle.</p>
 </div>
 </div>
 </section>
@@ -455,32 +455,27 @@ Fig&nbsp;12.4: Illustration of the result of quantization to 32, 16, 8 and 4 bit
 <section id="unsloth" class="level4">
 <h4 class="anchored" data-anchor-id="unsloth">Unsloth</h4>
 <p>Unsloth <span class="citation" data-cites="unsloth">(<a href="#ref-unsloth" role="doc-biblioref">Daniel Han &amp; team, 2023</a>)</span> is a python-module that implements LoRA-finetuning in a very efficient way that further reduces raining resource requirements. This is mostly done by a far more efficient Gradient Descent algorithm that is specifically optimized for LoRA finetuning <span class="citation" data-cites="IntroducingUnsloth">(<a href="#ref-IntroducingUnsloth" role="doc-biblioref"><span>“Introducing <span>Unsloth</span>,”</span> n.d.</a>)</span>.</p>
-<p>They additionally introduced dynamic quantization to their models, which allows them to further reduce the memory footprint without losing too much performance.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-📝 Task
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Your turn!</p>
-<p>The <a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter">huggingface-page on adapter-based finetuning</a> describes a good handfull of other variants for adapter-based finetuning. Select one of the following two:</p>
-<ol type="1">
-<li><a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#orthogonal-finetuning-oft">OFT</a></li>
-<li><a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#bone">BONE</a></li>
-</ol>
-<p>Try to answer the following questions in the same markdown-file as before:</p>
-<ol type="1">
-<li>What is the core principle?</li>
-<li>How does this method compare to LoRA?</li>
-<li>How much memory can be saved by leveraging this technique (if you can find this indication)</li>
-</ol>
-<p>Present your results to the group and upload the markdown-file to moodle.</p>
-</div>
-</div>
+<p>They additionally introduced dynamic quantization to their models, which allows them to further reduce the memory footprint without losing too much performance. <!-- 
+:::{.callout-note}
+
+### 📝 Task
+
+Your turn!
+
+The [huggingface-page on adapter-based finetuning](https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter) describes a good handfull of other variants for adapter-based finetuning. Select one of the following two:
+
+1. [OFT](https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#orthogonal-finetuning-oft)
+2. [BONE](https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#bone)
+
+Try to answer the following questions in the same markdown-file as before:
+
+1. What is the core principle?
+2. How does this method compare to  LoRA?
+3. How much memory can be saved by leveraging this technique (if you can find this indication)
+
+Present your results to the group and upload the markdown-file to moodle.
+You do not have 
+::: --></p>
 </section>
 </section>
 <section id="ia³" class="level3">
