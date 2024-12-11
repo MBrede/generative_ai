@@ -27,12 +27,45 @@
   langid = {english}
 }
 
+@misc{aghajanyanIntrinsicDimensionalityExplains2020,
+  title = {Intrinsic {{Dimensionality Explains}} the {{Effectiveness}} of {{Language Model Fine-Tuning}}},
+  author = {Aghajanyan, Armen and Zettlemoyer, Luke and Gupta, Sonal},
+  year = {2020},
+  month = dec,
+  number = {arXiv:2012.13255},
+  eprint = {2012.13255},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2012.13255},
+  urldate = {2024-12-09},
+  abstract = {Although pretrained language models can be fine-tuned to produce state-of-the-art results for a very wide range of language understanding tasks, the dynamics of this process are not well understood, especially in the low data regime. Why can we use relatively vanilla gradient descent algorithms (e.g., without strong regularization) to tune a model with hundreds of millions of parameters on datasets with only hundreds or thousands of labeled examples? In this paper, we argue that analyzing fine-tuning through the lens of intrinsic dimension provides us with empirical and theoretical intuitions to explain this remarkable phenomenon. We empirically show that common pre-trained models have a very low intrinsic dimension; in other words, there exists a low dimension reparameterization that is as effective for fine-tuning as the full parameter space. For example, by optimizing only 200 trainable parameters randomly projected back into the full space, we can tune a RoBERTa model to achieve 90{\textbackslash}\% of the full parameter performance levels on MRPC. Furthermore, we empirically show that pre-training implicitly minimizes intrinsic dimension and, perhaps surprisingly, larger models tend to have lower intrinsic dimension after a fixed number of pre-training updates, at least in part explaining their extreme effectiveness. Lastly, we connect intrinsic dimensionality with low dimensional task representations and compression based generalization bounds to provide intrinsic-dimension-based generalization bounds that are independent of the full parameter count.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
 @misc{AIAAICChatGPTTraining,
   title = {{AIAAIC - ChatGPT training emits 502 metric tons of carbon}},
   urldate = {2024-11-09},
   abstract = {ChatGPT training estimated to emit 502 metric tonnes of carbon},
   howpublished = {https://www.aiaaic.org/aiaaic-repository/ai-algorithmic-and-automation-incidents/chatgpt-training-emits-502-metric-tons-of-carbon},
   langid = {ngerman}
+}
+
+@misc{alexRAFTRealWorldFewShot2022,
+  title = {{{RAFT}}: {{A Real-World Few-Shot Text Classification Benchmark}}},
+  shorttitle = {{{RAFT}}},
+  author = {Alex, Neel and Lifland, Eli and Tunstall, Lewis and Thakur, Abhishek and Maham, Pegah and Riedel, C. Jess and Hine, Emmie and Ashurst, Carolyn and Sedille, Paul and Carlier, Alexis and Noetel, Michael and Stuhlm{\"u}ller, Andreas},
+  year = {2022},
+  month = jan,
+  number = {arXiv:2109.14076},
+  eprint = {2109.14076},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2109.14076},
+  urldate = {2024-12-09},
+  abstract = {Large pre-trained language models have shown promise for few-shot learning, completing text-based tasks given only a few task-specific examples. Will models soon solve classification tasks that have so far been reserved for human research assistants? Existing benchmarks are not designed to measure progress in applied settings, and so don't directly answer this question. The RAFT benchmark (Real-world Annotated Few-shot Tasks) focuses on naturally occurring tasks and uses an evaluation setup that mirrors deployment. Baseline evaluations on RAFT reveal areas current techniques struggle with: reasoning over long texts and tasks with many classes. Human baselines show that some classification tasks are difficult for non-expert humans, reflecting that real-world value sometimes depends on domain expertise. Yet even non-expert human baseline F1 scores exceed GPT-3 by an average of 0.11. The RAFT datasets and leaderboard will track which model improvements translate into real-world benefits at https://raft.elicit.org .},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @misc{angelovTop2VecDistributedRepresentations2020a,
@@ -141,6 +174,23 @@
   keywords = {Computer Science - Computation and Language}
 }
 
+@misc{buehlerXLoRAMixtureLowRank2024,
+  title = {X-{{LoRA}}: {{Mixture}} of {{Low-Rank Adapter Experts}}, a {{Flexible Framework}} for {{Large Language Models}} with {{Applications}} in {{Protein Mechanics}} and {{Molecular Design}}},
+  shorttitle = {X-{{LoRA}}},
+  author = {Buehler, Eric L. and Buehler, Markus J.},
+  year = {2024},
+  month = mar,
+  number = {arXiv:2402.07148},
+  eprint = {2402.07148},
+  primaryclass = {cond-mat},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2402.07148},
+  urldate = {2024-12-09},
+  abstract = {We report a mixture of expert strategy to create fine-tuned large language models using a deep layer-wise token-level approach based on low-rank adaptation (LoRA). Starting with a set of pre-trained LoRA adapters, our gating strategy uses the hidden states to dynamically mix adapted layers, allowing the resulting X-LoRA model to draw upon different capabilities and create never-before-used deep layer-wise combinations to solve tasks. The design is inspired by the biological principles of universality and diversity, where neural network building blocks are reused in different hierarchical manifestations. Hence, the X-LoRA model can be easily implemented for any existing large language model (LLM) without a need for modifications of the underlying structure. We develop a tailored X-LoRA model that offers scientific capabilities including forward/inverse analysis tasks and enhanced reasoning capability, focused on biomaterial analysis, protein mechanics and design. The impact of this work include access to readily expandable and adaptable models with strong domain knowledge and the capability to integrate across areas of knowledge. Featuring experts in biology, mathematics, reasoning, bio-inspired materials, mechanics and materials, chemistry, protein biophysics, mechanics and quantum-mechanics based molecular properties, we conduct a series of physics-focused case studies. We examine knowledge recall, protein mechanics forward/inverse tasks, protein design, adversarial agentic modeling including ontological knowledge graph construction, as well as molecular design. The model is capable not only of making quantitative predictions of nanomechanical properties of proteins or quantum mechanical molecular properties, but also reasons over the results and correctly predicts likely mechanisms that explain distinct molecular behaviors.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning,Condensed Matter - Disordered Systems and Neural Networks,Condensed Matter - Soft Condensed Matter,Quantitative Biology - Quantitative Methods}
+}
+
 @misc{BuildingMultiAgentFramework2024,
   title = {Building a {{Multi-Agent Framework}} from {{Scratch}} with {{LlamaIndex}}},
   year = {2024},
@@ -166,6 +216,32 @@
   abstract = {We present models for encoding sentences into embedding vectors that specifically target transfer learning to other NLP tasks. The models are efficient and result in accurate performance on diverse transfer tasks. Two variants of the encoding models allow for trade-offs between accuracy and compute resources. For both variants, we investigate and report the relationship between model complexity, resource consumption, the availability of transfer task training data, and task performance. Comparisons are made with baselines that use word level transfer learning via pretrained word embeddings as well as baselines do not use any transfer learning. We find that transfer learning using sentence embeddings tends to outperform word level transfer. With transfer learning via sentence embeddings, we observe surprisingly good performance with minimal amounts of supervised training data for a transfer task. We obtain encouraging results on Word Embedding Association Tests (WEAT) targeted at detecting model bias. Our pre-trained sentence encoding models are made freely available for download and on TF Hub.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computation and Language}
+}
+
+@misc{ChatbotArenaLeaderboard,
+  title = {Chatbot {{Arena Leaderboard Week}} 8: {{Introducing MT-Bench}} and {{Vicuna-33B}} {\textbar} {{LMSYS Org}}},
+  shorttitle = {Chatbot {{Arena Leaderboard Week}} 8},
+  urldate = {2024-12-09},
+  abstract = {{$<$}p{$>$}In this blog post, we share the latest update on Chatbot Arena leaderboard, which now includes more open models and three metrics:{$<$}/p{$>$} {$<$}ol{$>$} {$<$}li{$><$}strong{$>$}Ch...},
+  howpublished = {https://lmsys.org/blog/2023-06-22-leaderboard},
+  langid = {english}
+}
+
+@misc{chenReverseThinkingMakes2024,
+  title = {Reverse {{Thinking Makes LLMs Stronger Reasoners}}},
+  author = {Chen, Justin Chih-Yao and Wang, Zifeng and Palangi, Hamid and Han, Rujun and Ebrahimi, Sayna and Le, Long and Perot, Vincent and Mishra, Swaroop and Bansal, Mohit and Lee, Chen-Yu and Pfister, Tomas},
+  year = {2024},
+  month = nov,
+  number = {arXiv:2411.19865},
+  eprint = {2411.19865},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2411.19865},
+  urldate = {2024-12-09},
+  abstract = {Reverse thinking plays a crucial role in human reasoning. Humans can reason not only from a problem to a solution but also in reverse, i.e., start from the solution and reason towards the problem. This often enhances overall reasoning performance as it enables consistency checks between their forward and backward thinking. To enable Large Language Models (LLMs) to perform reverse thinking, we introduce Reverse-Enhanced Thinking (REVTHINK), a framework composed of data augmentation and learning objectives. In REVTHINK, we augment the dataset by collecting structured forward-backward reasoning from a teacher model, consisting of: (1) the original question, (2) forward reasoning, (3) backward question, and (4) backward reasoning. We then employ three objectives to train a smaller student model in a multi-task learning fashion: (a) generate forward reasoning from a question, (b) generate a backward question from a question, and (c) generate backward reasoning from the backward question. Experiments across 12 datasets covering commonsense, math, and logical reasoning show an average 13.53\% improvement over the student model's zero-shot performance and a 6.84\% improvement over the strongest knowledge distillation baselines. Moreover, our method demonstrates sample efficiency -- using only 10\% of the correct forward reasoning from the training data, it outperforms a standard fine-tuning method trained on 10{\texttimes} more forward reasoning. REVTHINK also exhibits strong generalization to out-of-distribution held-out datasets.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @misc{ConstitutionalAIHarmlessness,
@@ -258,6 +334,22 @@
   abstract = {Designed to learn long-range interactions on sequential data, transformers continue to show state-of-the-art results on a wide variety of tasks. In contrast to CNNs, they contain no inductive bias that prioritizes local interactions. This makes them expressive, but also computationally infeasible for long sequences, such as high-resolution images. We demonstrate how combining the effectiveness of the inductive bias of CNNs with the expressivity of transformers enables them to model and thereby synthesize high-resolution images. We show how to (i) use CNNs to learn a context-rich vocabulary of image constituents, and in turn (ii) utilize transformers to efficiently model their composition within high-resolution images. Our approach is readily applied to conditional synthesis tasks, where both non-spatial information, such as object classes, and spatial information, such as segmentations, can control the generated image. In particular, we present the first results on semantically-guided synthesis of megapixel images with transformers and obtain the state of the art among autoregressive models on class-conditional ImageNet. Code and pretrained models can be found at https://github.com/CompVis/taming-transformers .},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computer Vision and Pattern Recognition}
+}
+
+@misc{fedusReviewSparseExpert2022,
+  title = {A {{Review}} of {{Sparse Expert Models}} in {{Deep Learning}}},
+  author = {Fedus, William and Dean, Jeff and Zoph, Barret},
+  year = {2022},
+  month = sep,
+  number = {arXiv:2209.01667},
+  eprint = {2209.01667},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2209.01667},
+  urldate = {2024-12-09},
+  abstract = {Sparse expert models are a thirty-year old concept re-emerging as a popular architecture in deep learning. This class of architecture encompasses Mixture-of-Experts, Switch Transformers, Routing Networks, BASE layers, and others, all with the unifying idea that each example is acted on by a subset of the parameters. By doing so, the degree of sparsity decouples the parameter count from the compute per example allowing for extremely large, but efficient models. The resulting models have demonstrated significant improvements across diverse domains such as natural language processing, computer vision, and speech recognition. We review the concept of sparse expert models, provide a basic description of the common algorithms, contextualize the advances in the deep learning era, and conclude by highlighting areas for future work.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @article{ganesanEmpiricalEvaluationPretrained2021,
@@ -433,6 +525,23 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
+@misc{huLoRALowRankAdaptation2021a,
+  title = {{{LoRA}}: {{Low-Rank Adaptation}} of {{Large Language Models}}},
+  shorttitle = {{{LoRA}}},
+  author = {Hu, Edward J. and Shen, Yelong and Wallis, Phillip and {Allen-Zhu}, Zeyuan and Li, Yuanzhi and Wang, Shean and Wang, Lu and Chen, Weizhu},
+  year = {2021},
+  month = oct,
+  number = {arXiv:2106.09685},
+  eprint = {2106.09685},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2106.09685},
+  urldate = {2024-12-08},
+  abstract = {An important paradigm of natural language processing consists of large-scale pre-training on general domain data and adaptation to particular tasks or domains. As we pre-train larger models, full fine-tuning, which retrains all model parameters, becomes less feasible. Using GPT-3 175B as an example -- deploying independent instances of fine-tuned models, each with 175B parameters, is prohibitively expensive. We propose Low-Rank Adaptation, or LoRA, which freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture, greatly reducing the number of trainable parameters for downstream tasks. Compared to GPT-3 175B fine-tuned with Adam, LoRA can reduce the number of trainable parameters by 10,000 times and the GPU memory requirement by 3 times. LoRA performs on-par or better than fine-tuning in model quality on RoBERTa, DeBERTa, GPT-2, and GPT-3, despite having fewer trainable parameters, a higher training throughput, and, unlike adapters, no additional inference latency. We also provide an empirical investigation into rank-deficiency in language model adaptation, which sheds light on the efficacy of LoRA. We release a package that facilitates the integration of LoRA with PyTorch models and provide our implementations and model checkpoints for RoBERTa, DeBERTa, and GPT-2 at https://github.com/microsoft/LoRA.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
 @article{hussainTutorialOpensourceLarge2024,
   title = {A Tutorial on Open-Source Large Language Models for Behavioral Science},
   author = {Hussain, Zak and Binz, Marcel and Mata, Rui and Wulff, Dirk U.},
@@ -449,6 +558,14 @@
   langid = {english}
 }
 
+@misc{IntroducingUnsloth,
+  title = {Introducing {{Unsloth}}},
+  journal = {Unsloth - Open source Fine-tuning for LLMs},
+  urldate = {2024-12-08},
+  howpublished = {https://unsloth.ai/introducing},
+  langid = {english}
+}
+
 @misc{IntroductionLLMAgents2023,
   title = {Introduction to {{LLM Agents}}},
   year = {2023},
@@ -458,6 +575,34 @@
   abstract = {Consider a large language model (LLM) application that is designed to help financial analysts answer questions about the performance of a company. With a well-designed retrieval augmented generation{\dots}},
   howpublished = {https://developer.nvidia.com/blog/introduction-to-llm-agents/},
   langid = {american}
+}
+
+@article{jacobsAdaptiveMixturesLocal1991,
+  title = {Adaptive Mixtures of Local Experts},
+  author = {Jacobs, Robert A. and Jordan, Michael I. and Nowlan, Steven J. and Hinton, Geoffrey E.},
+  year = {1991},
+  journal = {Neural computation},
+  volume = {3},
+  number = {1},
+  pages = {79--87},
+  publisher = {MIT Press},
+  urldate = {2024-12-09}
+}
+
+@misc{jiangMixtralExperts2024,
+  title = {Mixtral of {{Experts}}},
+  author = {Jiang, Albert Q. and Sablayrolles, Alexandre and Roux, Antoine and Mensch, Arthur and Savary, Blanche and Bamford, Chris and Chaplot, Devendra Singh and de las Casas, Diego and Hanna, Emma Bou and Bressand, Florian and Lengyel, Gianna and Bour, Guillaume and Lample, Guillaume and Lavaud, L{\'e}lio Renard and Saulnier, Lucile and Lachaux, Marie-Anne and Stock, Pierre and Subramanian, Sandeep and Yang, Sophia and Antoniak, Szymon and Scao, Teven Le and Gervet, Th{\'e}ophile and Lavril, Thibaut and Wang, Thomas and Lacroix, Timoth{\'e}e and Sayed, William El},
+  year = {2024},
+  month = jan,
+  number = {arXiv:2401.04088},
+  eprint = {2401.04088},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2401.04088},
+  urldate = {2024-12-09},
+  abstract = {We introduce Mixtral 8x7B, a Sparse Mixture of Experts (SMoE) language model. Mixtral has the same architecture as Mistral 7B, with the difference that each layer is composed of 8 feedforward blocks (i.e. experts). For every token, at each layer, a router network selects two experts to process the current state and combine their outputs. Even though each token only sees two experts, the selected experts can be different at each timestep. As a result, each token has access to 47B parameters, but only uses 13B active parameters during inference. Mixtral was trained with a context size of 32k tokens and it outperforms or matches Llama 2 70B and GPT-3.5 across all evaluated benchmarks. In particular, Mixtral vastly outperforms Llama 2 70B on mathematics, code generation, and multilingual benchmarks. We also provide a model fine-tuned to follow instructions, Mixtral 8x7B - Instruct, that surpasses GPT-3.5 Turbo, Claude-2.1, Gemini Pro, and Llama 2 70B - chat model on human benchmarks. Both the base and instruct models are released under the Apache 2.0 license.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @misc{jiangMoRAHighRankUpdating2024,
@@ -500,6 +645,22 @@
   urldate = {2023-12-12},
   abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
   howpublished = {https://huggingface.co/jphme/em\_german\_13b\_v01}
+}
+
+@misc{kalajdzievskiScalingLawsForgetting2024,
+  title = {Scaling {{Laws}} for {{Forgetting When Fine-Tuning Large Language Models}}},
+  author = {Kalajdzievski, Damjan},
+  year = {2024},
+  month = jan,
+  number = {arXiv:2401.05605},
+  eprint = {2401.05605},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2401.05605},
+  urldate = {2024-12-08},
+  abstract = {We study and quantify the problem of forgetting when fine-tuning pre-trained large language models (LLMs) on a downstream task. We find that parameter-efficient fine-tuning (PEFT) strategies, such as Low-Rank Adapters (LoRA), still suffer from catastrophic forgetting. In particular, we identify a strong inverse linear relationship between the fine-tuning performance and the amount of forgetting when fine-tuning LLMs with LoRA. We further obtain precise scaling laws that show forgetting increases as a shifted power law in the number of parameters fine-tuned and the number of update steps. We also examine the impact of forgetting on knowledge, reasoning, and the safety guardrails trained into Llama 2 7B chat. Our study suggests that forgetting cannot be avoided through early stopping or by varying the number of parameters fine-tuned. We believe this opens up an important safety-critical direction for future research to evaluate and develop fine-tuning schemes which mitigate forgetting},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @misc{kaplanScalingLawsNeural2020a,
@@ -546,21 +707,6 @@
   year = {2016}
 }
 
-@misc{kojimaLargeLanguageModels2023,
-  title = {Large {{Language Models}} Are {{Zero-Shot Reasoners}}},
-  author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
-  year = {2023},
-  month = jan,
-  number = {arXiv:2205.11916},
-  eprint = {2205.11916},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2205.11916},
-  urldate = {2024-11-19},
-  abstract = {Pretrained large language models (LLMs) are widely used in many sub-fields of natural language processing (NLP) and generally known as excellent few-shot learners with task-specific exemplars. Notably, chain of thought (CoT) prompting, a recent technique for eliciting complex multi-step reasoning through step-by-step answer examples, achieved the state-of-the-art performances in arithmetics and symbolic reasoning, difficult system-2 tasks that do not follow the standard scaling laws for LLMs. While these successes are often attributed to LLMs' ability for few-shot learning, we show that LLMs are decent zero-shot reasoners by simply adding "Let's think step by step" before each answer. Experimental results demonstrate that our Zero-shot-CoT, using the same single prompt template, significantly outperforms zero-shot LLM performances on diverse benchmark reasoning tasks including arithmetics (MultiArith, GSM8K, AQUA-RAT, SVAMP), symbolic reasoning (Last Letter, Coin Flip), and other logical reasoning tasks (Date Understanding, Tracking Shuffled Objects), without any hand-crafted few-shot examples, e.g. increasing the accuracy on MultiArith from 17.7\% to 78.7\% and GSM8K from 10.4\% to 40.7\% with large InstructGPT model (text-davinci-002), as well as similar magnitudes of improvements with another off-the-shelf large model, 540B parameter PaLM. The versatility of this single prompt across very diverse reasoning tasks hints at untapped and understudied fundamental zero-shot capabilities of LLMs, suggesting high-level, multi-task broad cognitive capabilities may be extracted by simple prompting. We hope our work not only serves as the minimal strongest zero-shot baseline for the challenging reasoning benchmarks, but also highlights the importance of carefully exploring and analyzing the enormous zero-shot knowledge hidden inside LLMs before crafting finetuning datasets or few-shot exemplars.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
-}
-
 @misc{kojimaLargeLanguageModels2023a,
   title = {Large {{Language Models}} Are {{Zero-Shot Reasoners}}},
   author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
@@ -574,6 +720,22 @@
   abstract = {Pretrained large language models (LLMs) are widely used in many sub-fields of natural language processing (NLP) and generally known as excellent few-shot learners with task-specific exemplars. Notably, chain of thought (CoT) prompting, a recent technique for eliciting complex multi-step reasoning through step-by-step answer examples, achieved the state-of-the-art performances in arithmetics and symbolic reasoning, difficult system-2 tasks that do not follow the standard scaling laws for LLMs. While these successes are often attributed to LLMs' ability for few-shot learning, we show that LLMs are decent zero-shot reasoners by simply adding "Let's think step by step" before each answer. Experimental results demonstrate that our Zero-shot-CoT, using the same single prompt template, significantly outperforms zero-shot LLM performances on diverse benchmark reasoning tasks including arithmetics (MultiArith, GSM8K, AQUA-RAT, SVAMP), symbolic reasoning (Last Letter, Coin Flip), and other logical reasoning tasks (Date Understanding, Tracking Shuffled Objects), without any hand-crafted few-shot examples, e.g. increasing the accuracy on MultiArith from 17.7\% to 78.7\% and GSM8K from 10.4\% to 40.7\% with large InstructGPT model (text-davinci-002), as well as similar magnitudes of improvements with another off-the-shelf large model, 540B parameter PaLM. The versatility of this single prompt across very diverse reasoning tasks hints at untapped and understudied fundamental zero-shot capabilities of LLMs, suggesting high-level, multi-task broad cognitive capabilities may be extracted by simple prompting. We hope our work not only serves as the minimal strongest zero-shot baseline for the challenging reasoning benchmarks, but also highlights the importance of carefully exploring and analyzing the enormous zero-shot knowledge hidden inside LLMs before crafting finetuning datasets or few-shot exemplars.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
+@misc{kumarFineTuningCanDistort2022,
+  title = {Fine-{{Tuning}} Can {{Distort Pretrained Features}} and {{Underperform Out-of-Distribution}}},
+  author = {Kumar, Ananya and Raghunathan, Aditi and Jones, Robbie and Ma, Tengyu and Liang, Percy},
+  year = {2022},
+  month = feb,
+  number = {arXiv:2202.10054},
+  eprint = {2202.10054},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2202.10054},
+  urldate = {2024-12-08},
+  abstract = {When transferring a pretrained model to a downstream task, two popular methods are full fine-tuning (updating all the model parameters) and linear probing (updating only the last linear layer -- the "head"). It is well known that fine-tuning leads to better accuracy in-distribution (ID). However, in this paper, we find that fine-tuning can achieve worse accuracy than linear probing out-of-distribution (OOD) when the pretrained features are good and the distribution shift is large. On 10 distribution shift datasets (Breeds-Living17, Breeds-Entity30, DomainNet, CIFAR \${\textbackslash}to\$ STL, CIFAR10.1, FMoW, ImageNetV2, ImageNet-R, ImageNet-A, ImageNet-Sketch), fine-tuning obtains on average 2\% higher accuracy ID but 7\% lower accuracy OOD than linear probing. We show theoretically that this tradeoff between ID and OOD accuracy arises even in a simple setting: fine-tuning overparameterized two-layer linear networks. We prove that the OOD error of fine-tuning is high when we initialize with a fixed or random head -- this is because while fine-tuning learns the head, the lower layers of the neural network change simultaneously and distort the pretrained features. Our analysis suggests that the easy two-step strategy of linear probing then full fine-tuning (LP-FT), sometimes used as a fine-tuning heuristic, combines the benefits of both fine-tuning and linear probing. Empirically, LP-FT outperforms both fine-tuning and linear probing on the above datasets (1\% better ID, 10\% better OOD than full fine-tuning).},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning}
 }
 
 @misc{kumarSelectiveFinetuningLLMlabeled2024,
@@ -632,6 +794,55 @@
   langid = {english}
 }
 
+@misc{lesterPowerScaleParameterEfficient2021,
+  title = {The {{Power}} of {{Scale}} for {{Parameter-Efficient Prompt Tuning}}},
+  author = {Lester, Brian and {Al-Rfou}, Rami and Constant, Noah},
+  year = {2021},
+  month = sep,
+  number = {arXiv:2104.08691},
+  eprint = {2104.08691},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2104.08691},
+  urldate = {2024-12-08},
+  abstract = {In this work, we explore "prompt tuning", a simple yet effective mechanism for learning "soft prompts" to condition frozen language models to perform specific downstream tasks. Unlike the discrete text prompts used by GPT-3, soft prompts are learned through backpropagation and can be tuned to incorporate signal from any number of labeled examples. Our end-to-end learned approach outperforms GPT-3's "few-shot" learning by a large margin. More remarkably, through ablations on model size using T5, we show that prompt tuning becomes more competitive with scale: as models exceed billions of parameters, our method "closes the gap" and matches the strong performance of model tuning (where all model weights are tuned). This finding is especially relevant in that large models are costly to share and serve, and the ability to reuse one frozen model for multiple downstream tasks can ease this burden. Our method can be seen as a simplification of the recently proposed "prefix tuning" of Li and Liang (2021), and we provide a comparison to this and other similar approaches. Finally, we show that conditioning a frozen model with soft prompts confers benefits in robustness to domain transfer, as compared to full model tuning.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language}
+}
+
+@misc{liPrefixTuningOptimizingContinuous2021,
+  title = {Prefix-{{Tuning}}: {{Optimizing Continuous Prompts}} for {{Generation}}},
+  shorttitle = {Prefix-{{Tuning}}},
+  author = {Li, Xiang Lisa and Liang, Percy},
+  year = {2021},
+  month = jan,
+  number = {arXiv:2101.00190},
+  eprint = {2101.00190},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2101.00190},
+  urldate = {2024-12-08},
+  abstract = {Fine-tuning is the de facto way to leverage large pretrained language models to perform downstream tasks. However, it modifies all the language model parameters and therefore necessitates storing a full copy for each task. In this paper, we propose prefix-tuning, a lightweight alternative to fine-tuning for natural language generation tasks, which keeps language model parameters frozen, but optimizes a small continuous task-specific vector (called the prefix). Prefix-tuning draws inspiration from prompting, allowing subsequent tokens to attend to this prefix as if it were "virtual tokens". We apply prefix-tuning to GPT-2 for table-to-text generation and to BART for summarization. We find that by learning only 0.1{\textbackslash}\% of the parameters, prefix-tuning obtains comparable performance in the full data setting, outperforms fine-tuning in low-data settings, and extrapolates better to examples with topics unseen during training.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language}
+}
+
+@misc{liuFewShotParameterEfficientFineTuning2022,
+  title = {Few-{{Shot Parameter-Efficient Fine-Tuning}} Is {{Better}} and {{Cheaper}} than {{In-Context Learning}}},
+  author = {Liu, Haokun and Tam, Derek and Muqeeth, Mohammed and Mohta, Jay and Huang, Tenghao and Bansal, Mohit and Raffel, Colin},
+  year = {2022},
+  month = aug,
+  number = {arXiv:2205.05638},
+  eprint = {2205.05638},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2205.05638},
+  urldate = {2024-12-09},
+  abstract = {Few-shot in-context learning (ICL) enables pre-trained language models to perform a previously-unseen task without any gradient-based training by feeding a small number of training examples as part of the input. ICL incurs substantial computational, memory, and storage costs because it involves processing all of the training examples every time a prediction is made. Parameter-efficient fine-tuning (PEFT) (e.g. adapter modules, prompt tuning, sparse update methods, etc.) offers an alternative paradigm where a small set of parameters are trained to enable a model to perform the new task. In this paper, we rigorously compare few-shot ICL and PEFT and demonstrate that the latter offers better accuracy as well as dramatically lower computational costs. Along the way, we introduce a new PEFT method called (IA)\${\textasciicircum}3\$ that scales activations by learned vectors, attaining stronger performance while only introducing a relatively tiny amount of new parameters. We also propose a simple recipe based on the T0 model called T-Few that can be applied to new tasks without task-specific tuning or modifications. We validate the effectiveness of T-Few on completely unseen tasks by applying it to the RAFT benchmark, attaining super-human performance for the first time and outperforming the state-of-the-art by 6\% absolute. All of the code used in our experiments is publicly available.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
 @article{liuGANBasedImageData,
   title = {{{GAN-Based Image Data Augmentation}}},
   author = {Liu, David and Hu, Nathan},
@@ -688,6 +899,22 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing}
 }
 
+@misc{luoEmpiricalStudyCatastrophic2024,
+  title = {An {{Empirical Study}} of {{Catastrophic Forgetting}} in {{Large Language Models During Continual Fine-tuning}}},
+  author = {Luo, Yun and Yang, Zhen and Meng, Fandong and Li, Yafu and Zhou, Jie and Zhang, Yue},
+  year = {2024},
+  month = apr,
+  number = {arXiv:2308.08747},
+  eprint = {2308.08747},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2308.08747},
+  urldate = {2024-12-08},
+  abstract = {Catastrophic forgetting (CF) is a phenomenon that occurs in machine learning when a model forgets previously learned information while acquiring new knowledge. As large language models (LLMs) have demonstrated remarkable performance, it is intriguing to investigate whether CF exists during the continual instruction tuning of LLMs. This study empirically evaluates the forgetting phenomenon in LLMs' knowledge during continual instruction tuning from the perspectives of domain knowledge, reasoning, and reading comprehension. The experiments reveal that catastrophic forgetting is generally observed in LLMs ranging from 1b to 7b parameters. Moreover, as the model scale increases, the severity of forgetting intensifies. Comparing the decoder-only model BLOOMZ with the encoder-decoder model mT0, BLOOMZ exhibits less forgetting and retains more knowledge. Interestingly, we also observe that LLMs can mitigate language biases, such as gender bias, during continual fine-tuning. Furthermore, our findings indicate that ALPACA maintains more knowledge and capacity compared to LLAMA during continual fine-tuning, suggesting that general instruction tuning can help alleviate the forgetting phenomenon in LLMs during subsequent fine-tuning processes.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language}
+}
+
 @misc{mikolovEfficientEstimationWord2013,
   title = {Efficient {{Estimation}} of {{Word Representations}} in {{Vector Space}}},
   author = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
@@ -708,6 +935,38 @@
   urldate = {2024-06-04},
   abstract = {We're on a journey to advance and democratize artificial intelligence through open source and open science.},
   howpublished = {https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1}
+}
+
+@article{mnihHumanlevelControlDeep2015,
+  title = {Human-Level Control through Deep Reinforcement Learning},
+  author = {Mnih, Volodymyr and Kavukcuoglu, Koray and Silver, David and Rusu, Andrei A. and Veness, Joel and Bellemare, Marc G. and Graves, Alex and Riedmiller, Martin and Fidjeland, Andreas K. and Ostrovski, Georg and Petersen, Stig and Beattie, Charles and Sadik, Amir and Antonoglou, Ioannis and King, Helen and Kumaran, Dharshan and Wierstra, Daan and Legg, Shane and Hassabis, Demis},
+  year = {2015},
+  month = feb,
+  journal = {Nature},
+  volume = {518},
+  number = {7540},
+  pages = {529--533},
+  issn = {0028-0836, 1476-4687},
+  doi = {10.1038/nature14236},
+  urldate = {2024-12-08},
+  langid = {english}
+}
+
+@misc{mosbachFewshotFinetuningVs2023,
+  title = {Few-Shot {{Fine-tuning}} vs. {{In-context Learning}}: {{A Fair Comparison}} and {{Evaluation}}},
+  shorttitle = {Few-Shot {{Fine-tuning}} vs. {{In-context Learning}}},
+  author = {Mosbach, Marius and Pimentel, Tiago and Ravfogel, Shauli and Klakow, Dietrich and Elazar, Yanai},
+  year = {2023},
+  month = may,
+  number = {arXiv:2305.16938},
+  eprint = {2305.16938},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2305.16938},
+  urldate = {2024-12-08},
+  abstract = {Few-shot fine-tuning and in-context learning are two alternative strategies for task adaptation of pre-trained language models. Recently, in-context learning has gained popularity over fine-tuning due to its simplicity and improved out-of-domain generalization, and because extensive evidence shows that fine-tuned models pick up on spurious correlations. Unfortunately, previous comparisons of the two approaches were done using models of different sizes. This raises the question of whether the observed weaker out-of-domain generalization of fine-tuned models is an inherent property of fine-tuning or a limitation of the experimental setup. In this paper, we compare the generalization of few-shot fine-tuning and in-context learning to challenge datasets, while controlling for the models used, the number of examples, and the number of parameters, ranging from 125M to 30B. Our results show that fine-tuned language models can in fact generalize well out-of-domain. We find that both approaches generalize similarly; they exhibit large variation and depend on properties such as model size and the number of examples, highlighting that robust task adaptation remains a challenge.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language}
 }
 
 @misc{petersDeepContextualizedWord2018,
@@ -863,6 +1122,41 @@
   howpublished = {https://ieeexplore.ieee.org/document/10465440}
 }
 
+@misc{shazeerOutrageouslyLargeNeural2017,
+  title = {Outrageously {{Large Neural Networks}}: {{The Sparsely-Gated Mixture-of-Experts Layer}}},
+  shorttitle = {Outrageously {{Large Neural Networks}}},
+  author = {Shazeer, Noam and Mirhoseini, Azalia and Maziarz, Krzysztof and Davis, Andy and Le, Quoc and Hinton, Geoffrey and Dean, Jeff},
+  year = {2017},
+  month = jan,
+  number = {arXiv:1701.06538},
+  eprint = {1701.06538},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1701.06538},
+  urldate = {2024-12-09},
+  abstract = {The capacity of a neural network to absorb information is limited by its number of parameters. Conditional computation, where parts of the network are active on a per-example basis, has been proposed in theory as a way of dramatically increasing model capacity without a proportional increase in computation. In practice, however, there are significant algorithmic and performance challenges. In this work, we address these challenges and finally realize the promise of conditional computation, achieving greater than 1000x improvements in model capacity with only minor losses in computational efficiency on modern GPU clusters. We introduce a Sparsely-Gated Mixture-of-Experts layer (MoE), consisting of up to thousands of feed-forward sub-networks. A trainable gating network determines a sparse combination of these experts to use for each example. We apply the MoE to the tasks of language modeling and machine translation, where model capacity is critical for absorbing the vast quantities of knowledge available in the training corpora. We present model architectures in which a MoE with up to 137 billion parameters is applied convolutionally between stacked LSTM layers. On large language modeling and machine translation benchmarks, these models achieve significantly better results than state-of-the-art at lower computational cost.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing,Statistics - Machine Learning}
+}
+
+@misc{shenLargeLanguageModel2023,
+  title = {Large {{Language Model Alignment}}: {{A Survey}}},
+  shorttitle = {Large {{Language Model Alignment}}},
+  author = {Shen, Tianhao and Jin, Renren and Huang, Yufei and Liu, Chuang and Dong, Weilong and Guo, Zishan and Wu, Xinwei and Liu, Yan and Xiong, Deyi},
+  year = {2023},
+  month = sep,
+  number = {arXiv:2309.15025},
+  eprint = {2309.15025},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2309.15025},
+  urldate = {2024-12-08},
+  abstract = {Recent years have witnessed remarkable progress made in large language models (LLMs). Such advancements, while garnering significant attention, have concurrently elicited various concerns. The potential of these models is undeniably vast; however, they may yield texts that are imprecise, misleading, or even detrimental. Consequently, it becomes paramount to employ alignment techniques to ensure these models to exhibit behaviors consistent with human values.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
+}
+
 @misc{shinnReflexionLanguageAgents2023,
   title = {Reflexion: {{Language Agents}} with {{Verbal Reinforcement Learning}}},
   shorttitle = {Reflexion},
@@ -919,7 +1213,7 @@
   urldate = {2024-11-30}
 }
 
-@article{songScoreBasedGenerativeModeling2020a,
+@article{songScoreBasedGenerativeModeling2020,
   title = {Score-{{Based Generative Modeling}} through {{Stochastic Differential Equations}}},
   author = {Song, Yang and {Sohl-Dickstein}, Jascha Narain and Kingma, Diederik P. and Kumar, Abhishek and Ermon, Stefano and Poole, Ben},
   year = {2020},
@@ -927,6 +1221,22 @@
   journal = {ArXiv},
   urldate = {2024-11-30},
   abstract = {Creating noise from data is easy; creating data from noise is generative modeling. We present a stochastic differential equation (SDE) that smoothly transforms a complex data distribution to a known prior distribution by slowly injecting noise, and a corresponding reverse-time SDE that transforms the prior distribution back into the data distribution by slowly removing the noise. Crucially, the reverse-time SDE depends only on the time-dependent gradient field ({\textbackslash}aka, score) of the perturbed data distribution. By leveraging advances in score-based generative modeling, we can accurately estimate these scores with neural networks, and use numerical SDE solvers to generate samples. We show that this framework encapsulates previous approaches in score-based generative modeling and diffusion probabilistic modeling, allowing for new sampling procedures and new modeling capabilities. In particular, we introduce a predictor-corrector framework to correct errors in the evolution of the discretized reverse-time SDE. We also derive an equivalent neural ODE that samples from the same distribution as the SDE, but additionally enables exact likelihood computation, and improved sampling efficiency. In addition, we provide a new way to solve inverse problems with score-based models, as demonstrated with experiments on class-conditional generation, image inpainting, and colorization. Combined with multiple architectural improvements, we achieve record-breaking performance for unconditional image generation on CIFAR-10 with an Inception score of 9.89 and FID of 2.20, a competitive likelihood of 2.99 bits/dim, and demonstrate high fidelity generation of 1024 x 1024 images for the first time from a score-based generative model.}
+}
+
+@misc{srinivasanComparativeAnalysisDifferent2024,
+  title = {Comparative {{Analysis}} of {{Different Efficient Fine Tuning Methods}} of {{Large Language Models}} ({{LLMs}}) in {{Low-Resource Setting}}},
+  author = {Srinivasan, Krishna Prasad Varadarajan and Gumpena, Prasanth and Yattapu, Madhusudhana and Brahmbhatt, Vishal H.},
+  year = {2024},
+  month = may,
+  number = {arXiv:2405.13181},
+  eprint = {2405.13181},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2405.13181},
+  urldate = {2024-12-08},
+  abstract = {In the domain of large language models (LLMs), arXiv:2305.16938 showed that few-shot full-model fine-tuning -- namely Vanilla Fine Tuning (FT) and Pattern-Based Fine Tuning (PBFT) --, and In-Context Learning (ICL) generalize similarly on Out-Of-Domain (OOD) datasets, but vary in terms of task adaptation. However, they both pose challenges, especially in term of memory requirements. In this paper, we further try to push the understanding of different fine-tuning strategies for LLM and aim to bring a myriad of these on the same pedestal for an elaborate comparison with full-model fine-tuning on two diverse datasets. To that end, we conducted a series of experiments, beginning with state-of-the-art methods like vanilla fine-tuning and Pattern-Based Fine-Tuning (PBFT) on pre-trained models across two datasets, COLA and MNLI. We then investigate adaptive fine-tuning and the efficiency of LoRA adapters in a few-shot setting. Finally, we also compare an alternative approach that has gained recent popularity -- context distillation -- with the vanilla FT and PBFT with and without few-shot setup. Our findings suggest that these alternative strategies that we explored can exhibit out-of-domain generalization comparable to that of vanilla FT and PBFT. PBFT under-performs Vanilla FT on out-of-domain (OOD) data, emphasizing the need for effective prompts. Further, our adaptive-fine tuning and LoRA experiments perform comparable or slightly worse than the standard fine-tunings as anticipated, since standard fine-tunings involve tuning the entire model. Finally, our context distillation experiments out-perform the standard fine-tuning methods. These findings underscore that eventually the choice of an appropriate fine-tuning method depends on the available resources (memory, compute, data) and task adaptability.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @article{stadlerCognitiveEaseCost2024,
@@ -1016,6 +1326,12 @@
   abstract = {A complete explanation of all the layers of a Transformer Model: Multi-Head Self-Attention, Positional Encoding, including all the matrix multiplications and a complete description of the training and inference process. Paper: Attention is all you need - https://arxiv.org/abs/1706.03762 Slides PDF: https://github.com/hkproj/transformer... Chapters 00:00 - Intro 01:10 - RNN and their problems 08:04 - Transformer Model 09:02 - Maths background and notations 12:20 - Encoder (overview) 12:31 - Input Embeddings 15:04 - Positional Encoding 20:08 - Single Head Self-Attention 28:30 - Multi-Head Attention 35:39 - Query, Key, Value 37:55 - Layer Normalization 40:13 - Decoder (overview) 42:24 - Masked Multi-Head Attention 44:59 - Training 52:09 - Inference}
 }
 
+@misc{unsloth,
+  title = {Unsloth},
+  author = {Daniel Han, Michael Han and {team}, Unsloth},
+  year = {2023}
+}
+
 @misc{UnslothPhi3mini4kinstructHugging,
   title = {Unsloth/{{Phi-3-mini-4k-instruct}} {$\cdot$} {{Hugging Face}}},
   urldate = {2024-06-04},
@@ -1099,6 +1415,22 @@
   keywords = {Computer Science - Computation and Language,Computer Science - Information Retrieval}
 }
 
+@misc{wangMultitaskPromptTuning2023,
+  title = {Multitask {{Prompt Tuning Enables Parameter-Efficient Transfer Learning}}},
+  author = {Wang, Zhen and Panda, Rameswar and Karlinsky, Leonid and Feris, Rogerio and Sun, Huan and Kim, Yoon},
+  year = {2023},
+  month = mar,
+  number = {arXiv:2303.02861},
+  eprint = {2303.02861},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2303.02861},
+  urldate = {2024-12-08},
+  abstract = {Prompt tuning, in which a base pretrained model is adapted to each task via conditioning on learned prompt vectors, has emerged as a promising approach for efficiently adapting large language models to multiple downstream tasks. However, existing methods typically learn soft prompt vectors from scratch, and it has not been clear how to exploit the rich cross-task knowledge with prompt vectors in a multitask learning setting. We propose multitask prompt tuning (MPT), which first learns a single transferable prompt by distilling knowledge from multiple task-specific source prompts. We then learn multiplicative low rank updates to this shared prompt to efficiently adapt it to each downstream target task. Extensive experiments on 23 NLP datasets demonstrate that our proposed approach outperforms the state-of-the-art methods, including the full finetuning baseline in some cases, despite only tuning 0.035\% as many task-specific parameters.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language}
+}
+
 @misc{wangSearchingBestPractices2024,
   title = {Searching for {{Best Practices}} in {{Retrieval-Augmented Generation}}},
   author = {Wang, Xiaohua and Wang, Zhenghua and Gao, Xuan and Zhang, Feiran and Wu, Yixin and Xu, Zhibo and Shi, Tianyuan and Wang, Zhengyuan and Li, Shizheng and Qian, Qi and Yin, Ruicheng and Lv, Changze and Zheng, Xiaoqing and Huang, Xuanjing},
@@ -1147,22 +1479,6 @@
   urldate = {2024-11-24},
   abstract = {We explore how generating a chain of thought -- a series of intermediate reasoning steps -- significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain of thought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain of thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a 540B-parameter language model with just eight chain of thought exemplars achieves state of the art accuracy on the GSM8K benchmark of math word problems, surpassing even finetuned GPT-3 with a verifier.},
   archiveprefix = {arXiv},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
-}
-
-@misc{weiChainThoughtPromptingElicits2023,
-  title = {Chain-of-{{Thought Prompting Elicits Reasoning}} in {{Large Language Models}}},
-  author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
-  year = {2023},
-  month = jan,
-  number = {arXiv:2201.11903},
-  eprint = {2201.11903},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  urldate = {2024-11-17},
-  abstract = {We explore how generating a chain of thought---a series of intermediate reasoning steps---significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain-ofthought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a PaLM 540B with just eight chain-of-thought exemplars achieves state-of-the-art accuracy on the GSM8K benchmark of math word problems, surpassing even finetuned GPT-3 with a verifier.},
-  archiveprefix = {arXiv},
-  langid = {english},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
 }
 
