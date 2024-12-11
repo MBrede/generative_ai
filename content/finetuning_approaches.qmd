@@ -95,6 +95,7 @@ Select one of the three and try to answer the following questions in a markdown-
 3. How much memory can be saved by leveraging this technique (if you can find this indication)
 
 Present your results to the group.
+Upload your results to moodle.
 
 :::
 
@@ -170,7 +171,7 @@ Unsloth [@unsloth] is a python-module that implements LoRA-finetuning in a very 
 This is mostly done by a far more efficient Gradient Descent algorithm that is specifically optimized for LoRA finetuning [@IntroducingUnsloth].
 
 They additionally introduced dynamic quantization to their models, which allows them to further reduce the memory footprint without losing too much performance.
-
+<!-- 
 :::{.callout-note}
 
 ### 📝 Task
@@ -189,8 +190,8 @@ Try to answer the following questions in the same markdown-file as before:
 3. How much memory can be saved by leveraging this technique (if you can find this indication)
 
 Present your results to the group and upload the markdown-file to moodle.
-
-:::
+You do not have 
+::: -->
 
 ### (IA)³
 
