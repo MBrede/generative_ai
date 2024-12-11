@@ -29,14 +29,6 @@ The main advantage of this approach is that it is very simple and easy to implem
 However, it also has some disadvantages.
 Firstly, it can be computationally expensive as it requires training all parameters of the model. 
 
-<!-- @tip-fineTuningResources illustrates the relationship between necessary resources for finetuning compared to inference.
-
-:::{#tip-fineTuningResources .callout-tip collapse="true" appearance="minimal"}
-
-{{< include resources_full_finetuning.md >}}
-
-::: -->
-
 Secondly, it can lead to catastrophic forgetting, i.e., the model forgets what it has learned during pre-training when adapting to new data [@luoEmpiricalStudyCatastrophic2024].
 
 ## Parameter-Efficient Finetuning (PEFT)
@@ -82,16 +74,6 @@ The main contribution of Prompt-Tuning over Prefix-Tuning is a) that they showed
 
 ![Results of Prompt-tuning compared to prompt-engineering and complete finetuning, taken from @lesterPowerScaleParameterEfficient2021](../imgs/prompt_tuning.png){#fig-promptTuning .enlarge-onhover}
 
-<!-- ### Multitask prompt tuning
- -->
-
-<!-- @tip-softPromptFineTuningResources illustrates the amount of resources that can be saved when using soft-prompting-based finetuning compared to full finetuning.
-
-:::{#tip-softPromptFineTuningResources .callout-tip collapse="true" appearance="minimal"}
-
-{{< include resources_softprompt_finetuning.md >}}
-
-::: -->
 
 
 :::{.callout-note}
@@ -147,7 +129,7 @@ This results in a reduction of the number of parameters to be trained from $d_{i
 ```{r loRaMats}
 #| fig-width: 8
 #| fig-height: 2.5
-#| label: #fig-loRaMats
+#| label: fig-loRaMats
 #| fig-cap: Illustration of the LoRA approximation of a weight matrix $\Delta W$ as the product of two lower-rank matrices $A$ and $B$. The rank of the approximation is $r << d_{in}, d_{out}$.
 #| classes: .enlarge-onhover
 
@@ -163,13 +145,6 @@ display_a_multiplication(mat1,
 ```
 
 
-<!-- @tip-LoRAFineTuningResources illustrates the amount of resources that can be saved when using LoRA-based finetuning compared to full finetuning.
-
-:::{#tip-LoRAFineTuningResources .callout-tip collapse="true" appearance="minimal"}
-
-{{< include resources_lora_finetuning.md >}}
-
-::: -->
 
 #### QLoRA (Quantized Low-Rank Adaptation)
 
