@@ -285,7 +285,7 @@ Prompting<br>
 </h3>
    
   <ul>
-  <li><a href="#instruct-tuned-models" id="toc-instruct-tuned-models" class="nav-link active" data-scroll-target="#instruct-tuned-models">Instruct-tuned models</a></li>
+  <li><a href="#sec-instruct" id="toc-sec-instruct" class="nav-link active" data-scroll-target="#sec-instruct">Instruct-tuned models</a></li>
   <li><a href="#prompting-strategies" id="toc-prompting-strategies" class="nav-link" data-scroll-target="#prompting-strategies">Prompting strategies</a></li>
   <li><a href="#generation-of-synthetic-texts" id="toc-generation-of-synthetic-texts" class="nav-link" data-scroll-target="#generation-of-synthetic-texts">Generation of synthetic texts</a></li>
   <li><a href="#temperature" id="toc-temperature" class="nav-link" data-scroll-target="#temperature">Temperature</a></li>
@@ -299,7 +299,7 @@ Prompting<br>
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/prompting.html"><span class="chapter-title">Prompting</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Prompting</span></h1>
+<h1 class="title"><span id="sec-prompting" class="quarto-section-identifier"><span class="chapter-title">Prompting</span></span></h1>
 </div>
 
 
@@ -318,8 +318,8 @@ Prompting<br>
 
 <p>Prompting describes the utilization of the ability of language models to use zero or few-shot instrutions to perform a task. This ability, which we briefly touched on when we were discussing the history of language models (i.e., the paper by <span class="citation" data-cites="radfordLanguageModelsAre2019">Radford et al. (<a href="#ref-radfordLanguageModelsAre2019" role="doc-biblioref">2019</a>)</span>), is one of the most important aspects of modern large language models.</p>
 <p>Prompting can be used for various tasks such as text generation, summarization, question answering, and many more.</p>
-<section id="instruct-tuned-models" class="level2">
-<h2 class="anchored" data-anchor-id="instruct-tuned-models">Instruct-tuned models</h2>
+<section id="sec-instruct" class="level2">
+<h2 class="anchored" data-anchor-id="sec-instruct">Instruct-tuned models</h2>
 <p>Instruct-tuned models are trained on a dataset (for an example, see <a href="#fig-instructData" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>) that consists of instructions and their corresponding outputs. This is different from the pretraining phase of language models where they were trained on large amounts of text data without any specific task in mind. The goal of instruct-tuning is to make the model better at following instructions and generating more accurate and relevant outputs.</p>
 <div id="fig-instructData" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">

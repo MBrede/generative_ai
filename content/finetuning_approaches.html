@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -70,11 +90,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -230,20 +279,25 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
-    <h2 id="toc-title"><img src="../imgs/cover.jpg" class="img-fluid" width="240"><br><br>
+    <h2 id="toc-title"><img src="../imgs/finetuning.webp" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
 Finetuning Approaches<br>
 </h3>
    
   <ul>
-  <li><a href="#basics-of-finetuning-strategies" id="toc-basics-of-finetuning-strategies" class="nav-link active" data-scroll-target="#basics-of-finetuning-strategies">Basics of Finetuning strategies</a></li>
-  <li><a href="#alignment-and-finetuning-of-llms" id="toc-alignment-and-finetuning-of-llms" class="nav-link" data-scroll-target="#alignment-and-finetuning-of-llms">Alignment and Finetuning of (L)LMs</a></li>
+  <li><a href="#full-finetuning" id="toc-full-finetuning" class="nav-link active" data-scroll-target="#full-finetuning">Full Finetuning</a></li>
+  <li><a href="#parameter-efficient-finetuning-peft" id="toc-parameter-efficient-finetuning-peft" class="nav-link" data-scroll-target="#parameter-efficient-finetuning-peft">Parameter-Efficient Finetuning (PEFT)</a>
+  <ul class="collapse">
+  <li><a href="#prompt-based-finetuning" id="toc-prompt-based-finetuning" class="nav-link" data-scroll-target="#prompt-based-finetuning">Prompt-based Finetuning</a></li>
+  <li><a href="#adapter-based-finetuning" id="toc-adapter-based-finetuning" class="nav-link" data-scroll-target="#adapter-based-finetuning">Adapter-based finetuning</a></li>
+  <li><a href="#ia³" id="toc-ia³" class="nav-link" data-scroll-target="#ia³">(IA)³</a></li>
+  </ul></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/finetuning_approaches.html">Finetuning</a></li><li class="breadcrumb-item"><a href="../content/finetuning_approaches.html"><span class="chapter-title">Finetuning Approaches</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -264,17 +318,255 @@ Finetuning Approaches<br>
 </header>
 
 
-<section id="basics-of-finetuning-strategies" class="level2">
-<h2 class="anchored" data-anchor-id="basics-of-finetuning-strategies">Basics of Finetuning strategies</h2>
+<p><em>Finetuning</em> in terms of generative models means the general concept taking a pre-trained, “foundational” model and updating its parameters using new data. This data is usually much smaller than the data used to train the original model. The goal is to adapt the model to the new data while preserving as much of the knowledge it has already learned from the original training data. We have already seen an example of a finetuning approach when we were talking about instruct-tuned models <a href="prompting.html#sec-instruct" class="quarto-xref"><span>Instruct-tuned models</span></a>. These models are based on plain MLM-trained language models, that are then trained on new data that is presented in a Instruct - Response format. The result of this specific example of finetuning was a model that, instead of just completing a text, answered in the format present in the finetuning data.</p>
+<p>Though the central concept of finetuning is always the same, i.e., updating the parameters of a pre-trained model using new data, there are many different ways to do this. The following sections will give an overview of some of the most common approaches.</p>
+<section id="full-finetuning" class="level2">
+<h2 class="anchored" data-anchor-id="full-finetuning">Full Finetuning</h2>
+<p>Full finetuning is the simplest approach to finetuning. As the name says, it is based on completely updating the parameters of the pre-trained model using new data. This means that all weights of the model are updated during training using regular gradient descent or a variant thereof. The main advantage of this approach is that it is very simple and easy to implement. Complete (few-shot) fine-tuning has also shown to perform better in the domain of finetuning and in Out-of-domain tasks when compared to Few-Shot-Prompt-approaches <span class="citation" data-cites="mosbachFewshotFinetuningVs2023">Mosbach et al. (<a href="#ref-mosbachFewshotFinetuningVs2023" role="doc-biblioref">2023</a>)</span>. However, it also has some disadvantages. Firstly, it can be computationally expensive as it requires training all parameters of the model.</p>
+<p>Secondly, it can lead to catastrophic forgetting, i.e., the model forgets what it has learned during pre-training when adapting to new data <span class="citation" data-cites="luoEmpiricalStudyCatastrophic2024">(<a href="#ref-luoEmpiricalStudyCatastrophic2024" role="doc-biblioref">Luo et al., 2024</a>)</span>.</p>
 </section>
-<section id="alignment-and-finetuning-of-llms" class="level2">
-<h2 class="anchored" data-anchor-id="alignment-and-finetuning-of-llms">Alignment and Finetuning of (L)LMs</h2>
+<section id="parameter-efficient-finetuning-peft" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="parameter-efficient-finetuning-peft">Parameter-Efficient Finetuning (PEFT)</h2>
+<p>Another approach to finetuning is to not update all a models parameters but to (partially) freeze them and only update a small subset of the parameters or to train an adaptor module that can be added to the model. This approach is called parameter-efficient fine-tuning (PEFT). The main advantage of PEFT is that it is much more computationally efficient than full finetuning as it only requires updating a small subset of the parameters. We will look at three different approaches to PEFT:</p>
+<!-- 1. Prompt-based Finetuning (Prefix-tuning, Prompt tuning and Multitask Prompt Tuning) -->
+<ol type="1">
+<li><p>Prompt-based Finetuning (Prefix-tuning and Prompt tuning)</p></li>
+<li><p>Adapter-based finetuning (Low-Rank Adaptation and its relatives)</p></li>
+<li><p>(IA)³ (Infused Adapter by Inhibiting and Amplifying Inner Activations)</p></li>
+</ol>
+<section id="prompt-based-finetuning" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="prompt-based-finetuning">Prompt-based Finetuning</h3>
+<p>Prompt-based finetuning is a family of methods that use so called “soft-prompts” to guide a models generation. The general concept is pretty close to prompting as we discussed it in <a href="prompting.html" class="quarto-xref"><span>Prompting</span></a>. The main difference is that instead of engineering a prompt constructed from discrete tokens that results in opportune results, we let standard optimization procedures find a continuos embedding-vector in a pre-trained LMs embedding-space. Prefix-Tuning, Prompt Tuning and P-tuning are three different approaches to prompt-based finetuning - all utilizing some implementation of this soft-prompt concept.</p>
+<section id="prefix-tuning" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="prefix-tuning">Prefix tuning</h4>
+<p>Prefix-Tuning <span class="citation" data-cites="liPrefixTuningOptimizingContinuous2021">(<a href="#ref-liPrefixTuningOptimizingContinuous2021" role="doc-biblioref">Li &amp; Liang, 2021</a>)</span> is a method of adapting a language model to a specific down-stream task by adding a continuous prefix vector to the input embeddings. This is done by learning a continuos matrix with a set amount of columns (i.e., tokens) and the frozen models embeddings-dimensionality<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> that is prepended to the input of each transformer layer (i.e., the encoder and the decoder-stack). The principle is illustrated in <a href="#fig-prefixTuning" class="quarto-xref">Figure&nbsp;<span>12.1</span></a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Since directly learning the prefix-weights proved to result in unstable performance, the authors did not directly train prefix-vectors but a MLP scaling up from a smaller dimensionality to the embedding size. Since the rest of the proxy-model is discarded after training though, the method can be treated as the same principle.</p></div></div><div id="fig-prefixTuning" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-prefixTuning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/prefix_tuning.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-prefixTuning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;12.1: Illustration of Prefix-tuning. A continuous prefix vector is learned and concatenated to the input embeddings before they are fed into the transformer layers. From <span class="citation" data-cites="liPrefixTuningOptimizingContinuous2021">Li &amp; Liang (<a href="#ref-liPrefixTuningOptimizingContinuous2021" role="doc-biblioref">2021</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>This vector can then be used to guide the model during inference. The main advantages of this method are</p>
+<ol type="a">
+<li>a small number of parameters that need to be learned and</li>
+<li>the ability to quickly adapt to different tasks by simply switching out the prefix vector.</li>
+</ol>
+<p>Since the learned prefix-weights have to be prepended to each input though, one has to have access to the models internal representation during inference (at least for encoder-decoder-stacks). This is not always possible, especially when using black-box models like large language models that are hosted on a remote server.</p>
+</section>
+<section id="prompt-tuning" class="level4">
+<h4 class="anchored" data-anchor-id="prompt-tuning">Prompt-Tuning</h4>
+<p>Prompt-tuning <span class="citation" data-cites="lesterPowerScaleParameterEfficient2021">(<a href="#ref-lesterPowerScaleParameterEfficient2021" role="doc-biblioref">Lester et al., 2021</a>)</span> is a method that is conceptually very similar to prefix-tuning, but avoids the need for accessing the internal representation of the model during inference by using what the authors call “soft prompts”. Again, instead of prompting using discrete tokens, continuous “special tokens” are learned that are concatenated to the input embeddings. The main contribution of Prompt-Tuning over Prefix-Tuning is a) that they showed that inputting the soft-prompts to the encoder alone suffices and more importantly b) that the performance of models fine-tuned in this manner is comparable to full finetuning, at least for larger LLMs (<a href="#fig-promptTuning" class="quarto-xref">Figure&nbsp;<span>12.2</span></a>).</p>
+<div id="fig-promptTuning" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-promptTuning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/prompt_tuning.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-promptTuning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;12.2: Results of Prompt-tuning compared to prompt-engineering and complete finetuning, taken from <span class="citation" data-cites="lesterPowerScaleParameterEfficient2021">Lester et al. (<a href="#ref-lesterPowerScaleParameterEfficient2021" role="doc-biblioref">2021</a>)</span>
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Your turn!</p>
+<p>The <a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting">huggingface-page on prompt-based finetuning</a> describes three more variants of soft-prompt finetuning:</p>
+<ol type="1">
+<li><a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting">P-Tuning</a></li>
+<li><a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting">Multitask prompt tuning</a></li>
+<li><a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/prompting">Context-Aware prompt tuning</a></li>
+</ol>
+<p>Select one of the three and try to answer the following questions in a markdown-file:</p>
+<ol type="1">
+<li>What is the core principle?</li>
+<li>What is the context in which this tuning method is most efficient?</li>
+<li>How much memory can be saved by leveraging this technique (if you can find this indication)</li>
+</ol>
+<p>Present your results to the group.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="adapter-based-finetuning" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="adapter-based-finetuning">Adapter-based finetuning</h3>
+<p>Instead of focusing on the embeddings and thus the input of the language models, LoRA and its relatives focus on adapting the output of the attention and feed-forward layers of a transformer. The family of Low-Rank Adaptation (LoRA) methods <span class="citation" data-cites="huLoRALowRankAdaptation2021">(<a href="#ref-huLoRALowRankAdaptation2021" role="doc-biblioref">Hu et al., 2021</a>)</span> we will discuss here is a group of parameter-efficient fine-tuning techniques that adapt the models output by injecting trainable rank decomposition matrices into a transformers layer, greatly reducing the amount of parameters that need to be learned.</p>
+<section id="lora-low-rank-adaptation" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="lora-low-rank-adaptation">LoRA (Low-Rank Adaptation)</h4>
+<p>The first and most common candidate of the group of LoRA-finetuning techniques is the name giver itself: Low-Rank Adaptation (LoRA). <span class="citation" data-cites="huLoRALowRankAdaptation2021">Hu et al. (<a href="#ref-huLoRALowRankAdaptation2021" role="doc-biblioref">2021</a>)</span> criticized soft-prompting methods as being hard to optimize<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and being dependent on reserving part of the input space for the prompt, effectively reducing the context window.</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;As was also reported in <span class="citation" data-cites="liPrefixTuningOptimizingContinuous2021">Li &amp; Liang (<a href="#ref-liPrefixTuningOptimizingContinuous2021" role="doc-biblioref">2021</a>)</span> in the context of their reported unstable learning.</p></div></div><p>LoRA builds on the findings by <span class="citation" data-cites="aghajanyanIntrinsicDimensionalityExplains2020">Aghajanyan et al. (<a href="#ref-aghajanyanIntrinsicDimensionalityExplains2020" role="doc-biblioref">2020</a>)</span> that the intrinsic dimensionality of transformer layers is low, i.e., that there exists a lower dimensionality representation of the models parameters that suffices for an effective finetuning and thus only a few parameters are needed to adapt them. They show this by successfully finetuning a model on a random projection to a far smaller subspace without losing too much performance.</p>
+<p>The central idea behind LoRA is that finetuning can be represented as learning the updates to the models parameter matrix <span class="math inline">\(\Delta W\)</span> so that the results of a fine-tuned generation <span class="math inline">\(h\)</span> is based on the initial weights <span class="math inline">\(W_0\)</span> and the update <span class="math inline">\(\Delta W\)</span>:</p>
+<p><span class="math display">\[
+h = W_0x + \Delta Wx
+\]</span></p>
+<p>Based on the idea of <span class="citation" data-cites="aghajanyanIntrinsicDimensionalityExplains2020">Aghajanyan et al. (<a href="#ref-aghajanyanIntrinsicDimensionalityExplains2020" role="doc-biblioref">2020</a>)</span>, LoRA approximates this update matrix as the product of the lower-rank matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, where <span class="math inline">\(B \in \mathbb{R}^{d_{in} \times r}\)</span>, <span class="math inline">\(A  \in \mathbb{R}^{r \times d_{out}}\)</span> and <span class="math inline">\(r &lt;&lt; d_{in}, d_{out}\)</span>:</p>
+<p><span class="math display">\[
+h = W_0x + \Delta Wx = W_0x + BAx
+\]</span></p>
+<p>A is initialized with random values sampled from a normal distribution and B is initialized as a zero matrix so that <span class="math inline">\(\Delta W\)</span> is zero at the start of the training.</p>
+<p>This results in a reduction of the number of parameters to be trained from <span class="math inline">\(d_{in} \cdot d_{out}\)</span> to <span class="math inline">\(d_{in} \cdot r  + d_{out} \cdot r\)</span> as is illustrated in <a href="#fig-loRaMats" class="quarto-xref">Figure&nbsp;<span>12.3</span></a>.</p>
+<div class="cell enlarge-onhover">
+<div class="cell-output cell-output-stdout">
+<pre><code>function (...)  .Primitive("c")</code></pre>
+</div>
+<div class="cell-output-display">
+<div id="fig-loRaMats" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-loRaMats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="finetuning_approaches_files/figure-html/fig-loRaMats-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loRaMats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;12.3: Illustration of the LoRA approximation of a weight matrix <span class="math inline">\(\Delta W\)</span> as the product of two lower-rank matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. The rank of the approximation is <span class="math inline">\(r &lt;&lt; d_{in}, d_{out}\)</span>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="qlora-quantized-low-rank-adaptation" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="qlora-quantized-low-rank-adaptation">QLoRA (Quantized Low-Rank Adaptation)</h4>
+<p>QLoRA <span class="citation" data-cites="dettmersQLoRAEfficientFinetuning2023">(<a href="#ref-dettmersQLoRAEfficientFinetuning2023" role="doc-biblioref">Dettmers et al., 2023</a>)</span> builds on the concept of LoRA by further reducing the memory footprint and computational requirements. It does this, next do some other optimizations, by quantizing, i.e.&nbsp;reducing the precision of, the frozen pretrained LLM. The process of quantization is illustrated in <a href="#fig-quantization" class="quarto-xref">Figure&nbsp;<span>12.4</span></a>.</p>
+<div id="fig-quantization" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-quantization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../img/quantization.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-quantization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;12.4: Illustration of the result of quantization to 32, 16, 8 and 4 bits. The top of the image shows the same color-gradient under all quantizations, the bottom image is the quantized chapter-illustration.
+</figcaption>
+</figure>
+</div>
+<p>They report a reduction of GPU-requirements for finetuning a 65B parameter model from more than 780GB VRAM to a measly number under 48 GB, allowing it to be finetuned in a single GPU. They also report performance values of up to 99.3% of the performance of ChatGPT on the vicuna benchmark<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;which is now defunct and replaced by the MT-Bench score <span class="citation" data-cites="ChatbotArenaLeaderboard"><em>Chatbot <span>Arena Leaderboard Week</span> 8</em> (<a href="#ref-ChatbotArenaLeaderboard" role="doc-biblioref">n.d.</a>)</span></p></div></div></section>
+<section id="x-lora-mixture-of-experts-with-lora" class="level4">
+<h4 class="anchored" data-anchor-id="x-lora-mixture-of-experts-with-lora">X-LoRA (Mixture of Experts with LoRA)</h4>
+<p>Mixture of experts is a pretty old idea generally <span class="citation" data-cites="jacobsAdaptiveMixturesLocal1991">(<a href="#ref-jacobsAdaptiveMixturesLocal1991" role="doc-biblioref">Jacobs et al., 1991</a>)</span> and has been used in the context of Deep Learning and more specifically NLP for quite some time now <span class="citation" data-cites="shazeerOutrageouslyLargeNeural2017">(<a href="#ref-shazeerOutrageouslyLargeNeural2017" role="doc-biblioref">Shazeer et al., 2017</a>)</span>. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. <span class="citation" data-cites="jiangMixtralExperts2024">Jiang et al. (<a href="#ref-jiangMixtralExperts2024" role="doc-biblioref">2024</a>)</span> The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic. During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert. This approach was applied to LoRA-based finetuning by <span class="citation" data-cites="buehlerXLoRAMixtureLowRank2024">Buehler &amp; Buehler (<a href="#ref-buehlerXLoRAMixtureLowRank2024" role="doc-biblioref">2024</a>)</span> who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts. This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.</p>
+</section>
+<section id="unsloth" class="level4">
+<h4 class="anchored" data-anchor-id="unsloth">Unsloth</h4>
+<p>Unsloth <span class="citation" data-cites="unsloth">(<a href="#ref-unsloth" role="doc-biblioref">Daniel Han &amp; team, 2023</a>)</span> is a python-module that implements LoRA-finetuning in a very efficient way that further reduces raining resource requirements. This is mostly done by a far more efficient Gradient Descent algorithm that is specifically optimized for LoRA finetuning <span class="citation" data-cites="IntroducingUnsloth">(<a href="#ref-IntroducingUnsloth" role="doc-biblioref"><span>“Introducing <span>Unsloth</span>,”</span> n.d.</a>)</span>.</p>
+<p>They additionally introduced dynamic quantization to their models, which allows them to further reduce the memory footprint without losing too much performance.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Your turn!</p>
+<p>The <a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter">huggingface-page on adapter-based finetuning</a> describes a good handfull of other variants for adapter-based finetuning. Select one of the following two:</p>
+<ol type="1">
+<li><a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#orthogonal-finetuning-oft">OFT</a></li>
+<li><a href="https://huggingface.co/docs/peft/main/en/conceptual_guides/adapter#bone">BONE</a></li>
+</ol>
+<p>Try to answer the following questions in the same markdown-file as before:</p>
+<ol type="1">
+<li>What is the core principle?</li>
+<li>How does this method compare to LoRA?</li>
+<li>How much memory can be saved by leveraging this technique (if you can find this indication)</li>
+</ol>
+<p>Present your results to the group and upload the markdown-file to moodle.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="ia³" class="level3">
+<h3 class="anchored" data-anchor-id="ia³">(IA)³</h3>
+<p><span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span> propose (IA)³ (Infused Adapter by Inhibiting and Amplifying Inner Activations) which additionally builds on the central concepts of Soft Prompting and LoRA. Instead of learning additional tokens to prepend to the input or adaptation matrices for each layer, they propose the training of a small set of additional vectors that are used to item-wise rescale select hidden states of the model. A schematic illustration can be seen in <a href="#fig-ia3" class="quarto-xref">Figure&nbsp;<span>12.5</span></a>.</p>
+<div id="fig-ia3" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ia3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/ia3.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ia3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;12.5: Illustration of the adaptation principle of (IA)³. The input is passed through the model and then the selected hidden states are rescaled by the learned vectors. Q, K and V are the learned hidden weights for the queries, keys and values of a self-attention mechanism. The depiction on the right illustrates the adaptation of the weights of the feed-forward-part of a transformer. Image taken from <span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>They also report their adaptation-strategy to work better and in a less resource-intensive way than LoRA and the other methods we have discussed so far, achieving higher accuracy with fewer parameters on their benchmark (<a href="#fig-ia3performance" class="quarto-xref">Figure&nbsp;<span>12.6</span></a>).</p>
+<div id="fig-ia3performance" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ia3performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/ia3_performance.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ia3performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;12.6: Performance of (IA)³ compared to other parameter-efficient finetuning approaches. Image taken from <span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>Additionally, they report a super-human performance of 75.8% on the RAFT, which provides only 50 training examples per task.</p>
+</section>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<ul>
+<li><p>The <a href="https://huggingface.co/docs/peft/main/en/index">huggingface-hub for PEFT-Methods</a> is a great source to get an overview and a better hub to get to the original papers proposing the presented methods.</p></li>
+<li><p>They also have a <a href="https://huggingface.co/blog/moe">nice blogpost</a> about MoE-models.</p></li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-aghajanyanIntrinsicDimensionalityExplains2020" class="csl-entry" role="listitem">
+Aghajanyan, A., Zettlemoyer, L., &amp; Gupta, S. (2020). <em>Intrinsic <span>Dimensionality Explains</span> the <span>Effectiveness</span> of <span>Language Model Fine-Tuning</span></em> (arXiv:2012.13255). arXiv. <a href="https://doi.org/10.48550/arXiv.2012.13255">https://doi.org/10.48550/arXiv.2012.13255</a>
+</div>
+<div id="ref-buehlerXLoRAMixtureLowRank2024" class="csl-entry" role="listitem">
+Buehler, E. L., &amp; Buehler, M. J. (2024). <em>X-<span>LoRA</span>: <span>Mixture</span> of <span>Low-Rank Adapter Experts</span>, a <span>Flexible Framework</span> for <span>Large Language Models</span> with <span>Applications</span> in <span>Protein Mechanics</span> and <span>Molecular Design</span></em> (arXiv:2402.07148). arXiv. <a href="https://doi.org/10.48550/arXiv.2402.07148">https://doi.org/10.48550/arXiv.2402.07148</a>
+</div>
+<div id="ref-ChatbotArenaLeaderboard" class="csl-entry" role="listitem">
+<em>Chatbot <span>Arena Leaderboard Week</span> 8: <span>Introducing MT-Bench</span> and <span>Vicuna-33B</span> <span></span> <span>LMSYS Org</span></em>. (n.d.). https://lmsys.org/blog/2023-06-22-leaderboard.
+</div>
+<div id="ref-unsloth" class="csl-entry" role="listitem">
+Daniel Han, M. H., &amp; team, U. (2023). <em>Unsloth</em>.
+</div>
+<div id="ref-dettmersQLoRAEfficientFinetuning2023" class="csl-entry" role="listitem">
+Dettmers, T., Pagnoni, A., Holtzman, A., &amp; Zettlemoyer, L. (2023). <em><span>QLoRA</span>: <span>Efficient Finetuning</span> of <span>Quantized LLMs</span></em> (arXiv:2305.14314). arXiv. <a href="https://doi.org/10.48550/arXiv.2305.14314">https://doi.org/10.48550/arXiv.2305.14314</a>
+</div>
+<div id="ref-huLoRALowRankAdaptation2021" class="csl-entry" role="listitem">
+Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., &amp; Chen, W. (2021). <em><span>LoRA</span>: <span>Low-Rank Adaptation</span> of <span>Large Language Models</span></em> (arXiv:2106.09685). arXiv. <a href="https://doi.org/10.48550/arXiv.2106.09685">https://doi.org/10.48550/arXiv.2106.09685</a>
+</div>
+<div id="ref-IntroducingUnsloth" class="csl-entry" role="listitem">
+Introducing <span>Unsloth</span>. (n.d.). In <em>Unsloth - Open source Fine-tuning for LLMs</em>. https://unsloth.ai/introducing.
+</div>
+<div id="ref-jacobsAdaptiveMixturesLocal1991" class="csl-entry" role="listitem">
+Jacobs, R. A., Jordan, M. I., Nowlan, S. J., &amp; Hinton, G. E. (1991). Adaptive mixtures of local experts. <em>Neural Computation</em>, <em>3</em>(1), 79–87.
+</div>
+<div id="ref-jiangMixtralExperts2024" class="csl-entry" role="listitem">
+Jiang, A. Q., Sablayrolles, A., Roux, A., Mensch, A., Savary, B., Bamford, C., Chaplot, D. S., Casas, D. de las, Hanna, E. B., Bressand, F., Lengyel, G., Bour, G., Lample, G., Lavaud, L. R., Saulnier, L., Lachaux, M.-A., Stock, P., Subramanian, S., Yang, S., … Sayed, W. E. (2024). <em>Mixtral of <span>Experts</span></em> (arXiv:2401.04088). arXiv. <a href="https://doi.org/10.48550/arXiv.2401.04088">https://doi.org/10.48550/arXiv.2401.04088</a>
+</div>
+<div id="ref-lesterPowerScaleParameterEfficient2021" class="csl-entry" role="listitem">
+Lester, B., Al-Rfou, R., &amp; Constant, N. (2021). <em>The <span>Power</span> of <span>Scale</span> for <span>Parameter-Efficient Prompt Tuning</span></em> (arXiv:2104.08691). arXiv. <a href="https://doi.org/10.48550/arXiv.2104.08691">https://doi.org/10.48550/arXiv.2104.08691</a>
+</div>
+<div id="ref-liPrefixTuningOptimizingContinuous2021" class="csl-entry" role="listitem">
+Li, X. L., &amp; Liang, P. (2021). <em>Prefix-<span>Tuning</span>: <span>Optimizing Continuous Prompts</span> for <span>Generation</span></em> (arXiv:2101.00190). arXiv. <a href="https://doi.org/10.48550/arXiv.2101.00190">https://doi.org/10.48550/arXiv.2101.00190</a>
+</div>
+<div id="ref-liuFewShotParameterEfficientFineTuning2022" class="csl-entry" role="listitem">
+Liu, H., Tam, D., Muqeeth, M., Mohta, J., Huang, T., Bansal, M., &amp; Raffel, C. (2022). <em>Few-<span>Shot Parameter-Efficient Fine-Tuning</span> is <span>Better</span> and <span>Cheaper</span> than <span>In-Context Learning</span></em> (arXiv:2205.05638). arXiv. <a href="https://doi.org/10.48550/arXiv.2205.05638">https://doi.org/10.48550/arXiv.2205.05638</a>
+</div>
+<div id="ref-luoEmpiricalStudyCatastrophic2024" class="csl-entry" role="listitem">
+Luo, Y., Yang, Z., Meng, F., Li, Y., Zhou, J., &amp; Zhang, Y. (2024). <em>An <span>Empirical Study</span> of <span>Catastrophic Forgetting</span> in <span class="nocase">Large Language Models During Continual Fine-tuning</span></em> (arXiv:2308.08747). arXiv. <a href="https://doi.org/10.48550/arXiv.2308.08747">https://doi.org/10.48550/arXiv.2308.08747</a>
+</div>
+<div id="ref-mosbachFewshotFinetuningVs2023" class="csl-entry" role="listitem">
+Mosbach, M., Pimentel, T., Ravfogel, S., Klakow, D., &amp; Elazar, Y. (2023). <em>Few-shot <span class="nocase">Fine-tuning</span> vs. <span class="nocase">In-context Learning</span>: <span>A Fair Comparison</span> and <span>Evaluation</span></em> (arXiv:2305.16938). arXiv. <a href="https://doi.org/10.48550/arXiv.2305.16938">https://doi.org/10.48550/arXiv.2305.16938</a>
+</div>
+<div id="ref-shazeerOutrageouslyLargeNeural2017" class="csl-entry" role="listitem">
+Shazeer, N., Mirhoseini, A., Maziarz, K., Davis, A., Le, Q., Hinton, G., &amp; Dean, J. (2017). <em>Outrageously <span>Large Neural Networks</span>: <span class="nocase">The Sparsely-Gated Mixture-of-Experts Layer</span></em> (arXiv:1701.06538). arXiv. <a href="https://doi.org/10.48550/arXiv.1701.06538">https://doi.org/10.48550/arXiv.1701.06538</a>
+</div>
+</div>
 </section>
+
 
 </main> <!-- /main -->
 <script>
