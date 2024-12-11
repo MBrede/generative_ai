@@ -151,7 +151,7 @@ display_a_multiplication(mat1,
 QLoRA [@dettmersQLoRAEfficientFinetuning2023] builds on the concept of LoRA by further reducing the memory footprint and computational requirements.
 It does this, next do some other optimizations, by quantizing, i.e. reducing the precision of, the frozen pretrained LLM. The process of quantization is illustrated in @fig-quantization.
 
-![Illustration of the result of quantization to 32, 16, 8 and 4 bits. The top of the image shows the same color-gradient under all quantizations, the bottom image is the quantized chapter-illustration.](/img/quantization.png){#fig-quantization .enlarge-onhover}
+![Illustration of the result of quantization to 32, 16, 8 and 4 bits. The top of the image shows the same color-gradient under all quantizations, the bottom image is the quantized chapter-illustration.](../imgs/finetuning_quantization_demo.webp){#fig-quantization .enlarge-onhover}
 
 They report a reduction of GPU-requirements for finetuning a 65B parameter model from more than 780GB VRAM to a measly number under 48 GB, allowing it to be finetuned in a single GPU.
 They also report performance values of up to 99.3% of the performance of ChatGPT on the vicuna benchmark^[which is now defunct and replaced by the MT-Bench score @ChatbotArenaLeaderboard].
