@@ -106,6 +106,7 @@ Students
 |11|51|  17.12. |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
 ||  |         || (Q)LoRA fine-tuning using Unsloth |
 |12|51| 18.12.  |Project presentations||
+|  | 3| 17.1. | Project submission on moodle ||
 
 : Course schedule {.striped .hover tbl-colwidths="[5,5,10,30,50]"}
 
