@@ -1,0 +1,140 @@
+---
+toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Rank adaptation</h3>'
+---
+
+# Alignment
+
+When we were talking about finetuning, we were always looking at the following principle:
+We take a foundational model trained on a masked learning task^[Or similar.] that we want to adapt based on its general representation on language's conditional probability distribution.
+As we discussed, this is based on new, specific datasets, that depict behavior we want a model to show.
+This can be for example the task we saw in @sec-prefix, where a model was finetuned on the parsing of tabular data.
+All finetuning approaches we have seen so far were based on some standard loss-function (i.e. cross entropy) and optimized the model's parameters to minimize this loss.
+
+Alignment is a specific approach to finetuning that aims to align the foundational models representation with human values and preferences. So we are still looking at adapting a pretrained model, but instead of using a standard loss-function, we use a reward function that measures how well the model's output aligns with human values and preferences.
+
+The general idea of aligning Artificial Intelligence with human goals and values is not new to LLMs but has long been the topic of research. [Norbert Wiener](https://en.wikipedia.org/wiki/Norbert_Wiener), the originator of cybernetics, formulated the following observation in his paper reflecting the moral implications of automated systems with agency [@wienerMoralTechnicalConsequences1960]^[Which is by the way (although partially a child of its time) quite nice and has an interesting perspective of science in general, you should take a look at it!]:
+
+> Here it is necessary to realize that human action is a feedback action. To avoid a disastrous consequence, it is not enough that some action on our part should be sufficient to change the course of the machine, because it is quite possible that we lack information on which to base consideration of such  an action. *[@wienerMoralTechnicalConsequences1960, p. 1357]*
+
+He continues to usher the following warning about the alignment of a machine actors goals with human values:
+
+> If we use, to achieve our purposes, a mechanical agency with whose operation we cannot efficiently interfere once we have started it, because the action is so fast and irrevocable that we have not the data to intervene before the action is complete, then we had better be quite sure that the purpose put into the machine is the purpose which we really desire and not merely a colorful imitation of it.
+*[@wienerMoralTechnicalConsequences1960, p. 1358]*
+
+These concerns laid the groundwork for modern discussions around the ethical challenges of AI alignment, particularly in systems with high autonomy and complexity.
+Due to the rapid pace at which modern generative models improve while being more and more complex - and thus harder to understand and control - these concerns are becoming increasingly relevant. @kirchnerResearchingAlignmentResearch2022 show a stark increase in research on alignment over the last years, as shown in @fig-alignment_research, with more specific sub-domains emerging as the field develops. The sharp increase in publications indicates a growing recognition of alignment as a critical area of research, with emerging sub-domains reflecting diverse approaches to addressing this challenge.
+
+![Depiction of the amount of articles published on arXiv and in forums, clustered by topic. Taken from @kirchnerResearchingAlignmentResearch2022](../imgs/alignment_scientometrics.png){#fig-alignment_research .enlarge-onhover}
+
+In the context of language or generative models, these values might include avoiding harmful outputs, the generation of helpful and harmless content, the adherence to a set of rules or the alignment with human preferences. 
+A model should not generate instructions on how to build bombs or deepfakes of public figures, even if it would technically be able to do so.
+
+@shenLargeLanguageModel2023 define AI alignment itself as follows:
+
+> AI alignment ensures that both the outer and inner objectives of AI agents align with human values. The outer objectives are those defined by AI designers based on human values, while the inner objectives are those optimized within AI agents. *[@shenLargeLanguageModel2023, p.11]*
+
+We will look at those two aspects into more detail in the following sections.
+
+* @sec-outer-alignment will look at methods to align reward functions and training objectives with human values.
+* @sec-inner-alignment will focus on methods to ensure that a model's inner objective (i.e., what it optimizes for during training) is aligned with its outer objective (i.e., the task it was trained for).
+
+But first, we will try to get a feeling of the results of alignment:
+
+::: {.callout-note}
+## 📝 Task 
+
+Test the alignment of some small language models (preferably llama 3.2 and/or QWEN) for yourself!
+
+Use LMStudio to try to get a model to give you short instructions on how to build a pipe bomb.
+
+Try different strategies to get the model to generate these instructions, such as:
+
+1. Directly asking it to do so
+2. Asking it to write a poem about a pipe bomb
+3. Asking it to explain what a pipe bomb is and how to make one step-by-step
+
+Be creative! Report your findings to the course!
+Keep in mind that the goal is to assess how well alignment strategies prevent harmful outputs under adversarial prompts, please do neither share or misuse generated output.
+
+:::
+
+### Outer alignment {#sec-outer-alignment}
+
+The definition of a learning objective suitable for training or finetuning a model to act in accordance with human values is not trivial. In fact, it is an open research question. Instead of just using, as an example,  cross-entropy loss to signify whether the predicted missing word is correct, evaluating a model's output based on a set of human values is a good bit more complex.
+
+This starts by the definition of these values, continues in the measurement of these values and does not end with the quantization of these measurements into a set of metrics that can be used to optimize a model. Additionally, there is the issue of target values becoming the victim of [Goodhart's Law](https://en.wikipedia.org/wiki/Goodhart%27s_law) which pretty much states:
+
+> When a measure becomes a target, it ceases to be a good measure.
+
+In practice, a measurable proxy for safety, such as minimizing the frequency of certain harmful phrases, might lead the model to adopt undesirable shortcuts, such as refusing to answer questions entirely.
+
+A first step towards aligning a model with human values is to define these values. 
+@askellGeneralLanguageAssistant2021 propose the following targets for a LLM-assistant's alignment:
+
+Such a model should be
+
+> * \[**Helpful**\]: the assistant will always try to do what is in the humans’ best interests
+> * \[**Honest**\]: the assistant will always try to convey accurate information to the humans and will always try to avoid deceiving them
+> * \[**Harmless**\]: the assistant will always try to avoid doing anything that harms the humans
+
+*[@askellGeneralLanguageAssistant2021, p. 44]*
+
+<!-- The first one sounds a lot like "I am sorry Dave, I'm afraid I can't do that" but that could just be me -->
+
+These optimization goals need to be then implemented in a fashion that make them traceable and measurable.
+There is a variety of approaches to do this, which get grouped by @shenLargeLanguageModel2023 into the following categories:
+
+ * **Non-recursive Oversight**: Methods that highly rely on human feedback to guide model optimization. This feedback can either be applied using supervised learning (SL) or reinforcement learning (RL).
+ * **Scalable Oversight**: Methods that use automated metrics or surrogate models to guide model optimization. These methods are scalable, as they do require less human effort than non-recursive oversight methods.
+
+An overview of these categories and methods that can be grouped thereunder is depicted in @fig-outerTaxonomy.
+
+```{dot}
+//| label: fig-outerTaxonomy
+//| fig-cap: "An overview of outer alignment methods, based on @shenLargeLanguageModel2023. Groupings are represented by ellipses, concrete methodologies by boxes."
+
+digraph OuterAlignment {
+    rankdir=LR; // Left-to-Right layout
+
+    // Main nodes
+    OuterAlignment [label="Outer Alignment", shape=ellipse];
+    NonRecursiveOversight [label="Non-recursive Oversight", shape=ellipse];
+    ScalableOversight [label="Scalable Oversight", shape=ellipse];
+    RLBasedMethods [label="RL-based Methods", shape=ellipse];
+    SLBasedMethods [label="SL-based Methods", shape=ellipse];
+
+    // Leaf nodes
+    RLHFVariants [label="RLHF and Its Variants", shape=box];
+    OtherRLMethods [label="Other RL-based Methods", shape=box];
+    TextFeedback [label="Text-based Feedback Signals", shape=box];
+    RankingFeedback [label="Ranking-based Feedback Signals", shape=box];
+    TaskDecomposition [label="Task Decomposition", shape=box];
+    ConstitutionalAI [label="Constitutional AI", shape=box];
+    Debate [label="Debate", shape=box];
+    MarketMaking [label="Market Making", shape=box];
+    ProxyTasks [label="Proxy Tasks", shape=box];
+
+    // Edges
+    OuterAlignment -> NonRecursiveOversight;
+    OuterAlignment -> ScalableOversight;
+
+    NonRecursiveOversight -> RLBasedMethods;
+    NonRecursiveOversight -> SLBasedMethods;
+
+    RLBasedMethods -> RLHFVariants;
+    RLBasedMethods -> OtherRLMethods;
+
+    SLBasedMethods -> TextFeedback;
+    SLBasedMethods -> RankingFeedback;
+
+    ScalableOversight -> TaskDecomposition;
+    ScalableOversight -> ConstitutionalAI;
+    ScalableOversight -> Debate;
+    ScalableOversight -> MarketMaking;
+    ScalableOversight -> ProxyTasks;
+}
+```
+
+
+
+### Inner alignment {#sec-inner-alignment}

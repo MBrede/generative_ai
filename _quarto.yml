@@ -39,7 +39,7 @@ book:
     - part: "Finetuning"
       chapters: 
         - content/finetuning_approaches.qmd
-        - content/rank_adaptation.qmd
+        - content/alignment.qmd
     
 crossref:
   fig-title: Fig

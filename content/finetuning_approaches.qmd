@@ -51,7 +51,7 @@ We will look at three different approaches to PEFT:
 Prompt-based finetuning is a family of methods that use so called "soft-prompts" to guide a models generation. The general concept is pretty close to prompting as we discussed it in @sec-prompting. The main difference is that instead of engineering a prompt constructed from discrete tokens that results in opportune results, we let standard optimization procedures find a continuos embedding-vector in a pre-trained LMs embedding-space.
 Prefix-Tuning, Prompt Tuning and P-tuning are three different approaches to prompt-based finetuning - all utilizing some implementation of this soft-prompt concept.
 
-#### Prefix tuning
+#### Prefix tuning {#sec-prefix}
 
 Prefix-Tuning [@liPrefixTuningOptimizingContinuous2021] is a method of adapting a language model to a specific down-stream task by adding a continuous prefix vector to the input embeddings. This is done by learning a continuos matrix with a set amount of columns (i.e., tokens) and the frozen models embeddings-dimensionality^[Since directly learning the prefix-weights proved to result in unstable performance, the authors did not directly train prefix-vectors but a MLP scaling up from a smaller 
 dimensionality to the embedding size. Since the rest of the proxy-model is discarded after training though, the method can be treated as the same principle.] that is prepended to the input of each transformer layer (i.e., the encoder and the decoder-stack). The principle is illustrated in @fig-prefixTuning.

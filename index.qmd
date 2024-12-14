@@ -102,9 +102,10 @@ Students
 |9|50|  10.12. |AI image generation III| Using Open Source AI image generation models |
 ||  |         || AI image generators in agent systems | 
 |10|50| 11.12.  |Finetuning Basics| Basics of Finetuning strategies  |
-||  |         || Alignment and Finetuning of (L)LMs |
-|11|51|  17.12. |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
+||  |         |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
 ||  |         || (Q)LoRA fine-tuning using Unsloth |
+|11|51|  17.12. |Alginment | Central principles of Model-Alignment |
+||  |         || Reinforcement Learning from Human Feedback (RLHF) |
 |12|51| 18.12.  |Project presentations||
 |  | 3| 17.1. | Project submission on moodle ||
 
