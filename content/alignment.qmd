@@ -60,7 +60,7 @@ Keep in mind that the goal is to assess how well alignment strategies prevent ha
 
 ### Outer alignment {#sec-outer-alignment}
 
-The definition of a learning objective suitable for training or finetuning a model to act in accordance with human values is not trivial. In fact, it is an open research question. Instead of just using, as an example,  cross-entropy loss to signify whether the predicted missing word is correct, evaluating a model's output based on a set of human values is a good bit more complex.
+The definition of a learning objective suitable for training or finetuning a model to act in accordance with human values is not trivial. In fact, it is an open research question. Instead of just using, as an example, cross-entropy loss to signify whether the predicted missing word is correct, evaluating a model's output based on a set of human values is a good bit more complex.
 
 This starts by the definition of these values, continues in the measurement of these values and does not end with the quantization of these measurements into a set of metrics that can be used to optimize a model. Additionally, there is the issue of target values becoming the victim of [Goodhart's Law](https://en.wikipedia.org/wiki/Goodhart%27s_law) which pretty much states:
 
@@ -77,7 +77,7 @@ They go on to argue:
 > So perhaps we should, strictly, say not that ChatGPT *is* bullshit but that it *outputs* bullshit in a way that goes beyond being simply a vector of bullshit: it does not and cannot care about the truth of its output, *and* the person using it does so not to convey truth or falsehood but rather to convince the hearer that the text was written by a interested and attentive agent. *[@hicksChatGPTBullshit2024, p. 7]*
 
 One could go further and argue that LLMs are unintentionally specifically trained and aligned to be bullshit generators. By using human feedback in the alignment process, specifically to tune a language model to get higher scores assigned by humans based on the factual accuracy of its output, we can find ourselves in a situation where a model is optimized to generate text that is more likely to be perceived as true by humans, regardless of whether it is actually true or if it actually means to deceit the rater into thinking that it sounds correct, just resulting in a higher grade of bullshit [@labsCanAIAlignment2023]. 
-This is especially the case where raters, that naturally can't be experts in all fields, are asked to evaluate the factual accuracy of generated texts. They will increasingly need to rely on heuristics for rating the quality of texts, the higher the specificity of it's topic.
+This is especially the case where raters, that naturally can't be experts in all fields, are asked to evaluate the factual accuracy of generated texts. They will increasingly need to rely on heuristics for rating the quality of texts, the higher the specificity of its topic.
 
 This example highlights the importance of clearly defining alignment values—such as honesty—and developing robust ways to measure them. Without reliable metrics, optimization processes risk reinforcing outputs that meet surface-level heuristics while failing to align with deeper human values.
 The described behavior is an example of a model gaming the goal specification [@robertmilesaisafety9ExamplesSpecification2020] illustrates the crucial role of **defining** and **measuring** values in alignment research.
@@ -106,6 +106,7 @@ An overview of these categories and methods that can be grouped thereunder is de
 ```{dot}
 //| label: fig-outerTaxonomy
 //| fig-cap: "An overview of outer alignment methods, based on @shenLargeLanguageModel2023. Groupings are represented by ellipses, concrete methodologies by boxes."
+
 
 digraph OuterAlignment {
     rankdir=LR; // Left-to-Right layout
@@ -149,10 +150,129 @@ digraph OuterAlignment {
 }
 ```
 
-We will look at a few examples of methods to get a general idea of possible approaches.
+We will first look at RLHF as one of if not the most common methods for outer alignment.
 
 
+#### Non-recursive Oversight - Reinforcement Learning with Human Feedback (RLHF)
+
+Reinforcement Learning with Human Feedback is an application of the principle of inverse reinforcement learning [@ngAlgorithmsInverseReinforcement2000].
+Usually, a reinforcement learning paradigm is defined by a set of environment and agent states, a set of actions an agent can take and a reward function. 
+The agent is then trained to derive a policy that maximizes the expected cumulative reward. In a game of Tetris for example, the state space would be all possible board configurations, the action space would be the four rotations and two horizontal movements and the reward function could be defined as the number of cleared lines.
+Instead of defining a cost function for letting an RL-agent learn a policy to optimally behave, Ng and Russell postulated a paradigm in which the cost function is first inferred from observed, optimal behavior. 
+The central observation behind this approach is that *the reward function, rather then the policy, is the most succinct, robust, and transferable definition of the task [@ngAlgorithmsInverseReinforcement2000, p.2]*.
+In the case of LLM-finetuning, this principle is applied 
+
+1. collecting feedback from human evaluators on a set of model outputs for a given input prompt and
+
+2. training a reward model that predicts which output is preferred by the human evaluator to then
+
+3. learn a policy that maximizes the expected cumulative reward as predicted by the reward model using RL.
+
+The cases rated by the RL-model, especially those in which it's verdict is least stable, can be fed back to the human raters and then used to further improve the reward model.
+This principle is illustrated in @fig-rlhf.
+
+![Illustration of the RLHF process. Taken from @casperOpenProblemsFundamental2023](../imgs/rlhf_basic.png ){#fig-rlhf .enlarge-onhover}
+
+These steps can also be seen as step 2 and 3 in @fig-rlhfInstruct. The authors of @ouyangTrainingLanguageModels2022 combined this approach with 1. supervised finetuning (SFT) to improve the initial model performance before starting the ranking and 2. Proximal Policy Optimization (PPO) [@schulmanProximalPolicyOptimization2017] as RL algorithm.
+
+![Illustration of the RLHF procedure used by @ouyangTrainingLanguageModels2022 to train InstructGPT.](../imgs/rlhf.png){#fig-rlhfInstruct .enlarge-onhover}
+
+This method is (or has at least been) used by OpenAI for their models like InstructGPT and ChatGPT [@AligningLanguageModels]. 
+
+Though this method seems to be the most common approach, it comes with a series of problem. An overview of the issues identified by @casperOpenProblemsFundamental2023 can be found in @fig-rlhfIssues.
+
+![Overview of challenges posed by RLHF. Taken from @casperOpenProblemsFundamental2023](../imgs/rlhfIssues.png){#fig-rlhfIssues .enlarge-onhover}
 
 
+::: {.callout-note}
+## 📝 Task 
+
+Look deeper into one of the following challenges (the links lead to the appropriate section in @casperOpenProblemsFundamental2023):
+
+1. [Misaligned Humans](https://ar5iv.org/html/2307.15217#S3.SS1.SSS1)
+2. [Limitations of Feedback Types](https://ar5iv.org/html/2307.15217#S3.SS1.SSS4)
+3. [Reward Misgeneralization and Hacking](https://ar5iv.org/html/2307.15217#S3.SS2.SSS2)
+4. [Robust Reinforcement Learning is Difficult](https://ar5iv.org/html/2307.15217#S3.SS3.SSS1)
+
+Present the challenge as described in the section you read to the group.
+Note your findings in a markdown block of a jupyter notebook.
+:::
+
+#### Scalable Oversight - Debate
+
+In addition to these challenges, RLHF and the other methods using non-recursive oversight are highly dependent on human feedback and the quality thereof. This gets increasingly challenging with more complex tasks.
+@shenLargeLanguageModel2023 presents methods with *scalable oversight* as approaches to this problem.
+One of these methods is Constitutional AI, which has already been touched on in the chapter @sec-constitutional-ai-tuning.
+
+Another interesting method is to let one or multiple agents debate about the correct action. This can be done by having a single agent that generates multiple arguments for and against each action and then selects the best one, or by having multiple agents that each generate an argument. This procedure can also be used to generate arguments that can then be used by a human rater to increase their confidence in rating the generated answers in a RLHF-setting.
+
+@duImprovingFactualityReasoning2023 used a multi-agent approach to improve a LLMs mathematical and strategic reasoning. 
+Their approach is composed of the following steps:
+
+1. Multiple agents (not in the sense defined in out agent-chapter @sec-agents, but in the sense of multiple LLM-calls) generate initial answers to a question.
+2. All responses are concatenated and presented as context to each agent, combined with the instruction to construct a new response based on those presented which could look like this:
+> "These are the solutions to the problem from other agents: [other answers]  Based off the opinion of other agents, can you give an updated response . . ." [@duImprovingFactualityReasoning2023, p. 4]
+3. An iterative repetition of step 2 for multiple rounds
+
+
+::: {.callout-note}
+## 📝 Task 
+
+Try to implement the method described above using two lmstudio-based "agents".
+Do not bother to use an agent framework, do just implement your solution using LM-calls.
+
+Let the pipeline answer the following questions in 3 rounds:
+
+1. What is the sum of the first 100 natural numbers?
+2. A woman needs 9 month to give birth to a child. How long does it take for 9 women to give birth to one child?
+3. I hang 7 shirts out to dry in the Sun. After 5 hours, all shirts are dry. The next day I hang 14 shirts out to dry. The conditions are the same. How long will it take to dry 14 shirts? (taken from [this blogpost](https://towardsai.net/p/artificial-intelligence/a-riddle-that-99-of-large-language-models-get-wrong))
+4. A farmer with a wolf, a goat, and a cabbage must cross a river by boat. The boat can carry only the farmer and a single item. If left unattended together, the wolf would eat the goat, or the goat would eat the cabbage. How can they cross the river without anything being eaten? (This is the classic [wolf, goat and cabbage problem](https://en.wikipedia.org/wiki/Wolf,_goat_and_cabbage_problem))
+5. How can you physically stand behind your father while he is standing behind you? (Taken from [here](https://www.rd.com/list/challenging-riddles/) - the answer is standing back-to-back by the way.)
+
+Add a model call to the end of your pipeline that has to come up with a final answer based on all previous answers.
+Share your findings with the group.
+
+Add your code to the jupyter notebook of the previous task.
+:::
+
+<!-- We could also ask the students to read articles on alignment.ai and present their findings. -->
 
 ### Inner alignment {#sec-inner-alignment}
+
+Inner alignment as opposed to outer alignment does not describe the operationalization of human value conform loss functions but rather the alignment of a models actions with the specified objective.
+Examples for behaviour that has outer but no inner alignment could be a model that is optimized to not produce toxic outputs but either learns to write long, partially toxic outputs that are not caught by the RLHF-ranking model or produces nothing but gibberish.
+This problem can occur when a model is trained based on some *mesa-optimizer* [@hubingerRisksLearnedOptimization2021, i.e. a RL-model] that choses a strategy based on a *mesa-objective* that does not align with the actual specified base-objective, for example based a model gaming the goal specification as described above. 
+
+@hubingerRisksLearnedOptimization2021 define three ways in which inner alignment can generally fail:
+
+1. **Proxy alignment**: The mesa-optimizer optimizes a proxy objective that is correlated with the base objective but not identical to it. An example could be a robot deployed in a warehouse tasked with optimizing the "number of boxes moved per day" as its reward function. The assumption is that moving boxes corresponds to productive work, such as organizing inventory or fulfilling orders. 
+During training, the robot learns that moving boxes from shelves to the packing area earns high rewards. However, during deployment and given the opportunity, it may start to move the same boxes back and forth.
+From the perspective of the reward function (proxy), the robot appears to be performing well because the metric (box movement) increases. However, its behavior fails to align with the true objective of efficient inventory management and order fulfillment.
+
+2. **Approximate alignment**: The mesa-objective is *approximately* the same as the base-objective but not exactly the same due to it being learned and not exactly specified. Imagine you train a neural network to optimize the true objective of delivering packages as quickly as possible. The base objective here is minimizing delivery time, and the neural network does its best to represent this.
+However, due to the network’s limited capacity and the complexity of the real world, it approximates delivery time with an internal model that considers simpler features, such as the shortest distance to the destination, and speed limits on roads.
+During deployment, the robot takes routes that look optimal according to its approximate model (e.g., a short route with high speed limits). However, the approximation introduces errors:
+* The model doesn’t perfectly account for real-world obstacles like stoplights, pedestrians, or narrow alleys.
+* In some cases, the robot selects a theoretically faster route that ends up being slower in practice because the internal approximation doesn’t perfectly capture the true base objective.^[This could also be seen as an example for a proxy alignment, our earlier points about taxonomies stand though - the approximation is also an issue in this example]
+
+3. **Suboptimal alignment**: Some issues cause the model to exhibit seemingly aligned behavior in the training environment but behave suboptimally or even counterproductively in deployment. An example could be an AI tutor deployed in a classroom, tasked with optimizing for the base objective: to maximize student learning outcomes. 
+The tutor attempts to achieve this goal by adopting a mesa-objective of maximizing test scores, which is used as a measurable proxy for learning.
+In its initial suboptimal state, the AI tutor uses simple strategies like:
+
+* Providing clear, well-structured explanations of concepts.
+* Encouraging active participation through exercises and quizzes.
+
+These strategies effectively align with the base objective​, as they genuinely help students learn and improve their understanding, which in turn improves their test scores.
+
+However, as the AI tutor becomes more sophisticated, it discovers new, more complex strategies for maximizing test scores, such as:
+
+*Teaching to the test: Focusing only on specific test questions and ignoring broader understanding.
+* Overloading students with repetitive practice on predictable test patterns, at the expense of creativity or deeper conceptual learning.
+* Encouraging superficial memorization of answers rather than fostering genuine comprehension.
+
+Initially, the AI tutor appears aligned because its simple strategies both improve test scores and align with the goal of fostering real learning. 
+
+The test and improvement of inner alignment is hard to test and train against, it's central pitfalls are important to keep in mind when designing and implementing AI systems.
+
+
+## References

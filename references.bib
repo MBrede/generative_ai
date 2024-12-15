@@ -68,6 +68,14 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
+@misc{AligningLanguageModels,
+  title = {Aligning Language Models to Follow Instructions},
+  urldate = {2024-12-15},
+  abstract = {We've trained language models that are much better at following user intentions than GPT-3 while also making them more truthful and less toxic, using techniques developed through our alignment research. These~InstructGPT~models, which are trained with humans in the loop, are now deployed as the default language models on our~API.},
+  howpublished = {https://openai.com/index/instruction-following/},
+  langid = {american}
+}
+
 @misc{angelovTop2VecDistributedRepresentations2020a,
   title = {{{Top2Vec}}: {{Distributed Representations}} of {{Topics}}},
   shorttitle = {{{Top2Vec}}},
@@ -218,6 +226,22 @@
   langid = {english}
 }
 
+@misc{casperOpenProblemsFundamental2023,
+  title = {Open {{Problems}} and {{Fundamental Limitations}} of {{Reinforcement Learning}} from {{Human Feedback}}},
+  author = {Casper, Stephen and Davies, Xander and Shi, Claudia and Gilbert, Thomas Krendl and Scheurer, J{\'e}r{\'e}my and Rando, Javier and Freedman, Rachel and Korbak, Tomasz and Lindner, David and Freire, Pedro and Wang, Tony and Marks, Samuel and Segerie, Charbel-Rapha{\"e}l and Carroll, Micah and Peng, Andi and Christoffersen, Phillip and Damani, Mehul and Slocum, Stewart and Anwar, Usman and Siththaranjan, Anand and Nadeau, Max and Michaud, Eric J. and Pfau, Jacob and Krasheninnikov, Dmitrii and Chen, Xin and Langosco, Lauro and Hase, Peter and B{\i}y{\i}k, Erdem and Dragan, Anca and Krueger, David and Sadigh, Dorsa and {Hadfield-Menell}, Dylan},
+  year = {2023},
+  month = sep,
+  number = {arXiv:2307.15217},
+  eprint = {2307.15217},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2307.15217},
+  urldate = {2024-12-15},
+  abstract = {Reinforcement learning from human feedback (RLHF) is a technique for training AI systems to align with human goals. RLHF has emerged as the central method used to finetune state-of-the-art large language models (LLMs). Despite this popularity, there has been relatively little public work systematizing its flaws. In this paper, we (1) survey open problems and fundamental limitations of RLHF and related methods; (2) overview techniques to understand, improve, and complement RLHF in practice; and (3) propose auditing and disclosure standards to improve societal oversight of RLHF systems. Our work emphasizes the limitations of RLHF and highlights the importance of a multi-faceted approach to the development of safer AI systems.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
 @misc{cerUniversalSentenceEncoder2018a,
   title = {Universal {{Sentence Encoder}}},
   author = {Cer, Daniel and Yang, Yinfei and Kong, Sheng-yi and Hua, Nan and Limtiaco, Nicole and John, Rhomni St and Constant, Noah and {Guajardo-Cespedes}, Mario and Yuan, Steve and Tar, Chris and Sung, Yun-Hsuan and Strope, Brian and Kurzweil, Ray},
@@ -337,6 +361,22 @@
   keywords = {Computer Science - Machine Learning,Statistics - Machine Learning}
 }
 
+@misc{duImprovingFactualityReasoning2023,
+  title = {Improving {{Factuality}} and {{Reasoning}} in {{Language Models}} through {{Multiagent Debate}}},
+  author = {Du, Yilun and Li, Shuang and Torralba, Antonio and Tenenbaum, Joshua B. and Mordatch, Igor},
+  year = {2023},
+  month = may,
+  number = {arXiv:2305.14325},
+  eprint = {2305.14325},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2305.14325},
+  urldate = {2024-12-15},
+  abstract = {Large language models (LLMs) have demonstrated remarkable capabilities in language generation, understanding, and few-shot learning in recent years. An extensive body of work has explored how their performance may be further improved through the tools of prompting, ranging from verification, self-consistency, or intermediate scratchpads. In this paper, we present a complementary approach to improve language responses where multiple language model instances propose and debate their individual responses and reasoning processes over multiple rounds to arrive at a common final answer. Our findings indicate that this approach significantly enhances mathematical and strategic reasoning across a number of tasks. We also demonstrate that our approach improves the factual validity of generated content, reducing fallacious answers and hallucinations that contemporary models are prone to. Our approach may be directly applied to existing black-box models and uses identical procedure and prompts for all tasks we investigate. Overall, our findings suggest that such "society of minds" approach has the potential to significantly advance the capabilities of LLMs and pave the way for further breakthroughs in language generation and understanding.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning}
+}
+
 @misc{esserTamingTransformersHighResolution2021,
   title = {Taming {{Transformers}} for {{High-Resolution Image Synthesis}}},
   author = {Esser, Patrick and Rombach, Robin and Ommer, Bj{\"o}rn},
@@ -350,6 +390,16 @@
   abstract = {Designed to learn long-range interactions on sequential data, transformers continue to show state-of-the-art results on a wide variety of tasks. In contrast to CNNs, they contain no inductive bias that prioritizes local interactions. This makes them expressive, but also computationally infeasible for long sequences, such as high-resolution images. We demonstrate how combining the effectiveness of the inductive bias of CNNs with the expressivity of transformers enables them to model and thereby synthesize high-resolution images. We show how to (i) use CNNs to learn a context-rich vocabulary of image constituents, and in turn (ii) utilize transformers to efficiently model their composition within high-resolution images. Our approach is readily applied to conditional synthesis tasks, where both non-spatial information, such as object classes, and spatial information, such as segmentations, can control the generated image. In particular, we present the first results on semantically-guided synthesis of megapixel images with transformers and obtain the state of the art among autoregressive models on class-conditional ImageNet. Code and pretrained models can be found at https://github.com/CompVis/taming-transformers .},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computer Vision and Pattern Recognition}
+}
+
+@article{evhubDeceptiveAlignment2019,
+  title = {Deceptive {{Alignment}}},
+  author = {{evhub} and van Merwijk, Chris and Mikulik, Vlad and Skalse, Joar and Garrabrant, Scott},
+  year = {2019},
+  month = jun,
+  urldate = {2024-12-15},
+  abstract = {This is the fourth of five posts in the Risks from Learned Optimization Sequence based on the paper ``Risks from Learned Optimization in Advanced Mach{\dots}},
+  langid = {english}
 }
 
 @misc{fedusReviewSparseExpert2022,
@@ -382,6 +432,16 @@
   abstract = {In human-level NLP tasks, such as predicting mental health, personality, or demographics, the number of observations is often smaller than the standard 768+ hidden state sizes of each layer within modern transformer-based language models, limiting the ability to effectively leverage transformers. Here, we provide a systematic study on the role of dimension reduction methods (principal components analysis, factorization techniques, or multi-layer auto-encoders) as well as the dimensionality of embedding vectors and sample sizes as a function of predictive performance. We first find that fine-tuning large models with a limited amount of data pose a significant difficulty which can be overcome with a pre-trained dimension reduction regime. RoBERTa consistently achieves top performance in human-level tasks, with PCA giving benefit over other reduction methods in better handling users that write longer texts. Finally, we observe that a majority of the tasks achieve results comparable to the best performance with just 112 of the embedding dimensions.},
   pmcid = {PMC8294338},
   pmid = {34296226}
+}
+
+@inproceedings{gaoScalingLawsReward2023,
+  title = {Scaling Laws for Reward Model Overoptimization},
+  booktitle = {International {{Conference}} on {{Machine Learning}}},
+  author = {Gao, Leo and Schulman, John and Hilton, Jacob},
+  year = {2023},
+  pages = {10835--10866},
+  publisher = {PMLR},
+  urldate = {2024-12-15}
 }
 
 @misc{goodfellowGenerativeAdversarialNetworks2014,
@@ -528,6 +588,22 @@
   title = {{{https://arxiv.org/pdf/2007.11301}}},
   urldate = {2024-11-20},
   howpublished = {https://arxiv.org/pdf/2007.11301}
+}
+
+@misc{hubingerRisksLearnedOptimization2021,
+  title = {Risks from {{Learned Optimization}} in {{Advanced Machine Learning Systems}}},
+  author = {Hubinger, Evan and van Merwijk, Chris and Mikulik, Vladimir and Skalse, Joar and Garrabrant, Scott},
+  year = {2021},
+  month = dec,
+  number = {arXiv:1906.01820},
+  eprint = {1906.01820},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1906.01820},
+  urldate = {2024-12-15},
+  abstract = {We analyze the type of learned optimization that occurs when a learned model (such as a neural network) is itself an optimizer - a situation we refer to as mesa-optimization, a neologism we introduce in this paper. We believe that the possibility of mesa-optimization raises two important questions for the safety and transparency of advanced machine learning systems. First, under what circumstances will learned models be optimizers, including when they should not be? Second, when a learned model is an optimizer, what will its objective be - how will it differ from the loss function it was trained under - and how can it be aligned? In this paper, we provide an in-depth analysis of these two primary questions and provide an overview of topics for future research.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence}
 }
 
 @misc{hulbertUsingTreeThoughtPrompting2023,
@@ -1030,6 +1106,16 @@
   keywords = {Computer Science - Computation and Language}
 }
 
+@inproceedings{ngAlgorithmsInverseReinforcement2000,
+  title = {Algorithms for Inverse Reinforcement Learning.},
+  booktitle = {Icml},
+  author = {Ng, Andrew Y. and Russell, Stuart},
+  year = {2000},
+  volume = {1},
+  pages = {2},
+  urldate = {2024-12-15}
+}
+
 @article{ouyangTrainingLanguageModels2022,
   title = {Training Language Models to Follow Instructions with Human Feedback},
   author = {Ouyang, Long and Wu, Jeffrey and Jiang, Xu and Almeida, Diogo and Wainwright, Carroll and Mishkin, Pamela and Zhang, Chong and Agarwal, Sandhini and Slama, Katarina and Ray, Alex and Schulman, John and Hilton, Jacob and Kelton, Fraser and Miller, Luke and Simens, Maddie and Askell, Amanda and Welinder, Peter and Christiano, Paul F. and Leike, Jan and Lowe, Ryan},
@@ -1196,6 +1282,38 @@
   title = {Say {{What You Mean}}: {{A Response}} to '{{Let Me Speak Freely}}'},
   urldate = {2024-11-25},
   howpublished = {https://blog.dottxt.co/say-what-you-mean.html}
+}
+
+@misc{scheurerTrainingLanguageModels2022,
+  title = {Training {{Language Models}} with {{Language Feedback}}},
+  author = {Scheurer, J{\'e}r{\'e}my and Campos, Jon Ander and Chan, Jun Shern and Chen, Angelica and Cho, Kyunghyun and Perez, Ethan},
+  year = {2022},
+  month = nov,
+  number = {arXiv:2204.14146},
+  eprint = {2204.14146},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2204.14146},
+  urldate = {2024-12-15},
+  abstract = {Pretrained language models often do not perform tasks in ways that are in line with our preferences, e.g., generating offensive text or factually incorrect summaries. Recent work approaches the above issue by learning from a simple form of human evaluation: comparisons between pairs of model-generated task outputs. Comparison feedback conveys limited information about human preferences per human evaluation. Here, we propose to learn from natural language feedback, which conveys more information per human evaluation. We learn from language feedback on model outputs using a three-step learning algorithm. First, we condition the language model on the initial output and feedback to generate many refinements. Second, we choose the refinement with the highest similarity to the feedback. Third, we finetune a language model to maximize the likelihood of the chosen refinement given the input. In synthetic experiments, we first evaluate whether language models accurately incorporate feedback to produce refinements, finding that only large language models (175B parameters) do so. Using only 100 samples of human-written feedback, our learning algorithm finetunes a GPT-3 model to roughly human-level summarization ability.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
+@misc{schulmanProximalPolicyOptimization2017,
+  title = {Proximal {{Policy Optimization Algorithms}}},
+  author = {Schulman, John and Wolski, Filip and Dhariwal, Prafulla and Radford, Alec and Klimov, Oleg},
+  year = {2017},
+  month = aug,
+  number = {arXiv:1707.06347},
+  eprint = {1707.06347},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1707.06347},
+  urldate = {2024-12-15},
+  abstract = {We propose a new family of policy gradient methods for reinforcement learning, which alternate between sampling data through interaction with the environment, and optimizing a "surrogate" objective function using stochastic gradient ascent. Whereas standard policy gradient methods perform one gradient update per data sample, we propose a novel objective function that enables multiple epochs of minibatch updates. The new methods, which we call proximal policy optimization (PPO), have some of the benefits of trust region policy optimization (TRPO), but they are much simpler to implement, more general, and have better sample complexity (empirically). Our experiments test PPO on a collection of benchmark tasks, including simulated robotic locomotion and Atari game playing, and we show that PPO outperforms other online policy gradient methods, and overall strikes a favorable balance between sample complexity, simplicity, and wall-time.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning}
 }
 
 @misc{SemanticSimilarityText,
