@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/875720312.svg)](https://doi.org/10.5281/zenodo.14497740)
+
+
 # Generative AI: An Introductory Script
 
 This script serves as an introduction to **Generative AI** and was developed for the elective module "Generative AI," offered to master's students of the "Data Science" program at the University of Applied Sciences Kiel. Built using `quarto`, this resource is designed to provide an accessible overview of key topics and applications in this rapidly evolving field.
