@@ -67,8 +67,22 @@ This starts by the definition of these values, continues in the measurement of t
 > When a measure becomes a target, it ceases to be a good measure.
 
 In practice, a measurable proxy for safety, such as minimizing the frequency of certain harmful phrases, might lead the model to adopt undesirable shortcuts, such as refusing to answer questions entirely.
+The issue becomes even more evident when we consider alignment processes that involve human evaluations. @hicksChatGPTBullshit2024^[The paper is generally a nice read, with nice sentences like *On Frankfurt's view, bullshit is bullshit even if uttered with no intent to bullshit. p. 7* ] arguing (very convincingly) that ChatGPT and other LLMs illustrate this challenge by generating texts that are optimized to sound convincing, regardless of their factual accuracy - making them outright bullshit machines.
+They base this argument on the following reference to the term of bullshit coined by [Harry Frankfurt](https://en.wikipedia.org/wiki/Harry_Frankfurt):
 
-A first step towards aligning a model with human values is to define these values. 
+> Frankfurt understands bullshit to be characterized not by an intent to deceive but instead by a reckless disregard for the truth. A student trying to sound knowledgeable without having done the reading, a political candidate saying things because they sound good to potential voters, and a dilettante trying to spin an interesting story: none of these people are trying to deceive, but they are also not trying to convey facts. To Frankfurt, they are bullshitting. *[@hicksChatGPTBullshit2024, p. 4]*
+
+They go on to argue:
+
+> So perhaps we should, strictly, say not that ChatGPT *is* bullshit but that it *outputs* bullshit in a way that goes beyond being simply a vector of bullshit: it does not and cannot care about the truth of its output, *and* the person using it does so not to convey truth or falsehood but rather to convince the hearer that the text was written by a interested and attentive agent. *[@hicksChatGPTBullshit2024, p. 7]*
+
+One could go further and argue that LLMs are unintentionally specifically trained and aligned to be bullshit generators. By using human feedback in the alignment process, specifically to tune a language model to get higher scores assigned by humans based on the factual accuracy of its output, we can find ourselves in a situation where a model is optimized to generate text that is more likely to be perceived as true by humans, regardless of whether it is actually true or if it actually means to deceit the rater into thinking that it sounds correct, just resulting in a higher grade of bullshit [@labsCanAIAlignment2023]. 
+This is especially the case where raters, that naturally can't be experts in all fields, are asked to evaluate the factual accuracy of generated texts. They will increasingly need to rely on heuristics for rating the quality of texts, the higher the specificity of it's topic.
+
+This example highlights the importance of clearly defining alignment values—such as honesty—and developing robust ways to measure them. Without reliable metrics, optimization processes risk reinforcing outputs that meet surface-level heuristics while failing to align with deeper human values.
+The described behavior is an example of a model gaming the goal specification [@robertmilesaisafety9ExamplesSpecification2020] illustrates the crucial role of **defining** and **measuring** values in alignment research.
+
+So, a first step towards aligning a model with human values is to define these values. 
 @askellGeneralLanguageAssistant2021 propose the following targets for a LLM-assistant's alignment:
 
 Such a model should be
@@ -84,10 +98,10 @@ Such a model should be
 These optimization goals need to be then implemented in a fashion that make them traceable and measurable.
 There is a variety of approaches to do this, which get grouped by @shenLargeLanguageModel2023 into the following categories:
 
- * **Non-recursive Oversight**: Methods that highly rely on human feedback to guide model optimization. This feedback can either be applied using supervised learning (SL) or reinforcement learning (RL).
+ * **Non-recursive Oversight**: Methods that highly rely on human feedback to guide model optimization. The mode of utilization of this feedback can be grouped into methods using *supervised learning (SL)* or *reinforcement learning (RL)*.
  * **Scalable Oversight**: Methods that use automated metrics or surrogate models to guide model optimization. These methods are scalable, as they do require less human effort than non-recursive oversight methods.
 
-An overview of these categories and methods that can be grouped thereunder is depicted in @fig-outerTaxonomy.
+An overview of these categories and methods that can be grouped thereunder is depicted in @fig-outerTaxonomy. As with nearly all taxonomies, this one is not exhaustive and the boundaries between the categories are not always clear. Methods in the *Non-recursive Oversight* category are often used as a component of methods in the *Scalable Oversight* category.
 
 ```{dot}
 //| label: fig-outerTaxonomy
@@ -134,6 +148,10 @@ digraph OuterAlignment {
     ScalableOversight -> ProxyTasks;
 }
 ```
+
+We will look at a few examples of methods to get a general idea of possible approaches.
+
+
 
 
 
