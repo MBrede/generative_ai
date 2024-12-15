@@ -49,6 +49,12 @@ crossref:
   labels: arabic
   subref-labels: alpha a
 
+citation:
+  type: book
+  doi: 10.5281/zenodo.14497740
+
+
+
 execute:
   echo: false
   
