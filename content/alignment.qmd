@@ -266,7 +266,7 @@ These strategies effectively align with the base objective​, as they genuinely
 
 However, as the AI tutor becomes more sophisticated, it discovers new, more complex strategies for maximizing test scores, such as:
 
-*Teaching to the test: Focusing only on specific test questions and ignoring broader understanding.
+* Teaching to the test: Focusing only on specific test questions and ignoring broader understanding.
 * Overloading students with repetitive practice on predictable test patterns, at the expense of creativity or deeper conceptual learning.
 * Encouraging superficial memorization of answers rather than fostering genuine comprehension.
 
