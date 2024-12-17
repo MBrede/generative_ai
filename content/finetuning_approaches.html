@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/rank_adaptation.html" rel="next">
+<link href="../content/alignment.html" rel="next">
 <link href="../content/generation_in_agent_pipelines.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js"></script>
@@ -267,7 +267,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/rank_adaptation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Rank adaptation</span></a>
+  <a href="../content/alignment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alignment</span></a>
   </div>
 </li>
       </ul>
@@ -337,8 +337,8 @@ Finetuning Approaches<br>
 <section id="prompt-based-finetuning" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="prompt-based-finetuning">Prompt-based Finetuning</h3>
 <p>Prompt-based finetuning is a family of methods that use so called “soft-prompts” to guide a models generation. The general concept is pretty close to prompting as we discussed it in <a href="prompting.html" class="quarto-xref"><span>Prompting</span></a>. The main difference is that instead of engineering a prompt constructed from discrete tokens that results in opportune results, we let standard optimization procedures find a continuos embedding-vector in a pre-trained LMs embedding-space. Prefix-Tuning, Prompt Tuning and P-tuning are three different approaches to prompt-based finetuning - all utilizing some implementation of this soft-prompt concept.</p>
-<section id="prefix-tuning" class="level4 page-columns page-full">
-<h4 class="anchored" data-anchor-id="prefix-tuning">Prefix tuning</h4>
+<section id="sec-prefix" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="sec-prefix">Prefix tuning</h4>
 <p>Prefix-Tuning <span class="citation" data-cites="liPrefixTuningOptimizingContinuous2021">(<a href="#ref-liPrefixTuningOptimizingContinuous2021" role="doc-biblioref">Li &amp; Liang, 2021</a>)</span> is a method of adapting a language model to a specific down-stream task by adding a continuous prefix vector to the input embeddings. This is done by learning a continuos matrix with a set amount of columns (i.e., tokens) and the frozen models embeddings-dimensionality<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> that is prepended to the input of each transformer layer (i.e., the encoder and the decoder-stack). The principle is illustrated in <a href="#fig-prefixTuning" class="quarto-xref">Figure&nbsp;<span>12.1</span></a>.</p>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Since directly learning the prefix-weights proved to result in unstable performance, the authors did not directly train prefix-vectors but a MLP scaling up from a smaller dimensionality to the embedding size. Since the rest of the proxy-model is discarded after training though, the method can be treated as the same principle.</p></div></div><div id="fig-prefixTuning" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1006,8 +1006,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/rank_adaptation.html" class="pagination-link" aria-label="Rank adaptation">
-        <span class="nav-page-text"><span class="chapter-title">Rank adaptation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/alignment.html" class="pagination-link" aria-label="Alignment">
+        <span class="nav-page-text"><span class="chapter-title">Alignment</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1015,7 +1015,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" style="padding-right: 10px;"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a></p>
+<p><a rel="license" href=" https://creativecommons.org/licenses/by-nc-sa/4.0/" style="padding-right: 10px;"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a></p>
 </div>   
     <div class="nav-footer-center">
 <p>All images are generated using Python, R, draw.io, Flux or Stable Diffusion XL if not indicated otherwise.</p>
