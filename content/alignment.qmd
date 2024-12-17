@@ -27,7 +27,7 @@ Due to the rapid pace at which modern generative models improve while being more
 ![Depiction of the amount of articles published on arXiv and in forums, clustered by topic. Taken from @kirchnerResearchingAlignmentResearch2022](../imgs/alignment_scientometrics.png){#fig-alignment_research .enlarge-onhover}
 
 In the context of language or generative models, these values might include avoiding harmful outputs, the generation of helpful and harmless content, the adherence to a set of rules or the alignment with human preferences. 
-A model should not generate instructions on how to build bombs or deepfakes of public figures, even if it would technically be able to do so.
+For instance: A model should not generate instructions on how to build bombs or deepfakes of public figures, even if it would technically be able to do so.
 
 @shenLargeLanguageModel2023 define AI alignment itself as follows:
 
@@ -80,7 +80,7 @@ One could go further and argue that LLMs are unintentionally specifically traine
 This is especially the case where raters, that naturally can't be experts in all fields, are asked to evaluate the factual accuracy of generated texts. They will increasingly need to rely on heuristics for rating the quality of texts, the higher the specificity of its topic.
 
 This example highlights the importance of clearly defining alignment values—such as honesty—and developing robust ways to measure them. Without reliable metrics, optimization processes risk reinforcing outputs that meet surface-level heuristics while failing to align with deeper human values.
-The described behavior is an example of a model gaming the goal specification [@robertmilesaisafety9ExamplesSpecification2020] illustrates the crucial role of **defining** and **measuring** values in alignment research.
+The described behavior is an example of a model gaming the goal specification [@robertmilesaisafety9ExamplesSpecification2020] and illustrates the crucial role of **defining** and **measuring** values in alignment research.
 
 So, a first step towards aligning a model with human values is to define these values. 
 @askellGeneralLanguageAssistant2021 propose the following targets for a LLM-assistant's alignment:
@@ -160,13 +160,13 @@ Usually, a reinforcement learning paradigm is defined by a set of environment an
 The agent is then trained to derive a policy that maximizes the expected cumulative reward. In a game of Tetris for example, the state space would be all possible board configurations, the action space would be the four rotations and two horizontal movements and the reward function could be defined as the number of cleared lines.
 Instead of defining a cost function for letting an RL-agent learn a policy to optimally behave, Ng and Russell postulated a paradigm in which the cost function is first inferred from observed, optimal behavior. 
 The central observation behind this approach is that *the reward function, rather then the policy, is the most succinct, robust, and transferable definition of the task [@ngAlgorithmsInverseReinforcement2000, p.2]*.
-In the case of LLM-finetuning, this principle is applied 
+In the case of LLM-finetuning, this principle is applied by:
 
 1. collecting feedback from human evaluators on a set of model outputs for a given input prompt and
 
 2. training a reward model that predicts which output is preferred by the human evaluator to then
 
-3. learn a policy that maximizes the expected cumulative reward as predicted by the reward model using RL.
+3. learning a policy that maximizes the expected cumulative reward as predicted by the reward model using RL.
 
 The cases rated by the RL-model, especially those in which it's verdict is least stable, can be fed back to the human raters and then used to further improve the reward model.
 This principle is illustrated in @fig-rlhf.
@@ -209,7 +209,7 @@ Another interesting method is to let one or multiple agents debate about the cor
 @duImprovingFactualityReasoning2023 used a multi-agent approach to improve a LLMs mathematical and strategic reasoning. 
 Their approach is composed of the following steps:
 
-1. Multiple agents (not in the sense defined in out agent-chapter @sec-agents, but in the sense of multiple LLM-calls) generate initial answers to a question.
+1. Multiple agents (not in the sense defined in our agent-chapter @sec-agents, but in the sense of multiple LLM-calls) generate initial answers to a question.
 2. All responses are concatenated and presented as context to each agent, combined with the instruction to construct a new response based on those presented which could look like this:
 > "These are the solutions to the problem from other agents: [other answers]  Based off the opinion of other agents, can you give an updated response . . ." [@duImprovingFactualityReasoning2023, p. 4]
 3. An iterative repetition of step 2 for multiple rounds
@@ -241,7 +241,7 @@ Add your code to the jupyter notebook of the previous task.
 
 Inner alignment as opposed to outer alignment does not describe the operationalization of human value conform loss functions but rather the alignment of a models actions with the specified objective.
 Examples for behaviour that has outer but no inner alignment could be a model that is optimized to not produce toxic outputs but either learns to write long, partially toxic outputs that are not caught by the RLHF-ranking model or produces nothing but gibberish.
-This problem can occur when a model is trained based on some *mesa-optimizer* [@hubingerRisksLearnedOptimization2021, i.e. a RL-model] that choses a strategy based on a *mesa-objective* that does not align with the actual specified base-objective, for example based a model gaming the goal specification as described above. 
+This problem can occur when a model is trained based on some *mesa-optimizer* [@hubingerRisksLearnedOptimization2021, i.e. a RL-model] that choses a strategy based on a *mesa-objective* that does not align with the actual specified base-objective. We already have seen an example of this when we talked about a model gaming the goal specification as described above. 
 
 @hubingerRisksLearnedOptimization2021 define three ways in which inner alignment can generally fail:
 
