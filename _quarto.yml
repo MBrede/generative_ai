@@ -14,7 +14,7 @@ book:
     logo: cover.jpg
   favicon: cover.jpg
   page-footer: 
-    left: '<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" style="padding-right: 10px;"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>'
+    left: '<a rel="license" href=" https://creativecommons.org/licenses/by-nc-sa/4.0/" style="padding-right: 10px;"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>'
     center: 'All images are generated using Python, R, draw.io, Flux or Stable Diffusion XL if not indicated otherwise.'
   repo-url: https://github.com/MBrede/generative_ai
   repo-actions: [issue]
@@ -39,7 +39,7 @@ book:
     - part: "Finetuning"
       chapters: 
         - content/finetuning_approaches.qmd
-        - content/rank_adaptation.qmd
+        - content/alignment.qmd
     
 crossref:
   fig-title: Fig
@@ -48,6 +48,12 @@ crossref:
   tbl-prefix: Table
   labels: arabic
   subref-labels: alpha a
+
+citation:
+  type: book
+  doi: 10.5281/zenodo.14497740
+
+
 
 execute:
   echo: false

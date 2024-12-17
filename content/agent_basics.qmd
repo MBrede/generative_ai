@@ -2,7 +2,7 @@
 toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent basics</h3>'
 ---
 
-# Agent basics
+# Agent basics {#sec-agents}
 
 <!-- ## Fundamentals of agents and train-of-thought prompting -->
 
