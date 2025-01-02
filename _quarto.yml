@@ -1,6 +1,9 @@
 project:
   output-dir: docs
   type: book
+  pre-render: _src/replace_webp.py
+  post-render:
+    - _src/move_hacked_gifs.py
 
 book:
   title: "Generative AI"
@@ -18,6 +21,7 @@ book:
     center: 'All images are generated using Python, R, draw.io, Flux or Stable Diffusion XL if not indicated otherwise.'
   repo-url: https://github.com/MBrede/generative_ai
   repo-actions: [issue]
+  downloads: [pdf]
   chapters:
     - part: index.qmd
       chapters: 
@@ -64,24 +68,25 @@ number-sections: false
 toc-depth: 3
 toc-expand: 2
 freeze: auto
-reference-location: margin
 code-annotations: below
   
 format:
   html:
+    reference-location: margin
     theme: simplex
     css: styles.css
     include-after-body: 
       - flip-script.js
-  # pdf:
-  #   documentclass: scrreprt
-  #   include-in-header: 
-  #     text: |
-  #       \usepackage{makeidx}
-  #       \makeindex
-  #   include-after-body: 
-  #     text: |
-  #       \printindex
+  pdf:
+    reference-location: block
+    documentclass: scrreprt
+    include-in-header: 
+      text: |
+        \usepackage{makeidx}
+        \makeindex
+    include-after-body: 
+      text: |
+        \printindex
 
 
 

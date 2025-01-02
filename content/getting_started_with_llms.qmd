@@ -6,7 +6,7 @@ toc-title: '![](../imgs/history.jpg){width=240px}<br> <h3>Getting started with (
 #| include: false
 set.seed(42)
 source('../_src/matrix_illustration.R')
-
+source('../_src/gif_handling.R')
 ```
 
 # Getting started with (L)LMs
@@ -21,26 +21,53 @@ This section will first explore the evolution of these representations before in
 
 ### A short history of natural language processing
 
-![BOW-representation of sentences.](../imgs/bow.gif){#fig-BOW .enlarge-onhover width=100%}
+```{r bow}
+#| output: asis
+
+include_gif('../imgs/bow.gif',
+            label='fig-BOW',
+            cap='BOW-representation of sentences.')
+```
+
 
 The **Bag Of Words (BOW)** method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus. Additionally, it does not take into account the order of words in a sentence, which can be crucial for understanding its meaning. For example, the sentences "The cat is on the mat" and "The mat is on the cat" have different meanings despite having the same set of words.
 
-![CBOW-representation of corpus.](../imgs/cbow.gif){#fig-CBOW .enlarge-onhover width=100%}
+```{r cbow}
+#| output: asis
+
+include_gif('../imgs/cbow.gif',
+            label='fig-CBOW',
+            cap='CBOW-representation of corpus.')
+```
 
 The **Continuous Bag Of Words (CBOW)** method extends traditional BOW by representing words as dense vectors in a continuous space. CBOW predicts a target word based on its context, learning meaningful word representations from large amounts of text data.
 
-![Shallow Model using CBOW-Method to predict missing word.](../imgs/training.gif){#fig-fasttext .enlarge-onhover width=100%}
+
+```{r fasttext}
+#| output: asis
+
+include_gif('../imgs/training.gif',
+            label='fig-fasttext',
+            cap='Shallow Model using CBOW-Method to predict missing word.')
+```
+
 
 fastText [@bojanowskiEnrichingWordVectors2017], an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of **Embeddings**, which laid the foundation for many modern NLP methods. @fig-fasttext illustrates this fastText-architecture^[Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext's spiritual predecessor word2vec [@mikolovEfficientEstimationWord2013].]
 
-![Model using CBOW-Method to predict missing word.](../imgs/embeddings.gif){#fig-embed .enlarge-onhover width=100%}
+```{r embeddings}
+#| output: asis
+
+include_gif('../imgs/embeddings.gif',
+            label='fig-embed',
+            cap='Model using CBOW-Method to predict missing word.')
+```
 
 **Language Model Embeddings** are learned by predicting the next word, or, in most cases, the next part of a word in a sequence. The utilisation of word-parts instead of whole words was another invention introduced by fastText [@bojanowskiEnrichingWordVectors2017], that allowed the model to generalize to new, unknown words when moving to inference. These parts of words are also called **tokens**. Embeddings are the representation the model learns to map the context-tokens to a multiclass classification of the missing token in the space of all possible tokens.
 These embeddings capture semantic and syntactic relationships between words, enabling them to understand context effectively. Since these embeddings represent the conditional probability distribution that language models learn to comprehend natural language, they can be reused by other models for tasks such as text classification or text retrieval. But more on this later.
 
 Still, these models did not really solve the inherent issue of the order of words in a sentence. The input of models of this generation still used a dummyfied version of the corpus to represent context, which loses a lot of information.
 
-![Illustration of a simple RNN-model, (exaggeratingly) illustrating the issue of the model "forgetting" parts of the input when processing long sequences.](../imgs/rnns.webp){#fig-rnn width=100%}
+![Illustration of a simple RNN-model, (exaggeratingly) illustrating the issue of the model "forgetting" parts of the input when processing long sequences.](../imgs/rnns.png){#fig-rnn width=100%}
 
 Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of sequential dependencies in text data and improve the understanding of context. However, RNNs suffered from their architecture's inherent inability to retain information over long sequences. Simple RNN- cells^[And pretty much all of the more complex variants] iterate through a sequence and use both their last output and the next sequence element as input to predict the next output. This makes it hard for them to learn long-term dependencies, since they have to compress all information into one vector (@fig-rnn)^[This is also (kind of) the reason for the so called **vanishing gradient** problem, where each iteration of the network is necessary for calculating the gradient in the steps before.].
 
@@ -243,11 +270,11 @@ The implementation of the multi-headed attention mechanism allowed to solve all 
 The description until now omitted one final but key detail - we only spoke about the weight matrices $Q$, $K$ and $V$. Each of these weight matrices are actually the product of the learned weights and the input vectors. In other words, each of the three matrices is calculated as follows:
 
 $$
-\begin{align}
-    Q &= XW_Q \\
-    K &= XW_k \\
-    V &= XW_v
-\end{align}
+\begin{array}{lcl}
+    Q  &=& XW_Q \\
+    K  &=& XW_k \\
+    V  &=& XW_v
+\end{array}
 $$
 
 where $W_{Q, k, v}$ are the learned weight matrices and $X$ is the input matrix. This input matrix consists of a) the learned embeddings of the tokenized input-parts and b) the added, so called positional encoding.^[While we are talking about omitted details, the whole architecture implements its layers as residual layers. This means that the output of each layer is added to the input of the layer before, before it is passed on to the next layer. But this detail is irrelevant for our understanding of the central mechanism.]
