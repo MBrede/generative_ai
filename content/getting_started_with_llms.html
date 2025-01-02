@@ -153,6 +153,7 @@ window.Quarto = {
       <a href="../">Generative AI</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/MBrede/generative_ai" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="../Generative-AI.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -325,10 +326,10 @@ Getting started with (L)LMs<br>
 <p>Language models have diverse applications, including speech recognition, machine translation, text generation, and question answering. While we’ll concentrate on <strong>text generation</strong> for this course, understanding the general concept of language models is crucial. Given language’s inherent complexity and ambiguity, a fundamental challenge in NLP is creating structured representations that can be employed downstream. This section will first explore the evolution of these representations before introducing the transformer architecture, which forms the foundation of most modern language models.</p>
 <section id="a-short-history-of-natural-language-processing" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="a-short-history-of-natural-language-processing">A short history of natural language processing</h3>
-<div id="fig-BOW" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-BOW" class="enlarge-onhover gif-image quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-BOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/bow.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/bow.png" class="enlarge-onhover gif-image img-fluid figure-img" width="100">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-BOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;3.1: BOW-representation of sentences.
@@ -336,10 +337,10 @@ Fig&nbsp;3.1: BOW-representation of sentences.
 </figure>
 </div>
 <p>The <strong>Bag Of Words (BOW)</strong> method represents text data by counting the frequency of each word in a given document or corpus. It treats all words as independent and ignores their order, making it suitable for tasks like text classification, for which it was traditionally the gold-standard. However, BOW has limitations when it comes to capturing semantic relationships between words and gets utterly useless if confronted with words not represented in the corpus. Additionally, it does not take into account the order of words in a sentence, which can be crucial for understanding its meaning. For example, the sentences “The cat is on the mat” and “The mat is on the cat” have different meanings despite having the same set of words.</p>
-<div id="fig-CBOW" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-CBOW" class="enlarge-onhover gif-image quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-CBOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/cbow.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/cbow.png" class="enlarge-onhover gif-image img-fluid figure-img" width="100">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CBOW-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;3.2: CBOW-representation of corpus.
@@ -347,10 +348,10 @@ Fig&nbsp;3.2: CBOW-representation of corpus.
 </figure>
 </div>
 <p>The <strong>Continuous Bag Of Words (CBOW)</strong> method extends traditional BOW by representing words as dense vectors in a continuous space. CBOW predicts a target word based on its context, learning meaningful word representations from large amounts of text data.</p>
-<div id="fig-fasttext" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-fasttext" class="enlarge-onhover gif-image quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-fasttext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/training.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/training.png" class="enlarge-onhover gif-image img-fluid figure-img" width="100">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fasttext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;3.3: Shallow Model using CBOW-Method to predict missing word.
@@ -358,10 +359,10 @@ Fig&nbsp;3.3: Shallow Model using CBOW-Method to predict missing word.
 </figure>
 </div>
 <p>fastText <span class="citation" data-cites="bojanowskiEnrichingWordVectors2017">(<a href="#ref-bojanowskiEnrichingWordVectors2017" role="doc-biblioref">Bojanowski et al., 2017</a>)</span>, an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of <strong>Embeddings</strong>, which laid the foundation for many modern NLP methods. <a href="#fig-fasttext" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> illustrates this fastText-architecture<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext’s spiritual predecessor word2vec <span class="citation" data-cites="mikolovEfficientEstimationWord2013">(<a href="#ref-mikolovEfficientEstimationWord2013" role="doc-biblioref">Mikolov et al., 2013</a>)</span>.</p></div></div><div id="fig-embed" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext’s spiritual predecessor word2vec <span class="citation" data-cites="mikolovEfficientEstimationWord2013">(<a href="#ref-mikolovEfficientEstimationWord2013" role="doc-biblioref">Mikolov et al., 2013</a>)</span>.</p></div></div><div id="fig-embed" class="enlarge-onhover gif-image quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-embed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/embeddings.gif" class="enlarge-onhover img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/embeddings.png" class="enlarge-onhover gif-image img-fluid figure-img" width="100">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-embed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;3.4: Model using CBOW-Method to predict missing word.
@@ -373,7 +374,7 @@ Fig&nbsp;3.4: Model using CBOW-Method to predict missing word.
 <div id="fig-rnn" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../imgs/rnns.webp" class="img-fluid figure-img" style="width:100.0%">
+<img src="../imgs/rnns.png" class="img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rnn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Fig&nbsp;3.5: Illustration of a simple RNN-model, (exaggeratingly) illustrating the issue of the model “forgetting” parts of the input when processing long sequences.
@@ -521,11 +522,11 @@ Fig&nbsp;3.7: Illustration of the multi-headed attention mechanism. Taken from <
 <p>The implementation of the multi-headed attention mechanism allowed to solve all major issues of the language modelling approaches of the previous generation<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies. This mechanism also implicitly solves the bidirectionality-issue since each word can be taken into account when processsing every other word in the sequence.</p>
 <div class="no-row-height column-margin column-container"><div id="fn7"><p><sup>7</sup>&nbsp;Well, kind of. Transformers are far superior language models due to their ability to parallely process long sequences without issues with stretched context - these advantages come at a price though. GPT-3s training is estimated to have emitted around 502 metric tons of carbon <span class="citation" data-cites="AIAAICChatGPTTraining">(<a href="#ref-AIAAICChatGPTTraining" role="doc-biblioref"><em><span>AIAAIC - ChatGPT training emits 502 metric tons of carbon</span></em>, n.d.</a>)</span>. The computational cost of the architecture as described here does additionally scale quadratically with context window size.</p></div></div><p>The description until now omitted one final but key detail - we only spoke about the weight matrices <span class="math inline">\(Q\)</span>, <span class="math inline">\(K\)</span> and <span class="math inline">\(V\)</span>. Each of these weight matrices are actually the product of the learned weights and the input vectors. In other words, each of the three matrices is calculated as follows:</p>
 <p><span class="math display">\[
-\begin{align}
-    Q &amp;= XW_Q \\
-    K &amp;= XW_k \\
-    V &amp;= XW_v
-\end{align}
+\begin{array}{lcl}
+    Q  &amp;=&amp; XW_Q \\
+    K  &amp;=&amp; XW_k \\
+    V  &amp;=&amp; XW_v
+\end{array}
 \]</span></p>
 <p>where <span class="math inline">\(W_{Q, k, v}\)</span> are the learned weight matrices and <span class="math inline">\(X\)</span> is the input matrix. This input matrix consists of a) the learned embeddings of the tokenized input-parts and b) the added, so called positional encoding.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 <div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp;While we are talking about omitted details, the whole architecture implements its layers as residual layers. This means that the output of each layer is added to the input of the layer before, before it is passed on to the next layer. But this detail is irrelevant for our understanding of the central mechanism.</p></div></div><p>The positional encoding is a vector that encodes the position of each token in the input sequence. It is added to the embedding of each token to provide the model with information about the order of the tokens in the sequence. The positional encoding is calculated as follows:</p>
@@ -697,7 +698,7 @@ var myFunction = function() {
   var content = this.querySelector('.content');
   content.classList.toggle('blur-effect');
   if (overlay) {
-    overlay.classList.toggle('show-overlay');
+    overlay.classList.toggle('show-overlay')
   }
 }
 
@@ -705,6 +706,22 @@ for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener('click', myFunction, false);
     myFunction.call(elements[i]);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const images = document.querySelectorAll('.gif-image');
+  
+  images.forEach(function(image) {
+    image.addEventListener('click', function() {
+        console.log(this.src)
+        console.log(this.src.slice(0,-4))
+        if(this.src.substr(-4) == '.gif') {
+          this.src = this.src.slice(0,-4) + '.png'
+        } else {
+          this.src = this.src.slice(0,-4) + '.gif'
+        }
+      });
+  });
+});
 
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
