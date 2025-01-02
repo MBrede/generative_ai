@@ -23,8 +23,8 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: setup imagemagick
-        uses: mfinelli/setup-imagemagick@v5
+      # - name: setup imagemagick
+      #   uses: mfinelli/setup-imagemagick@v5
 
       - name: Install Python and Dependencies
         uses: actions/setup-python@v5
