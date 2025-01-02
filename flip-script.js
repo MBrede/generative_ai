@@ -6,7 +6,7 @@ var myFunction = function() {
   var content = this.querySelector('.content');
   content.classList.toggle('blur-effect');
   if (overlay) {
-    overlay.classList.toggle('show-overlay');
+    overlay.classList.toggle('show-overlay')
   }
 }
 
@@ -14,5 +14,21 @@ for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener('click', myFunction, false);
     myFunction.call(elements[i]);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const images = document.querySelectorAll('.gif-image');
+  
+  images.forEach(function(image) {
+    image.addEventListener('click', function() {
+        console.log(this.src)
+        console.log(this.src.slice(0,-4))
+        if(this.src.substr(-4) == '.gif') {
+          this.src = this.src.slice(0,-4) + '.png'
+        } else {
+          this.src = this.src.slice(0,-4) + '.gif'
+        }
+      });
+  });
+});
 
 </script>
