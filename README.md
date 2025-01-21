@@ -4,6 +4,8 @@ This script serves as an introduction to **Generative AI** and was developed for
 
 While not an exhaustive guide to Generative AI, the script highlights foundational concepts, modern applications, and practical techniques that empower students to engage with and explore the possibilities of these transformative technologies.
 
+You can find a rendered html version of the script by following [this link](https://mbrede.github.io/generative_ai/)
+
 ---
 
 ## 📚 Contents and Learning Objectives
