@@ -24,11 +24,11 @@ Open Source Language Models
 - Ollama
 - Generation of synthetic text as training sets
 
-Agent Systems
+Agent and LLM-Pipeline Systems
 
-- Llamaindex, LangChain & Haystack
+- Llamaindex, LangChain & smolagents
 - Function calling
-- Data analysis
+- LLM-based pipelines
 
 Embeddings and Vector Stores
 
@@ -48,7 +48,7 @@ Fine-Tuning of LLMs and Diffusion Models
 
 ----
 
-Learning objectives listed in the [module database entry](https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1):
+Learning objectives listed in the [module database entry](https://moduldatenbank.fh-kiel.de/de-de/Module/Details/762426b4-8da1-468e-b89a-98263c047d27):
 
 Students
 
@@ -80,34 +80,33 @@ Students
 
 ## Schedule:
 
-| Number: | CW: | Date: | Title: | Topics: |
-|---:|--:|---:|---|---|
-|1|46| 12.11.  | Getting started with (L)LMs| Language Model Basics  |
-||  |         || Choosing open source models |
-||  |         || Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
-|2|46|  13.11. | Prompting| Prompting strategies  |
-||  |         || Generation of synthetic texts  |
-|3|47|  19.11. | Agent basics| Fundamentals of agents and chain-of-thought prompting |
-||  |         || Examples of agent-frameworks (Llamaindex, LangChain & Haystack)|
-|4|47|  20.11. | Embedding-based agent-systems| Semantic embeddings and vector stores |
-||  |         || Retrieval augmented and interleaved generation  |
-|5|48| 26.11.  | Function Calling| Code generation and function calling  |
-|6|48|  27.11. | Agent interaction | LLM as a Judge |
-||  |         || Constitutional AI |
-|7|49| 3.12.  |AI image generation I|  AI image generator basics |
-||  |         || Diffusion Models and Variational Autoencoders |
-||  |         || Multimodal models |
-|8|49| 4.12.  |AI image generation II| Generative Adversarial Networks (GANs) |
-||  |         || (Generative) approaches for image dataset augmentation |
-|9|50|  10.12. |AI image generation III| Using Open Source AI image generation models |
-||  |         || AI image generators in agent systems | 
-|10|50| 11.12.  |Finetuning Basics| Basics of Finetuning strategies  |
-||  |         |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
-||  |         || (Q)LoRA fine-tuning using Unsloth |
-|11|51|  17.12. |Alginment | Central principles of Model-Alignment |
-||  |         || Reinforcement Learning from Human Feedback (RLHF) |
-|12|51| 18.12.  |Project presentations||
-|  | 3| 17.1. | Project submission on moodle ||
+| Number: | Date: | Title: | Topics: |
+|---:|---:|---|---|
+|1| 13.05.  | Getting started with (L)LMs| Language Model Basics  |
+||         || Choosing open source models |
+||         || Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
+|2|  14.05. | Prompting| Prompting strategies  |
+||         || Generation of synthetic texts  |
+|3| 20.05.  | Function Calling| Code generation and function calling  |
+|4|  21.05. | Agent basics| Fundamentals of agents and chain-of-thought prompting |
+||         || Examples of agent-frameworks (Llamaindex, LangChain & smolagents)|
+|5|  27.05. | Embedding-based retrieval systems| Semantic embeddings and vector stores |
+||         || Retrieval augmented and interleaved generation  |
+|6|  28.05. | LLM-pipelines |  |
+|7| 3.06.  |AI image generation I|  AI image generator basics |
+||         || Diffusion Models and Variational Autoencoders |
+||         || Multimodal models |
+|8| 4.06.  |AI image generation II| Generative Adversarial Networks (GANs) |
+||         || (Generative) approaches for image dataset augmentation |
+|9|  10.06. |AI image generation III| Using Open Source AI image generation models |
+||         || AI image generators in agent systems | 
+|10| 11.06.  |Finetuning Basics| Basics of Finetuning strategies  |
+||         |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
+||         || (Q)LoRA fine-tuning using Unsloth |
+|11|  17.06. |Alignment | Central principles of Model-Alignment |
+||         || Reinforcement Learning from Human Feedback (RLHF) |
+|12| 18.06.  |Project presentations||
+|  | 27.06. | Project submission on moodle ||
 
 : Course schedule {.striped .hover tbl-colwidths="[5,5,10,30,50]"}
 
