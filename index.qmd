@@ -108,6 +108,6 @@ Students
 |12| 18.06.  |Project presentations||
 |  | 27.06. | Project submission on moodle ||
 
-: Course schedule {.striped .hover tbl-colwidths="[5,5,10,30,50]"}
+: Course schedule {.striped .hover tbl-colwidths="[5,10,30,50]"}
 
 
