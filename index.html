@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.40">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Max Brede">
 <meta name="author" content="Alwin Klick">
-<meta name="dcterms.date" content="2025-01-21">
+<meta name="dcterms.date" content="2025-03-18">
 
 <title>Generative AI</title>
 <style>
@@ -40,10 +40,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6636ee84a1e92aa4f94a68a35ac1be8a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d18f79af6832006d500f98fff2826263.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -270,7 +270,7 @@ Introduction<br>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 21, 2025</p>
+      <p class="date">March 18, 2025</p>
     </div>
   </div>
   
@@ -300,11 +300,11 @@ library(tidyverse)
 <li>Ollama</li>
 <li>Generation of synthetic text as training sets</li>
 </ul>
-<p>Agent Systems</p>
+<p>Agent and LLM-Pipeline Systems</p>
 <ul>
-<li>Llamaindex, LangChain &amp; Haystack</li>
+<li>Llamaindex, LangChain &amp; smolagents</li>
 <li>Function calling</li>
-<li>Data analysis</li>
+<li>LLM-based pipelines</li>
 </ul>
 <p>Embeddings and Vector Stores</p>
 <ul>
@@ -323,7 +323,7 @@ library(tidyverse)
 <li>Examples: LoRA, QLoRA, MoRA</li>
 </ul>
 <hr>
-<p>Learning objectives listed in the <a href="https://moduldatenbank.fh-kiel.de/de-DE/Module/Details/762426b4-8da1-468e-b89a-98263c047d27?versionId=1">module database entry</a>:</p>
+<p>Learning objectives listed in the <a href="https://moduldatenbank.fh-kiel.de/de-de/Module/Details/762426b4-8da1-468e-b89a-98263c047d27">module database entry</a>:</p>
 <p>Students</p>
 <ul>
 <li>know the fundamentals of generative AI systems.</li>
@@ -361,12 +361,10 @@ library(tidyverse)
 <col style="width: 5%">
 <col style="width: 10%">
 <col style="width: 30%">
-<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">Number:</th>
-<th style="text-align: right;">CW:</th>
 <th style="text-align: right;">Date:</th>
 <th>Title:</th>
 <th>Topics:</th>
@@ -375,13 +373,11 @@ library(tidyverse)
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">46</td>
-<td style="text-align: right;">12.11.</td>
+<td style="text-align: right;">13.05.</td>
 <td>Getting started with (L)LMs</td>
 <td>Language Model Basics</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
@@ -390,19 +386,16 @@ library(tidyverse)
 <tr class="odd">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
 <td></td>
 <td>Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, …)</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">46</td>
-<td style="text-align: right;">13.11.</td>
+<td style="text-align: right;">14.05.</td>
 <td>Prompting</td>
 <td>Prompting strategies</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
@@ -410,148 +403,121 @@ library(tidyverse)
 </tr>
 <tr class="even">
 <td style="text-align: right;">3</td>
-<td style="text-align: right;">47</td>
-<td style="text-align: right;">19.11.</td>
+<td style="text-align: right;">20.05.</td>
+<td>Function Calling</td>
+<td>Code generation and function calling</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">21.05.</td>
 <td>Agent basics</td>
 <td>Fundamentals of agents and chain-of-thought prompting</td>
 </tr>
-<tr class="odd">
-<td style="text-align: right;"></td>
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>Examples of agent-frameworks (Llamaindex, LangChain &amp; Haystack)</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">47</td>
-<td style="text-align: right;">20.11.</td>
-<td>Embedding-based agent-systems</td>
-<td>Semantic embeddings and vector stores</td>
+<td>Examples of agent-frameworks (Llamaindex, LangChain &amp; smolagents)</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;"></td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">27.05.</td>
+<td>Embedding-based retrieval systems</td>
+<td>Semantic embeddings and vector stores</td>
+</tr>
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Retrieval augmented and interleaved generation</td>
 </tr>
-<tr class="even">
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">48</td>
-<td style="text-align: right;">26.11.</td>
-<td>Function Calling</td>
-<td>Code generation and function calling</td>
-</tr>
 <tr class="odd">
 <td style="text-align: right;">6</td>
-<td style="text-align: right;">48</td>
-<td style="text-align: right;">27.11.</td>
-<td>Agent interaction</td>
-<td>LLM as a Judge</td>
+<td style="text-align: right;">28.05.</td>
+<td>LLM-pipelines</td>
+<td></td>
 </tr>
 <tr class="even">
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-<td>Constitutional AI</td>
-</tr>
-<tr class="odd">
 <td style="text-align: right;">7</td>
-<td style="text-align: right;">49</td>
-<td style="text-align: right;">3.12.</td>
+<td style="text-align: right;">3.06.</td>
 <td>AI image generation I</td>
 <td>AI image generator basics</td>
 </tr>
-<tr class="even">
-<td style="text-align: right;"></td>
+<tr class="odd">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Diffusion Models and Variational Autoencoders</td>
 </tr>
-<tr class="odd">
-<td style="text-align: right;"></td>
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Multimodal models</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">49</td>
-<td style="text-align: right;">4.12.</td>
+<td style="text-align: right;">4.06.</td>
 <td>AI image generation II</td>
 <td>Generative Adversarial Networks (GANs)</td>
 </tr>
-<tr class="odd">
-<td style="text-align: right;"></td>
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>(Generative) approaches for image dataset augmentation</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">50</td>
-<td style="text-align: right;">10.12.</td>
+<td style="text-align: right;">10.06.</td>
 <td>AI image generation III</td>
 <td>Using Open Source AI image generation models</td>
 </tr>
-<tr class="odd">
-<td style="text-align: right;"></td>
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>AI image generators in agent systems</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">50</td>
-<td style="text-align: right;">11.12.</td>
+<td style="text-align: right;">11.06.</td>
 <td>Finetuning Basics</td>
 <td>Basics of Finetuning strategies</td>
 </tr>
-<tr class="odd">
-<td style="text-align: right;"></td>
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td>Rank adaptation</td>
 <td>Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models</td>
 </tr>
-<tr class="even">
-<td style="text-align: right;"></td>
+<tr class="odd">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>(Q)LoRA fine-tuning using Unsloth</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;">11</td>
-<td style="text-align: right;">51</td>
-<td style="text-align: right;">17.12.</td>
-<td>Alginment</td>
+<td style="text-align: right;">17.06.</td>
+<td>Alignment</td>
 <td>Central principles of Model-Alignment</td>
 </tr>
-<tr class="even">
-<td style="text-align: right;"></td>
+<tr class="odd">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Reinforcement Learning from Human Feedback (RLHF)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;">12</td>
-<td style="text-align: right;">51</td>
-<td style="text-align: right;">18.12.</td>
+<td style="text-align: right;">18.06.</td>
 <td>Project presentations</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;"></td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">17.1.</td>
+<td style="text-align: right;">27.06.</td>
 <td>Project submission on moodle</td>
 <td></td>
 </tr>
