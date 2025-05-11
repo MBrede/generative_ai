@@ -236,12 +236,12 @@ tibble(
 
 Most generation-frameworks do additionally provide a parameter called *top_k* or *top_p*. These parameters are used to limit the number of tokens that can be selected as the next token. This is done by sorting the probabilities in descending order and only considering the top k tokens or the top p percent of tokens.
 
-Temperature is the mayor setting to controll a LLMs "creativity" though.
+Temperature is the mayor setting to control a LLMs "creativity" though.
 
 ::: {.callout-note}
 ## 📝 Task
 
-Using the script provided for generating snthetic data, test the effect of the temperature parameter on the output of the model.
+Using the script provided for generating synthetic data, test the effect of the temperature parameter on the output of the model.
 
  * Use the same prompt and the same model
  * Run the model with a temperature value of 0.1, 0.5, 1.0 and 2.0
