@@ -52,7 +52,9 @@ include_gif('../imgs/training.gif',
 ```
 
 
-fastText [@bojanowskiEnrichingWordVectors2017], an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of **Embeddings**, which laid the foundation for many modern NLP methods. @fig-fasttext illustrates this fastText-architecture^[Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext's spiritual predecessor word2vec [@mikolovEfficientEstimationWord2013].]
+fastText [@bojanowskiEnrichingWordVectors2017], an open-source library developed by Facebook, builds upon the CBOW method and introduces significant improvements. It incorporates subword information and employs hierarchical softmax for efficient training on large-scale datasets. Even with limited data, fastText can learn meaningful word representations. fastText and its predecessor Word2Vec are considered precursors to modern language models due to their introduction of **Embeddings**, which laid the foundation for many modern NLP methods. 
+@fig-fasttext illustrates this fastText-architecture^[Well, kind of. One of the major advantages of fasttext was the introduction of subword information which were left out of this illustration to save on space. This meant that uncommon words that were either absent or far and few between in the training corpus could be represented by common syllables. The display like it is here is far closer to fasttext's spiritual predecessor word2vec [@mikolovEfficientEstimationWord2013].]
+@fig-fasttext additionally illustrates quite nicely the learning paradigm that modern language models still use - the so called **masked language modelling (MLM)**. This paradigm presents the language model with the semi-supervised task of predicting a masked (i.e., missing) token from a presented sequence of tokenized text. **Token** means one of the word(-parts) that the model has represented in its vocabulary. This prediction is represented as probabilities of all possible tokens.
 
 ```{r embeddings}
 #| output: asis
@@ -62,18 +64,18 @@ include_gif('../imgs/embeddings.gif',
             cap='Model using CBOW-Method to predict missing word.')
 ```
 
-**Language Model Embeddings** are learned by predicting the next word, or, in most cases, the next part of a word in a sequence. The utilisation of word-parts instead of whole words was another invention introduced by fastText [@bojanowskiEnrichingWordVectors2017], that allowed the model to generalize to new, unknown words when moving to inference. These parts of words are also called **tokens**. Embeddings are the representation the model learns to map the context-tokens to a multiclass classification of the missing token in the space of all possible tokens.
+**Language Model Embeddings** are learned by predicting the next/missing token in a sequence. The utilisation of word-parts instead of whole words as tokens was another invention introduced by fastText [@bojanowskiEnrichingWordVectors2017], that allowed the model to generalize to new, unknown words when moving to inference. Embeddings are the representation the model learns to map the context-tokens to a multiclass classification of the missing token in the space of all possible tokens.
 These embeddings capture semantic and syntactic relationships between words, enabling them to understand context effectively. Since these embeddings represent the conditional probability distribution that language models learn to comprehend natural language, they can be reused by other models for tasks such as text classification or text retrieval. But more on this later.
 
 Still, these models did not really solve the inherent issue of the order of words in a sentence. The input of models of this generation still used a dummyfied version of the corpus to represent context, which loses a lot of information.
 
 ![Illustration of a simple RNN-model, (exaggeratingly) illustrating the issue of the model "forgetting" parts of the input when processing long sequences.](../imgs/rnns.png){#fig-rnn width=100%}
 
-Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of sequential dependencies in text data and improve the understanding of context. However, RNNs suffered from their architecture's inherent inability to retain information over long sequences. Simple RNN- cells^[And pretty much all of the more complex variants] iterate through a sequence and use both their last output and the next sequence element as input to predict the next output. This makes it hard for them to learn long-term dependencies, since they have to compress all information into one vector (@fig-rnn)^[This is also (kind of) the reason for the so called **vanishing gradient** problem, where each iteration of the network is necessary for calculating the gradient in the steps before.].
+Traditionally, this was approached by feeding these embeddings into **Recurrent Neural Networks (RNNs)**. These models could learn to keep track of sequential dependencies in text data and improve the understanding of context. However, RNNs suffered from their architecture's inherent inability to retain information over long sequences. Simple RNN- cells^[And pretty much all of the more complex variants] iterate through a sequence and use both their last output and the next sequence element as input to predict the next output. This makes it hard for them to learn long-term dependencies, since they have to compress all information into one vector (@fig-rnn).
 
 <!-- ![LSTM-model, also trained on text prediction.](../imgs/lstm.gif){#fig-lstm width=100%} -->
 
-**Long Short-Term Memory (LSTM) networks** addressed this issue by introducing a mechanism called "gates" that allowed information to flow through the network selectively and more efficiently, but were, as the RNNs before, notoriuosly slow in training since only one word could be processed at a time. Additionally, a single LSTM  is still only able to process the input sequence from left to right, which is not ideal for inputs that contain ambiguos words that need context after them to fully understand their meaning.
+**Long Short-Term Memory (LSTM) networks** addressed this issue by introducing a mechanism called "gates" that allowed information to flow through the network selectively and more efficiently, but were, as the RNNs before, notoriously slow in training since only one word could be processed at a time. Additionally, a single LSTM  is still only able to process the input sequence from left to right, which is not ideal for inputs that contain ambiguous words that need context after them to fully understand their meaning.
 Take the following part of a sentence:
 
 > The plant was growing
@@ -97,15 +99,13 @@ As the paper's title neatly suggests, the major breakthrough presented in this p
 
 #### Self-Attention Mechanism
 
-The self-attention mechanism relies on three components: **Query (Q)**, **Key (K)**, and **Value (V)**, inspired by concepts in information retrieval. Imagine you search for a specific term in a library (query), match it against the catalog (key), and retrieve relevant books (value).
+The self-attention mechanism relies on three components: **Query (Q)**, **Key (K)**, and **Value (V)**, inspired by concepts in information retrieval. Imagine you search for a specific term in a library (query), match it against the catalogue (key), and use this information about the catalogue to update your personal priority of search terms (value).
 
 In practice, for each word in a sentence, the model calculates:
 
 1. **Relevance Scores**: Compare each Query vector (Q) with every Key vector (K) in the sequence using the dot product. These scores measure how much focus one word should have on another.
 2. **Attention Weights**: Normalize the scores using a softmax function to ensure they sum to 1, distributing focus proportionally across all words.
 3. **Weighted Sum**: Multiply each Value vector (V) by its corresponding attention weight to compute the final representation.
-
-For example, in the sentence, "The cat sat on the mat," the model might assign more attention to "cat" when analyzing "sat," capturing their relationship.
 
 #### Calculating Attention
 
@@ -265,7 +265,7 @@ This small example is already pretty close to the general attention-mechanism de
 
 ![Illustration of the multi-headed attention mechanism. Taken from @hussainTutorialOpensourceLarge2024](../imgs/illustrated_attention.png){#fig-illustratedAttention .enlarge-onhover}
 
-The implementation of the multi-headed attention mechanism allowed to solve all major issues of the language modelling approaches of the previous generation^[Well, kind of. Transformers are far superior language models due to their ability to parallely process long sequences without issues with stretched context - these advantages come at a price though. GPT-3s training is estimated to have emitted around 502 metric tons of carbon [@AIAAICChatGPTTraining]. The computational cost of the architecture as described here does additionally scale quadratically with context window size.]. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies. This mechanism also implicitly solves the bidirectionality-issue since each word can be taken into account when processsing every other word in the sequence.
+The implementation of the multi-headed attention mechanism allowed to solve all major issues of the language modelling approaches of the previous generation^[Well, kind of. Transformers are far superior language models due to their ability to parallely process long sequences without issues with stretched context - these advantages come at a price though. GPT-3s training is estimated to have emitted around 502 metric tons of carbon [@AIAAICChatGPTTraining]. The computational cost of the architecture as described here does additionally scale quadratically with context window size.]. It firstly allows the input of a whole text-sequence at once, rendering the training and inference far speedier then the recursive approaches. Furthermore, the multi-head attention mechanism allows the model to focus on different parts of the input sequence simultaneously, enabling it to capture more complex relationships between words and improve its understanding of context without losing information about long-term dependencies. This mechanism also implicitly solves the bidirectionality-issue since each word can be taken into account when processing every other word in the sequence.
 
 The description until now omitted one final but key detail - we only spoke about the weight matrices $Q$, $K$ and $V$. Each of these weight matrices are actually the product of the learned weights and the input vectors. In other words, each of the three matrices is calculated as follows:
 
@@ -374,11 +374,11 @@ In your project-groups, you will each have to build a small "Hello World"-style 
 
 1. Choose a small model using the [sources we discussed before](https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a).
 2. Each group is to use one of the following frameworks
-    * [Huggingface](https://huggingface.co/)
+    * [LM-Studio](https://lmstudio.ai/) 
     * [Ollama](https://ollama.com/)
-    * [LM-Studio](https://lmstudio.ai/) from python
-    * [Llama.cpp](https://github.com/ggerganov/llama.cpp)
-    to load and use the model in your application.
+    * [Huggingface](https://huggingface.co/)
+    * [VLLM](https://github.com/vllm-project/vllm)
+    from python to load and use the model in your application.
 3. Present your results and your experiences with the frameworks in a short presentation.
 4. Submit your code and report on moodle.
 :::

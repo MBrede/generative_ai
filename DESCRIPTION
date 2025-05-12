@@ -3,3 +3,4 @@ Imports:
     rmarkdown
     knitr
     png
+    quarto
