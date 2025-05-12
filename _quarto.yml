@@ -27,9 +27,9 @@ book:
       chapters:
         - content/getting_started_with_llms.qmd
         - content/prompting.qmd
+        - content/function_calling.qmd
         - content/agent_basics.qmd
         - content/embeddings.qmd
-        - content/function_calling.qmd
         - content/agent_interaction.qmd
     - part: "Image Generation"
       chapters:

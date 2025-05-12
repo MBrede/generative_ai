@@ -2,14 +2,18 @@
 toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Function Calling</h3>'
 ---
 
-# Function Calling
+# Code Generation and Function Calling
+
+<!-- Sometimes questions are hard to answer directly, more info needed or complex math, like a web search or a calculator or something... therefore tools or functions. 
+anothe rexample is data analysis-->
+
 
 Function calling is a technique used in large language models (LLMs) and AI agents to enhance their capability to provide more accurate and relevant responses, especially when handling complex tasks or questions that require specialized knowledge or external data.
 
-We already got to know function calling in chapter 3 of this course. There, we introduced agents, that already came with the ability to call predefined functions. In this chapter, we will go back to the basics of function calling using LLMs. 
+<!-- We already got to know function calling in chapter 3 of this course. There, we introduced agents, that already came with the ability to call predefined functions. In this chapter, we will go back to the basics of function calling using LLMs. 
+ -->
 
-
-## Code generation and function calling
+<!-- ## Code generation and function calling -->
 
 The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that:
 
@@ -21,6 +25,11 @@ Here, we will focus on function calling. Still the challenge is to get the LLM t
 1. using a large, generalized LLM (e.g. GPT-4) with good prompt engineering and
 2. using a smaller model fine tuned to generate function calls.
 
+<!-- smolagents has code generation as default, historically (last year) it was still rubbish. Cover both this year. -->
+
+## Function Calling
+
+<!-- some smart sentences -->
 
 ### Function definition
 
@@ -88,14 +97,20 @@ Test it! (we can do it together, if your hardware does not allow you to run the 
 
 As above, but this time
 
+<!--  update models -->
+
 1. use a very small model (e.g [a small Llama model](https://huggingface.co/lmstudio-community/Llama-3.2-1B-Instruct-GGUF))
 2. use a model finetuned for the task (you could try [this one](https://huggingface.co/bartowski/llama-3-8B-function-calling-GGUF))
 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF))
 
 :::
 
+## Code Generation
+
+<!-- smolagents as example (more on agents later), or not... Just try it using LLM call-->
 
 
+<!-- 
 ## Agents recap
 
 We introduced agents already back in chapter 3. To give a quick recap, an agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request better. The agent has several modules at its disposal, the memory, some tools and a planning tool. 
@@ -142,5 +157,5 @@ On the Llamaindex website on the ["examples" page](https://docs.llamaindex.ai/en
 - To go even more low level then that see [this example](https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/) that will walk you through setting up a Workflow to construct a function calling agent from scratch.
 - [Here](https://blog.dottxt.co/say-what-you-mean.html) is a *very* nice paper about generating structured output. 
 
-
+ -->
 ## References
