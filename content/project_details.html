@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -39,10 +59,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-090eae3b36a5565e07b239e28c84a94b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-4464f1163110d1f8de9b16317157bd84.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -71,6 +91,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -230,8 +279,17 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title"><img src="../imgs/cover.jpg" class="img-fluid" width="240"><br><br>
+</h2><h3 class="anchored"><br>
+Project Details<br>
+</h3>
+   
+  <ul>
+  <li><a href="#a-note-about-using-llms-for-your-project" id="toc-a-note-about-using-llms-for-your-project" class="nav-link active" data-scroll-target="#a-note-about-using-llms-for-your-project">A note about using LLMs for your Project</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -281,8 +339,74 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>AI Storyteller</strong>: Creates illustrated short stories for children based on historical events.</li>
 <li><strong>AI Webdesigner</strong> A tool that creates and illustrates a webpage based on a Amazon product page.</li>
 </ol>
+<section id="a-note-about-using-llms-for-your-project" class="level2">
+<h2 class="anchored" data-anchor-id="a-note-about-using-llms-for-your-project">A note about using LLMs for your Project</h2>
+<p>Let’s start with a small psychological demonstration.</p>
+<p>Look at these anagrams:</p>
+<p><span class="math display">\[
+\begin{array}{ccc}
+\text{edbbal} &amp; \rightarrow &amp; \text{dabble} \\
+\text{eaeslg} &amp; \rightarrow &amp; \text{eagles} \\
+\text{fcbair} &amp; \rightarrow &amp; \text{fabric} \\
+\text{elsmod} &amp; \rightarrow &amp; \text{models} \\
+\text{actysh} &amp; \rightarrow &amp; \text{yachts}
+\end{array}
+\]</span></p>
+<p>How long would you take to solve such an anagram?</p>
+<ol type="1">
+<li>30 sec</li>
+<li><blockquote class="blockquote">
+<p>30 sec, &lt; 1 min</p>
+</blockquote></li>
+<li><blockquote class="blockquote">
+<p>1 min, &lt; 1:30 min</p>
+</blockquote></li>
+<li><blockquote class="blockquote">
+<p>1:30 min, &lt; 2 min</p>
+</blockquote></li>
+<li><blockquote class="blockquote">
+<p>2 min</p>
+</blockquote></li>
+</ol>
+<div class="card">
+<div class="content">
+<p><span class="math display">\[
+\begin{array}{ccc}
+\text{piemls} &amp; \rightarrow &amp; \text{???}
+\end{array}
+\]</span></p>
+</div>
+<div class="overlay">
+<p>Please take your time to think about how long you will take before clicking here to unveiling the anagram you are to solve.</p>
+</div>
+</div>
+<div class="card">
+<div class="content">
+<p>I will not show you the solution, though I assure you that it is quite simple.</p>
+<p>The main point of this demo is to illustrate the psychological bias often called <strong>overconfidence</strong>. This effect takes place when you underestimate the effort a reaching a solution takes when you are directly presented with the solution.</p>
+<p>In terms of using Gen AI to solve tasks, findings in the same vain can be found in <span class="citation" data-cites="stadlerCognitiveEaseCost2024">Stadler et al. (<a href="#ref-stadlerCognitiveEaseCost2024" role="doc-biblioref">2024</a>)</span>, who ran a study in which students were asked to research nanoparticles in sunscreen either using search engines or ChatGPT 3.5.</p>
+<p>Their</p>
+<blockquote class="blockquote">
+<p>Results indicated that students using LLMs experienced significantly lower cognitive load. However, despite this reduction, these students demonstrated lower-quality reasoning and argumentation in their final recommendations compared to those who used traditional search engines.</p>
+</blockquote>
+<p>and they argue further that</p>
+<blockquote class="blockquote">
+<p>[…] while LLMs can decrease the cognitive burden associated with information gathering during a learning task, they may not promote deeper engagement with content necessary for high-quality learning per se.</p>
+</blockquote>
+<p>Giving a lecture about Gen AI and expecting the students to not use seems rather pointless, but we will use the presentation at the end of the semester to test if you do indeed understand your solution to test the depth of your engagement with the lecture’s contents.</p>
+</div>
+<div class="overlay">
+<p>Show solution</p>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-stadlerCognitiveEaseCost2024" class="csl-entry" role="listitem">
+Stadler, M., Bannert, M., &amp; Sailer, M. (2024). Cognitive ease at a cost: <span>LLMs</span> reduce mental effort but compromise depth in student scientific inquiry. <em>Computers in Human Behavior</em>, <em>160</em>, 108386. <a href="https://doi.org/10.1016/j.chb.2024.108386">https://doi.org/10.1016/j.chb.2024.108386</a>
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script>
@@ -738,7 +862,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>   
     <div class="nav-footer-center">
 <p>All images are generated using Python, R, draw.io, Flux or Stable Diffusion XL if not indicated otherwise.</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
