@@ -62,11 +62,13 @@ $$
 
 How long would you take to solve such an anagram?
 
-1. 30 sec
-2. > 30 sec, < 1 min
-3. > 1 min, < 1:30 min
-4. > 1:30 min, < 2 min
-5. > 2 min
+* A: 30 sec
+* B: > 30 sec, < 1 min
+* C: > 1 min, < 1:30 min
+* D: > 1:30 min, < 2 min
+* E: > 2 min
+
+***
 
 :::{class="card"}
 :::{class="content"}
@@ -82,6 +84,9 @@ $$
 Please take your time to think about how long you will take before clicking here to unveiling the anagram you are to solve.
 :::
 :::
+
+***
+
 :::{class="card"}
 :::{class="content"}
 
