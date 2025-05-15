@@ -379,6 +379,52 @@ In your project-groups, you will each have to build a small "Hello World"-style 
     * [Huggingface](https://huggingface.co/)
     * [VLLM](https://github.com/vllm-project/vllm)
     from python to load and use the model in your application.
+
+With the exception of Huggingface, all APIs above use de facto standard of the OpenAI API scheme. This scheme presents multiple POST-endpoints, of which we will mostly use the chat-completion.
+
+You can either directly call it using python requests:
+```python
+import os
+import requests
+import json
+
+
+response = requests.post("http://<your API endpoint>:<port>/v1/chat/completions",
+json = {
+    "model": "qwen3-0.6B",
+    "messages":[
+        {
+            "role": "user",
+            "content": "Say this is a test"
+        }
+    ]})
+
+json.loads(response.content.decode())["choices"]
+
+```
+Or you can call it using the wrapper in the OpenAI-python-module:
+
+```python
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key='lm-studio',  
+    base_url="http://<your API endpoint>:<port>/v1" # this is the lmstudio-enpoint, yours might differ slightly.
+)
+
+chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "user",
+            "content": "Say this is a test"
+        }
+    ],
+    model="qwen3-0.6B",
+)
+print(chat_completion.choices[0].message.content)
+```
+  
 3. Present your results and your experiences with the frameworks in a short presentation.
 4. Submit your code and report on moodle.
 :::

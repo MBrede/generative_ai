@@ -136,10 +136,46 @@ Since even the largest LLMs are not perfect in general and might be even worse o
 Strategies to validate the synthetic data include:
 
 * Using a human annotator to label part of the data to test the models output
-* Forcing the model to answer in a structured way that is automatically testable (e.g., by using JSON)
+* Forcing the model to answer in a structured way that is automatically testable (e.g., by using JSON - see @tip-structuredOutput for an example on how to generate structured output using an API that follows the OpenAI-API-scheme.)
 * Forcing the model to return 2 or more answers and checking for consistency
 * Combining the two approaches above (i.e., forcing the model to return multiple structured outputs (JSON, XML, YAML, ...) and checking for consistency)
 * Using a second LLM/different prompt to rate the answers
+
+:::{#tip-structuredOutput .callout-tip collapse="true" appearance="minimal"}
+
+```python
+import os
+from openai import OpenAI
+from pydantic import BaseModel, Field
+
+class ClassificationResult(BaseModel):
+    description: str = Field(description="The description of the classification result.")
+    label: str = Field(pattern=r'^(GET_MESSAGE|OTHER)$', description="The classified label of the text.")
+
+
+
+client = OpenAI(
+    api_key='lm-studio',  
+    base_url="http://localhost:1234/v1"
+)
+
+test_dict = {"example": "This is a test", "example2": "This is another test"}
+def classify_one_sample(sample):
+    chat_completion = client.beta.chat.completions.parse(
+        messages=[
+            {
+                "role": "user",
+                "content": f"Classify the label of the following text: '{sample}' as 'GET_MESSAGE', 'OTHER'. /no_think {json_string}"
+            }
+        ],
+        model="qwen3-0.6B",
+        response_format=ClassificationResult
+    )
+    return chat_completion.choices[0].message.content
+
+classify_one_sample("Gib mir die Nachricht von Peter aus!")
+```
+:::
 
 ::: {.callout-note}
 ## 📝 Task 
