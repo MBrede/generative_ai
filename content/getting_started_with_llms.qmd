@@ -389,7 +389,7 @@ import requests
 import json
 
 
-response = requests.post("http://<your API endpoint>:<port>/v1/chat/completions",
+response = requests.post("http://<your API endpoint>:<port>/v1/chat/completions",  # this is the lmstudio-endpoint, yours might differ slightly.
 json = {
     "model": "qwen3-0.6B",
     "messages":[
@@ -410,7 +410,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key='lm-studio',  
-    base_url="http://<your API endpoint>:<port>/v1" # this is the lmstudio-enpoint, yours might differ slightly.
+    base_url="http://<your API endpoint>:<port>/v1"
 )
 
 chat_completion = client.chat.completions.create(

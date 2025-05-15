@@ -143,6 +143,13 @@ Strategies to validate the synthetic data include:
 
 :::{#tip-structuredOutput .callout-tip collapse="true" appearance="minimal"}
 
+### Structured Output
+
+There are ways on forcing a language model to only generate output conforming to a specific format.
+We have already seen one in the examples of models being instruct-tuned to conform to a given chat-template.
+Another often used method is to use regular expressions to set the probabilities of the next token to be zero if it would not conform to a given (JSON-)scheme.
+The nicest way to use this feature in python is to define a `pydantic`-dataclass that defines the possible output formats and describes the expected field content to the model:
+
 ```python
 import os
 from openai import OpenAI
@@ -175,6 +182,9 @@ def classify_one_sample(sample):
 
 classify_one_sample("Gib mir die Nachricht von Peter aus!")
 ```
+The descriptions are the internally added as context to the prompt and the output is limited to the given data-range.
+For more possibilities on setting constraints see the [`pydantic`-docs](https://docs.pydantic.dev/latest/concepts/fields/), for a more detailed explanation on how the token limitations work, see [this article by outlined](https://dottxt-ai.github.io/outlines/latest/reference/generation/structured_generation_explanation/).
+
 :::
 
 ::: {.callout-note}
