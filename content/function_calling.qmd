@@ -2,7 +2,7 @@
 toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Function Calling</h3>'
 ---
 
-# Code Generation and Function Calling
+# Function Calling
 
 
 ## Motivation
@@ -34,26 +34,34 @@ A basic workflow may look like this:
 5. The response is then fed back into the LLM (usually as user input) for further processing. 
 6. The LLM uses the returned information to continue generating its response.
 
-
-
+**Note:** As stated above, the functions need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however not the best idea for reasons of security. 
 
 <!-- ## Code generation and function calling -->
 
-The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that:
+<!-- The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that: -->
 
-1. **Code generation**: Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation. It can also pose a severe security issue because this approach hinges on running generated code on your machine. 
-2. **Function calling**: Here, we ask the LLM to generate a function call from the user input. This approach has the advantage of being more robust and accurate than code generation, as it is easier for the LLM to generate a correct function call than a complete python script. However, it requires that the functions that can be called are already defined and that they are properly documented.
+There are two main ways to implement function calling:
 
-Here, we will focus on function calling. Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
+1. **Structured output**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the function and its parameters. 
+2. **Code generation**: Here, we ask the LLM to generate the function calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined functions. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine. 
+<!-- Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation. It can also pose a severe security issue because this approach hinges on running generated code on your machine.  -->
+<!-- 2. **Function calling**: Here, we ask the LLM to generate a function call from the user input. This approach has the advantage of being more robust and accurate than code generation, as it is easier for the LLM to generate a correct function call than a complete python script. However, it requires that the functions that can be called are already defined and that they are properly documented. -->
+
+<!-- Here, we will focus on function calling.  -->
+
+Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
 
 1. using a large, generalized LLM (e.g. GPT-4) with good prompt engineering and
 2. using a smaller model fine tuned to generate function calls.
 
 <!-- smolagents has code generation as default, historically (last year) it was still rubbish. Cover both this year. -->
 
-## Function Calling
+## Structured output
 
 <!-- some smart sentences -->
+
+The traditional way^[In this context, *traditional* means: people have been using it for more than a year. ] of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. 
+
 
 ### Function definition
 
@@ -68,6 +76,9 @@ The first step in using function calling is to define the functions that the LLM
             "unit": {"type": "string"}  
             } 
     }
+
+Function name and description should be as clear as possible to make it easier for the LLM to decide which function to use and how to properly use it. Argument names and types should be as precise as possible to avoid ambiguity in the function call.
+
 
 ### Prompting
 
@@ -94,7 +105,6 @@ Try it!
 3. Write a prompt that asks the LLM to generate a function call based on user input.
 4. Test the prompt with an example input.
 5. Define other functions and try other inputs and see if the LLM generates valid output.
-6. Upload to Moodle.
 
 :::
 
@@ -102,11 +112,11 @@ Try it!
 
 The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
 
- - They can hallucinate functions or arguments that do not exist.
-  - They can forget to call a function.
-  - They can forget to provide all required arguments.
-  - They can provide the wrong type for an argument.
-  - They can provide invalid values for an argument.
+- They can hallucinate functions or arguments that do not exist.
+- They can forget to call a function.
+- They can forget to provide all required arguments.
+- They can provide the wrong type for an argument.
+- They can provide invalid values for an argument.
 
 There are several strategies to mitigate these issues:
 
@@ -132,6 +142,37 @@ As above, but this time
 ## Code Generation
 
 <!-- smolagents as example (more on agents later), or not... Just try it using LLM call-->
+
+The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will get to know agents and the smolagents framework next time.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
+
+::: {.callout-note}
+## 📝 Task
+
+Try it!
+
+1. In your notebook, define the weather function (and/or some other function of your choice) in python code. 
+2. Write an appropriate prompt that makes it clear that you expect python code calling the defined function(s). 
+3. Test your prompt with an example input.
+
+
+:::
+
+As mentioned above (several times already), giving clear names and descriptions for functions, parameters, etc., will help the model generate more accurate code snippets. (PRO TIP: it will help your human coworkers as well in understanding your code.) Here, you have the opportunity to see the consequences in action in a save environment without angering fellow humans or yourself later on!
+
+
+::: {.callout-note}
+## 📝 Task
+
+Try it!
+
+1. In your notebook, write a well written python function using clear names, description text and typing hints. You can use the one you wrote earlier, because of course you wrote clean code!
+2. Test the function with your prompt and example inputs. 
+3. Now write a badly written python function, without clear names, descriptions or typing hints. Test it with your example inputs too. Are the results better or worse? Why do you think that's happening?
+4. Upload your notebook to Moodle.
+
+
+:::
+
 
 
 <!-- 
@@ -162,7 +203,7 @@ Let's have a look!
 1. Open a notebook and connect it with a local LLM using LM Studio.
 2. Define a function that can be called by the agent to get the current weather in a given location. (Implement it this time, it doesn't need to work, just return random weather)
 3. Initialize a ReAct agent using LLamaindex (you can use [this tutorial](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as the starting point)
-<!-- (we will use [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) as a starting point, since it reimplements the function calling agent and returns a step-by step breakdown of its thought process). -->
+<!-- (we will use [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) as a starting point, since it reimplements the function calling agent and returns a step-by step breakdown of its thought process). 
 4. Have a look at the prompt, the agent gives to the LLM (you can find it using `agent.get_prompts()`)
 5. Discuss the prompt with the group! What does it do? How does it do it?
 6. Ask the agent to tell you the weather in a given location.
@@ -171,15 +212,16 @@ Let's have a look!
 9. Upload to Moodle
 
 :::
-
+-->
 
 ## Further Readings
-
+<!-- 
 On the Llamaindex website on the ["examples" page](https://docs.llamaindex.ai/en/stable/examples/) you will find a **lot** of helpful material: examples, notebooks, recipes and more. I recommend to have a look at them! For our case, check the "agents" section. For an even more in-depth dive, go to the "workflows" part.
 
 - In [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) you find an agent implementation that returns a step-by-step breakdown of its thought process.
-- To go even more low level then that see [this example](https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/) that will walk you through setting up a Workflow to construct a function calling agent from scratch.
+- To go even more low level then that see [this example](https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/) that will walk you through setting up a Workflow to construct a function calling agent from scratch. -->
 - [Here](https://blog.dottxt.co/say-what-you-mean.html) is a *very* nice paper about generating structured output. 
 
- -->
-## References
+
+
+<!-- ## References -->
