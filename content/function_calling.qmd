@@ -4,14 +4,38 @@ toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Function Call
 
 # Code Generation and Function Calling
 
-<!-- Sometimes questions are hard to answer directly, more info needed or complex math, like a web search or a calculator or something... therefore tools or functions. 
-anothe rexample is data analysis-->
+
+## Motivation
 
 
-Function calling is a technique used in large language models (LLMs) and AI agents to enhance their capability to provide more accurate and relevant responses, especially when handling complex tasks or questions that require specialized knowledge or external data.
+Sometimes you want your AI assistant to answer more complex tasks then the LLM can handle out of the box. For example, you might want to ask questions regarding documents or datasets on your hard drive, or ask about recent events. This is a hard task for an LLM, because, if it was not trained on this information, i.e. the information wasn't part of its training data, it won't be able to answer these questions correctly. 
 
-<!-- We already got to know function calling in chapter 3 of this course. There, we introduced agents, that already came with the ability to call predefined functions. In this chapter, we will go back to the basics of function calling using LLMs. 
- -->
+::: {.callout-note}
+## 📝 Task
+
+Try it!
+
+1. Open a notebook and connect to a local LLM using LM Studio.
+2. Ask the LLM about the current weather in your location.
+
+(I mean, sure, you could just look out the window, but we are developers here, we don't have windows!)
+
+:::
+
+
+To solve this problem, we need to give the LLM some tools it can use to access this additional information. This is where **function calling** comes into play. Function calling allows the LLM to call a function with specific parameters to get the required information. The function then returns the requested data or performs the necessary task, and the LLM can continue generating its response based on that information.
+
+A basic workflow may look like this: 
+
+1. The user inputs a question or task.
+2. The LLM determines if it needs additional information or assistance from external tools.
+3. If needed, the LLM calls a function with specific parameters to retrieve the required data or perform the necessary task. This means the LLM generates an answer containing either some executable code or a JSON object containing the name of the function and its parameters. These functions have to be defined in advance. 
+4. The LLM response is then scanned for these elements (code or JSON object) and these are executed if possible.
+5. The response is then fed back into the LLM (usually as user input) for further processing. 
+6. The LLM uses the returned information to continue generating its response.
+
+
+
 
 <!-- ## Code generation and function calling -->
 
