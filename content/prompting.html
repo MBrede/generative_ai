@@ -97,7 +97,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-090eae3b36a5565e07b239e28c84a94b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8035085d956021e735a0dae97839a3a6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -501,11 +501,58 @@ Too many labels. Reduce the label count for the task -->
 <p>Strategies to validate the synthetic data include:</p>
 <ul>
 <li>Using a human annotator to label part of the data to test the models output</li>
-<li>Forcing the model to answer in a structured way that is automatically testable (e.g., by using JSON)</li>
+<li>Forcing the model to answer in a structured way that is automatically testable (e.g., by using JSON - see <a href="#tip-structuredOutput" class="quarto-xref">Tip&nbsp;<span>4.1</span></a> for an example on how to generate structured output using an API that follows the OpenAI-API-scheme.)</li>
 <li>Forcing the model to return 2 or more answers and checking for consistency</li>
 <li>Combining the two approaches above (i.e., forcing the model to return multiple structured outputs (JSON, XML, YAML, …) and checking for consistency)</li>
 <li>Using a second LLM/different prompt to rate the answers</li>
 </ul>
+<div id="tip-structuredOutput" class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip&nbsp;4.1: Structured Output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>There are ways on forcing a language model to only generate output conforming to a specific format. We have already seen one in the examples of models being instruct-tuned to conform to a given chat-template. Another often used method is to use regular expressions to set the probabilities of the next token to be zero if it would not conform to a given (JSON-)scheme. The nicest way to use this feature in python is to define a <code>pydantic</code>-dataclass that defines the possible output formats and describes the expected field content to the model:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClassificationResult(BaseModel):</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    description: <span class="bu">str</span> <span class="op">=</span> Field(description<span class="op">=</span><span class="st">"The description of the classification result."</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    label: <span class="bu">str</span> <span class="op">=</span> Field(pattern<span class="op">=</span><span class="vs">r'</span><span class="dv">^</span><span class="kw">(</span><span class="vs">GET_MESSAGE</span><span class="cf">|</span><span class="vs">OTHER</span><span class="kw">)</span><span class="dv">$</span><span class="vs">'</span>, description<span class="op">=</span><span class="st">"The classified label of the text."</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span><span class="st">'lm-studio'</span>,  </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"http://localhost:1234/v1"</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>test_dict <span class="op">=</span> {<span class="st">"example"</span>: <span class="st">"This is a test"</span>, <span class="st">"example2"</span>: <span class="st">"This is another test"</span>}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_one_sample(sample):</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    chat_completion <span class="op">=</span> client.beta.chat.completions.parse(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        messages<span class="op">=</span>[</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                <span class="st">"content"</span>: <span class="ss">f"Classify the label of the following text: '</span><span class="sc">{</span>sample<span class="sc">}</span><span class="ss">' as 'GET_MESSAGE', 'OTHER'. /no_think </span><span class="sc">{</span>json_string<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        model<span class="op">=</span><span class="st">"qwen3-0.6B"</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        response_format<span class="op">=</span>ClassificationResult</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> chat_completion.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>classify_one_sample(<span class="st">"Gib mir die Nachricht von Peter aus!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The descriptions are the internally added as context to the prompt and the output is limited to the given data-range. For more possibilities on setting constraints see the <a href="https://docs.pydantic.dev/latest/concepts/fields/"><code>pydantic</code>-docs</a>, for a more detailed explanation on how the token limitations work, see <a href="https://dottxt-ai.github.io/outlines/latest/reference/generation/structured_generation_explanation/">this article by outlined</a>.</p>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
