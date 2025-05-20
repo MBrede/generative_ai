@@ -95,6 +95,8 @@ The second step is to provide a good prompt. The prompt should make it clear to 
         "arguments": {"location": "Berlin", "unit": "celsius"}
     }
 
+Another way of forcing the LLM to output structured format is to use ``pydantic`` classes as described last time. 
+
 ::: {.callout-note}
 ## 📝 Task
 
@@ -102,7 +104,7 @@ Try it!
 
 1. Open a notebook and connect to a local LLM using LM Studio.
 2. Define the function `get_current_weather` as shown above.
-3. Write a prompt that asks the LLM to generate a function call based on user input.
+3. Write a prompt that asks the LLM to generate a function call based on user input. Use prompt engineering as shown above or pydantic classes as shown last time. 
 4. Test the prompt with an example input.
 5. Define other functions and try other inputs and see if the LLM generates valid output.
 
