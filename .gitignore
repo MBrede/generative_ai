@@ -15,3 +15,5 @@ example_solutions/
 .jupyter*
 figure-pdf
 figure-latex
+.venv/
+.venv
