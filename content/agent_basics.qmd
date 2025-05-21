@@ -153,8 +153,89 @@ Each group is to use one of the following frameworks to build a small demo agent
 1. Set up a local LLM (e.g. using Ollama or LM Studio) to be used by the agent.
 2. Choose a small task for your agent, e.g. answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)
 3. Implement the agent using one of the frameworks listed above.
-4. Present your results and your experiences with the frameworks in a short presentation.
-5. Submit your code and report on moodle.
+4. Present your results and your experiences with the frameworks in a short presentation. (presenting the notebook is fine.)
+<!-- 5. Submit your code and report on moodle. -->
+:::
+
+
+## Summary and recap
+
+### Agents
+
+An agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request  better. The agent has several modules at its disposal, the memory, some tools and a planning tool. 
+
+The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e. the LLM) along with the system prompt and the current user input. 
+
+The planning module then decides which tools to use, if any, to answer the user request. The output of the planning module is a response message containing one or several tool calls (or a final answer). The agent then executes the tool calls by first parsing the response, then executing the functions. Based on the tool outputs, a final answer is generated and sent back to the user.
+
+
+### React agents
+
+There a several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
+
+
+### Why agents?
+
+Agents make decisions that control the flow of an application. The question is: when is this helpful? If the workflow is really simple, you basically don't need an agent. Just run the LLM calls in a pipeline. Actually, most of the examples you find in tutorials will be better solved with a pipeline. We will use the example from the [smolagents introduction](https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents) to illustrate that. 
+
+Let’s take an example: say you’re making an app that handles customer requests on a surfing trip website.
+
+You could know in advance that the requests will belong to either of 2 buckets (based on user choice), and you have a predefined workflow for each of these 2 cases.
+
+- Want some knowledge on the trips? ⇒ give them access to a search bar to search your knowledge base
+- Wants to talk to sales? ⇒ let them type in a contact form.
+
+If that deterministic workflow fits all queries, by all means just code everything! This will give you a 100% reliable system with no risk of error introduced by letting unpredictable LLMs meddle in your workflow. For the sake of simplicity and robustness, it’s advised to regularize towards not using any agentic behaviour.
+
+But what if the workflow can’t be determined that well in advance?
+
+For instance, a user wants to ask: "I can come on Monday, but I forgot my passport so risk being delayed to Wednesday, is it possible to take me and my stuff to surf on Tuesday morning, with a cancellation insurance?" This question hinges on many factors, and probably none of the predetermined criteria above will suffice for this request.
+
+If the pre-determined workflow falls short too often, that means you need more flexibility.
+
+That is where an agentic setup helps.
+
+
+### Pros and Cons 
+
+There are some obvious pros and cons with using agents
+
+**Pros** 
+
+- You don't have to do it yourself.  
+- Sometimes they perform better than humans.
+- they are easily scalable.
+
+**Cons** 
+
+- sometimes they fail spectacularly at easy tasks. See again the vending machine example [@backlundVendingBenchBenchmarkLongTerm2025] from earlier for some hilarious anecdotes. 
+
+
+<!-- ### Llamaindex
+
+LLamaindex is a framework that  makes it easy to implement and use agents. In Llamaindex an agent consists a an *agent runner* and an *agent_worker*. Think of the agent runner as the agent core in the architecture schematics and the agent worker as the planning module. The tools are functions implemented in python that can be executed by the agent worker. Finally, the memory module consists of a simple text buffer, logging the conversation history between the user and the agent and between the agent and the tools. -->
+
+
+
+### React agents
+
+There a several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
+
+´Let us have a closer look, at the inner workings of react agents. 
+
+::: {.callout-note}
+## 📝 Task
+
+Let's have a deeper look!
+
+1. Reopen the notebook from earlier where you defined your agents
+4. Have a look at the prompt, the agent gives to the LLM ( in LLamaindex you can find it using `agent.get_prompts()`). Try to find it in smolagents. 
+5. Discuss the prompt with the group! What does it do? How does it do it?
+6. Ask the agent to tell you the weather in a given location.
+7. Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
+8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into an infinite loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
+9. Upload your notebook to Moodle
+
 :::
 
 
