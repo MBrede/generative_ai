@@ -109,6 +109,39 @@
   keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
+@misc{askellGeneralLanguageAssistant2021,
+  title = {A {{General Language Assistant}} as a {{Laboratory}} for {{Alignment}}},
+  author = {Askell, Amanda and Bai, Yuntao and Chen, Anna and Drain, Dawn and Ganguli, Deep and Henighan, Tom and Jones, Andy and Joseph, Nicholas and Mann, Ben and DasSarma, Nova and Elhage, Nelson and {Hatfield-Dodds}, Zac and Hernandez, Danny and Kernion, Jackson and Ndousse, Kamal and Olsson, Catherine and Amodei, Dario and Brown, Tom and Clark, Jack and McCandlish, Sam and Olah, Chris and Kaplan, Jared},
+  year = {2021},
+  month = dec,
+  number = {arXiv:2112.00861},
+  eprint = {2112.00861},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2112.00861},
+  urldate = {2024-12-14},
+  abstract = {Given the broad capabilities of large language models, it should be possible to work towards a general-purpose, text-based assistant that is aligned with human values, meaning that it is helpful, honest, and harmless. As an initial foray in this direction we study simple baseline techniques and evaluations, such as prompting. We find that the benefits from modest interventions increase with model size, generalize to a variety of alignment evaluations, and do not compromise the performance of large models. Next we investigate scaling trends for several training objectives relevant to alignment, comparing imitation learning, binary discrimination, and ranked preference modeling. We find that ranked preference modeling performs much better than imitation learning, and often scales more favorably with model size. In contrast, binary discrimination typically performs and scales very similarly to imitation learning. Finally we study a `preference model pre-training' stage of training, with the goal of improving sample efficiency when finetuning on human preferences.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
+@misc{backlundVendingBenchBenchmarkLongTerm2025,
+  title = {Vending-{{Bench}}: {{A Benchmark}} for {{Long-Term Coherence}} of {{Autonomous Agents}}},
+  shorttitle = {Vending-{{Bench}}},
+  author = {Backlund, Axel and Petersson, Lukas},
+  year = {2025},
+  month = feb,
+  number = {arXiv:2502.15840},
+  eprint = {2502.15840},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2502.15840},
+  urldate = {2025-05-20},
+  abstract = {While Large Language Models (LLMs) can exhibit impressive proficiency in isolated, short-term tasks, they often fail to maintain coherent performance over longer time horizons. In this paper, we present Vending-Bench, a simulated environment designed to specifically test an LLM-based agent's ability to manage a straightforward, long-running business scenario: operating a vending machine. Agents must balance inventories, place orders, set prices, and handle daily fees - tasks that are each simple but collectively, over long horizons ({$>$}20M tokens per run) stress an LLM's capacity for sustained, coherent decision-making. Our experiments reveal high variance in performance across multiple LLMs: Claude 3.5 Sonnet and o3-mini manage the machine well in most runs and turn a profit, but all models have runs that derail, either through misinterpreting delivery schedules, forgetting orders, or descending into tangential "meltdown" loops from which they rarely recover. We find no clear correlation between failures and the point at which the model's context window becomes full, suggesting that these breakdowns do not stem from memory limits. Apart from highlighting the high variance in performance over long time horizons, Vending-Bench also tests models' ability to acquire capital, a necessity in many hypothetical dangerous AI scenarios. We hope the benchmark can help in preparing for the advent of stronger AI systems.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence}
+}
+
 @article{bahdanauNeuralMachineTranslation2014,
   title = {Neural Machine Translation by Jointly Learning to Align and Translate},
   author = {Bahdanau, Dzmitry},
@@ -376,6 +409,7 @@
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning}
 }
+
 
 @misc{esserTamingTransformersHighResolution2021,
   title = {Taming {{Transformers}} for {{High-Resolution Image Synthesis}}},
@@ -1470,6 +1504,17 @@
   isbn = {979-8-4007-0172-6}
 }
 
+@misc{SylphAIIncAdalFlow2025,
+  title = {{{SylphAI-Inc}}/{{AdalFlow}}},
+  year = {2025},
+  month = may,
+  urldate = {2025-05-17},
+  abstract = {AdalFlow: The library to build \& auto-optimize LLM applications.},
+  copyright = {MIT},
+  howpublished = {SylphAI},
+  keywords = {agent,ai,auto-prompting,bm25,chatbot,faiss,framework,generative-ai,information-retrieval,llm,machine-learning,nlp,optimizer,python,question-answering,rag,reranker,retriever,summarization,trainer}
+}
+
 @misc{touvronLLaMAOpenEfficient2023a,
   title = {{{LLaMA}}: {{Open}} and {{Efficient Foundation Language Models}}},
   shorttitle = {{{LLaMA}}},
@@ -1785,6 +1830,23 @@
   archiveprefix = {arXiv},
   langid = {english},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
+@misc{yinLLMAutoDiffAutoDifferentiateAny2025,
+  title = {{{LLM-AutoDiff}}: {{Auto-Differentiate Any LLM Workflow}}},
+  shorttitle = {{{LLM-AutoDiff}}},
+  author = {Yin, Li and Wang, Zhangyang},
+  year = {2025},
+  month = jan,
+  number = {arXiv:2501.16673},
+  eprint = {2501.16673},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2501.16673},
+  urldate = {2025-05-17},
+  abstract = {Large Language Models (LLMs) have reshaped natural language processing, powering applications from multi-hop retrieval and question answering to autonomous agent workflows. Yet, prompt engineering -- the task of crafting textual inputs to effectively direct LLMs -- remains difficult and labor-intensive, particularly for complex pipelines that combine multiple LLM calls with functional operations like retrieval and data formatting. We introduce LLM-AutoDiff: a novel framework for Automatic Prompt Engineering (APE) that extends textual gradient-based methods (such as Text-Grad) to multi-component, potentially cyclic LLM architectures. Implemented within the AdalFlow library, LLM-AutoDiff treats each textual input as a trainable parameter and uses a frozen backward engine LLM to generate feedback-akin to textual gradients -- that guide iterative prompt updates. Unlike prior single-node approaches, LLM-AutoDiff inherently accommodates functional nodes, preserves time-sequential behavior in repeated calls (e.g., multi-hop loops), and combats the "lost-in-the-middle" problem by isolating distinct sub-prompts (instructions, formats, or few-shot examples). It further boosts training efficiency by focusing on error-prone samples through selective gradient computation. Across diverse tasks, including single-step classification, multi-hop retrieval-based QA, and agent-driven pipelines, LLM-AutoDiff consistently outperforms existing textual gradient baselines in both accuracy and training cost. By unifying prompt optimization through a graph-centric lens, LLM-AutoDiff offers a powerful new paradigm for scaling and automating LLM workflows - mirroring the transformative role that automatic differentiation libraries have long played in neural network research.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computation and Language}
 }
 
 @misc{zhongSyntheT2CGeneratingSynthetic2024,
