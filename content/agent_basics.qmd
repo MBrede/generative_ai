@@ -135,6 +135,7 @@ There are *a lot* of agent frameworks out there. In this module we will focus on
  - [smolagents](https://huggingface.co/docs/smolagents/index): Smolagents is an agent framework for LLMs developed by the huggingface team. It is designed to be lightweight and easy to use. Smolagents is quite new but the documentation is quite good and the community is very active. 
 
  We will also give honorary mentions to two other frameworks, which are also very popular in the LLM community.
+
  - [LangChain](https://github.com/hwchase17/langchain): LangChain is a popular framework. It is designed to be modular and easy to use. It is designed for developers who want to build applications with LLMs but do not necessarily have a lot of time to spend on building the infrastructure. 
  - [Haystack](https://github.com/deepset-ai/haystack): Haystack is an open source NLP framework that enables you to build production-ready applications around LLMs and other models. The company behind Haystack, Deepset, is based in Germany and has a strong focus on open source. It is a good choice for production environments where you need high performance and scalability.
 
@@ -147,7 +148,7 @@ Now it is your turn!
 
 Each group is to use one of the following frameworks to build a small demo agent:
 
-- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) 
+- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) You can use [the ReAct example](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as a starting point. 
 - [Smolagents](https://huggingface.co/docs/smolagents/tutorials/building_good_agents)
 
 1. Set up a local LLM (e.g. using Ollama or LM Studio) to be used by the agent.
@@ -221,7 +222,7 @@ LLamaindex is a framework that  makes it easy to implement and use agents. In Ll
 
 There a several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
 
-´Let us have a closer look, at the inner workings of react agents. 
+Let us have a closer look, at the inner workings of react agents. 
 
 ::: {.callout-note}
 ## 📝 Task
