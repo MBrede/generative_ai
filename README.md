@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/875720312.svg)](https://doi.org/10.5281/zenodo.14497740)
+
+
 # Generative AI: An Introductory Script
 
 This script serves as an introduction to **Generative AI** and was developed for the elective module "Generative AI," offered to master's students of the "Data Science" program at the University of Applied Sciences Kiel. Built using `quarto`, this resource is designed to provide an accessible overview of key topics and applications in this rapidly evolving field.
@@ -61,20 +64,34 @@ Students engaging with this module will:
 
 ## 🗓 Schedule
 
-| Week | Date       | Title                      | Topics                                                                 |
-|------|------------|----------------------------|------------------------------------------------------------------------|
-| 46   | 12.11.     | Getting Started with (L)LMs| Language model basics, open-source model selection, Huggingface, etc. |
-|      | 13.11.     | Prompting                  | Prompting strategies, synthetic text generation                       |
-| 47   | 19.11.     | Agent Basics               | Fundamentals of agents, agent frameworks (LlamaIndex, LangChain)      |
-|      | 20.11.     | Embedding-based Agents     | Semantic embeddings, vector stores, retrieval-augmented generation    |
-| 48   | 26.11.     | Function Calling           | Code generation, function calling, data analysis                      |
-|      | 27.11.     | Agent Interaction          | Constitutional AI, prompt injection prevention                        |
-| 49   | 03.12.     | AI Image Generation I      | GANs, open-source image generation tools                              |
-|      | 04.12.     | AI Image Generation II     | Multimodal embeddings, VAEs, diffusion models                         |
-| 50   | 10.12.     | Image Dataset Augmentation | Generative methods for dataset augmentation                           |
-|      | 11.12.     | Fine-tuning Basics         | Alignment, fine-tuning of (L)LMs                                      |
-| 51   | 17.12.     | Rank Adaptation            | LoRA, QLoRA fine-tuning using Unsloth                                 |
-|      | 18.12.     | Project Presentations      | Team solutions and feedback                                           |
+| Number: | Date: | Title: | Topics: |
+|---:|---:|---|---|
+|1| 13.05.  | Getting started with (L)LMs| Language Model Basics  |
+||         || Choosing open source models |
+||         || Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
+|2|  14.05. | Prompting| Prompting strategies  |
+||         || Generation of synthetic texts  |
+|3| 20.05.  | Function Calling| Code generation and function calling  |
+|4|  21.05. | Agent basics| Fundamentals of agents and chain-of-thought prompting |
+||         || Examples of agent-frameworks (Llamaindex, LangChain & smolagents)|
+|5|  27.05. | Embedding-based retrieval systems| Semantic embeddings and vector stores |
+||         || Retrieval augmented and interleaved generation  |
+|6|  28.05. | LLM-pipelines |  |
+|7| 3.06.  |AI image generation I|  AI image generator basics |
+||         || Diffusion Models and Variational Autoencoders |
+||         || Multimodal models |
+|8| 4.06.  |AI image generation II| Generative Adversarial Networks (GANs) |
+||         || (Generative) approaches for image dataset augmentation |
+|9|  10.06. |AI image generation III| Using Open Source AI image generation models |
+||         || AI image generators in agent systems | 
+|10| 11.06.  |Finetuning Basics| Basics of Finetuning strategies  |
+||         |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
+||         || (Q)LoRA fine-tuning using Unsloth |
+|11|  17.06. |Alignment | Central principles of Model-Alignment |
+||         || Reinforcement Learning from Human Feedback (RLHF) |
+|12| 18.06.  |Project presentations||
+|  | 27.06. | Project submission on moodle ||
+
 
 ---
 

@@ -2,3 +2,5 @@ Imports:
     tidyverse
     rmarkdown
     knitr
+    png
+    quarto

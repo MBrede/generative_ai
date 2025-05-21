@@ -41,3 +41,74 @@ The project will then be graded based on these contents in addition to the follo
 3. **Synthetic Author**: Generates commit-messages based on commit history/diff. It could also suggest GitHub issues illustrated with AI-generated images. 
 4. **AI Storyteller**: Creates illustrated short stories for children based on historical events.
 5. **AI Webdesigner** A tool that creates and illustrates a webpage based on a Amazon product page.
+
+
+## A note about using LLMs for your Project
+
+
+Let's start with a small psychological demonstration.
+
+Look at these anagrams:
+
+$$
+\begin{array}{ccc}
+\text{edbbal} & \rightarrow & \text{dabble} \\
+\text{eaeslg} & \rightarrow & \text{eagles} \\
+\text{fcbair} & \rightarrow & \text{fabric} \\
+\text{elsmod} & \rightarrow & \text{models} \\
+\text{actysh} & \rightarrow & \text{yachts}
+\end{array}
+$$
+
+How long would you take to solve such an anagram?
+
+* A: 30 sec
+* B: > 30 sec, < 1 min
+* C: > 1 min, < 1:30 min
+* D: > 1:30 min, < 2 min
+* E: > 2 min
+
+***
+
+:::{class="card"}
+:::{class="content"}
+
+$$
+\begin{array}{ccc}
+\text{piemls} & \rightarrow & \text{???} 
+\end{array}
+$$
+
+:::
+:::{class="overlay"}
+Please take your time to think about how long you will take before clicking here to unveiling the anagram you are to solve.
+:::
+:::
+
+***
+
+:::{class="card"}
+:::{class="content"}
+
+I will not show you the solution, though I assure you that it is quite simple.
+
+The main point of this demo is to illustrate the psychological bias often called **overconfidence**. This effect takes place when you underestimate the effort a reaching a solution takes when you are directly presented with the solution.
+
+In terms of using Gen AI to solve tasks, findings in the same vain can be found in @stadlerCognitiveEaseCost2024, who ran a study in which students were asked to research nanoparticles in sunscreen either using search engines or ChatGPT 3.5.
+
+Their
+
+>  Results indicated that students using LLMs experienced significantly lower cognitive load. However, despite this reduction, these students demonstrated lower-quality reasoning and argumentation in their final recommendations compared to those who used traditional search engines.
+
+and they argue further that 
+
+> [...] while LLMs can decrease the cognitive burden associated with information gathering during a learning task, they may not promote deeper engagement with content necessary for high-quality learning per se.
+
+Giving a lecture about Gen AI and expecting the students to not use seems rather pointless, but we will use the presentation at the end of the semester to test if you do indeed understand your solution to test the depth of your engagement with the lecture's contents.
+
+:::
+:::{class="overlay"}
+Show solution
+:::
+:::
+

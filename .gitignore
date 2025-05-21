@@ -13,3 +13,7 @@ example_solutions/
 *.drawio
 *.db
 .jupyter*
+figure-pdf
+figure-latex
+.venv/
+.venv
