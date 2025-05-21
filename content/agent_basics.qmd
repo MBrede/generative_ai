@@ -220,9 +220,9 @@ LLamaindex is a framework that  makes it easy to implement and use agents. In Ll
 
 ### React agents
 
-There a several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
+There are several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
 
-Let us have a closer look, at the inner workings of react agents. 
+Let us have a closer look at the inner workings of react agents. 
 
 ::: {.callout-note}
 ## 📝 Task
