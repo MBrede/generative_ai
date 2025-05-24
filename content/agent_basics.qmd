@@ -10,20 +10,29 @@ toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent basics</h3
 
 "An AI agent is a system that uses an LLM to decide the control flow of an application." [@WhatAIAgent2024]
 
-In the context of large language models, agents are LLM-based systems that can solve complex tasks. Imagine asking a question like: 
+An agent (from latin *agere*, to act) is defined by its ability to make decisions based on the circumstances to achieve a predefined goal. In the context of large language models, agents are LLM-based systems where the control flow of an application is decided by the LLM based on its understanding of the situation at hand. Often, it also means that the agent has access to the external world i.e. it has **agency**. In Practice, this means that the LLM decides what do do next, which tool to use (if any), which information to retrieve, etc. based on its understanding of the situation. A nice Example of such an *agentic* system is *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors.
 
-__"What were the key learnings from the Generative AI elective module in WiSe 24/25 at FH Kiel?"__
+![Vending-Bench architecture [@backlundVendingBenchBenchmarkLongTerm2025]](../imgs/vending_bench.png)
+
+
+
+<!-- In the context of large language models, agents are LLM-based systems that can solve complex tasks. Imagine asking a question like:  -->
+
+But let's keep it simpler for now. Let's say you want to know:
+
+__"What were the key learnings from the Generative AI elective module in SoSe 25 at FH Kiel?"__
 
 Could you just ask an LLM that question and expect a correct answer? 
 
-It is in theory possible, that an LLM could answer that directly, but only if it was trained on this information, that is, if a text describing the module exists, is accessible from the web and was used in training the model. However, usually we can not expect the LLM to have this knowledge. 
+As stated earlier, it is in theory possible, but in reality usually not. So we need a more complex approach. 
+
+<!-- It is in theory possible, that an LLM could answer that directly, but only if it was trained on this information, that is, if a text describing the module exists, is accessible from the web and was used in training the model. However, usually we can not expect the LLM to have this knowledge.  -->
 
 Let's think for a moment how a human would answer that (one that did not attend the module). We would probably try to get a copy of the script, maybe we saved the script to our hard drive or other data storage. Maybe we could search the web for a description or text version of the module. Having obtained a copy of the script, we would probably read it. Then, we would try to distill the information hidden therein, to answer the question. 
 
 So, for our LLM to answer that question, it needs to be able to perform several tasks:
 
-- Searching the web for relevant documents
-- searching in a local file storage or other database
+- Searching the web or a local file storage for relevant documents
 - Reading and understanding a document
 - Summarizing the content of a document
 - Answering questions based on the summary of a document
@@ -52,9 +61,13 @@ This is a general-purpose LLM, that functions as the brain and main decision-mak
 
 ### Planning
 
-Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainofThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], [@hulbertUsingTreeThoughtPrompting2023] or __ReAct__ [@yaoReActSynergizingReasoning2023].
+Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is not easily separable from the agent core. It is more like the setup that defines how the LLM should approach the problem (e.g. multi-step thought process), rather than an independent component. 
+
+
+
+<!-- usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainofThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], [@hulbertUsingTreeThoughtPrompting2023] or __ReAct__ [@yaoReActSynergizingReasoning2023]. -->
  <!-- and __Reflexion__ [@shinnReflexionLanguageAgents2023].  -->
-We will discuss these in more detail later.
+<!-- We will discuss these in more detail later. -->
 
 
 ### Tools
@@ -67,7 +80,7 @@ Tools are functions that the agent can use to perform a specific task. They can 
 Memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions. Memory can be short-term, such as a conversation buffer, or long-term, such as a database. Memory can also be used to store the results of previous tool uses, allowing the agent to reuse them if necessary.
 
 
-### Chain-of-Thought prompting
+<!-- ### Chain-of-Thought prompting
 
 Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e. without examples) by invoking the magical words "Let's think step by step" [@kojimaLargeLanguageModels2023a]^[Note that these informations get old *fast*. Newer LLMs may have this functionality build in already]. 
 
@@ -83,22 +96,48 @@ Tree of Thoughts (ToT) is a generalization on CoT prompting. The papers on ToT a
     then share it with the group.
     Then all experts will go on to the next step, etc.
     If any expert realises they're wrong at any point then they leave.
-    The question is...
+    The question is... -->
 
 
-### ReAct
+### Multi-step agents
 
-ReAct (short for Synergizing Reasoning and Acting) is a technique based on CoT, that updates its reasoning after each step of tool use. This allows the agent to react (pun intended) to unforeseen results during the step-by-step solution i.e. failed tool use. The agent can then follow a different chain of thoughts. This makes it very well suited to tool use. An illustration is given in the figure below. 
+The *de-facto* standard for multi-step agents is ReAct introduced by Yao et al. [@yaoReActSynergizingReasoning2023]. ReAct is short for Synergizing Reasoning and Acting. In this approach, the agent updates its reasoning after each step of tool use. Basically, it is running a while loop: 
 
-![Comparison of ReAct with other prompting techniques [@yaoReActSynergizingReasoning2023]](../imgs/ReAct.png)
+First, the agent is initialized with a system prompt, tools and a task to solve. Then it goes through these steps:
+
+1.  The agent reasons about the task and selects a tool to use based on its reasoning.
+2.  The tool is executed. Both the tool usage and the result are recorded to memory.
+3.  Based on the output from the tool, the agent updates its reasoning and may select another tool if needed.
+4. **Repeat** until the goal is achieved or deemed unachievable.
+5. The final answer is generated based on the memory.
+
+Or, in code structure (from [the smolagents site](https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents)):
+
+    memory = [user_defined_task]
+    while llm_should_continue(memory): # this loop is the multi-step part
+        action = llm_get_next_action(memory) # this is the tool-calling part
+        observations = execute_action(action)
+        memory += [action, observations] # this is the memory update part
+    return llm_generate_answer(memory) # this is the final answer generation part
 
 
-## Examples of agent-frameworks (Llamaindex, LangChain & Haystack)
 
-There are *a lot* of agent frameworks out there. In this module we will focus on three of them: LlamaIndex, LangChain and Haystack. They all have their own strengths and weaknesses, but they all share the same basic architecture as described above. We will describe each of them below.
+<!-- ReAct (short for Synergizing Reasoning and Acting) is a technique based on CoT, that updates its reasoning after each step of tool use. This allows the agent to react (pun intended) to unforeseen results during the step-by-step solution i.e. failed tool use. The agent can then follow a different chain of thoughts. This makes it very well suited to tool use. An illustration is given in the figure below.  -->
 
- - [Llamaindex](https://github.com/run-llama/llama_index): LlamaIndex is a data framework for your LLM applications. It provides a central interface to connect your LLMs and your data. It also provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc.  - [LangChain](https://github.com/hwchase17/langchain): LangChain is a framework for developing applications powered by language models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.
- - [Haystack](https://github.com/deepset-ai/haystack): Haystack is an open source NLP framework that enables you to build production-ready applications around LLMs and other models. It provides a set of tools to help you build your own applications, such as a document reader, a web search engine, a data store, etc. It also provides a set of agents that can use these tools to solve complex tasks.
+<!-- ![Comparison of ReAct with other prompting techniques [@yaoReActSynergizingReasoning2023]](../imgs/ReAct.png) -->
+
+
+## Examples of agent-frameworks 
+
+There are *a lot* of agent frameworks out there. In this module we will focus on two of them: LlamaIndex and smolagents. They all have their own strengths and weaknesses, but they all share the same basic architecture as described above. We will describe each of them below.
+
+ - [Llamaindex](https://github.com/run-llama/llama_index): LlamaIndex is a data framework for building LLM applications. LLamaindex is easy to use out of the box. The documentation consists mainly of examples and tutorials that guide the user through the process of building an agent application. These can of course be combined or varied in many ways to create more complex applications.
+ - [smolagents](https://huggingface.co/docs/smolagents/index): Smolagents is an agent framework for LLMs developed by the huggingface team. It is designed to be lightweight and easy to use. Smolagents is quite new but the documentation is quite good and the community is very active. 
+
+ We will also give honorary mentions to two other frameworks, which are also very popular in the LLM community.
+
+ - [LangChain](https://github.com/hwchase17/langchain): LangChain is a popular framework. It is designed to be modular and easy to use. It is designed for developers who want to build applications with LLMs but do not necessarily have a lot of time to spend on building the infrastructure. 
+ - [Haystack](https://github.com/deepset-ai/haystack): Haystack is an open source NLP framework that enables you to build production-ready applications around LLMs and other models. The company behind Haystack, Deepset, is based in Germany and has a strong focus on open source. It is a good choice for production environments where you need high performance and scalability.
 
  <!-- - [AutoGen](https://github.com/microsoft/autogen): AutoGen is an open source framework for developing large language model (LLM) applications using multiple LLMs that can collaborate with each other. It enables the development of multi-agent systems, where each agent has a specific role and can communicate with other agents to solve complex tasks. -->
 
@@ -109,26 +148,104 @@ Now it is your turn!
 
 Each group is to use one of the following frameworks to build a small demo agent:
 
-- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) combine this approach with [this notebook](https://docs.llamaindex.ai/en/stable/examples/llm/lmstudio/) to make it work with LM Studio.
-
-- [Langchain](https://python.langchain.com/docs/tutorials/agents/)
-- [Haystack](https://docs.haystack.deepset.ai/docs/agent_overview)
-- (optional) another framework of your choice
+- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) You can use [the ReAct example](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as a starting point. 
+- [Smolagents](https://huggingface.co/docs/smolagents/tutorials/building_good_agents)
 
 1. Set up a local LLM (e.g. using Ollama or LM Studio) to be used by the agent.
 2. Choose a small task for your agent, e.g. answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)
 3. Implement the agent using one of the frameworks listed above.
-4. Present your results and your experiences with the frameworks in a short presentation.
-5. Submit your code and report on moodle.
+4. Present your results and your experiences with the frameworks in a short presentation. (presenting the notebook is fine.)
+<!-- 5. Submit your code and report on moodle. -->
+:::
+
+
+## Summary and recap
+
+### Agents
+
+An agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request  better. The agent has several modules at its disposal, the memory, some tools and a planning tool. 
+
+The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e. the LLM) along with the system prompt and the current user input. 
+
+The planning module then decides which tools to use, if any, to answer the user request. The output of the planning module is a response message containing one or several tool calls (or a final answer). The agent then executes the tool calls by first parsing the response, then executing the functions. Based on the tool outputs, a final answer is generated and sent back to the user.
+
+
+### React agents
+
+There a several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
+
+
+### Why agents?
+
+Agents make decisions that control the flow of an application. The question is: when is this helpful? If the workflow is really simple, you basically don't need an agent. Just run the LLM calls in a pipeline. Actually, most of the examples you find in tutorials will be better solved with a pipeline. We will use the example from the [smolagents introduction](https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents) to illustrate that. 
+
+Let’s take an example: say you’re making an app that handles customer requests on a surfing trip website.
+
+You could know in advance that the requests will belong to either of 2 buckets (based on user choice), and you have a predefined workflow for each of these 2 cases.
+
+- Want some knowledge on the trips? ⇒ give them access to a search bar to search your knowledge base
+- Wants to talk to sales? ⇒ let them type in a contact form.
+
+If that deterministic workflow fits all queries, by all means just code everything! This will give you a 100% reliable system with no risk of error introduced by letting unpredictable LLMs meddle in your workflow. For the sake of simplicity and robustness, it’s advised to regularize towards not using any agentic behaviour.
+
+But what if the workflow can’t be determined that well in advance?
+
+For instance, a user wants to ask: "I can come on Monday, but I forgot my passport so risk being delayed to Wednesday, is it possible to take me and my stuff to surf on Tuesday morning, with a cancellation insurance?" This question hinges on many factors, and probably none of the predetermined criteria above will suffice for this request.
+
+If the pre-determined workflow falls short too often, that means you need more flexibility.
+
+That is where an agentic setup helps.
+
+
+### Pros and Cons 
+
+There are some obvious pros and cons with using agents
+
+**Pros** 
+
+- You don't have to do it yourself.  
+- Sometimes they perform better than humans.
+- they are easily scalable.
+
+**Cons** 
+
+- sometimes they fail spectacularly at easy tasks. See again the vending machine example [@backlundVendingBenchBenchmarkLongTerm2025] from earlier for some hilarious anecdotes. 
+
+
+<!-- ### Llamaindex
+
+LLamaindex is a framework that  makes it easy to implement and use agents. In Llamaindex an agent consists a an *agent runner* and an *agent_worker*. Think of the agent runner as the agent core in the architecture schematics and the agent worker as the planning module. The tools are functions implemented in python that can be executed by the agent worker. Finally, the memory module consists of a simple text buffer, logging the conversation history between the user and the agent and between the agent and the tools. -->
+
+
+
+### React agents
+
+There are several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
+
+Let us have a closer look at the inner workings of react agents. 
+
+::: {.callout-note}
+## 📝 Task
+
+Let's have a deeper look!
+
+1. Reopen the notebook from earlier where you defined your agents
+4. Have a look at the prompt, the agent gives to the LLM ( in LLamaindex you can find it using `agent.get_prompts()`). Try to find it in smolagents. 
+5. Discuss the prompt with the group! What does it do? How does it do it?
+6. Ask the agent to tell you the weather in a given location.
+7. Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
+8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into an infinite loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
+9. Upload your notebook to Moodle
+
 :::
 
 
 
 
-## Further Readings
+<!-- ## Further Readings -->
 
-- [This paper](@wangSurveyLargeLanguage2024) compares different planning strategies
-- In addition to the websites listed above see also [@IntroductionLLMAgents2023]
+<!-- - [This paper](@wangSurveyLargeLanguage2024) compares different planning strategies -->
+<!-- - In addition to the websites listed above see also [@IntroductionLLMAgents2023] -->
 
 
 ## References
