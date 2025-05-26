@@ -182,7 +182,7 @@ The last step to make this into a RAG pipeline is to use a generative model to a
 
 This means, that we do collect the relevant documents like we did before, still based on a natural language question, but instead of returning the hits we got from the index, we feed them into a LLM and ask it to generate an answer based on these documents. This is where the name retrieval augmented generation comes from - we use the retrieval step to augment the generative model with additional information. The diagram in @fig-rag illustrates this process.
 
-![Illustration of a RAG-system.](../imgs/rag.png){#fig-rag .enlarge-onhover}
+![Illustration of a RAG-system.](../imgs/rag_diagram.png){#fig-rag .enlarge-onhover}
 
 ::: {.callout-note}
 
