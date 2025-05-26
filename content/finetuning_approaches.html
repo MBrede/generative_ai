@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -217,7 +252,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/embeddings.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Embedding-based agent-systems</span></a>
+  <a href="../content/embeddings.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Embedding-based LLM-systems</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -399,6 +434,39 @@ Fig&nbsp;12.2: Results of Prompt-tuning compared to prompt-engineering and compl
 </div>
 </div>
 </section>
+<section id="textgrad" class="level4">
+<h4 class="anchored" data-anchor-id="textgrad">TextGrad</h4>
+<p><span class="citation" data-cites="yuksekgonulOptimizingGenerativeAI2025">Yuksekgonul et al. (<a href="#ref-yuksekgonulOptimizingGenerativeAI2025" role="doc-biblioref">2025</a>)</span> described a method for text-based auto differentiation. The authors claim that, given a loss-target, their approach “TextGrad” allows to improve a model’s performance by directly tuning the discrete textual prompt used for generating the model’s answer across various tasks. This is done by implementing a system analogous to the autograd implementation in PyTorch (see <a href="#fig-textGrad" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> for an illustration).</p>
+<div id="fig-textGrad" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-textGrad-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../imgs/textgrad.png" class="enlarge-onhover img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-textGrad-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Fig&nbsp;12.3: The TextGrad optimization schema, taken from <span class="citation" data-cites="yuksekgonulOptimizingGenerativeAI2025">Yuksekgonul et al. (<a href="#ref-yuksekgonulOptimizingGenerativeAI2025" role="doc-biblioref">2025</a>)</span>
+</figcaption>
+</figure>
+</div>
+<p>A “loss”-function is defined, i.e., any function that takes the textual output and evaluates its quality. This can be a classic loss function like binary accuracy or a set of rules for evaluating text quality that are given to a language model to compare the result with the ground truth. This “loss” is then taken into account by the “optimizer”, which is another LLM-Call that takes the output and loss and critiques the appropriate Variables (i.e., the initial prompt). This critique or “gradient” as it is called in the Autograd analogy is then taken to update the initial prompt using another LLM-call (the step in Autograd). This process continues iteratively until the results are satisfactory or a predefined number of iterations is reached.</p>
+</section>
+<section id="task-1" class="level4">
+<h4 class="anchored" data-anchor-id="task-1">📝 Task</h4>
+<p>Your turn!</p>
+<p>Install <a href="https://github.com/zou-group/textgrad">TextGrad</a> and get the <a href="https://colab.research.google.com/github/zou-group/TextGrad/blob/main/examples/notebooks/Tutorial-Solution-Optimization.ipynb">tutorial on optimizing a solution</a> to run using the following snippet to initialize your LMStudio/Ollama server:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> textgrad <span class="im">as</span> tg</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textgrad.engine.local_model_openai_api <span class="im">import</span> ChatExternalClient</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(base_url<span class="op">=</span><span class="st">"&lt;your endpoint&gt;"</span>, api_key<span class="op">=</span><span class="st">"&lt;some key&gt;"</span>) </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> ChatExternalClient(client<span class="op">=</span>client, model_string<span class="op">=</span><span class="st">"&lt;your model of choice&gt;"</span>) </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>tg.set_backward_engine(engine, override<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If this tutorial runs for you, adapt the code so that it generates the reasoning to the following riddle:</p>
+<blockquote class="blockquote">
+<p>A farmer with a wolf, a goat, and a cabbage must cross a river by boat. The boat can carry only the farmer and a single item. If left unattended together, the wolf would eat the goat, or the goat would eat the cabbage. How can they cross the river without anything being eaten? - Taken from <a href="https://en.wikipedia.org/wiki/Wolf,_goat_and_cabbage_problem">wikipedia</a></p>
+</blockquote>
+<p>Solution: goat -&gt; empty -&gt; wolf -&gt; goat -&gt; cabbage -&gt; empty -&gt; goat :::</p>
+</section>
 </section>
 <section id="adapter-based-finetuning" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="adapter-based-finetuning">Adapter-based finetuning</h3>
@@ -416,7 +484,7 @@ h = W_0x + \Delta Wx
 h = W_0x + \Delta Wx = W_0x + BAx
 \]</span></p>
 <p>A is initialized with random values sampled from a normal distribution and B is initialized as a zero matrix so that <span class="math inline">\(\Delta W\)</span> is zero at the start of the training.</p>
-<p>This results in a reduction of the number of parameters to be trained from <span class="math inline">\(d_{in} \cdot d_{out}\)</span> to <span class="math inline">\(d_{in} \cdot r  + d_{out} \cdot r\)</span> as is illustrated in <a href="#fig-loRaMats" class="quarto-xref">Figure&nbsp;<span>12.3</span></a>.</p>
+<p>This results in a reduction of the number of parameters to be trained from <span class="math inline">\(d_{in} \cdot d_{out}\)</span> to <span class="math inline">\(d_{in} \cdot r  + d_{out} \cdot r\)</span> as is illustrated in <a href="#fig-loRaMats" class="quarto-xref">Figure&nbsp;<span>12.4</span></a>.</p>
 <div class="cell enlarge-onhover">
 <div class="cell-output cell-output-stdout">
 <pre><code>function (...)  .Primitive("c")</code></pre>
@@ -428,7 +496,7 @@ h = W_0x + \Delta Wx = W_0x + BAx
 <img src="finetuning_approaches_files/figure-html/fig-loRaMats-1.png" class="img-fluid figure-img" width="768">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loRaMats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;12.3: Illustration of the LoRA approximation of a weight matrix <span class="math inline">\(\Delta W\)</span> as the product of two lower-rank matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. The rank of the approximation is <span class="math inline">\(r &lt;&lt; d_{in}, d_{out}\)</span>.
+Fig&nbsp;12.4: Illustration of the LoRA approximation of a weight matrix <span class="math inline">\(\Delta W\)</span> as the product of two lower-rank matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. The rank of the approximation is <span class="math inline">\(r &lt;&lt; d_{in}, d_{out}\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -437,14 +505,14 @@ Fig&nbsp;12.3: Illustration of the LoRA approximation of a weight matrix <span c
 </section>
 <section id="qlora-quantized-low-rank-adaptation" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="qlora-quantized-low-rank-adaptation">QLoRA (Quantized Low-Rank Adaptation)</h4>
-<p>QLoRA <span class="citation" data-cites="dettmersQLoRAEfficientFinetuning2023">(<a href="#ref-dettmersQLoRAEfficientFinetuning2023" role="doc-biblioref">Dettmers et al., 2023</a>)</span> builds on the concept of LoRA by further reducing the memory footprint and computational requirements. It does this, next do some other optimizations, by quantizing, i.e.&nbsp;reducing the precision of, the frozen pretrained LLM. The process of quantization is illustrated in <a href="#fig-quantization" class="quarto-xref">Figure&nbsp;<span>12.4</span></a>.</p>
+<p>QLoRA <span class="citation" data-cites="dettmersQLoRAEfficientFinetuning2023">(<a href="#ref-dettmersQLoRAEfficientFinetuning2023" role="doc-biblioref">Dettmers et al., 2023</a>)</span> builds on the concept of LoRA by further reducing the memory footprint and computational requirements. It does this, next do some other optimizations, by quantizing, i.e.&nbsp;reducing the precision of, the frozen pretrained LLM. The process of quantization is illustrated in <a href="#fig-quantization" class="quarto-xref">Figure&nbsp;<span>12.5</span></a>.</p>
 <div id="fig-quantization" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-quantization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/finetuning_quantization_demo.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-quantization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;12.4: Illustration of the result of quantization to 32, 16, 8 and 4 bits. The top of the image shows the same color-gradient under all quantizations, the bottom image is the quantized chapter-illustration.
+Fig&nbsp;12.5: Illustration of the result of quantization to 32, 16, 8 and 4 bits. The top of the image shows the same color-gradient under all quantizations, the bottom image is the quantized chapter-illustration.
 </figcaption>
 </figure>
 </div>
@@ -482,25 +550,25 @@ You do not have
 </section>
 <section id="ia³" class="level3">
 <h3 class="anchored" data-anchor-id="ia³">(IA)³</h3>
-<p><span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span> propose (IA)³ (Infused Adapter by Inhibiting and Amplifying Inner Activations) which additionally builds on the central concepts of Soft Prompting and LoRA. Instead of learning additional tokens to prepend to the input or adaptation matrices for each layer, they propose the training of a small set of additional vectors that are used to item-wise rescale select hidden states of the model. A schematic illustration can be seen in <a href="#fig-ia3" class="quarto-xref">Figure&nbsp;<span>12.5</span></a>.</p>
+<p><span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span> propose (IA)³ (Infused Adapter by Inhibiting and Amplifying Inner Activations) which additionally builds on the central concepts of Soft Prompting and LoRA. Instead of learning additional tokens to prepend to the input or adaptation matrices for each layer, they propose the training of a small set of additional vectors that are used to item-wise rescale select hidden states of the model. A schematic illustration can be seen in <a href="#fig-ia3" class="quarto-xref">Figure&nbsp;<span>12.6</span></a>.</p>
 <div id="fig-ia3" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ia3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/ia3.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ia3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;12.5: Illustration of the adaptation principle of (IA)³. The input is passed through the model and then the selected hidden states are rescaled by the learned vectors. Q, K and V are the learned hidden weights for the queries, keys and values of a self-attention mechanism. The depiction on the right illustrates the adaptation of the weights of the feed-forward-part of a transformer. Image taken from <span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span>
+Fig&nbsp;12.6: Illustration of the adaptation principle of (IA)³. The input is passed through the model and then the selected hidden states are rescaled by the learned vectors. Q, K and V are the learned hidden weights for the queries, keys and values of a self-attention mechanism. The depiction on the right illustrates the adaptation of the weights of the feed-forward-part of a transformer. Image taken from <span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span>
 </figcaption>
 </figure>
 </div>
-<p>They also report their adaptation-strategy to work better and in a less resource-intensive way than LoRA and the other methods we have discussed so far, achieving higher accuracy with fewer parameters on their benchmark (<a href="#fig-ia3performance" class="quarto-xref">Figure&nbsp;<span>12.6</span></a>).</p>
+<p>They also report their adaptation-strategy to work better and in a less resource-intensive way than LoRA and the other methods we have discussed so far, achieving higher accuracy with fewer parameters on their benchmark (<a href="#fig-ia3performance" class="quarto-xref">Figure&nbsp;<span>12.7</span></a>).</p>
 <div id="fig-ia3performance" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ia3performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/ia3_performance.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ia3performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;12.6: Performance of (IA)³ compared to other parameter-efficient finetuning approaches. Image taken from <span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span>
+Fig&nbsp;12.7: Performance of (IA)³ compared to other parameter-efficient finetuning approaches. Image taken from <span class="citation" data-cites="liuFewShotParameterEfficientFineTuning2022">Liu et al. (<a href="#ref-liuFewShotParameterEfficientFineTuning2022" role="doc-biblioref">2022</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -560,6 +628,9 @@ Mosbach, M., Pimentel, T., Ravfogel, S., Klakow, D., &amp; Elazar, Y. (2023). <e
 </div>
 <div id="ref-shazeerOutrageouslyLargeNeural2017" class="csl-entry" role="listitem">
 Shazeer, N., Mirhoseini, A., Maziarz, K., Davis, A., Le, Q., Hinton, G., &amp; Dean, J. (2017). <em>Outrageously <span>Large Neural Networks</span>: <span class="nocase">The Sparsely-Gated Mixture-of-Experts Layer</span></em> (arXiv:1701.06538). arXiv. <a href="https://doi.org/10.48550/arXiv.1701.06538">https://doi.org/10.48550/arXiv.1701.06538</a>
+</div>
+<div id="ref-yuksekgonulOptimizingGenerativeAI2025" class="csl-entry" role="listitem">
+Yuksekgonul, M., Bianchi, F., Boen, J., Liu, S., Lu, P., Huang, Z., Guestrin, C., &amp; Zou, J. (2025). Optimizing generative <span>AI</span> by backpropagating language model feedback. <em>Nature</em>, <em>639</em>(8055), 609–616. <a href="https://doi.org/10.1038/s41586-025-08661-4">https://doi.org/10.1038/s41586-025-08661-4</a>
 </div>
 </div>
 </section>
