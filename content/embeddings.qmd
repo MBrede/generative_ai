@@ -1,25 +1,25 @@
 ---
-toc-title: '![](../imgs/rag.png){width=240px}<br> <h3>Embedding-based agent-systems</h3>'
+toc-title: '![](../imgs/rag.png){width=240px}<br> <h3>Embedding-based LLM-systems</h3>'
 ---
 
-# Embedding-based agent-systems
+# Embedding-based LLM-systems
 
-All agents we discussed until here are using tools that allow them to use their generated inputs in some way.
-In most of the task we want to utilize agents, we do not only want to generate text but to also inform the generation based on some kind of existing knowledge base.
+All agents (and all LLM-pipelines if sufficiently complex) we discussed until here are using tools that allow them to use their generated inputs in some way.
+In most of the task we want to utilize LLMs, we do not only want to generate text but to also inform the generation based on some kind of existing knowledge base.
 Examples for these kinds of usecases include:
 
 - Answering questions about a specific topic (e.g., a company or product)
 - Summarizing a document
 - Generating a report based on data
 
-Though most modern LLMs are increasingly capable in answering basic knowledge-questions, the more comples a topic or the more relevant the factual basis of an answer is, the more it is important to base generated answers on actual data.
+Though most modern LLMs are increasingly capable in answering basic knowledge-questions, the more complex a topic or the more relevant the factual basis of an answer is, the more it is important to base generated answers on actual data.
 
 ## Semantic embeddings and vector stores
 
-To empower an agent too look up information during its thought-process, one has to build a tool that allows an agent to use natural language to retrieve information necessary for a task.
+To empower a LLM too look up information during its thought-process, one has to build a tool that allows a LLM to use natural language to retrieve information necessary for a task.
 The fundamental principle to do this are so-called *semantic embeddings*.
 These are pretty close to the concept we introduced when talking about the foundations of LLMs (see [here](getting_started_with_llms)) and can be understood as a way to map textual data into a vector space.
-The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonibly small distance between them. The go-to standard to measure this distance is the **cosine similarity**, which has proven usefull enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in [OpenAI tutorials](https://cookbook.openai.com/examples/recommendation_using_embeddings) and in [Azure embedding-applications](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/understand-embeddings)). The cosine similarity is defined as:
+The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonably small distance between them. The go-to standard to measure this distance is the **cosine similarity**, which has proven useful enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in [OpenAI tutorials](https://cookbook.openai.com/examples/recommendation_using_embeddings) and in [Azure embedding-applications](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/understand-embeddings)). The cosine similarity is defined as:
 
 $$
 \text{cosine\_similarity}(u, v) = \frac{u \cdot v}{\|u\| \|v\|} = \frac{\sum_{i=1}^{n} u_i v_i}{\sqrt{\sum_{i=1}^{n} u_i^2} \sqrt{\sum_{i=1}^{n} v_i^2}}
@@ -111,8 +111,8 @@ An example for a dataset containing such sentences is the [Stanford Natural Lang
 @reimersSentenceBERTSentenceEmbeddings2019a then concated the both senteces embeddings and their element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls. At inference, this classification head was removed and replaced as the cosine similarity as discussed above.
 The resulting network is highly effective in calculating semantic similarities between sentences.
 
-A look at the [sbert-website](https://www.sbert.net/docs/sentence_transformer/loss_overview.html) shows that the module has somewhat grown and now does supply a series of learning paradigms that can be used to efficiently tune a model for your specific usecase^[And this does not have to be expensive. @tunstallEfficientFewShotLearning2022 have shown a highly efficient contrastive learning paradigm that limts the amount of necessary labels for a ridiuculously small amount of labels.]. 
-As the library has grown, so has the sheer amount of pretrained embedding-models in some way based on this architecture that are hosted on huggingface. The [MTEB-Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) is a good strat to search for a model for your application.
+A look at the [sbert-website](https://www.sbert.net/docs/sentence_transformer/loss_overview.html) shows that the module has somewhat grown and now does supply a series of learning paradigms that can be used to efficiently tune a model for your specific usecase^[And this does not have to be expensive. @tunstallEfficientFewShotLearning2022 have shown a highly efficient contrastive learning paradigm that limits the amount of necessary labels for a ridiculously small amount of labels.]. 
+As the library has grown, so has the sheer amount of pretrained embedding-models in some way based on this architecture that are hosted on huggingface. The [MTEB-Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) is a good start to search for a model for your application.
 One utilization of this model-family, which has already been implicitly used in this script, is their very efficient ability to semantically search for documents.
 If a model is very good at finding similar sentences, it can also be very good to find documents that are very similar to a question.
 
@@ -129,9 +129,9 @@ We can then calculate the cosine-similarity between these embeddings and return 
 
 Install the sentence-transformer package and download [the climate_fever-dataset](https://huggingface.co/datasets/tdiggelm/climate_fever).
 
-Choose one model from the [MTEB-Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) that you deem adequatly sized and appropriate for the task
+Choose one model from the [MTEB-Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) that you deem adequately sized and appropriate for the task
 
-Test the different metrics for the first twenty claims of the dataset and a question you formulate.
+Test the different metrics shown in @fig-cosineSimilarity for the first twenty claims of the dataset and a question you formulate.
 
 Use the similarity-implementations from [sklearn.metrics.pairwise](https://scikit-learn.org/dev/api/sklearn.metrics.html#module-sklearn.metrics.pairwise).
 
@@ -142,10 +142,10 @@ This approach of using a model to embed documents and questions into a vector sp
 ## Retrieval augmented generation
 
 Retrieval augmented generation (RAG) is a framework that does pretty much do what it says on the tin.
-You use a retrieval model to find documents that are similar to your question and then either return these documents our feed them into a generative model, which then generates an answer based on these documents.
+You use a retrieval model to find documents that are similar to your question and then either return these documents or feed them into a generative model, which then generates an answer based on these documents.
 This process can additionally be wrapped as a tool to be used by an agent, so that your existing agent can now also use external knowledge sources to answer questions.
 
-Retrieval does not have to be semantics-based in this context - all kinds of data sources and databases can be made accessible for a LLM - we will focus on a purely embbedding based approach here though.
+Retrieval does not have to be semantics-based in this context - all kinds of data sources and databases can be made accessible for a LLM - we will focus on a purely embedding based approach here though.
 
 Although the small example in the last task was working, it is not really scalable. It was fine for a limited set of examples, if you want to realistically make a whole knowledge base searchable, you need to use an appropriate database system.
 
@@ -167,10 +167,10 @@ The best way to use qdrant is to use [docker](https://qdrant.tech/documentation/
 
 #### 📝 Task
 
-Install the qdrant-client python-sdk and fastembed.
+Install the qdrant-client python-sdk.
 
 Create a collection for the claims and one for the evidence in [the climate_fever-dataset](https://huggingface.co/datasets/tdiggelm/climate_fever).
-Add the first 200 entries to each of these collections. Use qdrants [fastembemd](https://qdrant.tech/articles/fastembed/)-integration to do this.
+Add the first 200 entries to each of these collections. Use qdrants sentencetransformers to do this, [here](https://medium.com/@hassanqureshi700/semantic-search-a-step-by-step-tutorial-using-qdrant-53e93f787828) is a medium tutorial that leads you through the process.
 
 Test the similarity search on a question you formulate.
 
@@ -182,7 +182,7 @@ The last step to make this into a RAG pipeline is to use a generative model to a
 
 This means, that we do collect the relevant documents like we did before, still based on a natural language question, but instead of returning the hits we got from the index, we feed them into a LLM and ask it to generate an answer based on these documents. This is where the name retrieval augmented generation comes from - we use the retrieval step to augment the generative model with additional information. The diagram in @fig-rag illustrates this process.
 
-![Illustration of a RAG-system.](../imgs/rag.png){#fig-rag .enlarge-onhover}
+![Illustration of a RAG-system.](../imgs/rag_diagram.png){#fig-rag .enlarge-onhover}
 
 ::: {.callout-note}
 
