@@ -192,7 +192,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent interactions</span></a>
+  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM pipelines</span></a>
   </div>
 </li>
       </ul>
@@ -621,7 +621,7 @@ Fig&nbsp;13.5: Overview of challenges posed by RLHF. Taken from <span class="cit
 </section>
 <section id="scalable-oversight---debate" class="level4">
 <h4 class="anchored" data-anchor-id="scalable-oversight---debate">Scalable Oversight - Debate</h4>
-<p>In addition to these challenges, RLHF and the other methods using non-recursive oversight are highly dependent on human feedback and the quality thereof. This gets increasingly challenging with more complex tasks. <span class="citation" data-cites="shenLargeLanguageModel2023">Shen et al. (<a href="#ref-shenLargeLanguageModel2023" role="doc-biblioref">2023</a>)</span> presents methods with <em>scalable oversight</em> as approaches to this problem. One of these methods is Constitutional AI, which has already been touched on in the chapter <a href="agent_interaction.html#sec-constitutional-ai-tuning" class="quarto-xref"><span>Constitutional AI Tuning</span></a>.</p>
+<p>In addition to these challenges, RLHF and the other methods using non-recursive oversight are highly dependent on human feedback and the quality thereof. This gets increasingly challenging with more complex tasks. <span class="citation" data-cites="shenLargeLanguageModel2023">Shen et al. (<a href="#ref-shenLargeLanguageModel2023" role="doc-biblioref">2023</a>)</span> presents methods with <em>scalable oversight</em> as approaches to this problem. One of these methods is Constitutional AI, which has already been touched on in the chapter <span class="quarto-unresolved-ref">?sec-constitutional-ai-tuning</span>.</p>
 <p>Another interesting method is to let one or multiple agents debate about the correct action. This can be done by having a single agent that generates multiple arguments for and against each action and then selects the best one, or by having multiple agents that each generate an argument. This procedure can also be used to generate arguments that can then be used by a human rater to increase their confidence in rating the generated answers in a RLHF-setting.</p>
 <p><span class="citation" data-cites="duImprovingFactualityReasoning2023">Du et al. (<a href="#ref-duImprovingFactualityReasoning2023" role="doc-biblioref">2023</a>)</span> used a multi-agent approach to improve a LLMs mathematical and strategic reasoning. Their approach is composed of the following steps:</p>
 <ol type="1">

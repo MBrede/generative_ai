@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Agent interactions – Generative AI</title>
+<title>LLM pipelines – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,7 +104,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">Agent interactions</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">LLM pipelines</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -193,7 +193,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agent interactions</span></a>
+  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">LLM pipelines</span></a>
   </div>
 </li>
       </ul>
@@ -252,22 +252,24 @@ div.csl-indent {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
-    <h2 id="toc-title"><img src="../imgs/llm_as_a_judge.png" class="img-fluid" width="240"><br><br>
+    <h2 id="toc-title"><img src="../imgs/llm-pipeline.jpg" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
-Agent interaction<br>
+LLM pipelines<br>
 </h3>
    
   <ul>
-  <li><a href="#llm-as-a-judge" id="toc-llm-as-a-judge" class="nav-link active" data-scroll-target="#llm-as-a-judge">LLM as a judge</a></li>
-  <li><a href="#a-basic-multi-agent-system" id="toc-a-basic-multi-agent-system" class="nav-link" data-scroll-target="#a-basic-multi-agent-system">A basic multi-agent system</a>
+  <li><a href="#pipelines-vs.-agents" id="toc-pipelines-vs.-agents" class="nav-link active" data-scroll-target="#pipelines-vs.-agents">Pipelines vs.&nbsp;agents</a></li>
+  <li><a href="#llm-as-a-judge" id="toc-llm-as-a-judge" class="nav-link" data-scroll-target="#llm-as-a-judge">LLM as a judge</a></li>
+  <li><a href="#a-basic-pipeline" id="toc-a-basic-pipeline" class="nav-link" data-scroll-target="#a-basic-pipeline">A basic pipeline</a>
   <ul class="collapse">
   <li><a href="#generator" id="toc-generator" class="nav-link" data-scroll-target="#generator">Generator</a></li>
   <li><a href="#reviewer" id="toc-reviewer" class="nav-link" data-scroll-target="#reviewer">Reviewer</a></li>
   <li><a href="#editor" id="toc-editor" class="nav-link" data-scroll-target="#editor">Editor</a></li>
-  <li><a href="#orchestrator" id="toc-orchestrator" class="nav-link" data-scroll-target="#orchestrator">Orchestrator</a></li>
-  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow">Workflow</a></li>
+  <li><a href="#full-pipeline" id="toc-full-pipeline" class="nav-link" data-scroll-target="#full-pipeline">Full pipeline</a></li>
+  <li><a href="#orchestrator-agent" id="toc-orchestrator-agent" class="nav-link" data-scroll-target="#orchestrator-agent">Orchestrator agent</a></li>
+  <li><a href="#agent-workflow" id="toc-agent-workflow" class="nav-link" data-scroll-target="#agent-workflow">Agent workflow</a></li>
   </ul></li>
-  <li><a href="#sec-constitutional-ai-tuning" id="toc-sec-constitutional-ai-tuning" class="nav-link" data-scroll-target="#sec-constitutional-ai-tuning">Constitutional AI Tuning</a></li>
+  <li><a href="#project-work" id="toc-project-work" class="nav-link" data-scroll-target="#project-work">Project work</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -276,9 +278,9 @@ Agent interaction<br>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">Agent interactions</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">LLM pipelines</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Agent interactions</span></h1>
+<h1 class="title"><span class="chapter-title">LLM pipelines</span></h1>
 </div>
 
 
@@ -295,10 +297,36 @@ Agent interaction<br>
 </header>
 
 
-<p>In this chapter, we want to introduce multi agent systems. As a starting point, we will talk about LLM as a judge.</p>
+<section id="pipelines-vs.-agents" class="level2">
+<h2 class="anchored" data-anchor-id="pipelines-vs.-agents">Pipelines vs.&nbsp;agents</h2>
+<p>As already mentioned, an agent is defined by its ability to make decisions. This means the agent decides if and what tool to use or not to use. One potential problem with this is that, a lot of the time, the LLM may decide not to use any tool. This is especially true for retrieval augmented generation (RAG) tasks, where looking up the answer in a document store is not really optional, but the whole reason to have the system in the first place.</p>
+<p>At other times, the workflow may just not be complex enough to warrant the additional complexity of using agents in your application. When you find yourself having a workflow where you basically iterate through a number of steps in always the same order, you may skip the agent altogether and just hardcode a series of LLM calls instead. This is called an LLM pipeline.</p>
+<p>But before we get to pipelines, we want to introduce a concept, which is widely used in a lot of LLM-based systems.</p>
+</section>
 <section id="llm-as-a-judge" class="level2">
 <h2 class="anchored" data-anchor-id="llm-as-a-judge">LLM as a judge</h2>
-<p>Before we introduce the concept proper, let us first describe the problem it tries to solve:</p>
+<p>The basic idea is to use a an LLM to criticize (to judge) a text snippet. To understand why this would be useful, please do the following task:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Open a notebook and connect it with a local LLM using LM Studio (or other).</li>
+<li>Ask it to generate a story containing fried eggs on a sunrise.</li>
+<li>How good is the story? Do you like it? What is good and what is not so good? How did you come to this conclusion?</li>
+<li>Now generate 100 such stories. Dial up the temperature so you do not get the same story every time.</li>
+<li>Repeat step 3 for all of the 100 stories…</li>
+</ol>
+</div>
+</div>
+<p>… or don’t.</p>
+<p>Based on our experience, we can formulate a problem description.</p>
 <ol type="1">
 <li>We generate text (be it natural language or structured output) using LLMs.</li>
 <li>The generated text is not always correct or appropriate for our use case.</li>
@@ -308,11 +336,11 @@ Agent interaction<br>
 </ol>
 <p>The solution to this problem is, of course, to use an LLM to read and evaluate the text. This is only fair and proper, since it was an LLM that generated the text in the first place. The generated evaluation can then be used</p>
 <ul>
-<li>to decide whether to accept or reject the generated text.</li>
-<li>to improve the model itself (e.g., for fine-tuning it on the generated text and its evaluation).</li>
-<li>to get an LLM to improve the text based on the evaluation.</li>
+<li>to decide whether to accept or reject the generated text. This is the most basic form of judgement.</li>
+<li>to improve the model itself e.g., for fine-tuning it on the generated text and its evaluation. This was used in fine tuning the “Claude” model family by anthropic <span class="citation" data-cites="ConstitutionalAIHarmlessness">(<a href="#ref-ConstitutionalAIHarmlessness" role="doc-biblioref"><em>Constitutional <span>AI</span></em>, n.d.</a>)</span></li>
+<li>to get an LLM to improve the text based on the evaluation. This is used in a variety of frameworks, e.g.&nbsp;textgrad <span class="citation" data-cites="yuksekgonulTextGradAutomaticDifferentiation2024">(<a href="#ref-yuksekgonulTextGradAutomaticDifferentiation2024" role="doc-biblioref">Yuksekgonul et al., 2024</a>)</span>.</li>
 </ul>
-<p>This approach is called LLM as a judge. It is a system that uses several calls to one or several LLMs to solve a problem. As such, it can be implemented as a multi-agent system.</p>
+<p>This approach is called LLM as a judge. It is an example of a system that uses several calls to one or several LLMs to solve a problem.</p>
 <p>This approach has a number of benefits as well as drawbacks.</p>
 <ul>
 <li>Benefits:
@@ -326,22 +354,23 @@ Agent interaction<br>
 <li>Drawbacks:
 <ul>
 <li>The evaluation can be very expensive, since it requires several calls to the LLM.</li>
-<li>The evaluation can be biased, since it is based on the LLMs’ own evaluation of itself. Indeed many LLMs tend to like their own creations.</li>
+<li>The evaluation can be biased, especially when it is evaluating its own text. Indeed many LLMs tend to like their own creations.</li>
 <li>The evaluation can be subjective, since it is based on the LLMs’ interpretation of the prompt.</li>
 <li>The evaluation can be misleading, since it is based on the LLMs’ interpretation of the generated text, which may not be the same as the human interpretation. For example, many LLMs seem to prefer long answers over shorter ones.</li>
 </ul></li>
 </ul>
 </section>
-<section id="a-basic-multi-agent-system" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="a-basic-multi-agent-system">A basic multi-agent system</h2>
-<!-- TODO: add informative diagrams -->
-<p>Let us now look at a simple example of a multi-agent system. We will use the following scenario: We want to generate Anki flashcards from text.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The following is loosely based on <span class="citation" data-cites="BuildingMultiAgentFramework2024"><span>“Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>”</span> (<a href="#ref-BuildingMultiAgentFramework2024" role="doc-biblioref">2024</a>)</span>, though I took the liberty to streamline and simplify the code a bit.</p></div></div><p>To do this, we will build a multi-agent system that consists of three agents:</p>
-<ol type="1">
-<li>An Anki card generator that generates Anki flashcards from the extracted text.</li>
+<section id="a-basic-pipeline" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="a-basic-pipeline">A basic pipeline</h2>
+<p>Let us now look at a simple example of such a system. We will use the following scenario: We want to generate Anki flashcards from text.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct):</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The following is loosely based on <span class="citation" data-cites="BuildingMultiAgentFramework2024"><span>“Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>”</span> (<a href="#ref-BuildingMultiAgentFramework2024" role="doc-biblioref">2024</a>)</span>, though I took the liberty to streamline and simplify it a bit. </p></div></div><ol type="1">
+<li>An Anki card generator that generates Anki flashcards from a text.</li>
 <li>A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.</li>
 <li>An Editor, that generates a new set of Anki flashcards based on the reviewer’s feedback.</li>
-<li>An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop.</li>
+</ol>
+<p>Optionally, when building an agent system, not a pipeline, there is also</p>
+<ol start="4" type="1">
+<li>An Orchestrator , that serves as the decision maker, managing the other agents and deciding when to stop.</li>
 </ol>
 <p>We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation.</p>
 <!-- 
@@ -353,6 +382,7 @@ Let us first define the cards. We will use pydantic for that. A card consists of
     extra: str -->
 <section id="generator" class="level3">
 <h3 class="anchored" data-anchor-id="generator">Generator</h3>
+<p><img src="../imgs/pipe_gen.png" class="img-fluid"></p>
 <p>Let us first implement the Anki card generator. It will take a text as input and return a card. A system prompt for the generator could look like this:</p>
 <pre><code>You are an educational content creator specializing in Anki flashcard generation.
 Your task is to create one clear, concise flashcards following these guidelines:
@@ -369,7 +399,7 @@ Format the card as:
     &lt;answer&gt;Your answer here&lt;/answer&gt;
     &lt;extra&gt;Additional context, examples, or explanations&lt;/extra&gt;
 &lt;/card&gt;</code></pre>
-<p>We will use llamaindex to implement the generator.</p>
+<p>Instead of the complicated formatting above, you can simply use a pydantic class, of course.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -380,10 +410,9 @@ Format the card as:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You can do it!</p>
+<p>Your turn!</p>
 <ol type="1">
-<li><p>Open a notebook and connect it with a local LLM using LM Studio.</p></li>
-<li><p>Initialize a generator agent without any tools. Do not use the ReAct agent this time, a simpler OpenAIAgent will do.</p></li>
+<li><p>In your notebook, implement a card generator. You can use a simple wrapper around an LLM call or use one of the agent frameworks to implement it as an agent with no tools.</p></li>
 <li><p>Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.</p></li>
 <li><p>Let it generate cards from the text below.</p>
 <p>LLM-as-a-Judge is an evaluation method to assess the quality of text outputs from any LLM-powered product, including chatbots, Q&amp;A systems, or agents. It uses a large language model (LLM) with an evaluation prompt to rate generated text based on criteria you define.</p></li>
@@ -394,6 +423,7 @@ Format the card as:
 </section>
 <section id="reviewer" class="level3">
 <h3 class="anchored" data-anchor-id="reviewer">Reviewer</h3>
+<p><img src="../imgs/pipe_rev.png" class="img-fluid"></p>
 <p>Let us now implement the reviewer. It will take a card as input and return feedback on how to improve it. A system prompt for the reviewer could look like this:</p>
 <pre><code>You are an expert in educational content creation, specializing in Anki flashcard generation.
 You are the Reviewer agent. Your task is to review an Anki flashcard based on the following rules:
@@ -434,7 +464,8 @@ Please give brief and concise feedback to the card you received in natural langu
 </section>
 <section id="editor" class="level3">
 <h3 class="anchored" data-anchor-id="editor">Editor</h3>
-<p>Let us now implement the Editor agent. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the second generator could look like this:</p>
+<p><img src="../imgs/pipe_ed.png" class="img-fluid"></p>
+<p>Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the second generator could look like this:</p>
 <pre><code>You are an expert in educational content creation, specializing in Anki flashcard generation.
 You are the Editor agent. Your task is to generate a new Anki flashcard based on the original card and the feedback you received from the Reviewer.
 Follow these guidelines:
@@ -463,7 +494,7 @@ Follow these guidelines:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You have been edited!</p>
+<p>Time to improve!</p>
 <ol type="1">
 <li>In the same notebook, initialize the editor as well.</li>
 <li>Let the editor generate new cards based on the feedback from the reviewer.</li>
@@ -472,8 +503,50 @@ Follow these guidelines:
 </div>
 </div>
 </section>
-<section id="orchestrator" class="level3">
-<h3 class="anchored" data-anchor-id="orchestrator">Orchestrator</h3>
+<section id="full-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="full-pipeline">Full pipeline</h3>
+<p>We now basically have a working LLM pipeline.</p>
+<p><img src="../imgs/pipe_simple.png" class="img-fluid"></p>
+<p>A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. In pseudocode, this could look like this:</p>
+<pre><code># Pseudocode
+initialize:
+    Generator
+    Reviewer
+    Editor
+
+card = Generator.generate(input text)
+
+# now the loop
+while n &lt; max_iter:  # define maximum number of review steps
+    n += 1
+    review = Reviewer.review(card)
+    if review is positive:  # this has to be defined
+        stop
+    else:
+        card = Editor.edit(card, review)
+return card</code></pre>
+<p>For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance prompt ot to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Build it!</p>
+<ol type="1">
+<li>Think of a way to stop the review process once the card is good enough.</li>
+<li>Implement the loop.</li>
+</ol>
+<p>This is the minimum goal for today, so when you are done, you can upload to moodle. Alternatively, go on and implement the agent (see below) as well!</p>
+</div>
+</div>
+</section>
+<section id="orchestrator-agent" class="level3">
+<h3 class="anchored" data-anchor-id="orchestrator-agent">Orchestrator agent</h3>
 <p>While we’re at it, we can implement the orchestrator as well. Let us think for a moment what the orchestrators job should be. Its task should be decision making. That is, it’s the orchestrators job to decide which of the other agents to call next. It is also responsible for deciding whether the job is finished or not, i.e.&nbsp;whether to call any more agents. In terms of input and output, the orchestrator should get a current state of affairs along with the current chat history and output a decision. So the output can be one of the other agents or a stop signal.</p>
 <p>An example prompt for our case would be:</p>
 <pre><code>You are the Orchestrator agent. Your task is to coordinate the interaction between all agents to create high-quality flashcards.
@@ -491,8 +564,8 @@ Decision Guidelines:
 
 Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END")</code></pre>
 </section>
-<section id="workflow" class="level3">
-<h3 class="anchored" data-anchor-id="workflow">Workflow</h3>
+<section id="agent-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="agent-workflow">Agent workflow</h3>
 <p>Now, all we have to do is integrate our agents into a pipeline. The basic idea is to call the orchestrator at each step and let it decide which agent to call next or wether to stop. For this, the agent will need an understanding of the basic state of affairs and the past interaction. This is easily implemented like this:</p>
 <pre><code>state = {
     "input_text": text,
@@ -547,41 +620,35 @@ return state</code></pre>
 </ul>
 </section>
 </section>
-<section id="sec-constitutional-ai-tuning" class="level2">
-<h2 class="anchored" data-anchor-id="sec-constitutional-ai-tuning">Constitutional AI Tuning</h2>
-<p>One application of a multi-agent system is Constitutional AI.</p>
-<p>Constitutional AI <span class="citation" data-cites="ConstitutionalAIOpen">(<a href="#ref-ConstitutionalAIOpen" role="doc-biblioref"><em>Constitutional <span>AI</span> with <span>Open LLMs</span></em>, n.d.</a>)</span> is a method for fine-tuning language models that allows us to specify constraints and rules that the model should follow. It is based on the idea of a “constitution” that specifies the rights and duties of the model. The constitution is then used to guide the model’s behavior during training and inference. This is done by adding an additional loss term to the training objective that penalizes the model for violating the constitution. The constitution can be specified in a variety of ways, including natural language, formal logic, or programmatic code.</p>
-<p>Constitutional AI has been used to improve the safety and reliability of language models in a variety of applications, including chatbots, question-answering systems, and text generation. It has also been used to improve the fairness and transparency of language models by specifying constraints on the types of information that they can access or generate.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/CAI_illustration.png" class="img-fluid figure-img"></p>
-<figcaption>Illustration of the CAI training process (from <span class="citation" data-cites="ConstitutionalAIOpen"><em>Constitutional <span>AI</span> with <span>Open LLMs</span></em> (<a href="#ref-ConstitutionalAIOpen" role="doc-biblioref">n.d.</a>)</span>)</figcaption>
-</figure>
+<section id="project-work" class="level2">
+<h2 class="anchored" data-anchor-id="project-work">Project work</h2>
+<p>Time to work on your projects!</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p>The basic idea is to define a “Constitution” that specifies the rules and constraints that the model should follow. These could be rules like</p>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ol type="1">
-<li>The model should not generate harmful or inappropriate content,</li>
-<li>The model should not engage in offensive or derogatory behavior,</li>
-<li>The model should not disclose sensitive information about users without their consent, etc.</li>
+<li>Discuss a topic for your project.</li>
+<li>Set up the repository</li>
+<li>Plan the project</li>
+<li>Start collecting data or finding a data set</li>
+<li>Start implementing</li>
 </ol>
-<p>The way it works is as follows:</p>
-<ol type="1">
-<li>A malicious user sends a prompt to the model. The prompt may be designed to elicit harmful or inappropriate behavior from the model, such as “how can I build a bomb?”. The model, being a helpful AI agent, generates a response that violates its constitution. For example, it might provide instructions for building a bomb.</li>
-<li>The model is asked if its answer violates the constrains defined in its constitution. In our case, we might conclude that bomb building instructions can indeed lead to harm and thus violate the constitution.</li>
-<li>The model is asked to revise its answer based on the constitution. In this case, it might generate a response like “I’m sorry, but I cannot assist with that request as it goes against my programming.” While we could stop here and use the revised response as our final output, we can also take this one step further:</li>
-<li>Create a training set from the original prompt, the original answer, the constitution, and the revised answer. This training example can then be used to fine-tune the model so that it learns to avoid violating the constitution in the future.</li>
-</ol>
-<p>This technique was used, for example, in the training of the “Claude” model <span class="citation" data-cites="ConstitutionalAIHarmlessness">(<a href="#ref-ConstitutionalAIHarmlessness" role="doc-biblioref"><em>Constitutional <span>AI</span></em>, n.d.</a>)</span>.</p>
-<!-- 
-## Preventing prompt injections 
-we will save this for another time. I don't know anything about it anyway...-->
+<p>Happy coding!</p>
+</div>
+</div>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=ewLMYLCWvcI">Here</a> is a video describing other multi-agent systems, including an <a href="https://arxiv.org/abs/2405.02957">agent hospital</a> and a <a href="https://arxiv.org/html/2405.11804v1">multi-agent translator</a></li>
 </ul>
-<!-- That's it! There isn't any more to say about this. I'm done. -->
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
@@ -591,11 +658,11 @@ we will save this for another time. I don't know anything about it anyway...-->
 <div id="ref-BuildingMultiAgentFramework2024" class="csl-entry" role="listitem">
 Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>. (2024). In <em>DEV Community</em>. https://dev.to/yukooshima/building-a-multi-agent-framework-from-scratch-with-llamaindex-5ecn.
 </div>
-<div id="ref-ConstitutionalAIOpen" class="csl-entry" role="listitem">
-<em>Constitutional <span>AI</span> with <span>Open LLMs</span></em>. (n.d.). https://huggingface.co/blog/constitutional_ai.
-</div>
 <div id="ref-ConstitutionalAIHarmlessness" class="csl-entry" role="listitem">
 <em>Constitutional <span>AI</span>: <span>Harmlessness</span> from <span>AI Feedback</span></em>. (n.d.). https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback.
+</div>
+<div id="ref-yuksekgonulTextGradAutomaticDifferentiation2024" class="csl-entry" role="listitem">
+Yuksekgonul, M., Bianchi, F., Boen, J., Liu, S., Huang, Z., Guestrin, C., &amp; Zou, J. (2024, June 11). <em><span>TextGrad</span>: <span>Automatic</span> "<span>Differentiation</span>" via <span>Text</span></em>. <a href="https://doi.org/10.48550/arXiv.2406.07496">https://doi.org/10.48550/arXiv.2406.07496</a>
 </div>
 </div>
 </section>
