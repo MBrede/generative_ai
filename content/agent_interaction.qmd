@@ -4,6 +4,7 @@ toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>LLM pipelines</h3
 
 # LLM pipelines
 
+<!-- ToDo: add something about pipeline frameworks, haystack, langchain, llamaindex (deprecated) -->
 
 ## Pipelines vs. agents
 
@@ -11,8 +12,7 @@ As already mentioned, an agent is defined by its ability to make decisions. This
 
 At other times, the workflow may just not be complex enough to warrant the additional complexity of using agents in your application. When you find yourself having a workflow where you basically iterate through a number of steps in always the same order, you may skip the agent altogether and just hardcode a series of LLM calls instead. This is called an LLM pipeline. 
 
-
-But before we get to pipelines, we want to introduce a concept, which is widely used in a lot of LLM-based systems. 
+We will discuss an example pipeline and the difference to agent systems in detail below. But before we get to this, we want to introduce a concept, which is widely used in a lot of LLM-based systems. 
 
 ## LLM as a judge
 
@@ -66,7 +66,7 @@ This approach has a number of benefits as well as drawbacks.
 ## A basic pipeline
 
 Let us now look at a simple example of such a system. We will use the following scenario: We want to generate Anki flashcards from text.^[The following is loosely based on @BuildingMultiAgentFramework2024, though I took the liberty to streamline and simplify it a bit. ]
-To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct): 
+To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct). Later, we will expand it to a full agentic system to illustrate the differences between the two concepts. The Agents we will use here are:
 
 1. An Anki card generator that generates Anki flashcards from a text.
 2. A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.
@@ -74,7 +74,7 @@ To do this, we will build a system that consists of a series of specialized LLM 
 
 Optionally, when building an agent system, not a pipeline, there is also 
 
-4. An Orchestrator , that serves as the decision maker, managing the other agents and deciding when to stop. 
+4. An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop. 
 
 We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation. 
 
@@ -90,7 +90,7 @@ Let us first define the cards. We will use pydantic for that. A card consists of
 
 ![](../imgs/pipe_gen.png)
 
-Let us first implement the Anki card generator. It will take a text as input and return a card. A system prompt for the generator could look like this:
+Let us first implement the Anki card generator. It will take text as input and return a card. A system prompt for the generator could look like this:
 
     You are an educational content creator specializing in Anki flashcard generation.
     Your task is to create one clear, concise flashcards following these guidelines:
@@ -118,7 +118,7 @@ Your turn!
 
 1. In your notebook, implement a card generator. You can use a simple wrapper around an LLM call or use one of the agent frameworks to implement it as an agent with no tools. 
 2. Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.
-3. Let it generate cards from the text below.
+3. Let it generate cards from the text below (or any other text of your choice).
 
     LLM-as-a-Judge is an evaluation method to assess the quality of text outputs from any LLM-powered product, including chatbots, Q&A systems, or agents.
     It uses a large language model (LLM) with an evaluation prompt to rate generated text based on criteria you define.
@@ -147,7 +147,7 @@ Your turn!
         - Detailed explanations
         - Examples
         - Context
-    5. information should not be repeated, i.e. the extra information should not repeat the answer. 
+    5. Information should not be repeated, i.e. the extra information should not repeat the answer. 
    
     Please give brief and concise feedback to the card you received in natural language. 
 
@@ -165,7 +165,7 @@ Let's build us a very judgemental robot!
 
 ![](../imgs/pipe_ed.png)
 
-Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the second generator could look like this:
+Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the editor could look like this:
 
     You are an expert in educational content creation, specializing in Anki flashcard generation.
     You are the Editor agent. Your task is to generate a new Anki flashcard based on the original card and the feedback you received from the Reviewer.
@@ -222,7 +222,7 @@ A good next step would be to add a loop around the review process, so that it on
             card = Editor.edit(card, review)
     return card
 
-For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance prompt ot to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!
+For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance, prompt the reviewer to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!
 
 ::: {.callout-note}
 ## 📝 Task
@@ -232,7 +232,7 @@ Build it!
 1. Think of a way to stop the review process once the card is good enough. 
 2. Implement the loop. 
 
-This is the minimum goal for today, so when you are done, you can upload to moodle. Alternatively, go on and implement the agent (see below) as well!
+This is the minimum goal for today, so when you are done, you can upload your notebook to moodle. Alternatively, go on and implement the agent (see below) as well!
 
 :::
 
