@@ -297,11 +297,12 @@ LLM pipelines<br>
 </header>
 
 
+<!-- ToDo: add something about pipeline frameworks, haystack, langchain, llamaindex (deprecated) -->
 <section id="pipelines-vs.-agents" class="level2">
 <h2 class="anchored" data-anchor-id="pipelines-vs.-agents">Pipelines vs.&nbsp;agents</h2>
 <p>As already mentioned, an agent is defined by its ability to make decisions. This means the agent decides if and what tool to use or not to use. One potential problem with this is that, a lot of the time, the LLM may decide not to use any tool. This is especially true for retrieval augmented generation (RAG) tasks, where looking up the answer in a document store is not really optional, but the whole reason to have the system in the first place.</p>
 <p>At other times, the workflow may just not be complex enough to warrant the additional complexity of using agents in your application. When you find yourself having a workflow where you basically iterate through a number of steps in always the same order, you may skip the agent altogether and just hardcode a series of LLM calls instead. This is called an LLM pipeline.</p>
-<p>But before we get to pipelines, we want to introduce a concept, which is widely used in a lot of LLM-based systems.</p>
+<p>We will discuss an example pipeline and the difference to agent systems in detail below. But before we get to this, we want to introduce a concept, which is widely used in a lot of LLM-based systems.</p>
 </section>
 <section id="llm-as-a-judge" class="level2">
 <h2 class="anchored" data-anchor-id="llm-as-a-judge">LLM as a judge</h2>
@@ -362,7 +363,7 @@ LLM pipelines<br>
 </section>
 <section id="a-basic-pipeline" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="a-basic-pipeline">A basic pipeline</h2>
-<p>Let us now look at a simple example of such a system. We will use the following scenario: We want to generate Anki flashcards from text.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct):</p>
+<p>Let us now look at a simple example of such a system. We will use the following scenario: We want to generate Anki flashcards from text.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct). Later, we will expand it to a full agentic system to illustrate the differences between the two concepts. The Agents we will use here are:</p>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The following is loosely based on <span class="citation" data-cites="BuildingMultiAgentFramework2024"><span>“Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>”</span> (<a href="#ref-BuildingMultiAgentFramework2024" role="doc-biblioref">2024</a>)</span>, though I took the liberty to streamline and simplify it a bit. </p></div></div><ol type="1">
 <li>An Anki card generator that generates Anki flashcards from a text.</li>
 <li>A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.</li>
@@ -370,7 +371,7 @@ LLM pipelines<br>
 </ol>
 <p>Optionally, when building an agent system, not a pipeline, there is also</p>
 <ol start="4" type="1">
-<li>An Orchestrator , that serves as the decision maker, managing the other agents and deciding when to stop.</li>
+<li>An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop.</li>
 </ol>
 <p>We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation.</p>
 <!-- 
@@ -383,7 +384,7 @@ Let us first define the cards. We will use pydantic for that. A card consists of
 <section id="generator" class="level3">
 <h3 class="anchored" data-anchor-id="generator">Generator</h3>
 <p><img src="../imgs/pipe_gen.png" class="img-fluid"></p>
-<p>Let us first implement the Anki card generator. It will take a text as input and return a card. A system prompt for the generator could look like this:</p>
+<p>Let us first implement the Anki card generator. It will take text as input and return a card. A system prompt for the generator could look like this:</p>
 <pre><code>You are an educational content creator specializing in Anki flashcard generation.
 Your task is to create one clear, concise flashcards following these guidelines:
 
@@ -414,7 +415,7 @@ Format the card as:
 <ol type="1">
 <li><p>In your notebook, implement a card generator. You can use a simple wrapper around an LLM call or use one of the agent frameworks to implement it as an agent with no tools.</p></li>
 <li><p>Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.</p></li>
-<li><p>Let it generate cards from the text below.</p>
+<li><p>Let it generate cards from the text below (or any other text of your choice).</p>
 <p>LLM-as-a-Judge is an evaluation method to assess the quality of text outputs from any LLM-powered product, including chatbots, Q&amp;A systems, or agents. It uses a large language model (LLM) with an evaluation prompt to rate generated text based on criteria you define.</p></li>
 <li><p>Evaluate the results.</p></li>
 </ol>
@@ -440,7 +441,7 @@ You are the Reviewer agent. Your task is to review an Anki flashcard based on th
     - Detailed explanations
     - Examples
     - Context
-5. information should not be repeated, i.e. the extra information should not repeat the answer. 
+5. Information should not be repeated, i.e. the extra information should not repeat the answer. 
 
 Please give brief and concise feedback to the card you received in natural language. </code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -465,7 +466,7 @@ Please give brief and concise feedback to the card you received in natural langu
 <section id="editor" class="level3">
 <h3 class="anchored" data-anchor-id="editor">Editor</h3>
 <p><img src="../imgs/pipe_ed.png" class="img-fluid"></p>
-<p>Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the second generator could look like this:</p>
+<p>Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the editor could look like this:</p>
 <pre><code>You are an expert in educational content creation, specializing in Anki flashcard generation.
 You are the Editor agent. Your task is to generate a new Anki flashcard based on the original card and the feedback you received from the Reviewer.
 Follow these guidelines:
@@ -525,7 +526,7 @@ while n &lt; max_iter:  # define maximum number of review steps
     else:
         card = Editor.edit(card, review)
 return card</code></pre>
-<p>For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance prompt ot to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!</p>
+<p>For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance, prompt the reviewer to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -541,7 +542,7 @@ return card</code></pre>
 <li>Think of a way to stop the review process once the card is good enough.</li>
 <li>Implement the loop.</li>
 </ol>
-<p>This is the minimum goal for today, so when you are done, you can upload to moodle. Alternatively, go on and implement the agent (see below) as well!</p>
+<p>This is the minimum goal for today, so when you are done, you can upload your notebook to moodle. Alternatively, go on and implement the agent (see below) as well!</p>
 </div>
 </div>
 </section>
