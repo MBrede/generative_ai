@@ -1,0 +1,12 @@
+---
+toc-title: '![](../imgs/img_gen_pipeline.png){width=240px}<br> <h3>Additional content</h3>'
+---
+
+# Additional content (tbd)
+
+In last years course, we covered mostly GANs here. However, while they are a lot of fun, they appear to be mostly obsolete now. I am thinking of preparing a different lecture instead. For this, I want to hear your opinion. There are basically three options:
+
+- **Generative Advisary Networks (GANs):** As mentioned, GANs are mostly obsolete now, but are an interesting and fun approach.
+- **Model Context Protocol (MCP):** An open protocol by Anthropic for function calling. This should make integrating of function calling easier for LLM-based applications. 
+- **Automatic data analysis:** Use LLMs to first generate a hypothesis about a data set, then to decide on which analysis-steps are to be taken to test it and finally to generate pandas calls to test it. 
+
