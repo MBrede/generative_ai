@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>AI image generation III – Generative AI</title>
+<title>AI image generation pipelines – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/finetuning_approaches.html" rel="next">
-<link href="../content/gans_and_augmentation.html" rel="prev">
+<link href="../content/tbd_slide.html" rel="next">
+<link href="../content/diff_models.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/generation_in_agent_pipelines.html"><span class="chapter-title">AI image generation III</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/generation_in_agent_pipelines.html"><span class="chapter-title">AI image generation pipelines</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -194,12 +194,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/gans_and_augmentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI image generation II</span></a>
+  <a href="../content/generation_in_agent_pipelines.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">AI image generation pipelines</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/generation_in_agent_pipelines.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">AI image generation III</span></a>
+  <a href="../content/tbd_slide.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Additional content (tbd)</span></a>
   </div>
 </li>
       </ul>
@@ -252,9 +252,9 @@ AI image generation pipelines<br>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/generation_in_agent_pipelines.html"><span class="chapter-title">AI image generation III</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/diff_models.html">Image Generation</a></li><li class="breadcrumb-item"><a href="../content/generation_in_agent_pipelines.html"><span class="chapter-title">AI image generation pipelines</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">AI image generation III</span></h1>
+<h1 class="title"><span class="chapter-title">AI image generation pipelines</span></h1>
 </div>
 
 
@@ -274,8 +274,8 @@ AI image generation pipelines<br>
 <section id="basics-of-using-open-source-ai-image-generation-models" class="level2">
 <h2 class="anchored" data-anchor-id="basics-of-using-open-source-ai-image-generation-models">Basics of using Open Source AI image generation models</h2>
 <!-- - AUTOMATIC1111 -->
-<p>One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. We will cover finetuning next time. This time we want to focus on using image generation models locally.</p>
-<p>For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2024. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111’s Stable Diffusion web UI</a>.</p>
+<p>One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. It is, therefore, good to have access to pre-trained image generation models. Today, we want to focus on using image generation models locally and how to integrate them into pipelines.</p>
+<p>For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2025. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111’s Stable Diffusion web UI</a>.</p>
 <p><!-- Let us use this tool to see how we can run an AI image generator on our laptops, using the open source model [SDXL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) from StabilityAI. This is a very short summary of the features of AUTOMATIC1111's web UI, which we will use in this article for running an AI image generator on our laptops:   --></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -294,6 +294,7 @@ AI image generation pipelines<br>
 <li>Start generating images.🎉</li>
 <li>Change some of the settings and see what happens.</li>
 <li>What does the <code>Sampling steps</code> parameter do?</li>
+<li>Also check out the <code>img2img</code> function.</li>
 </ul>
 </div>
 </div>
@@ -319,21 +320,23 @@ AI image generation pipelines<br>
 </section>
 <section id="ai-image-generators-in-agent-systems-or-pipelines" class="level2">
 <h2 class="anchored" data-anchor-id="ai-image-generators-in-agent-systems-or-pipelines">AI image generators in agent systems or pipelines</h2>
-<p>In this section we want to explore the use of AI image generators as components in an agent system or a pipeline. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).</p>
-<p>We covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will:</p>
+<p>In this section we want to explore the use of AI image generators as components in agent systems or LLM pipelines. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).</p>
+<!-- We covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will: -->
+<p>So, we want to build a pipeline that</p>
 <ul>
-<li>generate or retrieve a text based on some input keywords.</li>
-<li>use this text as context for generating an image generation prompt.</li>
-<li>generate an image from the prompt.</li>
-<li>implement quality assurance by comparing the original text embedding with the generated image embedding.</li>
+<li>generates or retrieves some text based on some input keywords.</li>
+<li>uses this text as context for generating an image generation prompt.</li>
+<li>generates an image from the prompt.</li>
+<li>does some kind of quality assurance by comparing the original text embedding with the generated image embedding.</li>
 </ul>
+<p>Note, that comparing the embeddings of the generated image with the input text may not be the best way of judging image quality.</p>
 <p>Most agent frameworks we already introduced support building pipelines in addition to agents. See for example <a href="https://docs.llamaindex.ai/en/stable/examples/pipeline/query_pipeline/">this tutorial</a> on how to implement query pipelines in llamaindex or <a href="https://docs.haystack.deepset.ai/docs/pipelines">this documentation</a> for pipelines in haystack. To get a full understanding of the basic principles, it is most educational to implement a pipeline from scratch.</p>
 <section id="text-generation-or-retrieval" class="level3">
 <h3 class="anchored" data-anchor-id="text-generation-or-retrieval">Text generation or retrieval</h3>
 <p>The pipeline we are about to build starts with some input given by the user. In previous chapters we covered several ways of doing this. You could:</p>
 <ul>
 <li>use a local LLM to generate the text for you.</li>
-<li>use a retrieval function from a vector store or other text database.</li>
+<li>use a retrieval function from a vector store or other text database (e.g.&nbsp;wikipedia API).</li>
 <li>combine both approaches in a RAG system.</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -349,14 +352,14 @@ AI image generation pipelines<br>
 <p>Let’s get started!</p>
 <ul>
 <li>Open a notebook and implement a simple text generation or retrieval function.</li>
-<li>Get a text from an input.</li>
+<li>Get some text from an input.</li>
 </ul>
 </div>
 </div>
 </section>
 <section id="image-generation" class="level3">
 <h3 class="anchored" data-anchor-id="image-generation">Image generation</h3>
-<p>The next step is to to generate an images that fits the text. While we could just send the full text to the image generator and let it do its thing, a better approach is to generate a special prompt for the image generator. This prompt is then used to generate an image.</p>
+<p>The next step is to to generate an image that fits the text. While we could just send the full text to the image generator and let it do its thing, a better approach is to generate a special prompt for the image generator. This prompt is then used to generate the image.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -368,7 +371,7 @@ AI image generation pipelines<br>
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>In your notebook, implement a call to an LLM that generates in image generation prompt from your text.</li>
+<li>In your notebook, implement a call to an LLM that generates an image generation prompt from your text.</li>
 <li>Also implement a call to an image generator.</li>
 <li>Connect to an LLM (if not already done so) and to an image generation model.</li>
 <li>Generate an image for your text.</li>
@@ -379,7 +382,7 @@ AI image generation pipelines<br>
 <section id="quality-assurance" class="level3">
 <h3 class="anchored" data-anchor-id="quality-assurance">Quality assurance</h3>
 <p>Now that we have the image, we want to assure that it fits the text. There are several ways of doing this. We could, for instance, evaluate text and images manually (or, rather, by eyeballing it). This works well for small amounts of images. However, it is not scalable for larger amounts.</p>
-<p>One way of automating the examination is to check, if the image matches the text semantically, i.e.&nbsp;in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g.&nbsp;cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. On both cases, we need a predefined criterion, i.e.&nbsp;a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one.</p>
+<p>One way of automating the examination is to check if the image matches the text semantically, i.e.&nbsp;in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g.&nbsp;cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. In both cases, we need a predefined criterion, i.e.&nbsp;a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -394,15 +397,16 @@ AI image generation pipelines<br>
 <ul>
 <li>In your notebook, implement a function that displays text and image for manual inspection.</li>
 <li>Implement an automated similarity rater for text and images. You can use <a href="https://github.com/openai/CLIP">CLIP</a> for that task.</li>
+<li>Think of another way to automate quality insurance on the generated images.</li>
 </ul>
 </div>
 </div>
 </section>
 <section id="pipeline" class="level3">
 <h3 class="anchored" data-anchor-id="pipeline">Pipeline</h3>
-<p>Finally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. this is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined matching criterion is matched.</p>
+<p>Finally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. This is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined criterion is matched.</p>
 <pre><code>## pseudocode
-define pipeline(user_input):
+def image_gen_pipeline(user_input):
     get_text(user_input) -&gt; text
     generate_image_prompt(text) -&gt; image_prompt
     for in in range 5:
@@ -870,13 +874,13 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/gans_and_augmentation.html" class="pagination-link" aria-label="AI image generation II">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">AI image generation II</span></span>
+      <a href="../content/diff_models.html" class="pagination-link" aria-label="AI image generation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">AI image generation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/finetuning_approaches.html" class="pagination-link" aria-label="Finetuning Approaches">
-        <span class="nav-page-text"><span class="chapter-title">Finetuning Approaches</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/tbd_slide.html" class="pagination-link" aria-label="Additional content (tbd)">
+        <span class="nav-page-text"><span class="chapter-title">Additional content (tbd)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
