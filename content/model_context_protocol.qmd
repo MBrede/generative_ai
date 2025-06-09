@@ -1,0 +1,78 @@
+---
+toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Model Context Protocol</h3>'
+---
+
+# Model Context Protocol
+
+Model Context Protocol (MCP) is a function calling standard and framework developed by anthropic and published in November 2024. 
+<!-- TODO: generate more text -->
+
+Let's reiterate what we know about function calling. 
+
+
+## Function Calling
+
+Function calling allows the LLM to do tasks it could not normally achieve. This is done by giving the model some tools that allow it to interact with the outside world to, for instance, gather information or control other applications. To use function calling, we first have to
+
+1. write a system prompt that
+    - describes the tools the LLM has access to.
+    - prompts the LLM to structure the output in a certain way (usually JSON format) if it wants to use a tool. 
+
+We already did these things in the course. 
+The basic function calling workflow then looks something like this: 
+
+2. The LLM is presented with a user query.
+3. It starts reasoning internally about wether to use a tool for the task. If so, it 
+4. generates a function call. As mentioned, this takes the form of generating structured output.
+5. The LLM output is then parsed for tool calls. If tool calls are present, and syntactically correct, then
+6. The tool calls are executed. 
+7. The result of the tool call is returned to the LLM, usually indicated by a key word (**Observation:**).
+8. When the LLM has gathered enough information or thinks it does not need any more tool calls, a final answer is generated, if applicable. 
+
+
+
+## A unified standard
+
+This is all well, as long as the tools are relatively easy to implement, like executing python functions. Additionally, you may want to give the LLM the option to:
+
+- Read your files
+- Check your calendar
+- Search the web
+- Access your databases
+- Use your company's internal tools
+
+Every time developers want to give an AI access to external data or tools, they have to build custom, one-off integrations. It's like building a different key for every single door.
+
+MCP creates a standardized way for AI models to connect to external resources. Think of it as:
+
+- Universal translator: One standard "language" for AI-to-tool communication
+- Plugin system: Like browser extensions, but for AI assistants
+- Modular approach: Write a tool once, use it with any MCP-compatible AI
+
+So, first and foremost, **MCP is an interface standard** that defines how external tools can be integrated into large language models (LLMs). It provides a set of protocols and APIs that allow LLMs to interact with these tools seamlessly. This includes defining the inputs and outputs for each interaction, as well as the mechanisms for error handling and feedback loops.
+
+In addition to a standard definition, anthropic also released an implementation of MCP in a number of languages, including Python. It also hosts a repository on GitHub with examples and documentation that you can use as a starting point for building your own integrations. There is also a large and growing collection of pre-built connectors to third-party services like databases, APIs, and other tools. That means developers don't have to start from scratch every time they want to add new functionality to their LLMs.
+
+
+::: {.callout-note}
+## 📝 Task
+
+Have a look!
+
+1. Find the MCP and MCP server repository on GitHub
+2. Browse through the list of server implementations, find one (or many) that you find interesting.
+
+:::
+
+But what is an MCP server anyway? And how does MCP work exactly? 
+
+
+## Core concepts
+
+![MCP architecture](../imgs/MCP_archi.png)
+
+
+## MCP in action
+
+
+## Discussion

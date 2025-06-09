@@ -8,6 +8,7 @@ toc-title: '![](../imgs/img_gen_pipeline.png){width=240px}<br> <h3>AI image gene
 ## Basics of using Open Source AI image generation models
 
 <!-- - AUTOMATIC1111 -->
+<!-- TODO: comfyUI -->
 
 One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. 
 It is, therefore, good to have access to pre-trained image generation models. Today, we want to focus on using image generation models locally and how to integrate them into pipelines. 
@@ -131,7 +132,7 @@ Finally, we can wrap everything in a pipeline. The pseudocode below shows the ge
     def image_gen_pipeline(user_input):
         get_text(user_input) -> text
         generate_image_prompt(text) -> image_prompt
-        for in in range 5:
+        for i in range 5:
             generate_image(image_prompt) -> image
             rate_image(image) -> rate_value
         find_best_rated_image(images, rate_values) -> best_image

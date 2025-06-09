@@ -40,7 +40,9 @@ book:
         - content/diff_models.qmd
         # - content/gans_and_augmentation.qmd
         - content/generation_in_agent_pipelines.qmd
-        - content/tbd_slide.qmd
+    - part: "Other" # will do it like this for now to keep the script in chronological order. it naturally belongs to language models part
+      chapters:
+        - content/model_context_protocol.qmd
     - part: "Finetuning"
       chapters: 
         - content/finetuning_approaches.qmd
