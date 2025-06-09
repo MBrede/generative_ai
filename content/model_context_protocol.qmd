@@ -26,7 +26,7 @@ The basic function calling workflow then looks something like this:
 4. generates a function call. As mentioned, this takes the form of generating structured output.
 5. The LLM output is then parsed for tool calls. If tool calls are present, and syntactically correct, then
 6. The tool calls are executed. 
-7. The result of the tool call is returned to the LLM, usually indicated by a key word (**Observation:**).
+7. The result of the tool call is returned to the LLM, usually indicated by a key word (e.g. **Observation:**).
 8. When the LLM has gathered enough information or thinks it does not need any more tool calls, a final answer is generated, if applicable. 
 
 
@@ -69,10 +69,74 @@ But what is an MCP server anyway? And how does MCP work exactly?
 
 ## Core concepts
 
-![MCP architecture](../imgs/MCP_archi.png)
+The following is more or less taken from the [official website](https://modelcontextprotocol.io). 
+
+At its core, MCP follows a client-server architecture where a host application can connect to multiple servers:
+
+![MCP architecture [@ModelContextProtocol]](../imgs/MCP_archi.png)
+
+
+- **MCP Hosts:** Programs like Claude Desktop, IDEs, or AI tools that want to access data through MCP
+- **MCP Clients:** Protocol clients that maintain 1:1 connections with servers
+- **MCP Servers:** Lightweight programs that each expose specific capabilities through the standardized Model Context Protocol
+- **Local Data Sources:** Your computer’s files, databases, and services that MCP servers can securely access
+- **Remote Services:** External systems available over the internet (e.g., through APIs) that MCP servers can connect to
+
+The servers come in three main flavours: 
+
+- **Resources:** File-like data that can be read by clients (like API responses or file contents)
+- **Tools:** Functions that can be called by the LLM (with user approval)
+- **Prompts:** Pre-written templates that help users accomplish specific tasks
+
+As you have seen in the repository, there are lots of pre-built servers available. 
 
 
 ## MCP in action
 
+Now it's time to implement a simple example using MCP! There are several ways to get started:
+
+1. Follow the official [quickstart tutorial in the `python-sdk` repo](https://github.com/modelcontextprotocol/python-sdk)
+2. Combine the quick-start guides for [client](https://modelcontextprotocol.io/quickstart/client) and [server](https://modelcontextprotocol.io/quickstart/server) developers.
+3. Ask an LLM to generate a simple script or notebook to set up MCP for you!
+
+A comment on option 3 seems to be in order (this is a course on using generative AI, after all): It's ok to use an LLM to create code, especially if it's not your area of expertise. However, always double-check the generated code and make sure that you understand what each line does before running it! This has not only security implications but also practical ones. For example, you may have to explain your code to others. In this course, for instance, you will have to explain the code in your final project presentation to pass. Another word of warning against using LLM-generated code: It often works out of the box, but sometimes it does not. In this case, debugging LLM generated code often takes longer than writing it yourself from scratch!
+
+
+::: {.callout-note}
+## 📝 Task
+
+Now it's your turn!
+
+1. Set up a simple MCP system in a notebook using a local LLM.
+2. Have fun using one of the fancy servers from the [repo](https://github.com/modelcontextprotocol/servers)
+3. Upload your notebook to Moodle as usual!
+
+:::
+
 
 ## Discussion
+
+The final question to discuss is the following:
+
+**Is MCP worth spending my (valuable!) time on, or should I rather focus on other things?** 
+
+MCP is intended to be a standard for function calling in LLMs. It's not clear yet if others will adopt this. And what worth is a standard if it doesn't get adopted by the big players? Likewise, it is a framework for function calling, but htere are other frameworks out there that also facilitate that, e.g. LangChain, Llamaindex, Haystack, Smolagents etc. Is MCP the next big thing or just another framework? 
+
+Nobody knows what the future holds. A good way of making an educated guess is to ask these three questions:
+
+1. What do you think. Is it a good idea?
+2. What do others think? Especially the big players are of interest here.
+3. Where does the money come from? Who pays for this stuff? How does the company make money? 
+
+::: {.callout-note}
+## 📝 Task
+
+Try to find out.
+
+1. Take some time googling around on the internet and see what you can find about MCP, its adoption by big players, who is behind it etc. 
+2. Discuss in the group! What do you think? Is this a good idea or not? Why?
+
+:::
+
+
+## References
