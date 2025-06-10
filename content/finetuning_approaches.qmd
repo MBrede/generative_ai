@@ -109,6 +109,7 @@ This is done by implementing a system analogous to the autograd implementation i
 A "loss"-function is defined, i.e., any function that takes the textual output and evaluates its quality. This can be a classic loss function like binary accuracy or a set of rules for evaluating text quality that are given to a language model to compare the result with the ground truth.
 This "loss" is then taken into account by the "optimizer", which is another LLM-Call that takes the output and loss and critiques the appropriate Variables (i.e., the initial prompt). This critique or "gradient" as it is called in the Autograd analogy is then taken to update the initial prompt using another LLM-call (the step in Autograd). This process continues iteratively until the results are satisfactory or a predefined number of iterations is reached.
 
+:::{.callout-note}
 
 #### 📝 Task
 
