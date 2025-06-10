@@ -86,7 +86,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../content/alignment.html" rel="next">
-<link href="../content/tbd_slide.html" rel="prev">
+<link href="../content/model_context_protocol.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -281,22 +281,33 @@ window.Quarto = {
   <a href="../content/generation_in_agent_pipelines.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI image generation pipelines</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Other</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/tbd_slide.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Additional content (tbd)</span></a>
+  <a href="../content/model_context_protocol.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Context Protocol</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Finetuning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Finetuning Approaches</span></a>
@@ -520,7 +531,7 @@ Fig&nbsp;12.5: Illustration of the result of quantization to 32, 16, 8 and 4 bit
 <div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;which is now defunct and replaced by the MT-Bench score <span class="citation" data-cites="ChatbotArenaLeaderboard"><em>Chatbot <span>Arena Leaderboard Week</span> 8</em> (<a href="#ref-ChatbotArenaLeaderboard" role="doc-biblioref">n.d.</a>)</span></p></div></div></section>
 <section id="x-lora-mixture-of-experts-with-lora" class="level4">
 <h4 class="anchored" data-anchor-id="x-lora-mixture-of-experts-with-lora">X-LoRA (Mixture of Experts with LoRA)</h4>
-<p>Mixture of experts is a pretty old idea generally <span class="citation" data-cites="jacobsAdaptiveMixturesLocal1991">(<a href="#ref-jacobsAdaptiveMixturesLocal1991" role="doc-biblioref">Jacobs et al., 1991</a>)</span> and has been used in the context of Deep Learning and more specifically NLP for quite some time now <span class="citation" data-cites="shazeerOutrageouslyLargeNeural2017">(<a href="#ref-shazeerOutrageouslyLargeNeural2017" role="doc-biblioref">Shazeer et al., 2017</a>)</span>. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. <span class="citation" data-cites="jiangMixtralExperts2024">Jiang et al. (<a href="#ref-jiangMixtralExperts2024" role="doc-biblioref">2024</a>)</span> The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic. During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert. This approach was applied to LoRA-based finetuning by <span class="citation" data-cites="buehlerXLoRAMixtureLowRank2024">Buehler &amp; Buehler (<a href="#ref-buehlerXLoRAMixtureLowRank2024" role="doc-biblioref">2024</a>)</span> who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts. This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.</p>
+<p>Mixture of experts is a pretty old idea generally <span class="citation" data-cites="jacobsAdaptiveMixturesLocal1991">(<a href="#ref-jacobsAdaptiveMixturesLocal1991" role="doc-biblioref">Jacobs et al., 1991</a>)</span> and has been used in the context of Deep Learning and more specifically NLP for quite some time now <span class="citation" data-cites="shazeerOutrageouslyLargeNeural2017">(<a href="#ref-shazeerOutrageouslyLargeNeural2017" role="doc-biblioref">Shazeer et al., 2017</a>)</span>. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. <span class="citation" data-cites="jiangMixtralExperts2024">Jiang et al. (<a href="#ref-jiangMixtralExperts2024" role="doc-biblioref">2024</a>)</span> The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic. During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert. This approach was applied to LoRA-based finetuning by <span class="citation" data-cites="buehlerXLoRAMixtureLowRank2024">(<a href="#ref-buehlerXLoRAMixtureLowRank2024" role="doc-biblioref"><strong>buehlerXLoRAMixtureLowRank2024?</strong></a>)</span> who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts. This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.</p>
 </section>
 <section id="unsloth" class="level4">
 <h4 class="anchored" data-anchor-id="unsloth">Unsloth</h4>
@@ -586,9 +597,6 @@ Fig&nbsp;12.7: Performance of (IA)³ compared to other parameter-efficient finet
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-aghajanyanIntrinsicDimensionalityExplains2020" class="csl-entry" role="listitem">
 Aghajanyan, A., Zettlemoyer, L., &amp; Gupta, S. (2020). <em>Intrinsic <span>Dimensionality Explains</span> the <span>Effectiveness</span> of <span>Language Model Fine-Tuning</span></em> (arXiv:2012.13255). arXiv. <a href="https://doi.org/10.48550/arXiv.2012.13255">https://doi.org/10.48550/arXiv.2012.13255</a>
-</div>
-<div id="ref-buehlerXLoRAMixtureLowRank2024" class="csl-entry" role="listitem">
-Buehler, E. L., &amp; Buehler, M. J. (2024). <em>X-<span>LoRA</span>: <span>Mixture</span> of <span>Low-Rank Adapter Experts</span>, a <span>Flexible Framework</span> for <span>Large Language Models</span> with <span>Applications</span> in <span>Protein Mechanics</span> and <span>Molecular Design</span></em> (arXiv:2402.07148). arXiv. <a href="https://doi.org/10.48550/arXiv.2402.07148">https://doi.org/10.48550/arXiv.2402.07148</a>
 </div>
 <div id="ref-ChatbotArenaLeaderboard" class="csl-entry" role="listitem">
 <em>Chatbot <span>Arena Leaderboard Week</span> 8: <span>Introducing MT-Bench</span> and <span>Vicuna-33B</span> <span></span> <span>LMSYS Org</span></em>. (n.d.). https://lmsys.org/blog/2023-06-22-leaderboard.
@@ -1072,8 +1080,8 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/tbd_slide.html" class="pagination-link" aria-label="Additional content (tbd)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Additional content (tbd)</span></span>
+      <a href="../content/model_context_protocol.html" class="pagination-link" aria-label="Model Context Protocol">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Model Context Protocol</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

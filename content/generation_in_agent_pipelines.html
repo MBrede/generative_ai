@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/tbd_slide.html" rel="next">
+<link href="../content/model_context_protocol.html" rel="next">
 <link href="../content/diff_models.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -197,22 +197,33 @@ ul.task-list li input[type="checkbox"] {
   <a href="../content/generation_in_agent_pipelines.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">AI image generation pipelines</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Other</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/tbd_slide.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Additional content (tbd)</span></a>
+  <a href="../content/model_context_protocol.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Context Protocol</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
  <span class="menu-text">Finetuning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Finetuning Approaches</span></a>
@@ -274,6 +285,7 @@ AI image generation pipelines<br>
 <section id="basics-of-using-open-source-ai-image-generation-models" class="level2">
 <h2 class="anchored" data-anchor-id="basics-of-using-open-source-ai-image-generation-models">Basics of using Open Source AI image generation models</h2>
 <!-- - AUTOMATIC1111 -->
+<!-- TODO: comfyUI -->
 <p>One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. It is, therefore, good to have access to pre-trained image generation models. Today, we want to focus on using image generation models locally and how to integrate them into pipelines.</p>
 <p>For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2025. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111’s Stable Diffusion web UI</a>.</p>
 <p><!-- Let us use this tool to see how we can run an AI image generator on our laptops, using the open source model [SDXL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) from StabilityAI. This is a very short summary of the features of AUTOMATIC1111's web UI, which we will use in this article for running an AI image generator on our laptops:   --></p>
@@ -409,7 +421,7 @@ AI image generation pipelines<br>
 def image_gen_pipeline(user_input):
     get_text(user_input) -&gt; text
     generate_image_prompt(text) -&gt; image_prompt
-    for in in range 5:
+    for i in range 5:
         generate_image(image_prompt) -&gt; image
         rate_image(image) -&gt; rate_value
     find_best_rated_image(images, rate_values) -&gt; best_image
@@ -879,8 +891,8 @@ document.addEventListener('DOMContentLoaded', function() {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/tbd_slide.html" class="pagination-link" aria-label="Additional content (tbd)">
-        <span class="nav-page-text"><span class="chapter-title">Additional content (tbd)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/model_context_protocol.html" class="pagination-link" aria-label="Model Context Protocol">
+        <span class="nav-page-text"><span class="chapter-title">Model Context Protocol</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
