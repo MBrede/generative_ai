@@ -25,7 +25,7 @@ This model was trained on a dataset containing image-caption pairs in two parts:
 The resulting 1024 image-tokens can then be fed into the decoder-Block of the VAE to generate an image.
 An illustration of the training-process can be seen in @fig-dVAE.
 
-::: {.column-margin #fig-dVAE cap-location=bottom}
+::: {#fig-dVAE cap-location=bottom}
 
 ![](../imgs/dalle_vae.png)
 
