@@ -97,7 +97,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8035085d956021e735a0dae97839a3a6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6d7d76796be02c4c57202b87db7cd8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -370,7 +370,8 @@ Finetuning Approaches<br>
 <p>Though the central concept of finetuning is always the same, i.e., updating the parameters of a pre-trained model using new data, there are many different ways to do this. The following sections will give an overview of some of the most common approaches.</p>
 <section id="full-finetuning" class="level2">
 <h2 class="anchored" data-anchor-id="full-finetuning">Full Finetuning</h2>
-<p>Full finetuning is the simplest approach to finetuning. As the name says, it is based on completely updating the parameters of the pre-trained model using new data. This means that all weights of the model are updated during training using regular gradient descent or a variant thereof. The main advantage of this approach is that it is very simple and easy to implement. Complete (few-shot) fine-tuning has also shown to perform better in the domain of finetuning and in Out-of-domain tasks when compared to Few-Shot-Prompt-approaches <span class="citation" data-cites="mosbachFewshotFinetuningVs2023">Mosbach et al. (<a href="#ref-mosbachFewshotFinetuningVs2023" role="doc-biblioref">2023</a>)</span>. However, it also has some disadvantages. Firstly, it can be computationally expensive as it requires training all parameters of the model.</p>
+<p>Full finetuning is the simplest approach to finetuning. As the name says, it is based on completely updating the parameters of the pre-trained model using new data. This means that all weights of the model are updated during training using regular gradient descent or a variant thereof. The main advantage of this approach is that it is very simple and easy to implement. Complete (few-shot) fine-tuning has also shown to perform better in the domain of finetuning and in Out-of-domain tasks when compared to Few-Shot-Prompt-approaches <span class="citation" data-cites="mosbachFewshotFinetuningVs2023">(<a href="#ref-mosbachFewshotFinetuningVs2023" role="doc-biblioref">Mosbach et al., 2023</a>)</span>. However, it also has some disadvantages.</p>
+<p>Firstly, it can be computationally expensive as it requires training all parameters of the model.</p>
 <p>Secondly, it can lead to catastrophic forgetting, i.e., the model forgets what it has learned during pre-training when adapting to new data <span class="citation" data-cites="luoEmpiricalStudyCatastrophic2024">(<a href="#ref-luoEmpiricalStudyCatastrophic2024" role="doc-biblioref">Luo et al., 2024</a>)</span>.</p>
 </section>
 <section id="parameter-efficient-finetuning-peft" class="level2 page-columns page-full">
@@ -378,7 +379,10 @@ Finetuning Approaches<br>
 <p>Another approach to finetuning is to not update all a models parameters but to (partially) freeze them and only update a small subset of the parameters or to train an adaptor module that can be added to the model. This approach is called parameter-efficient fine-tuning (PEFT). The main advantage of PEFT is that it is much more computationally efficient than full finetuning as it only requires updating a small subset of the parameters. We will look at three different approaches to PEFT:</p>
 <!-- 1. Prompt-based Finetuning (Prefix-tuning, Prompt tuning and Multitask Prompt Tuning) -->
 <ol type="1">
-<li><p>Prompt-based Finetuning (Prefix-tuning and Prompt tuning)</p></li>
+<li><p>Prompt-based Finetuning (Prefix-tuning and Prompt tuning)</p>
+<ul>
+<li>Bonus: TextGrad</li>
+</ul></li>
 <li><p>Adapter-based finetuning (Low-Rank Adaptation and its relatives)</p></li>
 <li><p>(IA)³ (Infused Adapter by Inhibiting and Amplifying Inner Activations)</p></li>
 </ol>
@@ -403,7 +407,7 @@ Fig&nbsp;12.1: Illustration of Prefix-tuning. A continuous prefix vector is lear
 <li>a small number of parameters that need to be learned and</li>
 <li>the ability to quickly adapt to different tasks by simply switching out the prefix vector.</li>
 </ol>
-<p>Since the learned prefix-weights have to be prepended to each input though, one has to have access to the models internal representation during inference (at least for encoder-decoder-stacks). This is not always possible, especially when using black-box models like large language models that are hosted on a remote server.</p>
+<p>Since the learned prefix-weights have to be prepended to each input though, one has to have access to the models internal representation during inference (at least for encoder-decoder-stacks). This is not always possible, especially when using black-box models like LLMs that are hosted on a remote server.</p>
 </section>
 <section id="prompt-tuning" class="level4">
 <h4 class="anchored" data-anchor-id="prompt-tuning">Prompt-Tuning</h4>
@@ -459,9 +463,16 @@ Fig&nbsp;12.3: The TextGrad optimization schema, taken from <span class="citatio
 </figure>
 </div>
 <p>A “loss”-function is defined, i.e., any function that takes the textual output and evaluates its quality. This can be a classic loss function like binary accuracy or a set of rules for evaluating text quality that are given to a language model to compare the result with the ground truth. This “loss” is then taken into account by the “optimizer”, which is another LLM-Call that takes the output and loss and critiques the appropriate Variables (i.e., the initial prompt). This critique or “gradient” as it is called in the Autograd analogy is then taken to update the initial prompt using another LLM-call (the step in Autograd). This process continues iteratively until the results are satisfactory or a predefined number of iterations is reached.</p>
-</section>
-<section id="task-1" class="level4">
-<h4 class="anchored" data-anchor-id="task-1">📝 Task</h4>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Your turn!</p>
 <p>Install <a href="https://github.com/zou-group/textgrad">TextGrad</a> and get the <a href="https://colab.research.google.com/github/zou-group/TextGrad/blob/main/examples/notebooks/Tutorial-Solution-Optimization.ipynb">tutorial on optimizing a solution</a> to run using the following snippet to initialize your LMStudio/Ollama server:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> textgrad <span class="im">as</span> tg</span>
@@ -476,7 +487,9 @@ Fig&nbsp;12.3: The TextGrad optimization schema, taken from <span class="citatio
 <blockquote class="blockquote">
 <p>A farmer with a wolf, a goat, and a cabbage must cross a river by boat. The boat can carry only the farmer and a single item. If left unattended together, the wolf would eat the goat, or the goat would eat the cabbage. How can they cross the river without anything being eaten? - Taken from <a href="https://en.wikipedia.org/wiki/Wolf,_goat_and_cabbage_problem">wikipedia</a></p>
 </blockquote>
-<p>Solution: goat -&gt; empty -&gt; wolf -&gt; goat -&gt; cabbage -&gt; empty -&gt; goat :::</p>
+<p>Solution: goat -&gt; empty -&gt; wolf -&gt; goat -&gt; cabbage -&gt; empty -&gt; goat</p>
+</div>
+</div>
 </section>
 </section>
 <section id="adapter-based-finetuning" class="level3 page-columns page-full">
@@ -497,9 +510,6 @@ h = W_0x + \Delta Wx = W_0x + BAx
 <p>A is initialized with random values sampled from a normal distribution and B is initialized as a zero matrix so that <span class="math inline">\(\Delta W\)</span> is zero at the start of the training.</p>
 <p>This results in a reduction of the number of parameters to be trained from <span class="math inline">\(d_{in} \cdot d_{out}\)</span> to <span class="math inline">\(d_{in} \cdot r  + d_{out} \cdot r\)</span> as is illustrated in <a href="#fig-loRaMats" class="quarto-xref">Figure&nbsp;<span>12.4</span></a>.</p>
 <div class="cell enlarge-onhover">
-<div class="cell-output cell-output-stdout">
-<pre><code>function (...)  .Primitive("c")</code></pre>
-</div>
 <div class="cell-output-display">
 <div id="fig-loRaMats" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">

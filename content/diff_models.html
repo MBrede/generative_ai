@@ -62,7 +62,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8035085d956021e735a0dae97839a3a6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b6d7d76796be02c4c57202b87db7cd8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -349,8 +349,7 @@ AI image generation<br>
 <li>A Transformer to learn the relationship between text-captions and the latent space. This was done by encoding images using the pretrained VAE und argmax choosing the 32x32-token-representation of the image. The text-captions were limited to 256 tokens and concatenated with the 1024-dimensional image-tokens. The model is then trained to predict the next token in the sequence, which is either a text or an image token, similarly to the learning-paradigm we discussed when talking about the transformer-training.</li>
 </ol>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Since the latent space these images are compressed to is of a defined set of classes, the authors call the model a discrete VAE which makes a lot of sense.</p></div></div><p>The resulting 1024 image-tokens can then be fed into the decoder-Block of the VAE to generate an image. An illustration of the training-process can be seen in <a href="#fig-dVAE" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>.</p>
-
-<div class="no-row-height column-margin column-container"><div id="fig-dVAE" class="quarto-float quarto-figure quarto-figure-center anchored" data-cap-location="bottom">
+<div id="fig-dVAE" class="quarto-float quarto-figure quarto-figure-center anchored" data-cap-location="bottom">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dVAE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <p><img src="../imgs/dalle_vae.png" class="img-fluid figure-img"></p>
@@ -360,7 +359,8 @@ AI image generation<br>
 Fig&nbsp;9.1: Illustration of the DALL-E-VAE (A) and Illustration of the whole DALL-E-Stack (B). Both images are taken from <span class="citation" data-cites="abideenHowOpenAIsDALLE2023">Abideen (<a href="#ref-abideenHowOpenAIsDALLE2023" role="doc-biblioref">2023</a>)</span>.
 </figcaption>
 </figure>
-</div></div></section>
+</div>
+</section>
 <section id="clip" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="clip">CLIP</h3>
 <p>Close to the release of DALL-E, the team at OpenAI did also publish CLIP <span class="citation" data-cites="radfordLearningTransferableVisual2021">(<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">Radford et al., 2021</a>)</span>. The paper, which introduced a contrastive<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> method to learn visual representations from images and text descriptions, bridged the gap between image and text embeddings. This contrastive principle is illustrated in <a href="#fig-CLIP" class="quarto-xref">Figure&nbsp;<span>9.2</span></a>.</p>
