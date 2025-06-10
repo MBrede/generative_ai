@@ -126,39 +126,6 @@
   keywords = {Computer Science - Artificial Intelligence}
 }
 
-@misc{askellGeneralLanguageAssistant2021,
-  title = {A {{General Language Assistant}} as a {{Laboratory}} for {{Alignment}}},
-  author = {Askell, Amanda and Bai, Yuntao and Chen, Anna and Drain, Dawn and Ganguli, Deep and Henighan, Tom and Jones, Andy and Joseph, Nicholas and Mann, Ben and DasSarma, Nova and Elhage, Nelson and {Hatfield-Dodds}, Zac and Hernandez, Danny and Kernion, Jackson and Ndousse, Kamal and Olsson, Catherine and Amodei, Dario and Brown, Tom and Clark, Jack and McCandlish, Sam and Olah, Chris and Kaplan, Jared},
-  year = {2021},
-  month = dec,
-  number = {arXiv:2112.00861},
-  eprint = {2112.00861},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2112.00861},
-  urldate = {2024-12-14},
-  abstract = {Given the broad capabilities of large language models, it should be possible to work towards a general-purpose, text-based assistant that is aligned with human values, meaning that it is helpful, honest, and harmless. As an initial foray in this direction we study simple baseline techniques and evaluations, such as prompting. We find that the benefits from modest interventions increase with model size, generalize to a variety of alignment evaluations, and do not compromise the performance of large models. Next we investigate scaling trends for several training objectives relevant to alignment, comparing imitation learning, binary discrimination, and ranked preference modeling. We find that ranked preference modeling performs much better than imitation learning, and often scales more favorably with model size. In contrast, binary discrimination typically performs and scales very similarly to imitation learning. Finally we study a `preference model pre-training' stage of training, with the goal of improving sample efficiency when finetuning on human preferences.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
-}
-
-@misc{backlundVendingBenchBenchmarkLongTerm2025,
-  title = {Vending-{{Bench}}: {{A Benchmark}} for {{Long-Term Coherence}} of {{Autonomous Agents}}},
-  shorttitle = {Vending-{{Bench}}},
-  author = {Backlund, Axel and Petersson, Lukas},
-  year = {2025},
-  month = feb,
-  number = {arXiv:2502.15840},
-  eprint = {2502.15840},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2502.15840},
-  urldate = {2025-05-20},
-  abstract = {While Large Language Models (LLMs) can exhibit impressive proficiency in isolated, short-term tasks, they often fail to maintain coherent performance over longer time horizons. In this paper, we present Vending-Bench, a simulated environment designed to specifically test an LLM-based agent's ability to manage a straightforward, long-running business scenario: operating a vending machine. Agents must balance inventories, place orders, set prices, and handle daily fees - tasks that are each simple but collectively, over long horizons ({$>$}20M tokens per run) stress an LLM's capacity for sustained, coherent decision-making. Our experiments reveal high variance in performance across multiple LLMs: Claude 3.5 Sonnet and o3-mini manage the machine well in most runs and turn a profit, but all models have runs that derail, either through misinterpreting delivery schedules, forgetting orders, or descending into tangential "meltdown" loops from which they rarely recover. We find no clear correlation between failures and the point at which the model's context window becomes full, suggesting that these breakdowns do not stem from memory limits. Apart from highlighting the high variance in performance over long time horizons, Vending-Bench also tests models' ability to acquire capital, a necessity in many hypothetical dangerous AI scenarios. We hope the benchmark can help in preparing for the advent of stronger AI systems.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Artificial Intelligence}
-}
-
 @article{bahdanauNeuralMachineTranslation2014,
   title = {Neural Machine Translation by Jointly Learning to Align and Translate},
   author = {Bahdanau, Dzmitry},
@@ -432,7 +399,6 @@
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning}
 }
-
 
 @misc{esserTamingTransformersHighResolution2021,
   title = {Taming {{Transformers}} for {{High-Resolution Image Synthesis}}},
@@ -1151,6 +1117,15 @@
   issn = {0028-0836, 1476-4687},
   doi = {10.1038/nature14236},
   urldate = {2024-12-08},
+  langid = {english}
+}
+
+@misc{ModelContextProtocol,
+  title = {Model {{Context Protocol}}},
+  journal = {Model Context Protocol},
+  urldate = {2025-06-09},
+  abstract = {Get started with the Model Context Protocol (MCP)},
+  howpublished = {https://modelcontextprotocol.io/introduction},
   langid = {english}
 }
 
@@ -1897,6 +1872,23 @@
   copyright = {2025 The Author(s), under exclusive licence to Springer Nature Limited},
   langid = {english},
   keywords = {Computational science,Computer science}
+}
+
+@misc{yuksekgonulTextGradAutomaticDifferentiation2024,
+  title = {{{TextGrad}}: {{Automatic}} "{{Differentiation}}" via {{Text}}},
+  shorttitle = {{{TextGrad}}},
+  author = {Yuksekgonul, Mert and Bianchi, Federico and Boen, Joseph and Liu, Sheng and Huang, Zhi and Guestrin, Carlos and Zou, James},
+  year = {2024},
+  month = jun,
+  number = {arXiv:2406.07496},
+  eprint = {2406.07496},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2406.07496},
+  urldate = {2025-05-27},
+  abstract = {AI is undergoing a paradigm shift, with breakthroughs achieved by systems orchestrating multiple large language models (LLMs) and other complex components. As a result, developing principled and automated optimization methods for compound AI systems is one of the most important new challenges. Neural networks faced a similar challenge in its early days until backpropagation and automatic differentiation transformed the field by making optimization turn-key. Inspired by this, we introduce TextGrad, a powerful framework performing automatic ``differentiation'' via text. TextGrad backpropagates textual feedback provided by LLMs to improve individual components of a compound AI system. In our framework, LLMs provide rich, general, natural language suggestions to optimize variables in computation graphs, ranging from code snippets to molecular structures. TextGrad follows PyTorch's syntax and abstraction and is flexible and easy-to-use. It works out-of-the-box for a variety of tasks, where the users only provide the objective function without tuning components or prompts of the framework. We showcase TextGrad's effectiveness and generality across a diverse range of applications, from question answering and molecule optimization to radiotherapy treatment planning. Without modifying the framework, TextGrad improves the zero-shot accuracy of GPT-4o in Google-Proof Question Answering from \$51{\textbackslash}\%\$ to \$55{\textbackslash}\%\$, yields \$20{\textbackslash}\%\$ relative performance gain in optimizing LeetCode-Hard coding problem solutions, improves prompts for reasoning, designs new druglike small molecules with desirable in silico binding, and designs radiation oncology treatment plans with high specificity. TextGrad lays a foundation to accelerate the development of the next-generation of AI systems.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @misc{zhongSyntheT2CGeneratingSynthetic2024,
