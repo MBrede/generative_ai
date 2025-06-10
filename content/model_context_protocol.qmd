@@ -109,8 +109,9 @@ A comment on option 4 seems to be in order (this is a course on using generative
 Now it's your turn!
 
 1. Set up a simple MCP system in a notebook using a local LLM.
-2. Have fun using one of the fancy servers from the [repo](https://github.com/modelcontextprotocol/servers)
-3. Upload your notebook to Moodle as usual!
+2. If you use LLM-generated code as a starting point, find code snippets the LLM generates, but does not use or is superfluous in some other manner. 
+3. Have fun using one of the fancy servers from the [repo](https://github.com/modelcontextprotocol/servers)
+4. Upload your notebook to Moodle as usual!
 
 :::
 
