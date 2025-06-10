@@ -2,16 +2,18 @@
 toc-title: '![](../imgs/img_gen_pipeline.png){width=240px}<br> <h3>AI image generation pipelines</h3>'
 ---
 
-# AI image generation III
+# AI image generation pipelines
 
 
 ## Basics of using Open Source AI image generation models
 
 <!-- - AUTOMATIC1111 -->
+<!-- TODO: comfyUI -->
 
-One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. We will cover finetuning next time. This time we want to focus on using image generation models locally. 
+One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. 
+It is, therefore, good to have access to pre-trained image generation models. Today, we want to focus on using image generation models locally and how to integrate them into pipelines. 
 
- For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2024. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: [AUTOMATIC1111's Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui). 
+For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2025. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: [AUTOMATIC1111's Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui). 
  
  <!-- Let us use this tool to see how we can run an AI image generator on our laptops, using the open source model [SDXL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) from StabilityAI. This is a very short summary of the features of AUTOMATIC1111's web UI, which we will use in this article for running an AI image generator on our laptops:   -->
 
@@ -26,6 +28,7 @@ Let's have a look!
 - Start generating images.🎉
 - Change some of the settings and see what happens.
 - What does the ``Sampling steps`` parameter do?
+- Also check out the ``img2img`` function.
 
 :::
 
@@ -48,15 +51,18 @@ We now know how to easily generate images using a local model. The next steps wo
 
 ## AI image generators in agent systems or pipelines
 
-In this section we want to explore the use of AI image generators as components in an agent system or a pipeline. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. 
+In this section we want to explore the use of AI image generators as components in agent systems or LLM pipelines. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. 
 The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).
 
-We covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will:
+<!-- We covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will: -->
+So, we want to build a pipeline that
 
-- generate or retrieve a text based on some input keywords.
-- use this text as context for generating an image generation prompt.
-- generate an image from the prompt.
-- implement quality assurance by comparing the original text embedding with the generated image embedding. 
+- generates or retrieves some text based on some input keywords.
+- uses this text as context for generating an image generation prompt.
+- generates an image from the prompt.
+- does some kind of quality assurance by comparing the original text embedding with the generated image embedding. 
+
+Note, that comparing the embeddings of the generated image with the input text may not be the best way of judging image quality. 
 
 Most agent frameworks we already introduced support building pipelines in addition to agents. See for example [this tutorial](https://docs.llamaindex.ai/en/stable/examples/pipeline/query_pipeline/) on how to implement query pipelines in llamaindex or [this documentation](https://docs.haystack.deepset.ai/docs/pipelines) for pipelines in haystack. To get a full understanding of the basic principles, it is most educational to implement a pipeline from scratch. 
 
@@ -66,7 +72,7 @@ Most agent frameworks we already introduced support building pipelines in additi
 The pipeline we are about to build starts with some input given by the user. In previous chapters we covered several ways of doing this. You could:
 
 - use a local LLM to generate the text for you.
-- use a retrieval function from a vector store or other text database.
+- use a retrieval function from a vector store or other text database (e.g. wikipedia API).
 - combine both approaches in a RAG system.
 
 
@@ -77,21 +83,21 @@ The pipeline we are about to build starts with some input given by the user. In 
 Let's get started!
 
 - Open a notebook and implement a simple text generation or retrieval function.
-- Get a text from an input. 
+- Get some text from an input. 
 
 :::
 
 
 ### Image generation
 
-The next step is to to generate an images that fits the text. While we could just send the full text to the image generator and let it do its thing, a better approach is to generate a special prompt for the image generator. This prompt is then used to generate an image. 
+The next step is to to generate an image that fits the text. While we could just send the full text to the image generator and let it do its thing, a better approach is to generate a special prompt for the image generator. This prompt is then used to generate the image. 
 
 ::: {.callout-note}
 
 ## 📝 Task 
 
 
-- In your notebook, implement a call to an LLM that generates in image generation prompt from your text. 
+- In your notebook, implement a call to an LLM that generates an image generation prompt from your text. 
 - Also implement a call to an image generator. 
 - Connect to an LLM (if not already done so) and to an image generation model. 
 - Generate an image for your text. 
@@ -103,7 +109,7 @@ The next step is to to generate an images that fits the text. While we could jus
 
 Now that we have the image, we want to assure that it fits the text. There are several ways of doing this. We could, for instance, evaluate text and images manually (or, rather, by eyeballing it). This works well for small amounts of images. However, it is not scalable for larger amounts. 
 
-One way of automating the examination is to check, if the image matches the text semantically, i.e. in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g. cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. On both cases, we need a predefined criterion, i.e. a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one. 
+One way of automating the examination is to check if the image matches the text semantically, i.e. in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g. cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. In both cases, we need a predefined criterion, i.e. a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one. 
 
 ::: {.callout-note}
 
@@ -113,19 +119,20 @@ Let's have a look!
 
 - In your notebook, implement a function that displays text and image for manual inspection. 
 - Implement an automated similarity rater for text and images. You can use [CLIP](https://github.com/openai/CLIP) for that task. 
+- Think of another way to automate quality insurance on the generated images. 
 
 :::
 
 
 ### Pipeline
 
-Finally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. this is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined matching criterion is matched. 
+Finally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. This is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined criterion is matched. 
 
     ## pseudocode
-    define pipeline(user_input):
+    def image_gen_pipeline(user_input):
         get_text(user_input) -> text
         generate_image_prompt(text) -> image_prompt
-        for in in range 5:
+        for i in range 5:
             generate_image(image_prompt) -> image
             rate_image(image) -> rate_value
         find_best_rated_image(images, rate_values) -> best_image

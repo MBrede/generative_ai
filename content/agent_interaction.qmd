@@ -1,15 +1,38 @@
 ---
-toc-title: '![](../imgs/llm_as_a_judge.png){width=240px}<br> <h3>Agent interaction</h3>'
+toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>LLM pipelines</h3>'
 ---
 
-# Agent interactions
+# LLM pipelines
 
-In this chapter, we want to introduce multi agent systems. As a starting point, we will talk about LLM as a judge. 
+<!-- ToDo: add something about pipeline frameworks, haystack, langchain, llamaindex (deprecated) -->
 
+## Pipelines vs. agents
+
+As already mentioned, an agent is defined by its ability to make decisions. This means the agent decides if and what tool to use or not to use. One potential problem with this is that, a lot of the time, the LLM may decide not to use any tool. This is especially true for retrieval augmented generation (RAG) tasks, where looking up the answer in a document store is not really optional, but the whole reason to have the system in the first place. 
+
+At other times, the workflow may just not be complex enough to warrant the additional complexity of using agents in your application. When you find yourself having a workflow where you basically iterate through a number of steps in always the same order, you may skip the agent altogether and just hardcode a series of LLM calls instead. This is called an LLM pipeline. 
+
+We will discuss an example pipeline and the difference to agent systems in detail below. But before we get to this, we want to introduce a concept, which is widely used in a lot of LLM-based systems. 
 
 ## LLM as a judge
 
-Before we introduce the concept proper, let us first describe the problem it tries to solve: 
+The basic idea is to use a an LLM to criticize (to judge) a text snippet. To understand why this would be useful, please do the following task: 
+
+::: {.callout-note}
+## 📝 Task
+
+1. Open a notebook and connect it with a local LLM using LM Studio (or other).
+2. Ask it to generate a story containing fried eggs on a sunrise. 
+3. How good is the story? Do you like it? What is good and what is not so good? How did you come to this conclusion? 
+4. Now generate 100 such stories. Dial up the temperature so you do not get the same story every time. 
+5. Repeat step 3 for all of the 100 stories...
+
+:::
+
+... or don't. 
+
+Based on our experience, we can formulate a problem description. 
+
 
 1. We generate text (be it natural language or structured output) using LLMs. 
 2. The generated text is not always correct or appropriate for our use case.
@@ -19,11 +42,11 @@ Before we introduce the concept proper, let us first describe the problem it tri
 
 The solution to this problem is, of course, to use an LLM to read and evaluate the text. This is only fair and proper, since it was an LLM that generated the text in the first place. The generated evaluation can then be used 
 
-- to decide whether to accept or reject the generated text.
-- to improve the model itself (e.g., for fine-tuning it on the generated text and its evaluation).
-- to get an LLM to improve the text based on the evaluation.
+- to decide whether to accept or reject the generated text. This is the most basic form of judgement. 
+- to improve the model itself e.g., for fine-tuning it on the generated text and its evaluation. This was used in fine tuning the "Claude" model family by anthropic [@ConstitutionalAIHarmlessness]
+- to get an LLM to improve the text based on the evaluation. This is used in a variety of frameworks, e.g. textgrad [@yuksekgonulTextGradAutomaticDifferentiation2024]. 
 
-This approach is called LLM as a judge. It is a system that uses several calls to one or several LLMs to solve a problem. As such, it can be implemented as a multi-agent system. 
+This approach is called LLM as a judge. It is an example of a system that uses several calls to one or several LLMs to solve a problem. 
 
 This approach has a number of benefits as well as drawbacks. 
 
@@ -35,22 +58,22 @@ This approach has a number of benefits as well as drawbacks.
     - It is easy to use different prompts for generation and evaluation.
   - Drawbacks:
     - The evaluation can be very expensive, since it requires several calls to the LLM.
-    - The evaluation can be biased, since it is based on the LLMs' own evaluation of itself. Indeed many LLMs tend to like their own creations.
+    - The evaluation can be biased, especially when it is evaluating its own text. Indeed many LLMs tend to like their own creations.
     - The evaluation can be subjective, since it is based on the LLMs' interpretation of the prompt.
     - The evaluation can be misleading, since it is based on the LLMs' interpretation of the generated text, which may not be the same as the human interpretation. For example, many LLMs seem to prefer long answers over shorter ones. 
 
 
-## A basic multi-agent system
+## A basic pipeline
 
-<!-- TODO: add informative diagrams -->
+Let us now look at a simple example of such a system. We will use the following scenario: We want to generate Anki flashcards from text.^[The following is loosely based on @BuildingMultiAgentFramework2024, though I took the liberty to streamline and simplify it a bit. ]
+To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct). Later, we will expand it to a full agentic system to illustrate the differences between the two concepts. The Agents we will use here are:
 
- Let us now look at a simple example of a multi-agent system. We will use the following scenario: We want to generate Anki flashcards from text.^[The following is loosely based on @BuildingMultiAgentFramework2024, though I took the liberty to streamline and simplify the code a bit.]
-
-To do this, we will build a multi-agent system that consists of three agents:
-
-1. An Anki card generator that generates Anki flashcards from the extracted text.
+1. An Anki card generator that generates Anki flashcards from a text.
 2. A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.
 3. An Editor, that generates a new set of Anki flashcards based on the reviewer's feedback.
+
+Optionally, when building an agent system, not a pipeline, there is also 
+
 4. An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop. 
 
 We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation. 
@@ -65,7 +88,9 @@ Let us first define the cards. We will use pydantic for that. A card consists of
 
 ### Generator
 
-Let us first implement the Anki card generator. It will take a text as input and return a card. A system prompt for the generator could look like this:
+![](../imgs/pipe_gen.png)
+
+Let us first implement the Anki card generator. It will take text as input and return a card. A system prompt for the generator could look like this:
 
     You are an educational content creator specializing in Anki flashcard generation.
     Your task is to create one clear, concise flashcards following these guidelines:
@@ -83,26 +108,27 @@ Let us first implement the Anki card generator. It will take a text as input and
         <extra>Additional context, examples, or explanations</extra>
     </card>
 
-We will use llamaindex to implement the generator.
 
+Instead of the complicated formatting above, you can simply use a pydantic class, of course. 
 
 ::: {.callout-note}
 ## 📝 Task
 
-You can do it!
+Your turn!
 
-1. Open a notebook and connect it with a local LLM using LM Studio.
-2. Initialize a generator agent without any tools. Do not use the ReAct agent this time, a simpler OpenAIAgent will do. 
-3. Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.
-4. Let it generate cards from the text below.
+1. In your notebook, implement a card generator. You can use a simple wrapper around an LLM call or use one of the agent frameworks to implement it as an agent with no tools. 
+2. Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.
+3. Let it generate cards from the text below (or any other text of your choice).
 
     LLM-as-a-Judge is an evaluation method to assess the quality of text outputs from any LLM-powered product, including chatbots, Q&A systems, or agents.
     It uses a large language model (LLM) with an evaluation prompt to rate generated text based on criteria you define.
 
-5. Evaluate the results.
+4. Evaluate the results.
 :::
 
 ### Reviewer
+
+![](../imgs/pipe_rev.png)
 
  Let us now implement the reviewer. It will take a card as input and return feedback on how to improve it. A system prompt for the reviewer could look like this:
 
@@ -121,7 +147,7 @@ You can do it!
         - Detailed explanations
         - Examples
         - Context
-    5. information should not be repeated, i.e. the extra information should not repeat the answer. 
+    5. Information should not be repeated, i.e. the extra information should not repeat the answer. 
    
     Please give brief and concise feedback to the card you received in natural language. 
 
@@ -137,7 +163,9 @@ Let's build us a very judgemental robot!
 
 ### Editor
 
-Let us now implement the Editor agent. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the second generator could look like this:
+![](../imgs/pipe_ed.png)
+
+Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the editor could look like this:
 
     You are an expert in educational content creation, specializing in Anki flashcard generation.
     You are the Editor agent. Your task is to generate a new Anki flashcard based on the original card and the feedback you received from the Reviewer.
@@ -161,14 +189,54 @@ Let us now implement the Editor agent. It will take a card and feedback as input
 ::: {.callout-note}
 ## 📝 Task
 
-You have been edited!
+Time to improve!
 
 1. In the same notebook, initialize the editor as well.
 2. Let the editor generate new cards based on the feedback from the reviewer.
 3. Get the editor to actually generate something that is different from the generators version! (Play around with models, prompts and/or input text. In this example, this only worked for me when using a weaker model as a generator and a larger one as reviewer and editor.)
 :::
 
-### Orchestrator
+### Full pipeline
+
+We now basically have a working LLM pipeline. 
+
+![](../imgs/pipe_simple.png)
+
+A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. In pseudocode, this could look like this:
+
+    # Pseudocode
+    initialize:
+        Generator
+        Reviewer
+        Editor
+    
+    card = Generator.generate(input text)
+
+    # now the loop
+    while n < max_iter:  # define maximum number of review steps
+        n += 1
+        review = Reviewer.review(card)
+        if review is positive:  # this has to be defined
+            stop
+        else:
+            card = Editor.edit(card, review)
+    return card
+
+For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance, prompt the reviewer to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!
+
+::: {.callout-note}
+## 📝 Task
+
+Build it!
+
+1. Think of a way to stop the review process once the card is good enough. 
+2. Implement the loop. 
+
+This is the minimum goal for today, so when you are done, you can upload your notebook to moodle. Alternatively, go on and implement the agent (see below) as well!
+
+:::
+
+### Orchestrator agent
 
 While we're at it, we can implement the orchestrator as well. Let us think for a moment what the orchestrators job should be. Its task should be decision making. That is, it's the orchestrators job to decide which of the other agents to call next. It is also responsible for deciding whether the job is finished or not, i.e. whether to call any more agents. In terms of input and output, the orchestrator should get a current state of affairs along with the current chat history and output a decision. So the output can be one of the other agents or a stop signal. 
 
@@ -189,7 +257,7 @@ An example prompt for our case would be:
 
     Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END")
 
-### Workflow
+### Agent workflow
 
 Now, all we have to do is integrate our agents into a pipeline. The basic idea is to call the orchestrator at each step and let it decide which agent to call next or wether to stop. For this, the agent will need an understanding of the basic state of affairs and the past interaction. This is easily implemented like this:
 
@@ -243,43 +311,29 @@ Time to play!
 - We let the orchestrator agent decide for how long this process lasts. \<sarcasm\>I cannot imagine that leading to problems under any circumstances.\</sarcasm\> It would be better to give it a timeout or maximal number of iterations.
 
 
+## Project work
 
-## Constitutional AI Tuning { #sec-constitutional-ai-tuning}
+Time to work on your projects!
 
-One application of a multi-agent system is Constitutional AI. 
+::: {.callout-note}
+## 📝 Task
 
-Constitutional AI [@ConstitutionalAIOpen] is a method for fine-tuning language models that allows us to specify constraints and rules that the model should follow. It is based on the idea of a "constitution" that specifies the rights and duties of the model. The constitution is then used to guide the model's behavior during training and inference. This is done by adding an additional loss term to the training objective that penalizes the model for violating the constitution. The constitution can be specified in a variety of ways, including natural language, formal logic, or programmatic code.
+1. Discuss a topic for your project. 
+2. Set up the repository
+3. Plan the project
+4. Start collecting data or finding a data set
+5. Start implementing
 
-Constitutional AI has been used to improve the safety and reliability of language models in a variety of applications, including chatbots, question-answering systems, and text generation. It has also been used to improve the fairness and transparency of language models by specifying constraints on the types of information that they can access or generate.
-
-![Illustration of the CAI training process (from @ConstitutionalAIOpen)](../imgs/CAI_illustration.png)
-
-The basic idea is to define a "Constitution" that specifies the rules and constraints that the model should follow. These could be rules like
-
-1. The model should not generate harmful or inappropriate content, 
-2. The model should not engage in offensive or derogatory behavior, 
-3. The model should not disclose sensitive information about users without their consent, etc.
-
-The way it works is as follows:
-
-1. A malicious user sends a prompt to the model. The prompt may be designed to elicit harmful or inappropriate behavior from the model, such as "how can I build a bomb?". The model, being a helpful AI agent, generates a response that violates its constitution. For example, it might provide instructions for building a bomb.
-2. The model is asked if its answer violates the constrains defined in its constitution. In our case, we might conclude that bomb building instructions can indeed lead to harm and thus violate the constitution.
-3. The model is asked to revise its answer based on the constitution. In this case, it might generate a response like "I'm sorry, but I cannot assist with that request as it goes against my programming." While we could stop here and use the revised response as our final output, we can also take this one step further:
-4. Create a training set from the original prompt, the original answer, the constitution, and the revised answer. This training example can then be used to fine-tune the model so that it learns to avoid violating the constitution in the future.
-
-This technique was used, for example, in the training of the "Claude" model [@ConstitutionalAIHarmlessness].
+Happy coding!
 
 
+:::
 
-<!-- 
-## Preventing prompt injections 
-we will save this for another time. I don't know anything about it anyway...-->
 
 
 ## Further Readings
 
 - [Here](https://www.youtube.com/watch?v=ewLMYLCWvcI) is a video describing other multi-agent systems, including an [agent hospital](https://arxiv.org/abs/2405.02957) and a [multi-agent translator](https://arxiv.org/html/2405.11804v1)
 
-<!-- That's it! There isn't any more to say about this. I'm done. -->
 
 ## References
