@@ -97,9 +97,10 @@ Now it's time to implement a simple example using MCP! There are several ways to
 
 1. Follow the official [quickstart tutorial in the `python-sdk` repo](https://github.com/modelcontextprotocol/python-sdk)
 2. Combine the quick-start guides for [client](https://modelcontextprotocol.io/quickstart/client) and [server](https://modelcontextprotocol.io/quickstart/server) developers.
-3. Ask an LLM to generate a simple script or notebook to set up MCP for you!
+3. Find some other example implementation on [stackoverflow](https://stackoverflow.com), [reddit](https://www.reddit.com/), personal blogs, [medium](https://medium.com/) ect. 
+4. Ask an LLM to generate a simple script or notebook to set up MCP for you!
 
-A comment on option 3 seems to be in order (this is a course on using generative AI, after all): It's ok to use an LLM to create code, especially if it's not your area of expertise. However, always double-check the generated code and make sure that you understand what each line does before running it! This has not only security implications but also practical ones. For example, you may have to explain your code to others. In this course, for instance, you will have to explain the code in your final project presentation to pass. Another word of warning against using LLM-generated code: It often works out of the box, but sometimes it does not. In this case, debugging LLM generated code often takes longer than writing it yourself from scratch!
+A comment on option 4 seems to be in order (this is a course on using generative AI, after all): It's ok to use an LLM to create code, especially if it's not your area of expertise. However, always double-check the generated code and make sure that you understand what each line does before running it! This has not only security implications but also practical ones. For example, you may have to explain your code to others. In this course, for instance, you will have to explain the code in your final project presentation to pass. Another word of warning against using LLM-generated code: It often works out of the box, but sometimes it does not. In this case, debugging LLM generated code often takes longer than writing it yourself from scratch!
 
 
 ::: {.callout-note}
