@@ -126,39 +126,6 @@
   keywords = {Computer Science - Artificial Intelligence}
 }
 
-@misc{askellGeneralLanguageAssistant2021,
-  title = {A {{General Language Assistant}} as a {{Laboratory}} for {{Alignment}}},
-  author = {Askell, Amanda and Bai, Yuntao and Chen, Anna and Drain, Dawn and Ganguli, Deep and Henighan, Tom and Jones, Andy and Joseph, Nicholas and Mann, Ben and DasSarma, Nova and Elhage, Nelson and {Hatfield-Dodds}, Zac and Hernandez, Danny and Kernion, Jackson and Ndousse, Kamal and Olsson, Catherine and Amodei, Dario and Brown, Tom and Clark, Jack and McCandlish, Sam and Olah, Chris and Kaplan, Jared},
-  year = {2021},
-  month = dec,
-  number = {arXiv:2112.00861},
-  eprint = {2112.00861},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2112.00861},
-  urldate = {2024-12-14},
-  abstract = {Given the broad capabilities of large language models, it should be possible to work towards a general-purpose, text-based assistant that is aligned with human values, meaning that it is helpful, honest, and harmless. As an initial foray in this direction we study simple baseline techniques and evaluations, such as prompting. We find that the benefits from modest interventions increase with model size, generalize to a variety of alignment evaluations, and do not compromise the performance of large models. Next we investigate scaling trends for several training objectives relevant to alignment, comparing imitation learning, binary discrimination, and ranked preference modeling. We find that ranked preference modeling performs much better than imitation learning, and often scales more favorably with model size. In contrast, binary discrimination typically performs and scales very similarly to imitation learning. Finally we study a `preference model pre-training' stage of training, with the goal of improving sample efficiency when finetuning on human preferences.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning}
-}
-
-@misc{backlundVendingBenchBenchmarkLongTerm2025,
-  title = {Vending-{{Bench}}: {{A Benchmark}} for {{Long-Term Coherence}} of {{Autonomous Agents}}},
-  shorttitle = {Vending-{{Bench}}},
-  author = {Backlund, Axel and Petersson, Lukas},
-  year = {2025},
-  month = feb,
-  number = {arXiv:2502.15840},
-  eprint = {2502.15840},
-  primaryclass = {cs},
-  publisher = {arXiv},
-  doi = {10.48550/arXiv.2502.15840},
-  urldate = {2025-05-20},
-  abstract = {While Large Language Models (LLMs) can exhibit impressive proficiency in isolated, short-term tasks, they often fail to maintain coherent performance over longer time horizons. In this paper, we present Vending-Bench, a simulated environment designed to specifically test an LLM-based agent's ability to manage a straightforward, long-running business scenario: operating a vending machine. Agents must balance inventories, place orders, set prices, and handle daily fees - tasks that are each simple but collectively, over long horizons ({$>$}20M tokens per run) stress an LLM's capacity for sustained, coherent decision-making. Our experiments reveal high variance in performance across multiple LLMs: Claude 3.5 Sonnet and o3-mini manage the machine well in most runs and turn a profit, but all models have runs that derail, either through misinterpreting delivery schedules, forgetting orders, or descending into tangential "meltdown" loops from which they rarely recover. We find no clear correlation between failures and the point at which the model's context window becomes full, suggesting that these breakdowns do not stem from memory limits. Apart from highlighting the high variance in performance over long time horizons, Vending-Bench also tests models' ability to acquire capital, a necessity in many hypothetical dangerous AI scenarios. We hope the benchmark can help in preparing for the advent of stronger AI systems.},
-  archiveprefix = {arXiv},
-  keywords = {Computer Science - Artificial Intelligence}
-}
-
 @article{bahdanauNeuralMachineTranslation2014,
   title = {Neural Machine Translation by Jointly Learning to Align and Translate},
   author = {Bahdanau, Dzmitry},
@@ -248,7 +215,7 @@
   keywords = {Computer Science - Computation and Language}
 }
 
-@misc{buehlerXLoRAMixtureLowRank2024,
+@misc{buehlerXLoRAMixtureLowRank2024a,
   title = {X-{{LoRA}}: {{Mixture}} of {{Low-Rank Adapter Experts}}, a {{Flexible Framework}} for {{Large Language Models}} with {{Applications}} in {{Protein Mechanics}} and {{Molecular Design}}},
   shorttitle = {X-{{LoRA}}},
   author = {Buehler, Eric L. and Buehler, Markus J.},
@@ -432,7 +399,6 @@
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning}
 }
-
 
 @misc{esserTamingTransformersHighResolution2021,
   title = {Taming {{Transformers}} for {{High-Resolution Image Synthesis}}},
@@ -875,7 +841,7 @@
   archiveprefix = {arXiv}
 }
 
-@misc{kirchnerResearchingAlignmentResearch2022,
+@misc{kirchnerResearchingAlignmentResearch2022a,
   title = {Researching {{Alignment Research}}: {{Unsupervised Analysis}}},
   shorttitle = {Researching {{Alignment Research}}},
   author = {Kirchner, Jan H. and Smith, Logan and Thibodeau, Jacques and McDonell, Kyle and Reynolds, Laria},
@@ -896,6 +862,21 @@
   title = {Automatic {{Emotion Detection}} for {{Quantitative Literary Studies}}},
   author = {Klinger, Roman and Suliya, Surayya Samat and Reiter, Nils},
   year = {2016}
+}
+
+@misc{kojimaLargeLanguageModels2023,
+  title = {Large {{Language Models}} Are {{Zero-Shot Reasoners}}},
+  author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
+  year = {2023},
+  month = jan,
+  number = {arXiv:2205.11916},
+  eprint = {2205.11916},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2205.11916},
+  urldate = {2024-11-19},
+  abstract = {Pretrained large language models (LLMs) are widely used in many sub-fields of natural language processing (NLP) and generally known as excellent few-shot learners with task-specific exemplars. Notably, chain of thought (CoT) prompting, a recent technique for eliciting complex multi-step reasoning through step-by-step answer examples, achieved the state-of-the-art performances in arithmetics and symbolic reasoning, difficult system-2 tasks that do not follow the standard scaling laws for LLMs. While these successes are often attributed to LLMs' ability for few-shot learning, we show that LLMs are decent zero-shot reasoners by simply adding "Let's think step by step" before each answer. Experimental results demonstrate that our Zero-shot-CoT, using the same single prompt template, significantly outperforms zero-shot LLM performances on diverse benchmark reasoning tasks including arithmetics (MultiArith, GSM8K, AQUA-RAT, SVAMP), symbolic reasoning (Last Letter, Coin Flip), and other logical reasoning tasks (Date Understanding, Tracking Shuffled Objects), without any hand-crafted few-shot examples, e.g. increasing the accuracy on MultiArith from 17.7\% to 78.7\% and GSM8K from 10.4\% to 40.7\% with large InstructGPT model (text-davinci-002), as well as similar magnitudes of improvements with another off-the-shelf large model, 540B parameter PaLM. The versatility of this single prompt across very diverse reasoning tasks hints at untapped and understudied fundamental zero-shot capabilities of LLMs, suggesting high-level, multi-task broad cognitive capabilities may be extracted by simple prompting. We hope our work not only serves as the minimal strongest zero-shot baseline for the challenging reasoning benchmarks, but also highlights the importance of carefully exploring and analyzing the enormous zero-shot knowledge hidden inside LLMs before crafting finetuning datasets or few-shot exemplars.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
 
 @misc{kojimaLargeLanguageModels2023a,
@@ -1151,6 +1132,15 @@
   issn = {0028-0836, 1476-4687},
   doi = {10.1038/nature14236},
   urldate = {2024-12-08},
+  langid = {english}
+}
+
+@misc{ModelContextProtocol,
+  title = {Model {{Context Protocol}}},
+  journal = {Model Context Protocol},
+  urldate = {2025-06-09},
+  abstract = {Get started with the Model Context Protocol (MCP)},
+  howpublished = {https://modelcontextprotocol.io/introduction},
   langid = {english}
 }
 
@@ -1478,7 +1468,7 @@
   urldate = {2024-11-30}
 }
 
-@article{songScoreBasedGenerativeModeling2020,
+@article{songScoreBasedGenerativeModeling2020a,
   title = {Score-{{Based Generative Modeling}} through {{Stochastic Differential Equations}}},
   author = {Song, Yang and {Sohl-Dickstein}, Jascha Narain and Kingma, Diederik P. and Kumar, Abhishek and Ermon, Stefano and Poole, Ben},
   year = {2020},
@@ -1773,6 +1763,22 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
 }
 
+@misc{weiChainThoughtPromptingElicits2023,
+  title = {Chain-of-{{Thought Prompting Elicits Reasoning}} in {{Large Language Models}}},
+  author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed and Le, Quoc and Zhou, Denny},
+  year = {2023},
+  month = jan,
+  number = {arXiv:2201.11903},
+  eprint = {2201.11903},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-11-17},
+  abstract = {We explore how generating a chain of thought---a series of intermediate reasoning steps---significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain-ofthought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain-of-thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. The empirical gains can be striking. For instance, prompting a PaLM 540B with just eight chain-of-thought exemplars achieves state-of-the-art accuracy on the GSM8K benchmark of math word problems, surpassing even finetuned GPT-3 with a verifier.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language}
+}
+
 @misc{WhatAIAgent2024,
   title = {What Is an {{AI}} Agent?},
   year = {2024},
@@ -1899,6 +1905,23 @@
   keywords = {Computational science,Computer science}
 }
 
+@misc{yuksekgonulTextGradAutomaticDifferentiation2024,
+  title = {{{TextGrad}}: {{Automatic}} "{{Differentiation}}" via {{Text}}},
+  shorttitle = {{{TextGrad}}},
+  author = {Yuksekgonul, Mert and Bianchi, Federico and Boen, Joseph and Liu, Sheng and Huang, Zhi and Guestrin, Carlos and Zou, James},
+  year = {2024},
+  month = jun,
+  number = {arXiv:2406.07496},
+  eprint = {2406.07496},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2406.07496},
+  urldate = {2025-05-27},
+  abstract = {AI is undergoing a paradigm shift, with breakthroughs achieved by systems orchestrating multiple large language models (LLMs) and other complex components. As a result, developing principled and automated optimization methods for compound AI systems is one of the most important new challenges. Neural networks faced a similar challenge in its early days until backpropagation and automatic differentiation transformed the field by making optimization turn-key. Inspired by this, we introduce TextGrad, a powerful framework performing automatic ``differentiation'' via text. TextGrad backpropagates textual feedback provided by LLMs to improve individual components of a compound AI system. In our framework, LLMs provide rich, general, natural language suggestions to optimize variables in computation graphs, ranging from code snippets to molecular structures. TextGrad follows PyTorch's syntax and abstraction and is flexible and easy-to-use. It works out-of-the-box for a variety of tasks, where the users only provide the objective function without tuning components or prompts of the framework. We showcase TextGrad's effectiveness and generality across a diverse range of applications, from question answering and molecule optimization to radiotherapy treatment planning. Without modifying the framework, TextGrad improves the zero-shot accuracy of GPT-4o in Google-Proof Question Answering from \$51{\textbackslash}\%\$ to \$55{\textbackslash}\%\$, yields \$20{\textbackslash}\%\$ relative performance gain in optimizing LeetCode-Hard coding problem solutions, improves prompts for reasoning, designs new druglike small molecules with desirable in silico binding, and designs radiation oncology treatment plans with high specificity. TextGrad lays a foundation to accelerate the development of the next-generation of AI systems.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
 @misc{zhongSyntheT2CGeneratingSynthetic2024,
   title = {{{SyntheT2C}}: {{Generating Synthetic Data}} for {{Fine-Tuning Large Language Models}} on the {{Text2Cypher Task}}},
   shorttitle = {{{SyntheT2C}}},
@@ -1929,20 +1952,4 @@
   abstract = {Reward learning enables the application of reinforcement learning (RL) to tasks where reward is defined by human judgment, building a model of reward by asking humans questions. Most work on reward learning has used simulated environments, but complex information about values is often expressed in natural language, and we believe reward learning for language is a key to making RL practical and safe for real-world tasks. In this paper, we build on advances in generative pretraining of language models to apply reward learning to four natural language tasks: continuing text with positive sentiment or physically descriptive language, and summarization tasks on the TL;DR and CNN/Daily Mail datasets. For stylistic continuation we achieve good results with only 5,000 comparisons evaluated by humans. For summarization, models trained with 60,000 comparisons copy whole sentences from the input but skip irrelevant preamble; this leads to reasonable ROUGE scores and very good performance according to our human labelers, but may be exploiting the fact that labelers rely on simple heuristics.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Statistics - Machine Learning}
-}
-
-@online{yuksekgonulTextGradAutomaticDifferentiation2024,
-  title = {{{TextGrad}}: {{Automatic}} "{{Differentiation}}" via {{Text}}},
-  shorttitle = {{{TextGrad}}},
-  author = {Yuksekgonul, Mert and Bianchi, Federico and Boen, Joseph and Liu, Sheng and Huang, Zhi and Guestrin, Carlos and Zou, James},
-  date = {2024-06-11},
-  eprint = {2406.07496},
-  eprinttype = {arXiv},
-  eprintclass = {cs},
-  doi = {10.48550/arXiv.2406.07496},
-  url = {http://arxiv.org/abs/2406.07496},
-  urldate = {2025-05-27},
-  abstract = {AI is undergoing a paradigm shift, with breakthroughs achieved by systems orchestrating multiple large language models (LLMs) and other complex components. As a result, developing principled and automated optimization methods for compound AI systems is one of the most important new challenges. Neural networks faced a similar challenge in its early days until backpropagation and automatic differentiation transformed the field by making optimization turn-key. Inspired by this, we introduce TextGrad, a powerful framework performing automatic ``differentiation'' via text. TextGrad backpropagates textual feedback provided by LLMs to improve individual components of a compound AI system. In our framework, LLMs provide rich, general, natural language suggestions to optimize variables in computation graphs, ranging from code snippets to molecular structures. TextGrad follows PyTorch's syntax and abstraction and is flexible and easy-to-use. It works out-of-the-box for a variety of tasks, where the users only provide the objective function without tuning components or prompts of the framework. We showcase TextGrad's effectiveness and generality across a diverse range of applications, from question answering and molecule optimization to radiotherapy treatment planning. Without modifying the framework, TextGrad improves the zero-shot accuracy of GPT-4o in Google-Proof Question Answering from \$51\textbackslash\%\$ to \$55\textbackslash\%\$, yields \$20\textbackslash\%\$ relative performance gain in optimizing LeetCode-Hard coding problem solutions, improves prompts for reasoning, designs new druglike small molecules with desirable in silico binding, and designs radiation oncology treatment plans with high specificity. TextGrad lays a foundation to accelerate the development of the next-generation of AI systems.},
-  pubstate = {prepublished},
-  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
 }
