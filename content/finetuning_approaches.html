@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -94,7 +94,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-b6d7d76796be02c4c57202b87db7cd8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -449,8 +449,8 @@ Fig&nbsp;12.2: Results of Prompt-tuning compared to prompt-engineering and compl
 </div>
 </div>
 </section>
-<section id="textgrad" class="level4">
-<h4 class="anchored" data-anchor-id="textgrad">TextGrad</h4>
+<section id="sec-textgrad" class="level4">
+<h4 class="anchored" data-anchor-id="sec-textgrad">TextGrad</h4>
 <p><span class="citation" data-cites="yuksekgonulOptimizingGenerativeAI2025">Yuksekgonul et al. (<a href="#ref-yuksekgonulOptimizingGenerativeAI2025" role="doc-biblioref">2025</a>)</span> described a method for text-based auto differentiation. The authors claim that, given a loss-target, their approach “TextGrad” allows to improve a model’s performance by directly tuning the discrete textual prompt used for generating the model’s answer across various tasks. This is done by implementing a system analogous to the autograd implementation in PyTorch (see <a href="#fig-textGrad" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> for an illustration).</p>
 <div id="fig-textGrad" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -541,7 +541,7 @@ Fig&nbsp;12.5: Illustration of the result of quantization to 32, 16, 8 and 4 bit
 <div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;which is now defunct and replaced by the MT-Bench score <span class="citation" data-cites="ChatbotArenaLeaderboard"><em>Chatbot <span>Arena Leaderboard Week</span> 8</em> (<a href="#ref-ChatbotArenaLeaderboard" role="doc-biblioref">n.d.</a>)</span></p></div></div></section>
 <section id="x-lora-mixture-of-experts-with-lora" class="level4">
 <h4 class="anchored" data-anchor-id="x-lora-mixture-of-experts-with-lora">X-LoRA (Mixture of Experts with LoRA)</h4>
-<p>Mixture of experts is a pretty old idea generally <span class="citation" data-cites="jacobsAdaptiveMixturesLocal1991">(<a href="#ref-jacobsAdaptiveMixturesLocal1991" role="doc-biblioref">Jacobs et al., 1991</a>)</span> and has been used in the context of Deep Learning and more specifically NLP for quite some time now <span class="citation" data-cites="shazeerOutrageouslyLargeNeural2017">(<a href="#ref-shazeerOutrageouslyLargeNeural2017" role="doc-biblioref">Shazeer et al., 2017</a>)</span>. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. <span class="citation" data-cites="jiangMixtralExperts2024">Jiang et al. (<a href="#ref-jiangMixtralExperts2024" role="doc-biblioref">2024</a>)</span> The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic. During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert. This approach was applied to LoRA-based finetuning by <span class="citation" data-cites="buehlerXLoRAMixtureLowRank2024">(<a href="#ref-buehlerXLoRAMixtureLowRank2024" role="doc-biblioref"><strong>buehlerXLoRAMixtureLowRank2024?</strong></a>)</span> who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts. This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.</p>
+<p>Mixture of experts is a pretty old idea generally <span class="citation" data-cites="jacobsAdaptiveMixturesLocal1991">(<a href="#ref-jacobsAdaptiveMixturesLocal1991" role="doc-biblioref">Jacobs et al., 1991</a>)</span> and has been used in the context of Deep Learning and more specifically NLP for quite some time now <span class="citation" data-cites="shazeerOutrageouslyLargeNeural2017">(<a href="#ref-shazeerOutrageouslyLargeNeural2017" role="doc-biblioref">Shazeer et al., 2017</a>)</span>. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. <span class="citation" data-cites="jiangMixtralExperts2024">Jiang et al. (<a href="#ref-jiangMixtralExperts2024" role="doc-biblioref">2024</a>)</span> The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic. During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert. This approach was applied to LoRA-based finetuning by <span class="citation" data-cites="buehlerXLoRAMixtureLowRank2024a">Buehler &amp; Buehler (<a href="#ref-buehlerXLoRAMixtureLowRank2024a" role="doc-biblioref">2024</a>)</span> who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts. This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.</p>
 </section>
 <section id="unsloth" class="level4">
 <h4 class="anchored" data-anchor-id="unsloth">Unsloth</h4>
@@ -607,6 +607,9 @@ Fig&nbsp;12.7: Performance of (IA)³ compared to other parameter-efficient finet
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-aghajanyanIntrinsicDimensionalityExplains2020" class="csl-entry" role="listitem">
 Aghajanyan, A., Zettlemoyer, L., &amp; Gupta, S. (2020). <em>Intrinsic <span>Dimensionality Explains</span> the <span>Effectiveness</span> of <span>Language Model Fine-Tuning</span></em> (arXiv:2012.13255). arXiv. <a href="https://doi.org/10.48550/arXiv.2012.13255">https://doi.org/10.48550/arXiv.2012.13255</a>
+</div>
+<div id="ref-buehlerXLoRAMixtureLowRank2024a" class="csl-entry" role="listitem">
+Buehler, E. L., &amp; Buehler, M. J. (2024). <em>X-<span>LoRA</span>: <span>Mixture</span> of <span>Low-Rank Adapter Experts</span>, a <span>Flexible Framework</span> for <span>Large Language Models</span> with <span>Applications</span> in <span>Protein Mechanics</span> and <span>Molecular Design</span></em> (arXiv:2402.07148). arXiv. <a href="https://doi.org/10.48550/arXiv.2402.07148">https://doi.org/10.48550/arXiv.2402.07148</a>
 </div>
 <div id="ref-ChatbotArenaLeaderboard" class="csl-entry" role="listitem">
 <em>Chatbot <span>Arena Leaderboard Week</span> 8: <span>Introducing MT-Bench</span> and <span>Vicuna-33B</span> <span></span> <span>LMSYS Org</span></em>. (n.d.). https://lmsys.org/blog/2023-06-22-leaderboard.
