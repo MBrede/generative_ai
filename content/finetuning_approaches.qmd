@@ -102,7 +102,7 @@ Upload your results to moodle.
 
 :::
 
-#### TextGrad
+#### TextGrad {#sec-textgrad}
 
 @yuksekgonulOptimizingGenerativeAI2025 described a method for text-based auto differentiation. The authors claim that, given a loss-target, their approach "TextGrad" allows to improve a model's performance by directly tuning the discrete textual prompt used for generating the model's answer across various tasks.
 This is done by implementing a system analogous to the autograd implementation in PyTorch (see @fig-textGrad for an illustration).
@@ -202,7 +202,7 @@ They also report performance values of up to 99.3% of the performance of ChatGPT
 Mixture of experts is a pretty old idea generally [@jacobsAdaptiveMixturesLocal1991] and has been used in the context of Deep Learning and more specifically NLP for quite some time now [@shazeerOutrageouslyLargeNeural2017]. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. @jiangMixtralExperts2024
 The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic.
 During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert.
-This approach was applied to LoRA-based finetuning by @buehlerXLoRAMixtureLowRank2024 who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts.
+This approach was applied to LoRA-based finetuning by @buehlerXLoRAMixtureLowRank2024a who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts.
 This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.
 
 #### Unsloth
