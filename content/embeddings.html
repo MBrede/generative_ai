@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -90,14 +90,15 @@ div.csl-indent {
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-403dc1bdca117efccc841a13020d99f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-7c56b0cb14979e59e30aba88ccee8faa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -140,7 +141,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -183,7 +184,8 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../cover.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Generative AI</a> 
@@ -438,7 +440,7 @@ Fig&nbsp;7.2: Illustration of the usage of embedding-based distances in retrieva
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -470,7 +472,7 @@ Fig&nbsp;7.2: Illustration of the usage of embedding-based distances in retrieva
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -500,7 +502,7 @@ Fig&nbsp;7.3: Illustration of a RAG-system.
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -518,7 +520,7 @@ Fig&nbsp;7.3: Illustration of a RAG-system.
 <p>In terms of llamaindex, there are not just one but two tutorials on how to get qdrant to integrate into your agent, one from <a href="https://qdrant.tech/documentation/frameworks/llama-index/">qdrant</a> for general integration and one from <a href="https://docs.llamaindex.ai/en/stable/examples/vector_stores/QdrantIndexDemo/">llamaindex</a>.</p>
 <p>The pipeline is pretty close to what we discussed until here, it just uses the llamaindex-typical wrapper classes. See <a href="#tip-llamaindexRag" class="quarto-xref">Tip&nbsp;<span>7.1</span></a> for an example RAG-system implemented in Llamaindex.</p>
 <div id="tip-llamaindexRag" class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -530,19 +532,19 @@ Tip&nbsp;7.1: Llamaindex Rag
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The first thing in both the Llamaindex and the manual way of creating a retrieval pipeline is the setup of a vector database:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> qdrant_client <span class="im">import</span> QdrantClient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> qdrant_client <span class="im">import</span> QdrantClient</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> qdrant_client.models <span class="im">import</span> Distance, VectorParams, Batch</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>DIMENSIONS <span class="op">=</span> <span class="dv">384</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> QdrantClient(location<span class="op">=</span><span class="st">":memory:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> QdrantClient(location<span class="op">=</span><span class="st">":memory:"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>To store data and query the database, we have to load a embedding-model. As in the manual way of creating a retrieval pipeline discussed before, we can use a huggingface-SentenceTranformer model. But instead of using the SentenceTransformer class from the sentence_transformers library, we have to use the HuggingFaceEmbedding class from Llamaindex. This model is entered into the Llamaindex-Settings.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core <span class="im">import</span> Settings</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core <span class="im">import</span> Settings</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.embeddings.huggingface <span class="im">import</span> HuggingFaceEmbedding</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>embed_model <span class="op">=</span> HuggingFaceEmbedding(model_name<span class="op">=</span><span class="st">"sentence-transformers/all-MiniLM-L12-v2"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Settings.embed_model <span class="op">=</span> embed_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Settings.embed_model <span class="op">=</span> embed_model</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The next step is to wrap the vector-store into a Llamaindex-VectorStoreIndex. This index can be used to add our documents to the database.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.vector_stores.qdrant <span class="im">import</span> QdrantVectorStore</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.vector_stores.qdrant <span class="im">import</span> QdrantVectorStore</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>vector_store <span class="op">=</span> QdrantVectorStore(client<span class="op">=</span>client, collection_name<span class="op">=</span><span class="st">"paper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>vector_store <span class="op">=</span> QdrantVectorStore(client<span class="op">=</span>client, collection_name<span class="op">=</span><span class="st">"paper"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>As an example, we will add the “Attention is all you need” paper. This is how the head of our txt-file looks like:</p>
 <pre><code>         Attention Is All You Need
 arXiv:1706.03762v7 [cs.CL] 2 Aug 2023
@@ -554,24 +556,24 @@ arXiv:1706.03762v7 [cs.CL] 2 Aug 2023
                                               Google Brain                   Google Brain             Google Research            Google Research
                                           avaswani@google.com             noam@google.com            nikip@google.com            usz@google.com</code></pre>
 <p>Since we can not just dump the document at once, we will chunk it in sentences (more about that later). This can be done like this (ignore the parameters by now, we will look at them later):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core.node_parser <span class="im">import</span> SentenceSplitter</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core.node_parser <span class="im">import</span> SentenceSplitter</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core <span class="im">import</span> Document</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>node_parser <span class="op">=</span> SentenceSplitter(chunk_size<span class="op">=</span><span class="dv">100</span>, chunk_overlap<span class="op">=</span><span class="dv">20</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>nodes <span class="op">=</span> node_parser.get_nodes_from_documents(</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    [Document(text<span class="op">=</span>text)], show_progress<span class="op">=</span><span class="va">False</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These documents are then added to our database and transformed in an <em>index</em> llamaindex can use:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core <span class="im">import</span> VectorStoreIndex</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core <span class="im">import</span> VectorStoreIndex</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> VectorStoreIndex(</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    nodes<span class="op">=</span>nodes,</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    vector_store<span class="op">=</span>vector_store,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This index can already be used to retrieve documents from the database (by converting it to a <em>retriever</em>).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>retriever <span class="op">=</span> index.as_retriever(similarity_top_k<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>retriever.retrieve(<span class="st">'What do the terms Key, Value and Query stand for in self-attention?'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>retriever <span class="op">=</span> index.as_retriever(similarity_top_k<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>retriever.retrieve(<span class="st">'What do the terms Key, Value and Query stand for in self-attention?'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>[NodeWithScore(node=TextNode(id_='04c12537-5f33-4d41-a4d4-df30d2aed6e4', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={&lt;NodeRelationship.SOURCE: '1'&gt;: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=&lt;ObjectType.DOCUMENT: '4'&gt;, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), &lt;NodeRelationship.PREVIOUS: '2'&gt;: RelatedNodeInfo(node_id='22d5c0dc-d921-4790-ac6e-4f6a6d5f336f', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='772c092906000e119c69ad2e5cb90148a6c8b113d54a20fb9d5984d6a9695ee8'), &lt;NodeRelationship.NEXT: '3'&gt;: RelatedNodeInfo(node_id='893d077f-a8ab-4a3f-9765-69ef72d46ec4', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='df269253fe4504ec666a0a40380f9399466c5bd366c7ce6c853ee45b31d4bc84')}, text='of the values, where the weight assigned to each value is computed by a compatibility function of the\nquery with the corresponding key.\n\n3.2.1   Scaled Dot-Product Attention\nWe call our particular attention "Scaled Dot-Product Attention" (Figure 2). The input consists of\nqueries and keys of dimension dk , and\n                                    √ values of dimension dv .', mimetype='text/plain', start_char_idx=11715, end_char_idx=12088, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.588352239002419),
  NodeWithScore(node=TextNode(id_='c42d8e8c-24ac-447a-8058-d62d198ce9eb', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={&lt;NodeRelationship.SOURCE: '1'&gt;: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=&lt;ObjectType.DOCUMENT: '4'&gt;, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), &lt;NodeRelationship.PREVIOUS: '2'&gt;: RelatedNodeInfo(node_id='e961df5f-04be-4bf8-bba0-b30b346e6e3e', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='944203475caa494a68b2ca15140cea2278792db8546209bcc538388bf227b57d'), &lt;NodeRelationship.NEXT: '3'&gt;: RelatedNodeInfo(node_id='12962f1d-060f-49d3-9ff9-be2dceb23736', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='46773d9899458459b747af4980832a961621033663b11cb056304074633c0f14')}, text='Self-attention, sometimes called intra-attention is an attention mechanism relating different positions\nof a single sequence in order to compute a representation of the sequence. Self-attention has been\nused successfully in a variety of tasks including reading comprehension, abstractive summarization,\ntextual entailment and learning task-independent sentence representations [4, 27, 28, 22].', mimetype='text/plain', start_char_idx=8003, end_char_idx=8396, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5581949233902119),
  NodeWithScore(node=TextNode(id_='893d077f-a8ab-4a3f-9765-69ef72d46ec4', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={&lt;NodeRelationship.SOURCE: '1'&gt;: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=&lt;ObjectType.DOCUMENT: '4'&gt;, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), &lt;NodeRelationship.PREVIOUS: '2'&gt;: RelatedNodeInfo(node_id='04c12537-5f33-4d41-a4d4-df30d2aed6e4', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='4dc2893909c949675d444324e091b9dcae176eafe0faeb456e4f571f79863ac8'), &lt;NodeRelationship.NEXT: '3'&gt;: RelatedNodeInfo(node_id='e48f428a-1d0f-4830-8aca-82cbf4cd4b67', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='4a7481ff7440b3355d18a8f77fdbcf637903e138a37a44c74d4fd287baf610f2')}, text='We compute the dot products of the\nquery with all keys, divide each by dk , and apply a softmax function to obtain the weights on the\nvalues.\nIn practice, we compute the attention function on a set of queries simultaneously, packed together\ninto a matrix Q. The keys and values are also packed together into matrices K and V .', mimetype='text/plain', start_char_idx=12089, end_char_idx=12415, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.5557579023667499),
@@ -583,7 +585,7 @@ arXiv:1706.03762v7 [cs.CL] 2 Aug 2023
  NodeWithScore(node=TextNode(id_='158309a7-9a7a-47e6-ac58-1a4e98eee41b', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={&lt;NodeRelationship.SOURCE: '1'&gt;: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=&lt;ObjectType.DOCUMENT: '4'&gt;, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), &lt;NodeRelationship.PREVIOUS: '2'&gt;: RelatedNodeInfo(node_id='e4e96748-8e42-4c45-a1b3-3e0b2a179475', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='162e546ee2aace8fdcf9330a044ed33bc46d32219ec57c876b93a1fad69425e7'), &lt;NodeRelationship.NEXT: '3'&gt;: RelatedNodeInfo(node_id='8229d93a-1fb8-492f-9227-2b13658180f7', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='e9431f13405886d724857fa8ba6e9d0bd84affbaf2d35beedeeda36e79d95de8')}, text='4     Why Self-Attention\nIn this section we compare various aspects of self-attention layers to the recurrent and convolu-\ntional layers commonly used for mapping one variable-length sequence of symbol representations\n(x1 , ..., xn ) to another sequence of equal length (z1 , ..., zn ), with xi , zi ∈ Rd , such as a hidden\nlayer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we\nconsider three desiderata.', mimetype='text/plain', start_char_idx=20488, end_char_idx=20939, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.4348473100243987),
  NodeWithScore(node=TextNode(id_='721c5981-90a9-4046-a757-4593a362ddf7', embedding=None, metadata={}, excluded_embed_metadata_keys=[], excluded_llm_metadata_keys=[], relationships={&lt;NodeRelationship.SOURCE: '1'&gt;: RelatedNodeInfo(node_id='847f2be4-3799-41b5-80c0-b390298eba24', node_type=&lt;ObjectType.DOCUMENT: '4'&gt;, metadata={}, hash='74e64008cffed21d58edef5058f6cf6b3bc853bf936b83eefb70563168b73c5a'), &lt;NodeRelationship.PREVIOUS: '2'&gt;: RelatedNodeInfo(node_id='a07f95e3-64fb-4637-ac18-4a928541df80', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='b11620062050474b2e5a6317e981c8ad07b227f032ebe169b1cb4f87c8994aa6'), &lt;NodeRelationship.NEXT: '3'&gt;: RelatedNodeInfo(node_id='165241f9-efb1-433a-896b-b6ea61168d3f', node_type=&lt;ObjectType.TEXT: '1'&gt;, metadata={}, hash='559f529f69207d17371f20407b6f1b4691910f9c8a90c9cefbb741e95fbf5de9')}, text='Operations\n      Self-Attention                      O(n2 · d)             O(1)                O(1)\n      Recurrent', mimetype='text/plain', start_char_idx=18618, end_char_idx=18733, text_template='{metadata_str}\n\n{content}', metadata_template='{key}: {value}', metadata_seperator='\n'), score=0.4276254505797798)]</code></pre>
 <p>The retriever can then directly be use as a tool to answer questions about our documents:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core.tools <span class="im">import</span> BaseTool, FunctionTool</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core.tools <span class="im">import</span> BaseTool, FunctionTool</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_references(question: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Query a database containing the paper "Attention is all you Need" in parts.</span></span>
@@ -592,9 +594,9 @@ arXiv:1706.03762v7 [cs.CL] 2 Aug 2023
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>.join([<span class="ss">f'</span><span class="sc">{</span><span class="bu">round</span>(n.score,<span class="dv">2</span>)<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>n<span class="sc">.</span>node<span class="sc">.</span>text<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> n <span class="kw">in</span> retriever.retrieve(question)])</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>find_references_tool <span class="op">=</span> FunctionTool.from_defaults(fn<span class="op">=</span>find_references)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>find_references_tool <span class="op">=</span> FunctionTool.from_defaults(fn<span class="op">=</span>find_references)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This tool can then be added to an agent as we discussed before:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core.agent <span class="im">import</span> ReActAgent</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core.agent <span class="im">import</span> ReActAgent</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.llms.lmstudio <span class="im">import</span> LMStudio</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -605,14 +607,14 @@ arXiv:1706.03762v7 [cs.CL] 2 Aug 2023
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    request_timeout<span class="op">=</span><span class="dv">600</span>)</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ReActAgent.from_tools(tools<span class="op">=</span>[find_references_tool],llm<span class="op">=</span>llm, verbose<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ReActAgent.from_tools(tools<span class="op">=</span>[find_references_tool],llm<span class="op">=</span>llm, verbose<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>/home/brede/MEGA/Honorar/Generative AI/script/.venv/lib/python3.10/site-packages/pydantic/_internal/_fields.py:132: UserWarning: Field "model_name" in LMStudio has conflict with protected namespace "model_".
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
   warnings.warn(</code></pre>
 <p>Which can then be used to answer chat-requests:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"What is the meaning of Query, Key and Value in the context of self-attention?"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"What is the meaning of Query, Key and Value in the context of self-attention?"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>&gt; Running step 062240ab-0d21-4fdb-a603-fb386970c32f. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
 Observation: Error: Could not parse output. Please follow the thought-action-input format. Try again.
 &gt; Running step 2a291a80-5090-4373-945d-3a647ac2b758. Step input: None
@@ -748,14 +750,14 @@ File [0;32m~/MEGA/Honorar/Generative AI/script/.venv/lib/python3.10/site-packag
 [0;31mValueError[0m: Reached max iterations.</code></pre>
 <p>As you can see, the model request ends up with errors. The model is not powerful enough to answer in the structured manner we need for the function-calling of the tool. To circumvent this, we can try a function-calling-finetuned model:</p>
 <p>We can try to solve this issue by using a language model that is finetuned on function calling:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fc_llm <span class="op">=</span> LMStudio(model_name<span class="op">=</span><span class="st">"phi-3-mini-4k-instruct-function-calling"</span>,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fc_llm <span class="op">=</span> LMStudio(model_name<span class="op">=</span><span class="st">"phi-3-mini-4k-instruct-function-calling"</span>,</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>        base_url<span class="op">=</span><span class="st">"http://localhost:1234/v1"</span>,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="fl">0.2</span>,</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    request_timeout<span class="op">=</span><span class="dv">600</span>)</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ReActAgent.from_tools(tools<span class="op">=</span>[find_references_tool],llm<span class="op">=</span>fc_llm, verbose<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"What is the meaning of Query, Key and Value in the context of self-attention?"</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>&gt; Running step 78c0a52b-55fa-4241-ade5-67c0b92b9bf3. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
 Thought: (Implicit) I can answer without any more tools!
 Answer:  In the context of self-attention, "Query", "Key" and "Value" are terms used to describe different components of a neural network architecture. Here's what they mean:
@@ -770,7 +772,7 @@ In summary, query, key and value are components of a neural network architecture
 In summary, query, key and value are components of a neural network architecture used in self-attention that help us focus on specific parts of our input sequence, identify important features within it, and retrieve relevant stored knowledge/memory to compute outputs.</code></pre>
 <p>This model does not run into an issue with the structured output, it does not try to use the tool anymore though.</p>
 <p>One way to try to solve this issue is to adapt the agent-prompt:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(agent.get_prompts()[<span class="st">'agent_worker:system_prompt'</span>].template)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(agent.get_prompts()[<span class="st">'agent_worker:system_prompt'</span>].template)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>You are designed to help with a variety of tasks, from answering questions to providing summaries to other types of analyses.
 
 ## Tools
@@ -820,7 +822,7 @@ Answer: [your answer here (In the same language as the user's question)]
 
 Below is the current conversation consisting of interleaving human and assistant messages.</code></pre>
 <p>This we can adapt in the following way:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core <span class="im">import</span> PromptTemplate</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> llama_index.core <span class="im">import</span> PromptTemplate</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>new_agent_template_str <span class="op">=</span> <span class="st">"""</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="st">You are designed to help answer questions based on a collection of paper-excerpts.</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -855,10 +857,10 @@ Below is the current conversation consisting of interleaving human and assistant
 <span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>new_agent_template <span class="op">=</span> PromptTemplate(new_agent_template_str)</span>
 <span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>agent.update_prompts(</span>
 <span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"agent_worker:system_prompt"</span>: new_agent_template}</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>We can test this new prompt with the same question:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"What is the meaning of Query, Key and Value in the context of self-attention?"</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"What is the meaning of Query, Key and Value in the context of self-attention?"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>&gt; Running step d5fb46ea-de7a-4e8b-ace7-7ed3ae6a9706. Step input: What is the meaning of Query, Key and Value in the context of self-attention?
 Thought: (Implicit) I can answer without any more tools!
 Answer:  In the context of natural language processing (NLP), "Query", "Key" and "Value" are used as components for a type of neural network architecture called Transformer model. The Transformer model employs self-attention mechanism to improve its ability to process sequential data such as text or audio. 
@@ -875,8 +877,8 @@ Here's how these terms relate to the model:
 In summary, Query, Key and Value are components of a neural network architecture used in Transformer models for NLP that help us process sequential data such as text by guiding attention towards relevant parts of an input sequence, identifying important features within it, and computing outputs based on self-attention weights.</code></pre>
 <p>The model still tries to answer without the tool.</p>
 <p>Let’s try to ask a more specific question:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"How does the paper 'Attention is all you need' define the term self attention?"</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"How does the paper 'Attention is all you need' define the term self attention?"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>&gt; Running step 3c1b3050-f4a0-4b46-9006-366161df0219. Step input: How does the paper 'Attention is all you need' define the term self attention?
 Thought: (Implicit) I can answer without any more tools!
 Answer:  In the paper "Attention Is All You Need", the authors present a novel Transformer model that relies heavily on an attention mechanism to improve its ability to process sequential data such as text or audio. The paper introduces several key concepts related to this mechanism, including the notion of "self-attention". 
@@ -885,7 +887,7 @@ Self-attention is defined in the paper as follows: given a sequence of input tok
 Self-attention is defined in the paper as follows: given a sequence of input tokens (or words), self-attention enables us to compute contextualized representations for each token by computing attention weights over all other tokens in the sequence. These attention weights reflect how much importance we should give to each token when computing our output representation. In particular, during training, these weights are learned based on the input data itself and can be adjusted dynamically as new inputs come in. The resulting contextualized representations produced by self-attention provide a rich source of information for downstream tasks like language modeling or machine translation.</code></pre>
 <p>Still no dice.</p>
 <p>One solution to this problem is to just use a bigger model:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> LMStudio(model_name<span class="op">=</span><span class="st">"llama-3.2-3b-instruct"</span>, <span class="co">#3 Billion instead of 1</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>llm <span class="op">=</span> LMStudio(model_name<span class="op">=</span><span class="st">"llama-3.2-3b-instruct"</span>, <span class="co">#3 Billion instead of 1</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>        base_url<span class="op">=</span><span class="st">"http://localhost:1234/v1"</span>,</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span><span class="fl">0.2</span>,</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    request_timeout<span class="op">=</span><span class="dv">600</span>)</span>
@@ -894,7 +896,7 @@ Self-attention is defined in the paper as follows: given a sequence of input tok
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> ReActAgent.from_tools(tools<span class="op">=</span>[find_references_tool],llm<span class="op">=</span>llm, verbose<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> agent.chat(<span class="st">"How does the paper 'Attention is all you need' define the term self attention?"</span>)</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>&gt; Running step 9326aba5-48cf-40dd-8b85-b5da82554e5c. Step input: How does the paper 'Attention is all you need' define the term self attention?
 Thought: The current language of the user is English. I need to use a tool to help me answer the question.
 Action: find_references
@@ -978,9 +980,9 @@ Self-attention, also known as intra-attention, is an attention mechanism that co
 <p>This is not always feasible though.</p>
 <p>Another way to use the retrieval-pipeline is to not give a weak model the opportunity to mess up the tool calling. This can be implemented by using a query-engine instead of the retriever. This directly wraps the retrieval in a LLM-Summarization-Module that only returns summaries.</p>
 <p>Doing this, we can use two separate models for each part of the task - one for the planning and answering and one for the structured summarization:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>query_engine <span class="op">=</span> index.as_query_engine(use_async<span class="op">=</span><span class="va">False</span>, llm<span class="op">=</span>fc_llm, verbose<span class="op">=</span><span class="va">True</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>query_engine <span class="op">=</span> index.as_query_engine(use_async<span class="op">=</span><span class="va">False</span>, llm<span class="op">=</span>fc_llm, verbose<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> query_engine.query(<span class="st">"What is the meaning of Query, Key and Value in the context of self-attention?"</span>)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code> In the context of self-attention, "Query" refers to the keys that are used to retrieve relevant information from a sequence. "Key" represents the values associated with each element in the sequence, which determine their importance or relevance. "Value" corresponds to the actual data being processed by the attention mechanism.</code></pre>
 <p>Finally an answer we can work with!</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -989,7 +991,7 @@ Self-attention, also known as intra-attention, is an attention mechanism that co
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1012,7 +1014,7 @@ Self-attention, also known as intra-attention, is an attention mechanism that co
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1036,7 +1038,7 @@ Self-attention, also known as intra-attention, is an attention mechanism that co
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1172,13 +1174,14 @@ document.addEventListener('DOMContentLoaded', function() {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

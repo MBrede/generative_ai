@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -90,14 +90,15 @@ div.csl-indent {
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-403dc1bdca117efccc841a13020d99f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-7c56b0cb14979e59e30aba88ccee8faa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -140,7 +141,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -183,7 +184,8 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../cover.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Generative AI</a> 
@@ -337,6 +339,13 @@ Prompting<br>
   <li><a href="#prompting-strategies" id="toc-prompting-strategies" class="nav-link" data-scroll-target="#prompting-strategies">Prompting strategies</a></li>
   <li><a href="#generation-of-synthetic-texts" id="toc-generation-of-synthetic-texts" class="nav-link" data-scroll-target="#generation-of-synthetic-texts">Generation of synthetic texts</a></li>
   <li><a href="#temperature" id="toc-temperature" class="nav-link" data-scroll-target="#temperature">Temperature</a></li>
+  <li><a href="#understanding-and-mitigating-hallucinations" id="toc-understanding-and-mitigating-hallucinations" class="nav-link" data-scroll-target="#understanding-and-mitigating-hallucinations">Understanding and Mitigating Hallucinations</a>
+  <ul class="collapse">
+  <li><a href="#what-are-hallucinations" id="toc-what-are-hallucinations" class="nav-link" data-scroll-target="#what-are-hallucinations">What are Hallucinations?</a></li>
+  <li><a href="#why-hallucinations-occur-a-statistical-perspective" id="toc-why-hallucinations-occur-a-statistical-perspective" class="nav-link" data-scroll-target="#why-hallucinations-occur-a-statistical-perspective">Why Hallucinations Occur: A Statistical Perspective</a></li>
+  <li><a href="#hallucinations-as-compression-failures" id="toc-hallucinations-as-compression-failures" class="nav-link" data-scroll-target="#hallucinations-as-compression-failures">Hallucinations as Compression Failures</a></li>
+  <li><a href="#why-hallucinations-persist-after-training" id="toc-why-hallucinations-persist-after-training" class="nav-link" data-scroll-target="#why-hallucinations-persist-after-training">Why Hallucinations Persist After Training</a></li>
+  </ul></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -398,7 +407,7 @@ You are a helpful AI assistant named SmolLM, trained by Hugging Face&lt;|im_end|
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -459,15 +468,13 @@ Fig&nbsp;4.2: A poem and a “poem”
 <li>to provide examples if possible.</li>
 </ol>
 <p>Since the quality of results is so highly dependent on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated. One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.</p>
-<!--
-Too many labels. Reduce the label count for the task -->
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -479,7 +486,7 @@ Too many labels. Reduce the label count for the task -->
 </ol>
 <p>Use the <a href="https://en.wikipedia.org/wiki/F-score">F1-score</a> implemented in <a href="https://scikit-learn.org/1.5/modules/generated/sklearn.metrics.f1_score.html">scikit learn</a> to evaluate your results.</p>
 <p>Since the dataset has a whole series of labels, use the following python-snippet (or your own approach) to extract only examples using the “GET_MESSAGE”-label:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> []</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'data/de_test.jsonl'</span>, <span class="st">'r'</span>) <span class="im">as</span> f:</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
@@ -491,7 +498,7 @@ Too many labels. Reduce the label count for the task -->
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'example'</span>: entry[<span class="st">'text'</span>],</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>     <span class="st">'label'</span>: <span class="st">'GET_MESSAGE'</span> <span class="cf">if</span> entry[<span class="st">'label_text'</span>] <span class="op">==</span> <span class="st">'GET_MESSAGE'</span> </span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>              <span class="cf">else</span> <span class="st">'OTHER'</span>} <span class="cf">for</span> entry <span class="kw">in</span> data</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>2.</strong> You do sometimes read very specific tips on how to improve your results. Here are three, that you can find from time to time:</p>
 <ul>
 <li>Do promise rewards (i.e., monetary tips) instead of threatening punishments</li>
@@ -518,7 +525,7 @@ Too many labels. Reduce the label count for the task -->
 <li>Using a second LLM/different prompt to rate the answers</li>
 </ul>
 <div id="tip-structuredOutput" class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -530,7 +537,7 @@ Tip&nbsp;4.1: Structured Output
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>There are ways on forcing a language model to only generate output conforming to a specific format. We have already seen one in the examples of models being instruct-tuned to conform to a given chat-template. Another often used method is to use regular expressions to set the probabilities of the next token to be zero if it would not conform to a given (JSON-)scheme. The nicest way to use this feature in python is to define a <code>pydantic</code>-dataclass that defines the possible output formats and describes the expected field content to the model:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -559,7 +566,7 @@ Tip&nbsp;4.1: Structured Output
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> chat_completion.choices[<span class="dv">0</span>].message.content</span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>classify_one_sample(<span class="st">"Gib mir die Nachricht von Peter aus!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>classify_one_sample(<span class="st">"Gib mir die Nachricht von Peter aus!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The descriptions are the internally added as context to the prompt and the output is limited to the given data-range. For more possibilities on setting constraints see the <a href="https://docs.pydantic.dev/latest/concepts/fields/"><code>pydantic</code>-docs</a>, for a more detailed explanation on how the token limitations work, see <a href="https://dottxt-ai.github.io/outlines/latest/reference/generation/structured_generation_explanation/">this article by outlined</a>.</p>
 </div>
 </div>
@@ -570,12 +577,12 @@ Tip&nbsp;4.1: Structured Output
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Using your script for batch-testing different prompts, generate synthetic data for a emotion detection task based on <a href="https://en.wikipedia.org/wiki/Paul_Ekman">Paul Ekman’s</a> six basic emotions: anger, disgust, fear, happiness, sadness and surprise<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>The generated data should consist of a sentence and the emotion that is expressed in it. Start by generating two examples for each emotion. Validate these results and adapt them if necessary. Then use these examples to generate 100 samples for each emotion.</p>
+<p>The generated data should consist of a sentence and the emotion that is expressed in it. Start by generating two examples for each emotion. Validate these results and adapt them if necessary. Then use these examples to generate 10 samples for each emotion.</p>
 <p>Use one of the above mentioned (non-manual) strategies to validate the data you generated.</p>
 <p>Upload your results to Moodle.</p>
 </div>
@@ -603,7 +610,7 @@ p_{Token}(Temp) = \frac{e^{\frac{z_{Token}}{Temp}}}{\sum_{i=1}^k e ^{\frac{z_{i}
 <p>The effect of this temperature can be seen in <a href="#fig-temp" class="quarto-xref">Figure&nbsp;<span>4.3</span></a>.</p>
 <div class="cell enlarge-onhover" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-temp" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token." data-fig-align="center">
+<div id="fig-temp" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-temp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="prompting_files/figure-html/fig-temp-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="A heatmap illustrating the effect of the temperature parameter on the softmax-output for a given input. The x-axis represents the temperature, the y-axis represents the token-position and the color represents the probability of the token." width="2400">
@@ -623,7 +630,7 @@ Fig&nbsp;4.3: The effect of the temperature parameter on the softmax-output for 
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -634,6 +641,68 @@ Fig&nbsp;4.3: The effect of the temperature parameter on the softmax-output for 
 </ul>
 </div>
 </div>
+</section>
+<section id="understanding-and-mitigating-hallucinations" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-and-mitigating-hallucinations">Understanding and Mitigating Hallucinations</h2>
+<p>While temperature controls the randomness of model outputs, a more fundamental challenge emerges when language models generate plausible yet incorrect information - a phenomenon known as <strong>hallucination</strong>.</p>
+<section id="what-are-hallucinations" class="level3">
+<h3 class="anchored" data-anchor-id="what-are-hallucinations">What are Hallucinations?</h3>
+<p>Hallucinations occur when language models produce confident, plausible-sounding outputs that are factually incorrect or unsupported by their training data. These aren’t random errors - they’re systematic failures that arise from the statistical nature of language modeling itself.</p>
+<p>Consider this example: When asked “What is Adam Tauman Kalai’s birthday?”, state-of-the-art models confidently produce different incorrect dates across multiple attempts, even when explicitly asked to respond only if they know the answer <span class="citation" data-cites="kalaiWhyLanguageModels2025">(<a href="#ref-kalaiWhyLanguageModels2025" role="doc-biblioref">Kalai et al., 2025</a>)</span>.</p>
+</section>
+<section id="why-hallucinations-occur-a-statistical-perspective" class="level3">
+<h3 class="anchored" data-anchor-id="why-hallucinations-occur-a-statistical-perspective">Why Hallucinations Occur: A Statistical Perspective</h3>
+<p><span class="citation" data-cites="kalaiWhyLanguageModels2025">Kalai et al. (<a href="#ref-kalaiWhyLanguageModels2025" role="doc-biblioref">2025</a>)</span> demonstrate that hallucinations emerge from the fundamental objective of language model training. They show that generating valid outputs is inherently harder than classifying output validity - a task where errors are well-understood in machine learning.</p>
+<p>The key insight: even with perfect training data, the cross-entropy objective used in pretraining naturally leads to errors on certain types of facts. Specifically:</p>
+<p><strong>Arbitrary Facts</strong>: Information without learnable patterns (like birthdays of obscure individuals) will be hallucinated at rates approximately equal to the fraction of such facts appearing exactly once in training data. If 20% of birthday facts appear only once, expect ~20% hallucination rate on birthdays.</p>
+<p><strong>Poor Models</strong>: When model architectures cannot adequately represent certain patterns, systematic errors emerge. For example, models using only token-based representations struggle with character-level tasks like counting letters in “DEEPSEEK”.</p>
+</section>
+<section id="hallucinations-as-compression-failures" class="level3">
+<h3 class="anchored" data-anchor-id="hallucinations-as-compression-failures">Hallucinations as Compression Failures</h3>
+<p><span class="citation" data-cites="chlonPredictableCompressionFailures2025">Chlon et al. (<a href="#ref-chlonPredictableCompressionFailures2025" role="doc-biblioref">2025</a>)</span> provide a complementary information-theoretic perspective. They show that transformers minimize expected conditional description length over input orderings rather than the permutation-invariant description length. This makes them “Bayesian in expectation, not in realization.”</p>
+<p>Their framework introduces practical metrics for predicting hallucinations:</p>
+<ul>
+<li><strong>Information Sufficiency Ratio (ISR)</strong>: The ratio of available information to required information for a target reliability threshold</li>
+<li><strong>Bits-to-Trust (B2T)</strong>: The amount of information needed to achieve a specific confidence level</li>
+</ul>
+<p>A key finding: hallucinations decrease by approximately 0.13 per additional nat of information, making the phenomenon quantitatively predictable rather than mysterious.</p>
+</section>
+<section id="why-hallucinations-persist-after-training" class="level3">
+<h3 class="anchored" data-anchor-id="why-hallucinations-persist-after-training">Why Hallucinations Persist After Training</h3>
+<p>Beyond pretraining, <span class="citation" data-cites="kalaiWhyLanguageModels2025">Kalai et al. (<a href="#ref-kalaiWhyLanguageModels2025" role="doc-biblioref">2025</a>)</span> argue that post-training and evaluation procedures actively reinforce hallucinations. Most benchmarks use binary grading (correct/incorrect) with no credit for expressing uncertainty. This creates an “epidemic” of penalizing honest uncertainty - models that guess when unsure outperform those that appropriately abstain.</p>
+<p>Consider two models:</p>
+<ul>
+<li>Model A: Accurately signals uncertainty, never hallucinates</li>
+<li>Model B: Same as A but guesses instead of expressing uncertainty</li>
+</ul>
+<p>Model B will outperform A on most current benchmarks, despite being less trustworthy.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Test hallucination behavior on a small model using LM-Studio:</p>
+<ol type="1">
+<li>Use a small model (Qwen3-0.6B or similar) to answer 10 factual questions about rare entities</li>
+<li>For each question, generate 3 responses with the same temperature</li>
+<li>Document:
+<ul>
+<li>How often does the model give confident but incorrect answers?</li>
+<li>How often does it appropriately express uncertainty?</li>
+<li>How does response consistency relate to likely correctness?</li>
+</ul></li>
+<li>Now modify the prompt to explicitly encourage uncertainty expression (e.g., “Only answer if you’re very confident, otherwise say you don’t know”)</li>
+<li>Compare the results</li>
+</ol>
+<p>Upload your observations to Moodle.</p>
+</div>
+</div>
+</section>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
@@ -649,8 +718,14 @@ Fig&nbsp;4.3: The effect of the temperature parameter on the softmax-output for 
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-chlonPredictableCompressionFailures2025" class="csl-entry" role="listitem">
+Chlon, L., Karim, A., &amp; Chlon, M. (2025). <em>Predictable <span>Compression Failures</span>: <span>Why Language Models Actually Hallucinate</span></em> (arXiv:2509.11208). arXiv. <a href="https://doi.org/10.48550/arXiv.2509.11208">https://doi.org/10.48550/arXiv.2509.11208</a>
+</div>
 <div id="ref-heidloffFinetuningSmallLLMs2023" class="csl-entry" role="listitem">
 Heidloff, N. (2023). Fine-tuning small <span>LLMs</span> with <span>Output</span> from large <span>LLMs</span>. In <em>Niklas Heidloff</em>. https://heidloff.net/article/fine-tune-small-llm-with-big-llm/.
+</div>
+<div id="ref-kalaiWhyLanguageModels2025" class="csl-entry" role="listitem">
+Kalai, A. T., Nachum, O., Vempala, S. S., &amp; Zhang, E. (2025). <em>Why <span>Language Models Hallucinate</span></em> (arXiv:2509.04664). arXiv. <a href="https://doi.org/10.48550/arXiv.2509.04664">https://doi.org/10.48550/arXiv.2509.04664</a>
 </div>
 <div id="ref-kumarSelectiveFinetuningLLMlabeled2024" class="csl-entry" role="listitem">
 Kumar, B., Amar, J., Yang, E., Li, N., &amp; Jia, Y. (2024). <em>Selective <span class="nocase">Fine-tuning</span> on <span class="nocase">LLM-labeled Data May Reduce Reliance</span> on <span>Human Annotation</span>: <span class="nocase">A Case Study Using Schedule-of-Event Table Detection</span></em> (arXiv:2405.06093). arXiv. <a href="https://doi.org/10.48550/arXiv.2405.06093">https://doi.org/10.48550/arXiv.2405.06093</a>
@@ -760,13 +835,14 @@ document.addEventListener('DOMContentLoaded', function() {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

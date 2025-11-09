@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -90,14 +90,15 @@ div.csl-indent {
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-403dc1bdca117efccc841a13020d99f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-7c56b0cb14979e59e30aba88ccee8faa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -140,7 +141,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -183,7 +184,8 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../cover.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Generative AI</a> 
@@ -428,7 +430,7 @@ Fig&nbsp;12.2: Results of Prompt-tuning compared to prompt-engineering and compl
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -469,20 +471,20 @@ Fig&nbsp;12.3: The TextGrad optimization schema, taken from <span class="citatio
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Your turn!</p>
 <p>Install <a href="https://github.com/zou-group/textgrad">TextGrad</a> and get the <a href="https://colab.research.google.com/github/zou-group/TextGrad/blob/main/examples/notebooks/Tutorial-Solution-Optimization.ipynb">tutorial on optimizing a solution</a> to run using the following snippet to initialize your LMStudio/Ollama server:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> textgrad <span class="im">as</span> tg</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> textgrad <span class="im">as</span> tg</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textgrad.engine.local_model_openai_api <span class="im">import</span> ChatExternalClient</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(base_url<span class="op">=</span><span class="st">"&lt;your endpoint&gt;"</span>, api_key<span class="op">=</span><span class="st">"&lt;some key&gt;"</span>) </span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> ChatExternalClient(client<span class="op">=</span>client, model_string<span class="op">=</span><span class="st">"&lt;your model of choice&gt;"</span>) </span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>tg.set_backward_engine(engine, override<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>tg.set_backward_engine(engine, override<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If this tutorial runs for you, adapt the code so that it generates the reasoning to the following riddle:</p>
 <blockquote class="blockquote">
 <p>A farmer with a wolf, a goat, and a cabbage must cross a river by boat. The boat can carry only the farmer and a single item. If left unattended together, the wolf would eat the goat, or the goat would eat the cabbage. How can they cross the river without anything being eaten? - Taken from <a href="https://en.wikipedia.org/wiki/Wolf,_goat_and_cabbage_problem">wikipedia</a></p>
@@ -541,7 +543,7 @@ Fig&nbsp;12.5: Illustration of the result of quantization to 32, 16, 8 and 4 bit
 <div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;which is now defunct and replaced by the MT-Bench score <span class="citation" data-cites="ChatbotArenaLeaderboard"><em>Chatbot <span>Arena Leaderboard Week</span> 8</em> (<a href="#ref-ChatbotArenaLeaderboard" role="doc-biblioref">n.d.</a>)</span></p></div></div></section>
 <section id="x-lora-mixture-of-experts-with-lora" class="level4">
 <h4 class="anchored" data-anchor-id="x-lora-mixture-of-experts-with-lora">X-LoRA (Mixture of Experts with LoRA)</h4>
-<p>Mixture of experts is a pretty old idea generally <span class="citation" data-cites="jacobsAdaptiveMixturesLocal1991">(<a href="#ref-jacobsAdaptiveMixturesLocal1991" role="doc-biblioref">Jacobs et al., 1991</a>)</span> and has been used in the context of Deep Learning and more specifically NLP for quite some time now <span class="citation" data-cites="shazeerOutrageouslyLargeNeural2017">(<a href="#ref-shazeerOutrageouslyLargeNeural2017" role="doc-biblioref">Shazeer et al., 2017</a>)</span>. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. <span class="citation" data-cites="jiangMixtralExperts2024">Jiang et al. (<a href="#ref-jiangMixtralExperts2024" role="doc-biblioref">2024</a>)</span> The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic. During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert. This approach was applied to LoRA-based finetuning by <span class="citation" data-cites="buehlerXLoRAMixtureLowRank2024a">Buehler &amp; Buehler (<a href="#ref-buehlerXLoRAMixtureLowRank2024a" role="doc-biblioref">2024</a>)</span> who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts. This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.</p>
+<p>Mixture of experts is a pretty old idea generally <span class="citation" data-cites="jacobsAdaptiveMixturesLocal1991">(<a href="#ref-jacobsAdaptiveMixturesLocal1991" role="doc-biblioref">Jacobs et al., 1991</a>)</span> and has been used in the context of Deep Learning and more specifically NLP for quite some time now <span class="citation" data-cites="shazeerOutrageouslyLargeNeural2017">(<a href="#ref-shazeerOutrageouslyLargeNeural2017" role="doc-biblioref">Shazeer et al., 2017</a>)</span>. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. <span class="citation" data-cites="jiangMixtralExperts2024">Jiang et al. (<a href="#ref-jiangMixtralExperts2024" role="doc-biblioref">2024</a>)</span> The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic. During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert. This approach was applied to LoRA-based finetuning by <span class="citation" data-cites="buehlerXLoRAMixtureLowRank2024a">(<a href="#ref-buehlerXLoRAMixtureLowRank2024a" role="doc-biblioref"><strong>buehlerXLoRAMixtureLowRank2024a?</strong></a>)</span> who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts. This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.</p>
 </section>
 <section id="unsloth" class="level4">
 <h4 class="anchored" data-anchor-id="unsloth">Unsloth</h4>
@@ -608,11 +610,8 @@ Fig&nbsp;12.7: Performance of (IA)³ compared to other parameter-efficient finet
 <div id="ref-aghajanyanIntrinsicDimensionalityExplains2020" class="csl-entry" role="listitem">
 Aghajanyan, A., Zettlemoyer, L., &amp; Gupta, S. (2020). <em>Intrinsic <span>Dimensionality Explains</span> the <span>Effectiveness</span> of <span>Language Model Fine-Tuning</span></em> (arXiv:2012.13255). arXiv. <a href="https://doi.org/10.48550/arXiv.2012.13255">https://doi.org/10.48550/arXiv.2012.13255</a>
 </div>
-<div id="ref-buehlerXLoRAMixtureLowRank2024a" class="csl-entry" role="listitem">
-Buehler, E. L., &amp; Buehler, M. J. (2024). <em>X-<span>LoRA</span>: <span>Mixture</span> of <span>Low-Rank Adapter Experts</span>, a <span>Flexible Framework</span> for <span>Large Language Models</span> with <span>Applications</span> in <span>Protein Mechanics</span> and <span>Molecular Design</span></em> (arXiv:2402.07148). arXiv. <a href="https://doi.org/10.48550/arXiv.2402.07148">https://doi.org/10.48550/arXiv.2402.07148</a>
-</div>
 <div id="ref-ChatbotArenaLeaderboard" class="csl-entry" role="listitem">
-<em>Chatbot <span>Arena Leaderboard Week</span> 8: <span>Introducing MT-Bench</span> and <span>Vicuna-33B</span> <span></span> <span>LMSYS Org</span></em>. (n.d.). https://lmsys.org/blog/2023-06-22-leaderboard.
+<em>Chatbot <span>Arena Leaderboard Week</span> 8: <span>Introducing MT-Bench</span> and <span>Vicuna-33B</span> <span>LMSYS Org</span></em>. (n.d.). https://lmsys.org/blog/2023-06-22-leaderboard.
 </div>
 <div id="ref-unsloth" class="csl-entry" role="listitem">
 Daniel Han, M. H., &amp; team, U. (2023). <em>Unsloth</em>.
@@ -743,13 +742,14 @@ document.addEventListener('DOMContentLoaded', function() {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

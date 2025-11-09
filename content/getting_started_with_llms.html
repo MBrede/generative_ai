@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -90,14 +90,15 @@ div.csl-indent {
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-403dc1bdca117efccc841a13020d99f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-7c56b0cb14979e59e30aba88ccee8faa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -140,7 +141,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -183,7 +184,8 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../cover.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Generative AI</a> 
@@ -609,6 +611,10 @@ Fig&nbsp;3.9: The transformer architecture as depicted in <span class="citation"
 </figure>
 </div>
 <p>The Encoder half uses the embedding -&gt; encoding -&gt; multi-headed-attention -&gt; feed-forward structure to create a semantic representation of the sequence. The Decoder half uses the same structure, but with an additional masked multi-head attention layer to prevent the model from looking at future tokens. This is necessary because we want to generate a sequence token by token.</p>
+<p>The architecture described by <span class="citation" data-cites="vaswaniAttentionAllYou2023a">Vaswani et al. (<a href="#ref-vaswaniAttentionAllYou2023a" role="doc-biblioref">2023</a>)</span> implements both an encoder and a decoder half. In practice, many modern language models do not use this full architecture. Instead, they implement either encoder-only or decoder-only variants, each optimized for different tasks.</p>
+<p>Encoder-only models like BERT <span class="citation" data-cites="devlinBERTPretrainingDeep2019a">(<a href="#ref-devlinBERTPretrainingDeep2019a" role="doc-biblioref">Devlin et al., 2019</a>)</span> use bidirectional attention across the entire input sequence. Since they can attend to all tokens simultaneously, they excel at tasks requiring deep understanding of complete contexts - such as text classification, named entity recognition, or semantic similarity. These models cannot generate text sequentially since they process all tokens at once.</p>
+<p>Decoder-only models like GPT <span class="citation" data-cites="radfordImprovingLanguageUnderstanding2018">(<a href="#ref-radfordImprovingLanguageUnderstanding2018" role="doc-biblioref">Radford et al., 2018</a>)</span> use masked attention to prevent tokens from attending to future positions. This unidirectional constraint makes them naturally suited for autoregressive generation, where each token is predicted based only on preceding context. While this limits their ability to leverage future context, it enables them to generate coherent text token by token. Encoder-decoder models retain both components and are primarily used for sequence-to-sequence tasks like translation or summarization, where the encoder processes the input and the decoder generates the output.</p>
+<p>The choice between these architectures represents a fundamental trade-off between understanding and generation capabilities. For an interactive visualization of a decoder-only architecture in action, <a href="https://bbycroft.net/llm">this visualization</a> by Brendan Bycroft provides an excellent walkthrough of how tokens flow through each layer during inference.</p>
 <p><a href="#fig-TransformerVsLSTM" class="quarto-xref">Figure&nbsp;<span>3.10</span></a>, taken from <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span>, shows the test performance of Transformer models compared to LSTM-based models as a function of model size and context length. Transformers outperform LSTMs with increasing context length.</p>
 <div id="fig-TransformerVsLSTM" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -653,61 +659,72 @@ Fig&nbsp;3.11: Performance power law for transformer models. Taken from <span cl
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📝 Task
+<span class="screen-reader-only">Note</span>📝 Task
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Now it is your turn! In your project-groups, you will each have to build a small “Hello World”-style application that uses an open source model.</p>
+<p>Now it is your turn! In your project-groups, you will each have to build a small application that uses an open source model to generate code.</p>
 <ol type="1">
-<li>Choose a small model using the <a href="https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a">sources we discussed before</a>.</li>
-<li>Each group is to use one of the following frameworks
+<li><p>Choose a small model (&lt; 3B parameters) using the <a href="https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a">sources we discussed before</a>.</p></li>
+<li><p>Each group is to use one of the following frameworks from python to load and use the model:</p>
 <ul>
 <li><a href="https://lmstudio.ai/">LM-Studio</a></li>
 <li><a href="https://ollama.com/">Ollama</a></li>
 <li><a href="https://huggingface.co/">Huggingface</a></li>
-<li><a href="https://github.com/vllm-project/vllm">VLLM</a> from python to load and use the model in your application.</li>
+<li><a href="https://github.com/vllm-project/vllm">VLLM</a></li>
 </ul></li>
 </ol>
-<p>With the exception of Huggingface, all APIs above use de facto standard of the OpenAI API scheme. This scheme presents multiple POST-endpoints, of which we will mostly use the chat-completion.</p>
-<p>You can either directly call it using python requests:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="st">"http://&lt;your API endpoint&gt;:&lt;port&gt;/v1/chat/completions"</span>,  <span class="co"># this is the lmstudio-endpoint, yours might differ slightly.</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>json <span class="op">=</span> {</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model"</span>: <span class="st">"qwen3-0.6B"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"messages"</span>:[</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        {</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"Say this is a test"</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    ]})</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>json.loads(response.content.decode())[<span class="st">"choices"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>All APIs above use the de facto standard of the OpenAI API scheme. This scheme presents multiple POST-endpoints, of which we will mostly use the chat-completion.</p>
+<p>Your task is to prompt the model to generate a Python program that prints “Hello World” to the console. Use the following prompt:</p>
+<pre><code>Write a Python program that prints "Hello World" to the console. 
+Provide only the code without any explanations.</code></pre>
+<p>You can either directly call the API using python requests:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="st">"http://&lt;your API endpoint&gt;:&lt;port&gt;/v1/chat/completions"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>json <span class="op">=</span> {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model"</span>: <span class="st">"qwen2.5-coder-1.5b"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"messages"</span>:[</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"Write a Python program that prints </span><span class="ch">\"</span><span class="st">Hello World</span><span class="ch">\"</span><span class="st"> to the console. Provide only the code without any explanations."</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    ]})</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> json.loads(response.content.decode())[<span class="st">"choices"</span>][<span class="dv">0</span>][<span class="st">"message"</span>][<span class="st">"content"</span>]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Or you can call it using the wrapper in the OpenAI-python-module:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span><span class="st">'lm-studio'</span>,  </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"http://&lt;your API endpoint&gt;:&lt;port&gt;/v1"</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>chat_completion <span class="op">=</span> client.chat.completions.create(</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        {</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"Say this is a test"</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    ],</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"qwen3-0.6B"</span>,</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chat_completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    api_key<span class="op">=</span><span class="st">'lm-studio'</span>,  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    base_url<span class="op">=</span><span class="st">"http://&lt;your API endpoint&gt;:&lt;port&gt;/v1"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>chat_completion <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"content"</span>: <span class="st">"Write a Python program that prints </span><span class="ch">\"</span><span class="st">Hello World</span><span class="ch">\"</span><span class="st"> to the console. Provide only the code without any explanations."</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"qwen2.5-coder-1.5b"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(chat_completion.choices[<span class="dv">0</span>].message.content)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol start="3" type="1">
-<li>Present your results and your experiences with the frameworks in a short presentation.</li>
-<li>Submit your code and report on moodle.</li>
+<li><p>Test whether the generated code executes correctly.</p></li>
+<li><p>Present your results and your experiences with the frameworks to the course. Cover the following aspects:</p>
+<ul>
+<li>Model selection rationale</li>
+<li>Setup process and challenges</li>
+<li>Generated code quality</li>
+<li>Framework usability</li>
+</ul></li>
+<li><p>Submit your code and a brief report less than a page on moodle.</p></li>
 </ol>
 </div>
 </div>
@@ -716,7 +733,7 @@ Fig&nbsp;3.11: Performance power law for transformer models. Taken from <span cl
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 <ul>
 <li><p><a href="https://heidloff.net/article/foundation-models-transformers-bert-and-gpt/">This</a> quite high-level blog-article about foundational models by <span class="citation" data-cites="heidloffFoundationModelsTransformers2023">Heidloff (<a href="#ref-heidloffFoundationModelsTransformers2023" role="doc-biblioref">2023</a>)</span></p></li>
-<li><p>The Attention is all you need-paper <span class="citation" data-cites="vaswaniAttentionAllYou2023a">(<a href="#ref-vaswaniAttentionAllYou2023a" role="doc-biblioref">Vaswani et al., 2023</a>)</span> and the brilliant video discussing it by Umar Jamil <span class="citation" data-cites="vaswaniAttentionAllYou2023a">(<a href="#ref-vaswaniAttentionAllYou2023a" role="doc-biblioref">Vaswani et al., 2023</a>)</span></p></li>
+<li><p>The Attention is all you need-paper <span class="citation" data-cites="vaswaniAttentionAllYou2023a">(<a href="#ref-vaswaniAttentionAllYou2023a" role="doc-biblioref">Vaswani et al., 2023</a>)</span> and the brilliant video discussing it by Umar Jamil <span class="citation" data-cites="umarjamilAttentionAllYou2023">(<a href="#ref-umarjamilAttentionAllYou2023" role="doc-biblioref">Umar Jamil, 2023</a>)</span></p></li>
 <li><p><a href="https://stats.stackexchange.com/a/424127">This</a> <em>very</em> good answer on stack exchange that explains the attention-concept <span class="citation" data-cites="424127">(<a href="#ref-424127" role="doc-biblioref">(https://stats.stackexchange.com/users/95569/dontloo), n.d.</a>)</span></p></li>
 </ul>
 </section>
@@ -763,6 +780,9 @@ Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K., &amp; Ze
 </div>
 <div id="ref-radfordImprovingLanguageUnderstanding2018" class="csl-entry" role="listitem">
 Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). <em>Improving language understanding with unsupervised learning</em>.
+</div>
+<div id="ref-umarjamilAttentionAllYou2023" class="csl-entry" role="listitem">
+Umar Jamil. (2023). <em>Attention is all you need (<span>Transformer</span>) - <span>Model</span> explanation (including math), <span>Inference</span> and <span>Training</span></em>.
 </div>
 <div id="ref-vaswaniAttentionAllYou2023a" class="csl-entry" role="listitem">
 Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., &amp; Polosukhin, I. (2023). <em>Attention <span>Is All You Need</span></em> (arXiv:1706.03762). arXiv. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>
@@ -860,13 +880,14 @@ document.addEventListener('DOMContentLoaded', function() {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
