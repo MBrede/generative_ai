@@ -80,16 +80,16 @@ format:
     css: styles.css
     include-after-body: 
       - flip-script.js
-  # pdf:
-  #   reference-location: block
-  #   documentclass: scrreprt
-  #   include-in-header: 
-  #     text: |
-  #       \usepackage{makeidx}
-  #       \makeindex
-  #   include-after-body: 
-  #     text: |
-  #       \printindex
+  pdf:
+    reference-location: block
+    documentclass: scrreprt
+    include-in-header: 
+      text: |
+        \usepackage{makeidx}
+        \makeindex
+    include-after-body: 
+      text: |
+        \printindex
 
 
 
