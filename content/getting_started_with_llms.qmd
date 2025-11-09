@@ -268,7 +268,7 @@ display_a_multiplication(mat1,
 ```
 
 
-The result is now an attention matrix in the sense that it tells us the importance of each value's aspect for our query. In the specific example, the forth value seems to be the most important aspect for our third query. The crucial advantage is, that all aspects of all queries can be simultaneously compared with all aspects of all values without the necessity of sequential processing.
+The result is now an attention matrix in the sense that it tells us the importance of each value's aspect for our query. In the specific example, the third aspect seems to be the most important aspect for our forth query. The crucial advantage is, that all aspects of all queries can be simultaneously compared with all aspects of all values without the necessity of sequential processing.
 
 Though this general idea of weighting aspects in the sense of self-attention^[*self* in the sense of the model weighting its own embeddings, queries, keys and values] to process a sequence without disadvantages of the distances of the items was used before [@bahdanauNeuralMachineTranslation2014], the major contribution of the paper was the complete reliance on this mechanism without the need of LSTM/RNN parts.
 That their suggested architecture works is in part due to the utilisation of multiple self-attention layers, each learning its own weights for $Q$, $K$ and $V$. This allows the model to learn more complex patterns and dependencies between words in a sentence. You can think of it as allowing the model to focus on different parts of the input sequence at different stages of processing.
