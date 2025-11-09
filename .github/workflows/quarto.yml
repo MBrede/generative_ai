@@ -1,61 +1,26 @@
 name: Quarto Publish
-
 on:
   push:
     branches:
       - main
-
 permissions:
   contents: write
-
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    container:
+      image: mbrede/quarto-render:latest
     permissions:
       contents: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Setup r2u
-        uses: eddelbuettel/github-actions/r2u-setup@master
+      - name: Collect and Install Python dependencies
+        run: /workspace/req-venv/bin/python3 /workspace/collect_python_deps.py
 
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: setup imagemagick
-        uses: mfinelli/setup-imagemagick@v5
-
-      - name: Install Python and Dependencies
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-          cache: 'pip'
-
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
-
-      - name: Install Python dependencies
-        run: |
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          else
-            echo "No requirements.txt found, skipping Python dependencies."
-          fi
-      - run: pip install jupyter
-
-      - name: Install R packages
-        run:  |
-          Rscript -e '
-            desc <- read.dcf("DESCRIPTION")
-            pkgs <- unlist(strsplit(desc[1, "Imports"], "\n"))
-            pkgs <- trimws(pkgs) 
-            for (pkg in pkgs) {
-              if (!requireNamespace(pkg, quietly = TRUE)) {
-                install.packages(pkg, Ncpus = 6)
-              }
-            }
-          '
+      - name: Collect and Install R packages
+        run: Rscript /workspace/collect_r_deps.R
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
