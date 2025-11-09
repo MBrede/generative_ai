@@ -38,10 +38,10 @@ jobs:
           fi
 
       - name: Collect and Install Python dependencies
-        run: python3 /usr/local/bin/collect_python_deps.py
+        run: /workspace/req-venv/bin/python3 /workspace/collect_python_deps.py
 
       - name: Collect and Install R packages
-        run: Rscript /usr/local/bin/collect_r_deps.R
+        run: Rscript /workspace/collect_r_deps.R
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v@v2.1.9
