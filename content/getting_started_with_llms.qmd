@@ -195,15 +195,28 @@ $$
 #| fig-width: 8
 #| fig-height: 2.5
 
-mat1 = matrix(round(runif(25, -2,2), 2), nrow = 5, byrow = TRUE)
+mat1 <- matrix(c(
+     0.8, -0.3,  1.2,  0.5, -0.9,
+    -0.4,  1.1, -0.2,  0.9,  0.3,
+     1.0,  0.2,  0.8, -0.6,  1.3,
+    -0.5,  0.7,  0.4,  1.1, -0.3,
+     0.3, -0.8,  1.5,  0.2,  0.6
+), nrow = 5, byrow = TRUE)
 
-rownames(mat1) = paste0('Query', 1:5)
-colnames(mat1) = paste0('Aspect', 1:5)
+rownames(mat1) <- paste0('Query', 1:5)
+colnames(mat1) <- paste0('Aspect', 1:5)
 
-mat2 = matrix(round(runif(25, -2,2), 2), nrow = 5, byrow = TRUE)
 
-rownames(mat2) = paste0('Aspect', 1:5)
-colnames(mat2) = paste0('Key', 1:5)
+mat2 <- matrix(c(
+     0.9,  0.1,  1.1, -0.4,  0.7,
+    -0.3,  1.2, -0.1,  0.8,  0.4,
+     1.1, -0.2,  0.9,  0.3,  1.4,
+    -0.6,  0.6,  0.3,  1.0, -0.2,
+     0.4, -0.7,  1.3,  0.1,  0.5
+), nrow = 5, byrow = TRUE)
+
+rownames(mat2) <- paste0('Aspect', 1:5)
+colnames(mat2) <- paste0('Key', 1:5)
 
 display_a_multiplication(mat1, 
                          mat2,
@@ -240,7 +253,13 @@ scaled_qkt = mat1 %*% mat2/sqrt(dim(mat1)[2])
 
 mat1 = softmax(scaled_qkt)
 
-mat2 = matrix(runif(25, -2,2), nrow=5, ncol=5)
+mat2 = matrix(c(
+     1.2, -0.5,  0.8,  1.1, -0.3,
+    -0.6,  0.9,  1.4, -0.2,  0.7,
+     0.7,  1.3, -0.4,  0.5,  1.0,
+    -0.9,  0.4,  1.1,  0.8, -0.6,
+     1.0, -0.8,  0.6,  1.2,  0.3
+), nrow = 5, byrow = TRUE)
 
 display_a_multiplication(mat1, 
                          mat2,
@@ -332,6 +351,15 @@ These parts alltogether are all building-blocks of the basic transformer archite
 
 The Encoder half uses the embedding -> encoding -> multi-headed-attention -> feed-forward structure to create a semantic representation of the sequence. The Decoder half uses the same structure, but with an additional masked multi-head attention layer to prevent the model from looking at future tokens. This is necessary because we want to generate a sequence token by token.
 
+The architecture described by @vaswaniAttentionAllYou2023a implements both an encoder and a decoder half. In practice, many modern language models do not use this full architecture. Instead, they implement either encoder-only or decoder-only variants, each optimized for different tasks.
+
+Encoder-only models like BERT [@devlinBERTPretrainingDeep2019a] use bidirectional attention across the entire input sequence. Since they can attend to all tokens simultaneously, they excel at tasks requiring deep understanding of complete contexts - such as text classification, named entity recognition, or semantic similarity. These models cannot generate text sequentially since they process all tokens at once.
+
+Decoder-only models like GPT [@radfordImprovingLanguageUnderstanding2018] use masked attention to prevent tokens from attending to future positions. This unidirectional constraint makes them naturally suited for autoregressive generation, where each token is predicted based only on preceding context. While this limits their ability to leverage future context, it enables them to generate coherent text token by token.
+Encoder-decoder models retain both components and are primarily used for sequence-to-sequence tasks like translation or summarization, where the encoder processes the input and the decoder generates the output.
+
+The choice between these architectures represents a fundamental trade-off between understanding and generation capabilities. For an interactive visualization of a decoder-only architecture in action, [this visualization](https://bbycroft.net/llm) by Brendan Bycroft provides an excellent walkthrough of how tokens flow through each layer during inference.
+
 @fig-TransformerVsLSTM, taken from @kaplanScalingLawsNeural2020a, shows the test performance of Transformer models compared to LSTM-based models as a function of model size and context length.
 Transformers outperform LSTMs with increasing context length.
 
@@ -370,38 +398,45 @@ A good starting point for getting an overview about such metrics and benchmarks 
 ## 📝 Task
 
 Now it is your turn!
-In your project-groups, you will each have to build a small "Hello World"-style application that uses an open source model.
+In your project-groups, you will each have to build a small application that uses an open source model to generate code.
 
-1. Choose a small model using the [sources we discussed before](https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a).
-2. Each group is to use one of the following frameworks
+1. Choose a small model (< 3B parameters) using the [sources we discussed before](https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a).
+
+2. Each group is to use one of the following frameworks from python to load and use the model:
     * [LM-Studio](https://lmstudio.ai/) 
     * [Ollama](https://ollama.com/)
     * [Huggingface](https://huggingface.co/)
     * [VLLM](https://github.com/vllm-project/vllm)
-    from python to load and use the model in your application.
 
-With the exception of Huggingface, all APIs above use de facto standard of the OpenAI API scheme. This scheme presents multiple POST-endpoints, of which we will mostly use the chat-completion.
+All APIs above use the de facto standard of the OpenAI API scheme. This scheme presents multiple POST-endpoints, of which we will mostly use the chat-completion.
 
-You can either directly call it using python requests:
+Your task is to prompt the model to generate a Python program that prints "Hello World" to the console. Use the following prompt:
+
+```
+Write a Python program that prints "Hello World" to the console. 
+Provide only the code without any explanations.
+```
+
+You can either directly call the API using python requests:
 ```python
 import os
 import requests
 import json
 
-
-response = requests.post("http://<your API endpoint>:<port>/v1/chat/completions",  # this is the lmstudio-endpoint, yours might differ slightly.
+response = requests.post("http://<your API endpoint>:<port>/v1/chat/completions",
 json = {
-    "model": "qwen3-0.6B",
+    "model": "qwen2.5-coder-1.5b",
     "messages":[
         {
             "role": "user",
-            "content": "Say this is a test"
+            "content": "Write a Python program that prints \"Hello World\" to the console. Provide only the code without any explanations."
         }
     ]})
 
-json.loads(response.content.decode())["choices"]
-
+result = json.loads(response.content.decode())["choices"][0]["message"]["content"]
+print(result)
 ```
+
 Or you can call it using the wrapper in the OpenAI-python-module:
 
 ```python
@@ -417,23 +452,31 @@ chat_completion = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": "Say this is a test"
+            "content": "Write a Python program that prints \"Hello World\" to the console. Provide only the code without any explanations."
         }
     ],
-    model="qwen3-0.6B",
+    model="qwen2.5-coder-1.5b",
 )
+
 print(chat_completion.choices[0].message.content)
 ```
   
-3. Present your results and your experiences with the frameworks in a short presentation.
-4. Submit your code and report on moodle.
+3. Test whether the generated code executes correctly.
+
+4. Present your results and your experiences with the frameworks to the course. Cover the following aspects:
+    * Model selection rationale
+    * Setup process and challenges
+    * Generated code quality
+    * Framework usability
+
+5. Submit your code and a brief report less than a page on moodle.
 :::
 
 ## Further Readings
 
 * [This](https://heidloff.net/article/foundation-models-transformers-bert-and-gpt/) quite high-level blog-article about foundational models by @heidloffFoundationModelsTransformers2023
 
-* The Attention is all you need-paper [@vaswaniAttentionAllYou2023a] and the brilliant video discussing it by Umar Jamil [@vaswaniAttentionAllYou2023a]
+* The Attention is all you need-paper [@vaswaniAttentionAllYou2023a] and the brilliant video discussing it by Umar Jamil [@umarjamilAttentionAllYou2023]
 
 * [This](https://stats.stackexchange.com/a/424127) *very* good answer on stack exchange that explains the attention-concept [@424127]
 
