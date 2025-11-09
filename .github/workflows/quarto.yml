@@ -23,7 +23,7 @@ jobs:
         run: Rscript /workspace/collect_r_deps.R
 
       - name: Render and Publish
-        uses: quarto-dev/quarto-actions/publish@v2
+        uses: quarto-dev/quarto-actions/publish@v2.1.9
         with:
           target: gh-pages
         env:
