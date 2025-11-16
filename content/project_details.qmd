@@ -9,7 +9,7 @@ Projects should allow students to apply what they've learned throughout the cour
 
 - Retrieval Augmentation/RAG (i.e., the system should query documents or other content in an index for its answers and reference the sources of its generation)
 - Data Analysis (i.e., the system should "talk" to a dataset and decide on which analysis-steps are to be taken to then execute them)
-- Multiple Agents (i.e., at least two agents should work in tandem, for example in a generator-reviewer arrangement)
+- Multi-step LLM Pipeline (i.e., multiple coordinated LLM calls should work together, for example in a generator-reviewer arrangement, planner-executor setup, or using agent systems)
 - Fine-tuning on (Synthetic) Data (i.e., a small LM or SDM should be finetuned on (synthetic) data to adapt it to your needs. You could as an example train a model to only answer in nouns.)
 
 The project should also include function-calling-based interface ("a tool") to an AI image generator.
@@ -25,13 +25,77 @@ The presentation will become part of the overall grade.
 The presentation can but does not have to be prepared in PPT, any other mode of presentation (including a live-demo based on a nice notebook) is fine.
 
 
-The project will then be graded based on these contents in addition to the following criteria:
+## Grading Rubric
 
-1. The minimum of components mentioned above __have__ to be used
-2. The more components are used, the better the grade
-3. The project-solution has to work.(Since we are talking about LLMs it does not have to generate perfect results, the pipeline has to generally work though.)
-4. The students have to hand in code the instructors can run. The code has to be documented. This can be done either in sensible docstrings, appropriately commented notebooks or a report. The students can choose the mode. It is possible and recommended to create a github repository with the code and the documentation.
+**Grading Scale:** [German Notenpunkte System](https://de.wikipedia.org/wiki/Vorlage%3APunktesystem_der_gymnasialen_Oberstufe)  
+**Passing Grade:** 20 points (4 Notenpunkte)
 
+### Binary Requirements (MUST ALL BE MET TO PASS)
+
+**Failure to meet any of these requirements results in automatic failure (0 Notenpunkte), regardless of points earned.**
+
+- [ ] At least TWO core components implemented (from list above)
+- [ ] Image generation integration via function calling
+- [ ] Runnable code with setup instructions provided
+- [ ] Documentation included (docstrings, notebooks, or report)
+- [ ] Active participation: All required Moodle tasks completed (max 1 missing)
+- [ ] Presentation attendance and delivery
+
+**Once all binary requirements are met, the project receives 20 points (4- grade) as baseline.**
+
+### Point-Based Evaluation
+
+**Maximum Points: 40 points** (20 baseline + up to 40 additional = 60 total before bonus)
+
+**Core Components Quality (up to 20 points)**
+
+Choose at least TWO (required for binary requirements above):
+
+- Retrieval Augmentation/RAG with source citations (up to 10 points)
+- Data Analysis capabilities with executable analysis steps (up to 10 points)
+- Multi-step LLM pipeline with multiple coordinated LLM calls (e.g., generator-reviewer, planner-executor, or agent systems) (up to 10 points)
+- Fine-tuning on (synthetic) data (up to 10 points)
+
+*Points awarded based on implementation quality, completeness, and sophistication.*
+
+**Implementation Quality (up to 5 points)**
+
+- Code quality, structure, and documentation (up to 5 points)
+
+**Presentation (up to 15 points)**
+
+- Time management (up to 3 points)
+- Question handling & understanding demonstration (up to 8 points)
+- Clarity of explanation and live demo (up to 4 points)
+
+**TOTAL: 20 baseline + up to 40 points = 60 points maximum before bonus**
+
+### Bonus Features
+
+**Maximum Bonus Points: 40 points** (total cannot exceed 100 points)
+
+**Additional Core Components**
+
+- Implementation of 3rd core component (up to 10 points)
+- Implementation of all 4 core components (up to 10 points for 4th)
+
+**Advanced Features (examples, non-exhaustive):**
+
+- Prompt optimization/engineering framework (~5-10 points)
+- Custom evaluation metrics for LLM outputs (~5-10 points)
+- Streaming responses with proper UI (~5 points)
+- Multi-modal input handling (text + images) (~10 points)
+- Advanced RAG (hybrid search, re-ranking, query rewriting) (~10-15 points)
+- Chain-of-thought or reasoning traces visualization (~5-10 points)
+- LLM caching/optimization strategies (~5 points)
+- Synthetic data generation pipeline for fine-tuning (~10 points)
+- Agent memory/conversation history management (~5-10 points)
+- MCP (Model Context Protocol) integration (~10-15 points)
+- LoRA/QLoRA implementation details and analysis (~10 points)
+- Production-ready deployment (containerization, API) (~10-15 points)
+- Novel combination or creative application of techniques (~5-15 points)
+
+**This list is not exhaustive.** Be creative and propose your own features!
 
 
 **Example Project Ideas**:
@@ -111,4 +175,3 @@ Giving a lecture about Gen AI and expecting the students to not use seems rather
 Show solution
 :::
 :::
-
