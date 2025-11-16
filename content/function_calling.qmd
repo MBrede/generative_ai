@@ -7,6 +7,97 @@ toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Function Call
 
 ## Chatbots
 
+So far, we covered connecting with a local LLM and getting a single response. We also discussed the difference between base models and instruct-tuned models. On thing though is still missing, especially if you want to have something resembling a meaningful conversation with the LLM. 
+
+::: {.callout-note}
+## 📝 Task
+
+Let's talk!
+
+1. Open a notebook and connect to a local LLM using LM Studio.
+2. Tell the LLM something about you.
+3. In a second call, ask the LLM what you just told it. It should know, right? You just told it.
+
+:::
+
+
+:::{#tip-simple_llm_call .callout-tip collapse="true" appearance="minimal"}
+### Simple LLM call
+
+This is my simple example. The wrapper class is, of course, not strictly necessary.
+
+
+```python
+from openai import OpenAI
+
+class LLMCall():
+    
+    def __init__(self, client, model, system_message = "You are a helpful AI agent.", temperature = 0.7):
+        self.client = client
+        self.model = model
+        self.temperature = temperature
+        self.system_message = system_message
+        
+    
+    def simple_call(self, message):
+        response = self.client.chat.completions.create(
+            model = self.model,
+            messages=[
+                {"role": "system", "content": f"{self.system_message}"},
+                {"role": "user", "content": message}
+            ],
+            temperature=self.temperature
+        )
+        return response.choices[0].message.content
+
+client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
+
+llm_assistent = LLMCall(client=client, model="meta-llama-3.1-8b-instruct")
+
+```
+
+```python
+llm_assistent.simple_call("Please remember that i really like potatoes")
+```
+
+    "A potato enthusiast! I'll make sure to keep that in mind as we chat. Do you have a favorite way of preparing or using potatoes? Are you more into baked, mashed, roasted, or maybe something else entirely? Let me know and I can try to suggest some delicious ideas for you."
+
+```python
+llm_assistent.simple_call("what food item do i like to eat?")
+```
+    "I'm happy to help you, but I don't have any prior knowledge about your preferences or eating habits. However, I can try to make an educated guess.\n\nCan you give me some hints or clues about the type of cuisine or food item that you enjoy? For example:\n\n- Do you like sweet treats or savory dishes?\n- Are you a meat-lover or do you prefer plant-based options?\n- Do you have a favorite continent or country's cuisine (e.g. Italian, Chinese, Mexican)?\n- Is there a particular texture or consistency you prefer (e.g. crunchy, soft, chewy)?\n\nLet me know and I can try to suggest some possibilities!"
+:::
+
+As you have seen, the LLM cannot remember what we just told it. In technical terms, we say the LLM is stateless. To emphasize this: this is not what most people expect. It clearly is not how conversations with people work, it is also not how conversations with popular chatbots (i.e. chatgpt or claude) usually go. So, what is missing, here?
+
+::: {.callout-note}
+## 📝 Task
+
+We should have a conversation.
+
+1. In your notebook, write a chat function or method that does the following:
+    - saves the conversation history.
+    - adds the user' message to the messages.
+    - sends the system message plus conversation to the LLM.
+adds the response to the history
+
+2. Test the chat function as above.
+3. Can you see any downsides of this approach? What about long conversations?
+4. (Optional) Implement a limit to the conversation length. Make sure the system message is always read. 
+
+3. Upload your results to Moodle.
+:::
+
+Congratulations! You just build yourself a chatbot. 
+
+Here are this section's take home messages:
+
+1. A single LLM call is stateless—it has no memory of previous interactions. Each request is independent. 
+2. To enable multi-turn conversations, we need to
+    - Store the conversation history (user and assistant messages).
+    - Send the full history with each new request. (As long as it fits within the context window.)
+
+
 
 ## Function Calling
 
@@ -28,9 +119,12 @@ Try it!
 :::
 
 
-To solve this problem, we need to give the LLM some tools it can use to access this additional information. This is where **function calling** comes into play. Function calling allows the LLM to call a function with specific parameters to get the required information. The function then returns the requested data or performs the necessary task, and the LLM can continue generating its response based on that information.
+To solve this problem, we need to give the LLM assistant some tools it can use to access this additional information. This is where **function calling** comes into play. Function calling allows the assistant to call a function with specific parameters to get the required information. The function then returns the requested data or performs the necessary task, and the LLM can continue generating its response based on that information.
 
-A basic workflow may look like this: 
+This is what we call an LLM agent or agent system. We will look deeper into agents (and alternatives) soon. For now, we will just say that we have an *agent system* or that a system is *agentic* if the system has access to tools or functions and if the LLM decides which tools to use and when (or if). 
+
+
+A basic agentic workflow may look like this: 
 
 1. The user inputs a question or task.
 2. The LLM determines if it needs additional information or assistance from external tools.
@@ -38,6 +132,8 @@ A basic workflow may look like this:
 4. The LLM response is then scanned for these elements (code or JSON object) and these are executed if possible.
 5. The response is then fed back into the LLM (usually as user input) for further processing. 
 6. The LLM uses the returned information to continue generating its response.
+
+We obviously need the conversation history from earlier for this to work. We also need to give the system access to the functions.
 
 **Note:** As stated above, the functions need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however not the best idea for reasons of security. 
 
@@ -54,12 +150,14 @@ There are two main ways to implement function calling:
 
 <!-- Here, we will focus on function calling.  -->
 
-Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
+<!-- Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
 
 1. using a large, generalized LLM (e.g. GPT-4) with good prompt engineering and
-2. using a smaller model fine tuned to generate function calls.
+2. using a smaller model fine tuned to generate function calls. -->
 
-<!-- smolagents has code generation as default, historically (last year) it was still rubbish. Cover both this year. -->
+Today, we will not implement the full agentic workflow outlined above. We will get there eventually, though. Here, we want to focus on step 3, the function call. The aim is to take a user request and translate it into structured output, either JSON or code. In the following, we will explore how to do it. 
+
+
 
 ### Structured output
 
@@ -150,7 +248,7 @@ As above, but this time
 
 <!-- smolagents as example (more on agents later), or not... Just try it using LLM call-->
 
-The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will get to know agents and the smolagents framework next time.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
+The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
 
 ::: {.callout-note}
 ## 📝 Task
