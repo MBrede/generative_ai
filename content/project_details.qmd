@@ -93,7 +93,7 @@ Choose at least TWO (required for binary requirements above):
 - MCP (Model Context Protocol) integration (~10-15 points)
 - LoRA/QLoRA implementation details and analysis (~10 points)
 - Production-ready deployment (containerization, API) (~10-15 points)
-- Novel combination or creative application of techniques (~5-15 points)
+- Novel combination or creative application of techniques (~5-25 points)
 
 **This list is not exhaustive.** Be creative and propose your own features!
 
