@@ -14,7 +14,7 @@ At other times, the workflow may just not be complex enough to warrant the addit
 
 We will discuss an example pipeline and the difference to agent systems in detail below. But before we get to this, we want to introduce a concept, which is widely used in a lot of LLM-based systems. 
 
-## LLM as a judge
+## LLM as a judge {#sec-llmJudge}
 
 The basic idea is to use a an LLM to criticize (to judge) a text snippet. To understand why this would be useful, please do the following task: 
 
