@@ -300,7 +300,13 @@ Project Details<br>
 </h3>
    
   <ul>
-  <li><a href="#a-note-about-using-llms-for-your-project" id="toc-a-note-about-using-llms-for-your-project" class="nav-link active" data-scroll-target="#a-note-about-using-llms-for-your-project">A note about using LLMs for your Project</a></li>
+  <li><a href="#grading-rubric" id="toc-grading-rubric" class="nav-link active" data-scroll-target="#grading-rubric">Grading Rubric</a>
+  <ul class="collapse">
+  <li><a href="#binary-requirements-must-all-be-met-to-pass" id="toc-binary-requirements-must-all-be-met-to-pass" class="nav-link" data-scroll-target="#binary-requirements-must-all-be-met-to-pass">Binary Requirements (MUST ALL BE MET TO PASS)</a></li>
+  <li><a href="#point-based-evaluation" id="toc-point-based-evaluation" class="nav-link" data-scroll-target="#point-based-evaluation">Point-Based Evaluation</a></li>
+  <li><a href="#bonus-features" id="toc-bonus-features" class="nav-link" data-scroll-target="#bonus-features">Bonus Features</a></li>
+  </ul></li>
+  <li><a href="#a-note-about-using-llms-for-your-project" id="toc-a-note-about-using-llms-for-your-project" class="nav-link" data-scroll-target="#a-note-about-using-llms-for-your-project">A note about using LLMs for your Project</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -330,20 +336,79 @@ Project Details<br>
 <ul>
 <li>Retrieval Augmentation/RAG (i.e., the system should query documents or other content in an index for its answers and reference the sources of its generation)</li>
 <li>Data Analysis (i.e., the system should “talk” to a dataset and decide on which analysis-steps are to be taken to then execute them)</li>
-<li>Multiple Agents (i.e., at least two agents should work in tandem, for example in a generator-reviewer arrangement)</li>
+<li>Multi-step LLM Pipeline (i.e., multiple coordinated LLM calls should work together, for example in a generator-reviewer arrangement, planner-executor setup, or using agent systems)</li>
 <li>Fine-tuning on (Synthetic) Data (i.e., a small LM or SDM should be finetuned on (synthetic) data to adapt it to your needs. You could as an example train a model to only answer in nouns.)</li>
 </ul>
 <p>The project should also include function-calling-based interface (“a tool”) to an AI image generator.</p>
 <p>Students are free to choose their project topic, as long as it fits within the course scope and is approved by the instructor. All projects must be implemented in Python.</p>
 <p>The active participation on the course will be taken into account before grading. This means that all tasks asking the students to upload their results to moodle should be completed. If more than one of the required tasks is missing, the student will not be graded.</p>
 <p>The projects are to be presented in the last session of the course. The students of each group need to take part in this session. The presentation will become part of the overall grade. The presentation can but does not have to be prepared in PPT, any other mode of presentation (including a live-demo based on a nice notebook) is fine.</p>
-<p>The project will then be graded based on these contents in addition to the following criteria:</p>
-<ol type="1">
-<li>The minimum of components mentioned above <strong>have</strong> to be used</li>
-<li>The more components are used, the better the grade</li>
-<li>The project-solution has to work.(Since we are talking about LLMs it does not have to generate perfect results, the pipeline has to generally work though.)</li>
-<li>The students have to hand in code the instructors can run. The code has to be documented. This can be done either in sensible docstrings, appropriately commented notebooks or a report. The students can choose the mode. It is possible and recommended to create a github repository with the code and the documentation.</li>
-</ol>
+<section id="grading-rubric" class="level2">
+<h2 class="anchored" data-anchor-id="grading-rubric">Grading Rubric</h2>
+<p><strong>Grading Scale:</strong> <a href="https://de.wikipedia.org/wiki/Vorlage%3APunktesystem_der_gymnasialen_Oberstufe">German Notenpunkte System</a><br>
+<strong>Passing Grade:</strong> 20 points (4 Notenpunkte)</p>
+<section id="binary-requirements-must-all-be-met-to-pass" class="level3">
+<h3 class="anchored" data-anchor-id="binary-requirements-must-all-be-met-to-pass">Binary Requirements (MUST ALL BE MET TO PASS)</h3>
+<p><strong>Failure to meet any of these requirements results in automatic failure (0 Notenpunkte), regardless of points earned.</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">At least TWO core components implemented (from list above)</label></li>
+<li><label><input type="checkbox">Image generation integration via function calling</label></li>
+<li><label><input type="checkbox">Runnable code with setup instructions provided</label></li>
+<li><label><input type="checkbox">Documentation included (docstrings, notebooks, or report)</label></li>
+<li><label><input type="checkbox">Active participation: All required Moodle tasks completed (max 1 missing)</label></li>
+<li><label><input type="checkbox">Presentation attendance and delivery</label></li>
+</ul>
+<p><strong>Once all binary requirements are met, the project receives 20 points (4- grade) as baseline.</strong></p>
+</section>
+<section id="point-based-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="point-based-evaluation">Point-Based Evaluation</h3>
+<p><strong>Maximum Points: 40 points</strong> (20 baseline + up to 40 additional = 60 total before bonus)</p>
+<p><strong>Core Components Quality (up to 20 points)</strong></p>
+<p>Choose at least TWO (required for binary requirements above):</p>
+<ul>
+<li>Retrieval Augmentation/RAG with source citations (up to 10 points)</li>
+<li>Data Analysis capabilities with executable analysis steps (up to 10 points)</li>
+<li>Multi-step LLM pipeline with multiple coordinated LLM calls (e.g., generator-reviewer, planner-executor, or agent systems) (up to 10 points)</li>
+<li>Fine-tuning on (synthetic) data (up to 10 points)</li>
+</ul>
+<p><em>Points awarded based on implementation quality, completeness, and sophistication.</em></p>
+<p><strong>Implementation Quality (up to 5 points)</strong></p>
+<ul>
+<li>Code quality, structure, and documentation (up to 5 points)</li>
+</ul>
+<p><strong>Presentation (up to 15 points)</strong></p>
+<ul>
+<li>Time management (up to 3 points)</li>
+<li>Question handling &amp; understanding demonstration (up to 8 points)</li>
+<li>Clarity of explanation and live demo (up to 4 points)</li>
+</ul>
+<p><strong>TOTAL: 20 baseline + up to 40 points = 60 points maximum before bonus</strong></p>
+</section>
+<section id="bonus-features" class="level3">
+<h3 class="anchored" data-anchor-id="bonus-features">Bonus Features</h3>
+<p><strong>Maximum Bonus Points: 40 points</strong> (total cannot exceed 100 points)</p>
+<p><strong>Additional Core Components</strong></p>
+<ul>
+<li>Implementation of 3rd core component (up to 10 points)</li>
+<li>Implementation of all 4 core components (up to 10 points for 4th)</li>
+</ul>
+<p><strong>Advanced Features (examples, non-exhaustive):</strong></p>
+<ul>
+<li>Prompt optimization/engineering framework (~5-10 points)</li>
+<li>Custom evaluation metrics for LLM outputs (~5-10 points)</li>
+<li>Streaming responses with proper UI (~5 points)</li>
+<li>Multi-modal input handling (text + images) (~10 points)</li>
+<li>Advanced RAG (hybrid search, re-ranking, query rewriting) (~10-15 points)</li>
+<li>Chain-of-thought or reasoning traces visualization (~5-10 points)</li>
+<li>LLM caching/optimization strategies (~5 points)</li>
+<li>Synthetic data generation pipeline for fine-tuning (~10 points)</li>
+<li>Agent memory/conversation history management (~5-10 points)</li>
+<li>MCP (Model Context Protocol) integration (~10-15 points)</li>
+<li>LoRA/QLoRA implementation details and analysis (~10 points)</li>
+<li>Production-ready deployment (containerization, API) (~10-15 points)</li>
+<li>Novel combination or creative application of techniques (~5-25 points)</li>
+</ul>
+<p><strong>This list is not exhaustive.</strong> Be creative and propose your own features!</p>
 <p><strong>Example Project Ideas</strong>:</p>
 <ol type="1">
 <li><strong>LLM Tourist Guide</strong>: Uses <a href="https://opendata.schleswig-holstein.de/dataset/poi-der-touristischen-landesdatenbank">TA.SH data</a> to provide travel tips and enhances them with generated images.</li>
@@ -352,6 +417,8 @@ Project Details<br>
 <li><strong>AI Storyteller</strong>: Creates illustrated short stories for children based on historical events.</li>
 <li><strong>AI Webdesigner</strong> A tool that creates and illustrates a webpage based on a Amazon product page.</li>
 </ol>
+</section>
+</section>
 <section id="a-note-about-using-llms-for-your-project" class="level2">
 <h2 class="anchored" data-anchor-id="a-note-about-using-llms-for-your-project">A note about using LLMs for your Project</h2>
 <p>Let’s start with a small psychological demonstration.</p>

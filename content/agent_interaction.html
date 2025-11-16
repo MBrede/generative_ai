@@ -272,7 +272,7 @@ LLM pipelines<br>
    
   <ul>
   <li><a href="#pipelines-vs.-agents" id="toc-pipelines-vs.-agents" class="nav-link active" data-scroll-target="#pipelines-vs.-agents">Pipelines vs.&nbsp;agents</a></li>
-  <li><a href="#llm-as-a-judge" id="toc-llm-as-a-judge" class="nav-link" data-scroll-target="#llm-as-a-judge">LLM as a judge</a></li>
+  <li><a href="#sec-llmJudge" id="toc-sec-llmJudge" class="nav-link" data-scroll-target="#sec-llmJudge">LLM as a judge</a></li>
   <li><a href="#a-basic-pipeline" id="toc-a-basic-pipeline" class="nav-link" data-scroll-target="#a-basic-pipeline">A basic pipeline</a>
   <ul class="collapse">
   <li><a href="#generator" id="toc-generator" class="nav-link" data-scroll-target="#generator">Generator</a></li>
@@ -317,8 +317,8 @@ LLM pipelines<br>
 <p>At other times, the workflow may just not be complex enough to warrant the additional complexity of using agents in your application. When you find yourself having a workflow where you basically iterate through a number of steps in always the same order, you may skip the agent altogether and just hardcode a series of LLM calls instead. This is called an LLM pipeline.</p>
 <p>We will discuss an example pipeline and the difference to agent systems in detail below. But before we get to this, we want to introduce a concept, which is widely used in a lot of LLM-based systems.</p>
 </section>
-<section id="llm-as-a-judge" class="level2">
-<h2 class="anchored" data-anchor-id="llm-as-a-judge">LLM as a judge</h2>
+<section id="sec-llmJudge" class="level2">
+<h2 class="anchored" data-anchor-id="sec-llmJudge">LLM as a judge</h2>
 <p>The basic idea is to use a an LLM to criticize (to judge) a text snippet. To understand why this would be useful, please do the following task:</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
