@@ -2,10 +2,15 @@
 toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Function Calling</h3>'
 ---
 
-# Function Calling
+<!--  -->
+# Towards Agents: chatbots and function calling
+
+## Chatbots
 
 
-## Motivation
+## Function Calling
+
+### Motivation
 
 
 Sometimes you want your AI assistant to answer more complex tasks then the LLM can handle out of the box. For example, you might want to ask questions regarding documents or datasets on your hard drive, or ask about recent events. This is a hard task for an LLM, because, if it was not trained on this information, i.e. the information wasn't part of its training data, it won't be able to answer these questions correctly. 
@@ -56,14 +61,14 @@ Still the challenge is to get the LLM to generate valid output. There are two ma
 
 <!-- smolagents has code generation as default, historically (last year) it was still rubbish. Cover both this year. -->
 
-## Structured output
+### Structured output
 
 <!-- some smart sentences -->
 
-The traditional way^[In this context, *traditional* means: people have been using it for more than a year. ] of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. 
+The traditional way^[In this context, *traditional* means: people have been using it for more than a year. ] of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. We already talked about generating structured output before. Here, we will use it to generate a function call. 
 
 
-### Function definition
+#### Function definition
 
 The first step in using function calling is to define the functions that the LLM can call. This is done by providing a JSON schema that describes the name of the function, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: ^[Note, that this is not an executable implementation but just a description of the function for the LLM.]
 
@@ -80,7 +85,7 @@ The first step in using function calling is to define the functions that the LLM
 Function name and description should be as clear as possible to make it easier for the LLM to decide which function to use and how to properly use it. Argument names and types should be as precise as possible to avoid ambiguity in the function call.
 
 
-### Prompting
+#### Prompting
 
 The second step is to provide a good prompt. The prompt should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for function calling:
 
@@ -110,7 +115,7 @@ Try it!
 
 :::
 
-### Challenges, finetuned models and the influence of size
+#### Challenges, finetuned models and the influence of size
 
 The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
 
@@ -141,7 +146,7 @@ As above, but this time
 
 :::
 
-## Code Generation
+### Code Generation
 
 <!-- smolagents as example (more on agents later), or not... Just try it using LLM call-->
 
