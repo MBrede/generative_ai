@@ -314,8 +314,8 @@ Where $i$ is the dimension and $pos$ is the position. Those 2 formulas are not t
 #| echo: False
 #| message: false
 #| warning: false
-#| fig-cap: The positional encoding for 50 dimensions and 512 embedding-dimensions. The x-axis represents the position and the y-axis represents the dimension. The color represents the value of the encoding.
-#| fig-alt: A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The x-axis represents the position and the y-axis represents the dimension. The color represents the value of the encoding.
+#| fig-cap: The positional encoding for 50 tokens and 512 embedding-dimensions. The y-axis represents the position and the x-axis represents the dimension of the embedded token in the input sequence. The color represents the value of the encoding.
+#| fig-alt: A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The y-axis represents the position and the x-axis represents the dimension of the embedded token in the input sequence. The color represents the value of the encoding.
 #| fig-width: 7
 #| fig-height: 4
 #| fig-align: center
