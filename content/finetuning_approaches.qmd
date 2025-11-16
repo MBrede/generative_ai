@@ -25,8 +25,9 @@ The following sections will give an overview of some of the most common approach
 
 Full finetuning is the simplest approach to finetuning. As the name says, it is based on completely updating the parameters of the pre-trained model using new data.
 This means that all weights of the model are updated during training using regular gradient descent or a variant thereof.
-The main advantage of this approach is that it is very simple and easy to implement. Complete (few-shot) fine-tuning has also shown to perform better in the domain of finetuning and in Out-of-domain tasks when compared to Few-Shot-Prompt-approaches @mosbachFewshotFinetuningVs2023.
+The main advantage of this approach is that it is very simple and easy to implement. Complete (few-shot) fine-tuning has also shown to perform better in the domain of finetuning and in Out-of-domain tasks when compared to Few-Shot-Prompt-approaches [@mosbachFewshotFinetuningVs2023].
 However, it also has some disadvantages.
+
 Firstly, it can be computationally expensive as it requires training all parameters of the model. 
 
 Secondly, it can lead to catastrophic forgetting, i.e., the model forgets what it has learned during pre-training when adapting to new data [@luoEmpiricalStudyCatastrophic2024].
@@ -41,6 +42,8 @@ We will look at three different approaches to PEFT:
 <!-- 1. Prompt-based Finetuning (Prefix-tuning, Prompt tuning and Multitask Prompt Tuning) -->
 
 1. Prompt-based Finetuning (Prefix-tuning and Prompt tuning)
+
+    * Bonus: TextGrad
 
 2. Adapter-based finetuning (Low-Rank Adaptation and its relatives)
 
@@ -64,7 +67,7 @@ The main advantages of this method are
 a) a small number of parameters that need to be learned and
 b) the ability to quickly adapt to different tasks by simply switching out the prefix vector.
 
-Since the learned prefix-weights have to be prepended to each input though, one has to have access to the models internal representation during inference (at least for encoder-decoder-stacks). This is not always possible, especially when using black-box models like large language models that are hosted on a remote server.
+Since the learned prefix-weights have to be prepended to each input though, one has to have access to the models internal representation during inference (at least for encoder-decoder-stacks). This is not always possible, especially when using black-box models like LLMs that are hosted on a remote server.
 
 #### Prompt-Tuning
 
@@ -99,7 +102,7 @@ Upload your results to moodle.
 
 :::
 
-#### TextGrad
+#### TextGrad {#sec-textgrad}
 
 @yuksekgonulOptimizingGenerativeAI2025 described a method for text-based auto differentiation. The authors claim that, given a loss-target, their approach "TextGrad" allows to improve a model's performance by directly tuning the discrete textual prompt used for generating the model's answer across various tasks.
 This is done by implementing a system analogous to the autograd implementation in PyTorch (see @fig-textGrad for an illustration).
@@ -109,6 +112,7 @@ This is done by implementing a system analogous to the autograd implementation i
 A "loss"-function is defined, i.e., any function that takes the textual output and evaluates its quality. This can be a classic loss function like binary accuracy or a set of rules for evaluating text quality that are given to a language model to compare the result with the ground truth.
 This "loss" is then taken into account by the "optimizer", which is another LLM-Call that takes the output and loss and critiques the appropriate Variables (i.e., the initial prompt). This critique or "gradient" as it is called in the Autograd analogy is then taken to update the initial prompt using another LLM-call (the step in Autograd). This process continues iteratively until the results are satisfactory or a predefined number of iterations is reached.
 
+:::{.callout-note}
 
 #### 📝 Task
 
@@ -174,7 +178,7 @@ mat1 = matrix(round(runif(10, -2,2), 2), nrow = 5, byrow = TRUE)
 
 mat2 = matrix(round(runif(10, -2,2), 2), nrow = 2, byrow = TRUE)
 
-c
+
 display_a_multiplication(mat1, 
                          mat2,
                          bracket_kink_length = 0.4,
@@ -198,7 +202,7 @@ They also report performance values of up to 99.3% of the performance of ChatGPT
 Mixture of experts is a pretty old idea generally [@jacobsAdaptiveMixturesLocal1991] and has been used in the context of Deep Learning and more specifically NLP for quite some time now [@shazeerOutrageouslyLargeNeural2017]. There are also some examples for recent LLMs that are utilizing the concept to achieve better performance, e.g. @jiangMixtralExperts2024
 The basic idea is to split a model into multiple smaller models, each of which is an expert on a specific topic.
 During inference, the input is routed to the expert that is most likely to be able to answer the question. This can be done by having a router-model that predicts the topic of the input and then routes it to the corresponding expert.
-This approach was applied to LoRA-based finetuning by @buehlerXLoRAMixtureLowRank2024 who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts.
+This approach was applied to LoRA-based finetuning by @buehlerXLoRAMixtureLowRank2024a who propose X-LoRA, which is a mixture of experts that uses LoRA-finetuned models as experts.
 This is done by training a set of low rank adaptation matrices and using a router-model that predicts a scaling factor for each expert based on the input. The output of the model is then the weighted sum of the outputs of all experts. This scaling is done on a token-by-token basis, which allows a highly granular control over the output of the model.
 
 #### Unsloth

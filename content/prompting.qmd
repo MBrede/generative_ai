@@ -80,8 +80,6 @@ c) to provide examples if possible.
 Since the quality of results is so highly dependent on the chosen model, it is good practice to test candidate strategies against each other and therefore to define a target on which the quality of results can be evaluated.
 One example for such a target could be a benchmark dataset that contains multiple examples of the task at hand.
 
-<!--
-Too many labels. Reduce the label count for the task -->
 ::: {.callout-note}
 ## 📝 Task 
 
@@ -194,7 +192,7 @@ Using your script for batch-testing different prompts, generate synthetic data f
 
 The generated data should consist of a sentence and the emotion that is expressed in it.
 Start by generating two examples for each emotion. Validate these results and adapt them if necessary.
-Then use these examples to generate 100 samples for each emotion.
+Then use these examples to generate 10 samples for each emotion.
 
 Use one of the above mentioned (non-manual) strategies to validate the data you generated.
 
@@ -214,7 +212,7 @@ The generation-pipeline does not just use the token with the highest probability
 This means, that even if the input is identical, the output will be different every time you run the model.
 
 The temperature parameter controls the steepness of the softmax-function and thus the randomness of the sampling process. A higher temperature value results in more random outputs, while a lower temperature value results in more "deterministic" outputs.
-The temperatur, indicated as a float between 0 and 1^[Depending on the implementation, temperatures above 1 are also allowed. Temperatures above 1 are resultsing in strange behaviours - see @fig-temp.], is used to modulate the probabilities of the next token. This is done by adding a $\frac{1}{Temp}$ factor to the model-outputs before applying the softmax.
+The temperature, indicated as a float between 0 and 1^[Depending on the implementation, temperatures above 1 are also allowed. Temperatures above 1 are resulting in strange behaviours - see @fig-temp.], is used to modulate the probabilities of the next token. This is done by adding a $\frac{1}{Temp}$ factor to the model-outputs before applying the softmax.
 
 This effectively changes the Sofmax-fomula from 
 
@@ -293,6 +291,67 @@ Using the script provided for generating synthetic data, test the effect of the 
  * Run the model with a temperature value of 0.1, 0.5, 1.0 and 2.0
 :::
 
+
+## Understanding and Mitigating Hallucinations
+
+While temperature controls the randomness of model outputs, a more fundamental challenge emerges when language models generate plausible yet incorrect information - a phenomenon known as **hallucination**.
+
+### What are Hallucinations?
+
+Hallucinations occur when language models produce confident, plausible-sounding outputs that are factually incorrect or unsupported by their training data. These aren't random errors - they're systematic failures that arise from the statistical nature of language modeling itself.
+
+Consider this example: When asked "What is Adam Tauman Kalai's birthday?", state-of-the-art models confidently produce different incorrect dates across multiple attempts, even when explicitly asked to respond only if they know the answer [@kalaiWhyLanguageModels2025].
+
+### Why Hallucinations Occur: A Statistical Perspective
+
+@kalaiWhyLanguageModels2025 demonstrate that hallucinations emerge from the fundamental objective of language model training. They show that generating valid outputs is inherently harder than classifying output validity - a task where errors are well-understood in machine learning.
+
+The key insight: even with perfect training data, the cross-entropy objective used in pretraining naturally leads to errors on certain types of facts. Specifically:
+
+**Arbitrary Facts**: Information without learnable patterns (like birthdays of obscure individuals) will be hallucinated at rates approximately equal to the fraction of such facts appearing exactly once in training data. If 20% of birthday facts appear only once, expect ~20% hallucination rate on birthdays.
+
+**Poor Models**: When model architectures cannot adequately represent certain patterns, systematic errors emerge. For example, models using only token-based representations struggle with character-level tasks like counting letters in "DEEPSEEK".
+
+### Hallucinations as Compression Failures
+
+@chlonPredictableCompressionFailures2025 provide a complementary information-theoretic perspective. They show that transformers minimize expected conditional description length over input orderings rather than the permutation-invariant description length. This makes them "Bayesian in expectation, not in realization."
+
+Their framework introduces practical metrics for predicting hallucinations:
+
+- **Information Sufficiency Ratio (ISR)**: The ratio of available information to required information for a target reliability threshold
+- **Bits-to-Trust (B2T)**: The amount of information needed to achieve a specific confidence level
+
+A key finding: hallucinations decrease by approximately 0.13 per additional nat of information, making the phenomenon quantitatively predictable rather than mysterious.
+
+### Why Hallucinations Persist After Training
+
+Beyond pretraining, @kalaiWhyLanguageModels2025 argue that post-training and evaluation procedures actively reinforce hallucinations. Most benchmarks use binary grading (correct/incorrect) with no credit for expressing uncertainty. This creates an "epidemic" of penalizing honest uncertainty - models that guess when unsure outperform those that appropriately abstain.
+
+Consider two models:
+
+- Model A: Accurately signals uncertainty, never hallucinates
+- Model B: Same as A but guesses instead of expressing uncertainty
+
+Model B will outperform A on most current benchmarks, despite being less trustworthy.
+
+
+
+::: {.callout-note}
+## 📝 Task
+
+Test hallucination behavior on a small model using LM-Studio:
+
+1. Use a small model (Qwen3-0.6B or similar) to answer 10 factual questions about rare entities
+2. For each question, generate 3 responses with the same temperature
+3. Document:
+   - How often does the model give confident but incorrect answers?
+   - How often does it appropriately express uncertainty?
+   - How does response consistency relate to likely correctness?
+4. Now modify the prompt to explicitly encourage uncertainty expression (e.g., "Only answer if you're very confident, otherwise say you don't know")
+5. Compare the results
+
+Upload your observations to Moodle.
+:::
 
 ## Further Readings
 

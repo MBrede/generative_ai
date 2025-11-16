@@ -197,7 +197,7 @@ b) not inventing new information
 c) referencing the source of the information it uses
 
 
-Upload your results until here (embedder, database and summarization) to moodle.
+Upload your results until here (embedder, database and summarization) to moodle. All following tasks are optional.
 :::
 
 
@@ -243,6 +243,7 @@ Another approach to semantic chunking is described on the doc-pages of [LlamaInd
 Implement a document chunking strategy for a book of your choice from the [project_gutenberg](https://huggingface.co/datasets/manu/project_gutenberg) dataset.
 
 You can use any approach you like, but you should explain your choice and why it is appropriate for this dataset.
+
 :::
 
 ### Query Expansion/Transformation
@@ -271,12 +272,89 @@ Llamaindex implements two more sophisticated approaches to transform queries:
 Implement query expansion for the climate_fever dataset using llamaindex. [This](https://docs.llamaindex.ai/en/stable/module_guides/querying/pipeline/usage_pattern/#defining-a-custom-query-component) might be helpful.
 
 Experiment with different prompts and temperatures.
+
 :::
+
+### Hybrid Search
+
+So far, we have focused exclusively on semantic search using vector embeddings. However, purely semantic approaches can sometimes miss documents that contain exact keyword matches or specific terminology that users explicitly mention in their queries. This is where **hybrid search** becomes valuable by combining multiple retrieval strategies.
+
+Hybrid search integrates semantic search with traditional keyword-based methods (like BM25 or full-text search) to leverage the strengths of both approaches. Semantic search excels at understanding context and finding conceptually related documents, while keyword search ensures exact matches are not missed.
+
+Qdrant supports hybrid search through its [multi-stage query capabilities](https://qdrant.tech/documentation/concepts/hybrid-queries/#multi-stage-queries). The basic approach involves:
+
+1. **Parallel retrieval**: Execute both a dense vector search (semantic) and a sparse vector search (keyword-based) simultaneously
+2. **Score fusion**: Combine the results using a fusion strategy such as Reciprocal Rank Fusion (RRF) or weighted scoring
+3. **Re-ranking**: Optionally apply a re-ranking strategy to refine the final result ordering [e.g., using Maximal Marginal Relevance or a higher-resolution embedding-model like ColBERT @santhanamColBERTv2EffectiveEfficient2022]
+
+Qdrant's implementation allows you to configure how these different search strategies are weighted and combined. For example, you might give more weight to semantic similarity for conceptual queries, while prioritizing keyword matches for queries containing specific technical terms or proper nouns.
+
+::: {.callout-note}
+
+#### 📝 Task
+
+Extend your climate_fever RAG system to use hybrid search combining semantic and keyword-based retrieval in Qdrant (you can find a tutorial on how to implement this [here](https://qdrant.tech/documentation/advanced-tutorials/reranking-hybrid-search/)).
+
+Compare the retrieval results of pure semantic search versus hybrid search on at least 5 different test queries. Pay attention to cases where one approach significantly outperforms the other.
+
+Document your findings: When does hybrid search provide better results? When is pure semantic search sufficient?
+
+:::
+
+### RAG Evaluation
+
+Building a RAG system is one thing, but understanding whether it actually works well is another challenge entirely. RAG evaluation is crucial for iteratively improving your system and understanding its limitations.
+
+RAG evaluation can be approached from multiple angles:
+
+#### Component-Level Testing
+
+Individual components of your RAG pipeline can be tested separately:
+
+- **Retrieval quality**: Are the right documents being retrieved? Metrics include precision, recall, and Mean Reciprocal Rank (MRR)^[A score that indicates how far down the list of results the first correct answer is.]
+- **Generation quality**: Does the LLM produce accurate, relevant, and coherent answers given the retrieved context?
+- **End-to-end**: Does the complete pipeline answer questions correctly?
+
+Frameworks like [DeepEval](https://deepeval.com/guides/guides-rag-evaluation) provide tools for automated RAG evaluation. DeepEval offers three central, [LLM as a judge](@sec-llmJudge)-based RAG-specific metrics:
+
+1. **Contextual Precision**: an indication whether relevant nodes are ranked higher than irrelevant ones.
+
+2. **Contextual Recall**: this metric indicates to what extent the retrieved nodes align with the expected output.
+
+3. **Contextual Relevance**: an evaluation in how far each returned note is at all relevant to the query.
+
+Since the base for these scores is an assessment of a LLM, these scores can both be calculated for the retrievers answers as well as the output of the whole RAG pipeline.
+
+#### Benchmark-Based Evaluation
+
+For more comprehensive evaluation, standardized benchmark-systems like [RAGChecker](https://github.com/amazon-science/RAGChecker) offer systematic frameworks for assessing RAG systems across multiple dimensions based on ground-truth-datasets. RAGChecker evaluates:
+
+1. **Retriever precision and recall**: Quality of document retrieval
+2. **Overall accuracy**: Correctness of final answers
+3. **Hallucination detection**: Identification of generated content not supported by retrieved documents
+4. **Missing information**: Detection of incomplete answers
+
+These benchmarks use curated datasets with ground-truth answers, allowing you to compare your system's performance against baselines.
+
+
+#### Choosing Between Evaluation Approaches
+
+Both DeepEval- and RAGChecker-like evaluation has distinct advantages and limitations:
+
+A system like **RAGChecker** provides solid metric calculation based on ground truth data, offering objective and reproducible scores. However, benchmark datasets might not be comparable to your specific task or domain, limiting their practical applicability to real-world use cases.
+
+On the other hand, using a strategy similar to that implemented in **DeepEval**, does not require pre-existing ground truth and can evaluate systems on any domain or dataset, making it highly flexible. However, it relies on another LLM for evaluation, which introduces two key concerns: (1) the evaluating LLM itself can hallucinate, potentially providing unreliable assessments, and (2) extensive evaluation using LLM-as-judge can be costly, especially when evaluating large numbers of queries or iterating frequently during development.
+
+
 
 ## Further Readings
 
 * [This blogpost](https://www.deepset.ai/blog/llms-retrieval-augmentation) by DeepSet gives a good overview of the concept of RAG
 
 * [This blogpost](https://qdrant.tech/articles/what-is-a-vector-database/) by qdrant about (their) vector store and its inner workings
+
+* [Qdrant's Hybrid Search Documentation](https://qdrant.tech/documentation/concepts/hybrid-queries/) provides detailed information on combining multiple search strategies
+
+* [DeepEval's RAG Evaluation Guide](https://deepeval.com/guides/guides-rag-evaluation) offers practical approaches to measuring RAG system performance
 
 ## References
