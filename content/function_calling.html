@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Function Calling – Generative AI</title>
+<title>Towards Agents: chatbots and function calling – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/agent_basics.html" rel="next">
+<link href="../content/embeddings.html" rel="next">
 <link href="../content/prompting.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -85,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/function_calling.html"><span class="chapter-title">Function Calling</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/function_calling.html"><span class="chapter-title">Towards Agents: chatbots and function calling</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -160,17 +195,17 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/function_calling.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Function Calling</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent basics</span></a>
+  <a href="../content/function_calling.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Towards Agents: chatbots and function calling</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/embeddings.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Embedding-based LLM-systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent basics</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -251,14 +286,13 @@ Function Calling<br>
 </h3>
    
   <ul>
-  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a></li>
-  <li><a href="#structured-output" id="toc-structured-output" class="nav-link" data-scroll-target="#structured-output">Structured output</a>
+  <li><a href="#chatbots" id="toc-chatbots" class="nav-link active" data-scroll-target="#chatbots">Chatbots</a></li>
+  <li><a href="#function-calling" id="toc-function-calling" class="nav-link" data-scroll-target="#function-calling">Function Calling</a>
   <ul class="collapse">
-  <li><a href="#function-definition" id="toc-function-definition" class="nav-link" data-scroll-target="#function-definition">Function definition</a></li>
-  <li><a href="#prompting" id="toc-prompting" class="nav-link" data-scroll-target="#prompting">Prompting</a></li>
-  <li><a href="#challenges-finetuned-models-and-the-influence-of-size" id="toc-challenges-finetuned-models-and-the-influence-of-size" class="nav-link" data-scroll-target="#challenges-finetuned-models-and-the-influence-of-size">Challenges, finetuned models and the influence of size</a></li>
-  </ul></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#structured-output" id="toc-structured-output" class="nav-link" data-scroll-target="#structured-output">Structured output</a></li>
   <li><a href="#code-generation" id="toc-code-generation" class="nav-link" data-scroll-target="#code-generation">Code Generation</a></li>
+  </ul></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -266,9 +300,9 @@ Function Calling<br>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/function_calling.html"><span class="chapter-title">Function Calling</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/function_calling.html"><span class="chapter-title">Towards Agents: chatbots and function calling</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Function Calling</span></h1>
+<h1 class="title"><span class="chapter-title">Towards Agents: chatbots and function calling</span></h1>
 </div>
 
 
@@ -285,8 +319,114 @@ Function Calling<br>
 </header>
 
 
-<section id="motivation" class="level2">
-<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<!--  -->
+<section id="chatbots" class="level2">
+<h2 class="anchored" data-anchor-id="chatbots">Chatbots</h2>
+<p>So far, we covered connecting with a local LLM and getting a single response. We also discussed the difference between base models and instruct-tuned models. On thing though is still missing, especially if you want to have something resembling a meaningful conversation with the LLM.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s talk!</p>
+<ol type="1">
+<li>Open a notebook and connect to a local LLM using LM Studio.</li>
+<li>Tell the LLM something about you.</li>
+<li>In a second call, ask the LLM what you just told it. It should know, right? You just told it.</li>
+</ol>
+</div>
+</div>
+<div id="tip-simple_llm_call" class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip&nbsp;5.1: Simple LLM call
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This is my simple example. The wrapper class is, of course, not strictly necessary.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LLMCall():</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, client, model, system_message <span class="op">=</span> <span class="st">"You are a helpful AI agent."</span>, temperature <span class="op">=</span> <span class="fl">0.7</span>):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.client <span class="op">=</span> client</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.temperature <span class="op">=</span> temperature</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.system_message <span class="op">=</span> system_message</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> simple_call(<span class="va">self</span>, message):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        response <span class="op">=</span> <span class="va">self</span>.client.chat.completions.create(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            model <span class="op">=</span> <span class="va">self</span>.model,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            messages<span class="op">=</span>[</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>system_message<span class="sc">}</span><span class="ss">"</span>},</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: message}</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            temperature<span class="op">=</span><span class="va">self</span>.temperature</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> response.choices[<span class="dv">0</span>].message.content</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> OpenAI(base_url<span class="op">=</span><span class="st">"http://localhost:1234/v1"</span>, api_key<span class="op">=</span><span class="st">"lm-studio"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>llm_assistent <span class="op">=</span> LLMCall(client<span class="op">=</span>client, model<span class="op">=</span><span class="st">"meta-llama-3.1-8b-instruct"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>llm_assistent.simple_call(<span class="st">"Please remember that i really like potatoes"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>"A potato enthusiast! I'll make sure to keep that in mind as we chat. Do you have a favorite way of preparing or using potatoes? Are you more into baked, mashed, roasted, or maybe something else entirely? Let me know and I can try to suggest some delicious ideas for you."</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>llm_assistent.simple_call(<span class="st">"what food item do i like to eat?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>"I'm happy to help you, but I don't have any prior knowledge about your preferences or eating habits. However, I can try to make an educated guess.\n\nCan you give me some hints or clues about the type of cuisine or food item that you enjoy? For example:\n\n- Do you like sweet treats or savory dishes?\n- Are you a meat-lover or do you prefer plant-based options?\n- Do you have a favorite continent or country's cuisine (e.g. Italian, Chinese, Mexican)?\n- Is there a particular texture or consistency you prefer (e.g. crunchy, soft, chewy)?\n\nLet me know and I can try to suggest some possibilities!"</code></pre>
+</div>
+</div>
+</div>
+<p>As you have seen, the LLM cannot remember what we just told it. In technical terms, we say the LLM is stateless. To emphasize this: this is not what most people expect. It clearly is not how conversations with people work, it is also not how conversations with popular chatbots (i.e.&nbsp;chatgpt or claude) usually go. So, what is missing, here?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We should have a conversation.</p>
+<ol type="1">
+<li><p>In your notebook, write a chat function or method that does the following:</p>
+<ul>
+<li>saves the conversation history.</li>
+<li>adds the user’ message to the messages.</li>
+<li>sends the system message plus conversation to the LLM. adds the response to the history</li>
+</ul></li>
+<li><p>Test the chat function as above.</p></li>
+<li><p>Can you see any downsides of this approach? What about long conversations?</p></li>
+<li><p>(Optional) Implement a limit to the conversation length. Make sure the system message is always read.</p></li>
+<li><p>Upload your results to Moodle.</p></li>
+</ol>
+</div>
+</div>
+<p>Congratulations! You just build yourself a chatbot.</p>
+<p>Here are this section’s take home messages:</p>
+<ol type="1">
+<li>A single LLM call is stateless—it has no memory of previous interactions. Each request is independent.</li>
+<li>To enable multi-turn conversations, we need to
+<ul>
+<li>Store the conversation history (user and assistant messages).</li>
+<li>Send the full history with each new request. (As long as it fits within the context window.)</li>
+</ul></li>
+</ol>
+</section>
+<section id="function-calling" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="function-calling">Function Calling</h2>
+<section id="motivation" class="level3">
+<h3 class="anchored" data-anchor-id="motivation">Motivation</h3>
 <p>Sometimes you want your AI assistant to answer more complex tasks then the LLM can handle out of the box. For example, you might want to ask questions regarding documents or datasets on your hard drive, or ask about recent events. This is a hard task for an LLM, because, if it was not trained on this information, i.e.&nbsp;the information wasn’t part of its training data, it won’t be able to answer these questions correctly.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -306,8 +446,9 @@ Function Calling<br>
 <p>(I mean, sure, you could just look out the window, but we are developers here, we don’t have windows!)</p>
 </div>
 </div>
-<p>To solve this problem, we need to give the LLM some tools it can use to access this additional information. This is where <strong>function calling</strong> comes into play. Function calling allows the LLM to call a function with specific parameters to get the required information. The function then returns the requested data or performs the necessary task, and the LLM can continue generating its response based on that information.</p>
-<p>A basic workflow may look like this:</p>
+<p>To solve this problem, we need to give the LLM assistant some tools it can use to access this additional information. This is where <strong>function calling</strong> comes into play. Function calling allows the assistant to call a function with specific parameters to get the required information. The function then returns the requested data or performs the necessary task, and the LLM can continue generating its response based on that information.</p>
+<p>This is what we call an LLM agent or agent system. We will look deeper into agents (and alternatives) soon. For now, we will just say that we have an <em>agent system</em> or that a system is <em>agentic</em> if the system has access to tools or functions and if the LLM decides which tools to use and when (or if).</p>
+<p>A basic agentic workflow may look like this:</p>
 <ol type="1">
 <li>The user inputs a question or task.</li>
 <li>The LLM determines if it needs additional information or assistance from external tools.</li>
@@ -316,6 +457,7 @@ Function Calling<br>
 <li>The response is then fed back into the LLM (usually as user input) for further processing.</li>
 <li>The LLM uses the returned information to continue generating its response.</li>
 </ol>
+<p>We obviously need the conversation history from earlier for this to work. We also need to give the system access to the functions.</p>
 <p><strong>Note:</strong> As stated above, the functions need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however not the best idea for reasons of security.</p>
 <!-- ## Code generation and function calling -->
 <!-- The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that: -->
@@ -325,19 +467,18 @@ Function Calling<br>
 <li><strong>Code generation</strong>: Here, we ask the LLM to generate the function calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined functions. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine. <!-- Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation. It can also pose a severe security issue because this approach hinges on running generated code on your machine.  --> <!-- 2. **Function calling**: Here, we ask the LLM to generate a function call from the user input. This approach has the advantage of being more robust and accurate than code generation, as it is easier for the LLM to generate a correct function call than a complete python script. However, it requires that the functions that can be called are already defined and that they are properly documented. --></li>
 </ol>
 <!-- Here, we will focus on function calling.  -->
-<p>Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:</p>
-<ol type="1">
-<li>using a large, generalized LLM (e.g.&nbsp;GPT-4) with good prompt engineering and</li>
-<li>using a smaller model fine tuned to generate function calls.</li>
-</ol>
-<!-- smolagents has code generation as default, historically (last year) it was still rubbish. Cover both this year. -->
+<!-- Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
+
+1. using a large, generalized LLM (e.g. GPT-4) with good prompt engineering and
+2. using a smaller model fine tuned to generate function calls. -->
+<p>Today, we will not implement the full agentic workflow outlined above. We will get there eventually, though. Here, we want to focus on step 3, the function call. The aim is to take a user request and translate it into structured output, either JSON or code. In the following, we will explore how to do it.</p>
 </section>
-<section id="structured-output" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="structured-output">Structured output</h2>
+<section id="structured-output" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="structured-output">Structured output</h3>
 <!-- some smart sentences -->
-<p>The traditional way<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;In this context, <em>traditional</em> means: people have been using it for more than a year. </p></div></div><section id="function-definition" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="function-definition">Function definition</h3>
+<p>The traditional way<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. We already talked about generating structured output before. Here, we will use it to generate a function call.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;In this context, <em>traditional</em> means: people have been using it for more than a year. </p></div></div><section id="function-definition" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="function-definition">Function definition</h4>
 <p>The first step in using function calling is to define the functions that the LLM can call. This is done by providing a JSON schema that describes the name of the function, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Note, that this is not an executable implementation but just a description of the function for the LLM.</p></div></div><pre><code>{
     "name": "get_current_weather",  
@@ -349,8 +490,8 @@ Function Calling<br>
 }</code></pre>
 <p>Function name and description should be as clear as possible to make it easier for the LLM to decide which function to use and how to properly use it. Argument names and types should be as precise as possible to avoid ambiguity in the function call.</p>
 </section>
-<section id="prompting" class="level3">
-<h3 class="anchored" data-anchor-id="prompting">Prompting</h3>
+<section id="prompting" class="level4">
+<h4 class="anchored" data-anchor-id="prompting">Prompting</h4>
 <p>The second step is to provide a good prompt. The prompt should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for function calling:</p>
 <pre><code>You are a helpful assistant that generates function calls based on user input. Only use the functions you have been provided with.
 
@@ -384,8 +525,8 @@ Assistant: {
 </div>
 </div>
 </section>
-<section id="challenges-finetuned-models-and-the-influence-of-size" class="level3">
-<h3 class="anchored" data-anchor-id="challenges-finetuned-models-and-the-influence-of-size">Challenges, finetuned models and the influence of size</h3>
+<section id="challenges-finetuned-models-and-the-influence-of-size" class="level4">
+<h4 class="anchored" data-anchor-id="challenges-finetuned-models-and-the-influence-of-size">Challenges, finetuned models and the influence of size</h4>
 <p>The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.</p>
 <ul>
 <li>They can hallucinate functions or arguments that do not exist.</li>
@@ -422,10 +563,10 @@ Assistant: {
 </div>
 </section>
 </section>
-<section id="code-generation" class="level2">
-<h2 class="anchored" data-anchor-id="code-generation">Code Generation</h2>
+<section id="code-generation" class="level3">
+<h3 class="anchored" data-anchor-id="code-generation">Code Generation</h3>
 <!-- smolagents as example (more on agents later), or not... Just try it using LLM call-->
-<p>The exception mentioned above is the <a href="https://huggingface.co/docs/smolagents/index">smolagents framework</a>. Here, the default mode is code generation, but JSON mode is also supported. (We will get to know agents and the smolagents framework next time.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help.</p>
+<p>The exception mentioned above is the <a href="https://huggingface.co/docs/smolagents/index">smolagents framework</a>. Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -502,6 +643,7 @@ Let's have a look!
 
 :::
 -->
+</section>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
@@ -961,8 +1103,8 @@ document.addEventListener('DOMContentLoaded', function() {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/agent_basics.html" class="pagination-link" aria-label="Agent basics">
-        <span class="nav-page-text"><span class="chapter-title">Agent basics</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/embeddings.html" class="pagination-link" aria-label="Embedding-based LLM-systems">
+        <span class="nav-page-text"><span class="chapter-title">Embedding-based LLM-systems</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
