@@ -77,9 +77,9 @@ We should have a conversation.
 
 1. In your notebook, write a chat function or method that does the following:
     - saves the conversation history.
-    - adds the user' message to the messages.
+    - adds the user' message to the history.
     - sends the system message plus conversation to the LLM.
-adds the response to the history
+    - adds the response to the history
 
 2. Test the chat function as above.
 3. Can you see any downsides of this approach? What about long conversations?
