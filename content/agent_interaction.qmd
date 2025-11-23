@@ -2,9 +2,11 @@
 toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>LLM pipelines</h3>'
 ---
 
-# LLM pipelines
+# LLM pipelines {#sec-evalpipelines}
 
-<!-- ToDo: add something about pipeline frameworks, haystack, langchain, llamaindex (deprecated) -->
+<!-- in @sec-agents we bla  -->
+
+
 
 ## Pipelines vs. agents
 
@@ -78,13 +80,7 @@ Optionally, when building an agent system, not a pipeline, there is also
 
 We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation. 
 
-<!-- 
-Let us first define the cards. We will use pydantic for that. A card consists of a question, an answer and some additional information. All of these are strings. 
 
-    class QACard(BaseModel):
-    question: str
-    answer: str
-    extra: str -->
 
 ### Generator
 
