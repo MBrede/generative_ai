@@ -1,5 +1,5 @@
 ---
-toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Function Calling</h3>'
+toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and Function Calling</h3>'
 ---
 
 <!--  -->
@@ -77,9 +77,9 @@ We should have a conversation.
 
 1. In your notebook, write a chat function or method that does the following:
     - saves the conversation history.
-    - adds the user' message to the messages.
+    - adds the user' message to the history.
     - sends the system message plus conversation to the LLM.
-adds the response to the history
+    - adds the response to the history
 
 2. Test the chat function as above.
 3. Can you see any downsides of this approach? What about long conversations?
@@ -137,31 +137,17 @@ We obviously need the conversation history from earlier for this to work. We als
 
 **Note:** As stated above, the functions need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however not the best idea for reasons of security. 
 
-<!-- ## Code generation and function calling -->
-
-<!-- The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that: -->
 
 There are two main ways to implement function calling:
 
 1. **Structured output**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the function and its parameters. 
 2. **Code generation**: Here, we ask the LLM to generate the function calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined functions. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine. 
-<!-- Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation. It can also pose a severe security issue because this approach hinges on running generated code on your machine.  -->
-<!-- 2. **Function calling**: Here, we ask the LLM to generate a function call from the user input. This approach has the advantage of being more robust and accurate than code generation, as it is easier for the LLM to generate a correct function call than a complete python script. However, it requires that the functions that can be called are already defined and that they are properly documented. -->
-
-<!-- Here, we will focus on function calling.  -->
-
-<!-- Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
-
-1. using a large, generalized LLM (e.g. GPT-4) with good prompt engineering and
-2. using a smaller model fine tuned to generate function calls. -->
 
 Today, we will not implement the full agentic workflow outlined above. We will get there eventually, though. Here, we want to focus on step 3, the function call. The aim is to take a user request and translate it into structured output, either JSON or code. In the following, we will explore how to do it. 
 
 
 
 ### Structured output
-
-<!-- some smart sentences -->
 
 The traditional way^[In this context, *traditional* means: people have been using it for more than a year. ] of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. We already talked about generating structured output before. Here, we will use it to generate a function call. 
 
@@ -213,7 +199,7 @@ Try it!
 
 :::
 
-#### Challenges, finetuned models and the influence of size
+#### Challenges, fine-tuned models and the influence of size
 
 The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
 
@@ -238,15 +224,16 @@ As above, but this time
 
 <!--  update models -->
 
-1. use a very small model (e.g [a small Llama model](https://huggingface.co/lmstudio-community/Llama-3.2-1B-Instruct-GGUF))
-2. use a model finetuned for the task (you could try [this one](https://huggingface.co/bartowski/llama-3-8B-function-calling-GGUF))
-3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF))
+1. use a very small model (e.g [a small qwen model](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF))
+2. use a larger model pf the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
+3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
+<!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
+4. use a model of the same family not fine-tuned on this
+
 
 :::
 
 ### Code Generation
-
-<!-- smolagents as example (more on agents later), or not... Just try it using LLM call-->
 
 The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
 
@@ -280,53 +267,9 @@ Try it!
 
 
 
-<!-- 
-## Agents recap
 
-We introduced agents already back in chapter 3. To give a quick recap, an agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request better. The agent has several modules at its disposal, the memory, some tools and a planning tool. 
-
-The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e. the LLM) along with the system prompt and the current user input. 
-
-The planning module then decides which tools to use, if any, to answer the user request. The output of the planning module is a response message containing one or several tool calls (or a final answer). The agent then executes the tool calls by first parsing the response, then executing the functions. Based on the tool outputs, a final answer is generated and sent back to the user.
-
-
-### React agents
-
-There a several types of agent. Now, we want to fucus on the ReAct agent introduced by [@yaoReActSynergizingReasoning2023]. The ReAct agent is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
-
-
-### Llamaindex
-
-LLamaindex is a framework that  makes it easy to implement and use agents. In Llamaindex an agent consists a an *agent runner* and an *agent_worker*. Think of the agent runner as the agent core in the architecture schematics and the agent worker as the planning module. The tools are functions implemented in python that can be executed by the agent worker. Finally, the memory module consists of a simple text buffer, logging the conversation history between the user and the agent and between the agent and the tools.
-
-
-::: {.callout-note}
-## 📝 Task
-
-Let's have a look!
-
-1. Open a notebook and connect it with a local LLM using LM Studio.
-2. Define a function that can be called by the agent to get the current weather in a given location. (Implement it this time, it doesn't need to work, just return random weather)
-3. Initialize a ReAct agent using LLamaindex (you can use [this tutorial](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as the starting point)
-<!-- (we will use [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) as a starting point, since it reimplements the function calling agent and returns a step-by step breakdown of its thought process). 
-4. Have a look at the prompt, the agent gives to the LLM (you can find it using `agent.get_prompts()`)
-5. Discuss the prompt with the group! What does it do? How does it do it?
-6. Ask the agent to tell you the weather in a given location.
-7. Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
-8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into an infinite loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
-9. Upload to Moodle
-
-:::
--->
 
 ## Further Readings
-<!-- 
-On the Llamaindex website on the ["examples" page](https://docs.llamaindex.ai/en/stable/examples/) you will find a **lot** of helpful material: examples, notebooks, recipes and more. I recommend to have a look at them! For our case, check the "agents" section. For an even more in-depth dive, go to the "workflows" part.
 
-- In [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) you find an agent implementation that returns a step-by-step breakdown of its thought process.
-- To go even more low level then that see [this example](https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/) that will walk you through setting up a Workflow to construct a function calling agent from scratch. -->
 - [Here](https://blog.dottxt.co/say-what-you-mean.html) is a *very* nice paper about generating structured output. 
 
-
-
-<!-- ## References -->
