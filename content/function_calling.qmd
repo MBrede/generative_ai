@@ -228,7 +228,7 @@ As above, but this time
 2. use a larger model pf the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
 3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
 <!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
-4. use a model of the same family not fine-tuned on this
+4. use a model of the same family not fine-tuned on this Task.
 
 
 :::

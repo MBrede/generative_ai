@@ -201,7 +201,6 @@ Do the EDA agent
 3. Test the agent with several prompts and observe when it uses tools, when it doesn’t, and where it struggles. 
 4. Try to get it to do the above steps. 
 5. Present to the group. 
-6. Upload your Notebook to Moodle. 
 
 :::
 
@@ -239,7 +238,20 @@ For RAG-style systems, this is particularly relevant:
 - If retrieval is mandatory for correctness, you may not want to leave the “call retrieval or not?” decision to the LLM.
 - Instead, you enforce: “always retrieve, then generate”, implemented as a pipeline.
 
-We will build on this distinction in session @sec-evalpipelines, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense.
+<!-- We will build on this distinction in session @sec-evalpipelines, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense. -->
+
+What does this mean for our EDA agent?
+
+
+::: {.callout-note}
+## 📝 Task
+
+
+1. Discuss: for our EDA example, does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?
+2. Implement your agent from above as a pipeline. 
+3. Upload your Notebook to Moodle. 
+
+:::
 
 
 ## Further Readings
