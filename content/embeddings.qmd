@@ -19,7 +19,7 @@ Though most modern LLMs are increasingly capable in answering basic knowledge-qu
 To empower a LLM too look up information during its thought-process, one has to build a tool that allows a LLM to use natural language to retrieve information necessary for a task.
 The fundamental principle to do this are so-called *semantic embeddings*.
 These are pretty close to the concept we introduced when talking about the foundations of LLMs (see [here](getting_started_with_llms)) and can be understood as a way to map textual data into a vector space.
-The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonably small distance between them. The go-to standard to measure this distance is the **cosine similarity**, which has proven useful enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in [OpenAI tutorials](https://cookbook.openai.com/examples/recommendation_using_embeddings) and in [Azure embedding-applications](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/understand-embeddings)). The cosine similarity is defined as:
+The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonably small distance between them. The go-to standard to measure this distance is the **cosine similarity**, which has proven useful enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in [OpenAI tutorials](https://cookbook.openai.com/examples/recommendation_using_embeddings) and in [Azure AI Foundry embedding-applications](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/understand-embeddings?view=foundry-classic&viewFallbackFrom=foundry)). The cosine similarity is defined as:
 
 $$
 \text{cosine\_similarity}(u, v) = \frac{u \cdot v}{\|u\| \|v\|} = \frac{\sum_{i=1}^{n} u_i v_i}{\sqrt{\sum_{i=1}^{n} u_i^2} \sqrt{\sum_{i=1}^{n} v_i^2}}
@@ -170,7 +170,7 @@ The best way to use qdrant is to use [docker](https://qdrant.tech/documentation/
 Install the qdrant-client python-sdk.
 
 Create a collection for the claims and one for the evidence in [the climate_fever-dataset](https://huggingface.co/datasets/tdiggelm/climate_fever).
-Add the first 200 entries to each of these collections. Use qdrants sentencetransformers to do this, [here](https://medium.com/@hassanqureshi700/semantic-search-a-step-by-step-tutorial-using-qdrant-53e93f787828) is a medium tutorial that leads you through the process.
+Add the first 200 entries to each of these collections. Use sentence_transformers to do this, [here](https://qdrant.tech/documentation/beginner-tutorials/search-beginners/) is a tutorial by qdrant that leads you through the process.
 
 Test the similarity search on a question you formulate.
 
@@ -203,7 +203,7 @@ Upload your results until here (embedder, database and summarization) to moodle.
 
 Most agent frameworks provide integrations for a variety of vector databases. 
 
-In terms of llamaindex, there are not just one but two tutorials on how to get qdrant to integrate into your agent, one from [qdrant](https://qdrant.tech/documentation/frameworks/llama-index/) for general integration and one from [llamaindex](https://docs.llamaindex.ai/en/stable/examples/vector_stores/QdrantIndexDemo/).
+In terms of llamaindex, there are not just one but two tutorials on how to get qdrant to integrate into your agent, one from [qdrant](https://qdrant.tech/documentation/frameworks/llama-index/) for general integration and one from [llamaindex](https://developers.llamaindex.ai/python/examples/vector_stores/qdrantindexdemo/).
 
 The pipeline is pretty close to what we discussed until here, it just uses the llamaindex-typical wrapper classes. See @tip-llamaindexRag for an example RAG-system implemented in Llamaindex.
 
@@ -211,14 +211,9 @@ The pipeline is pretty close to what we discussed until here, it just uses the l
 
 {{< include llamaindex_rag.md >}}
 
-::: {.callout-note}
-
-#### 📝 Task
-
-Build a llamaindex-application that allows you to [chat](https://docs.llamaindex.ai/en/stable/examples/chat_engine/chat_engine_best/) with the climate_fever evidence.
 :::
 
-:::
+
 
 ### Document chunking
 
@@ -269,7 +264,7 @@ Llamaindex implements two more sophisticated approaches to transform queries:
 
 #### 📝 Task
 
-Implement query expansion for the climate_fever dataset using llamaindex. [This](https://docs.llamaindex.ai/en/stable/module_guides/querying/pipeline/usage_pattern/#defining-a-custom-query-component) might be helpful.
+Implement query expansion for the climate_fever dataset using llamaindex. [This](https://developers.llamaindex.ai/python/framework/optimizing/advanced_retrieval/query_transformations/) might be helpful.
 
 Experiment with different prompts and temperatures.
 
