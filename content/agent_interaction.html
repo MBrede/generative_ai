@@ -190,7 +190,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent basics</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agents and Pipelines</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -224,28 +224,12 @@ div.csl-indent {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Other</span></a>
+ <span class="menu-text">Finetuning</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/model_context_protocol.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Context Protocol</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Finetuning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Finetuning Approaches</span></a>
@@ -293,7 +277,7 @@ LLM pipelines<br>
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">LLM pipelines</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">LLM pipelines</span></h1>
+<h1 class="title"><span id="sec-evalpipelines" class="quarto-section-identifier"><span class="chapter-title">LLM pipelines</span></span></h1>
 </div>
 
 
@@ -310,7 +294,7 @@ LLM pipelines<br>
 </header>
 
 
-<!-- ToDo: add something about pipeline frameworks, haystack, langchain, llamaindex (deprecated) -->
+<!-- in @sec-agents we bla  -->
 <section id="pipelines-vs.-agents" class="level2">
 <h2 class="anchored" data-anchor-id="pipelines-vs.-agents">Pipelines vs.&nbsp;agents</h2>
 <p>As already mentioned, an agent is defined by its ability to make decisions. This means the agent decides if and what tool to use or not to use. One potential problem with this is that, a lot of the time, the LLM may decide not to use any tool. This is especially true for retrieval augmented generation (RAG) tasks, where looking up the answer in a document store is not really optional, but the whole reason to have the system in the first place.</p>
@@ -387,13 +371,6 @@ LLM pipelines<br>
 <li>An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop.</li>
 </ol>
 <p>We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation.</p>
-<!-- 
-Let us first define the cards. We will use pydantic for that. A card consists of a question, an answer and some additional information. All of these are strings. 
-
-    class QACard(BaseModel):
-    question: str
-    answer: str
-    extra: str -->
 <section id="generator" class="level3">
 <h3 class="anchored" data-anchor-id="generator">Generator</h3>
 <p><img src="../imgs/pipe_gen.png" class="img-fluid"></p>
@@ -1119,8 +1096,8 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/agent_basics.html" class="pagination-link" aria-label="Agent basics">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Agent basics</span></span>
+      <a href="../content/agent_basics.html" class="pagination-link" aria-label="Agents and Pipelines">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Agents and Pipelines</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Max Brede">
 <meta name="author" content="Alwin Klick">
-<meta name="dcterms.date" content="2025-11-17">
+<meta name="dcterms.date" content="2025-11-24">
 
 <title>Generative AI</title>
 <style>
@@ -172,7 +172,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent basics</span></a>
+  <a href="./content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agents and Pipelines</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -206,28 +206,12 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Other</span></a>
+ <span class="menu-text">Finetuning</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./content/model_context_protocol.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Context Protocol</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Finetuning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./content/finetuning_approaches.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Finetuning Approaches</span></a>
@@ -284,7 +268,7 @@ Introduction<br>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 17, 2025</p>
+      <p class="date">November 24, 2025</p>
     </div>
   </div>
   
@@ -418,118 +402,112 @@ library(tidyverse)
 <tr class="even">
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">17.11.</td>
-<td>Function Calling</td>
-<td>Code generation and function calling</td>
+<td>Towards Agents</td>
+<td>chatbots and function calling</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-<td>MCP</td>
-</tr>
-<tr class="even">
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">19.11.</td>
 <td>Embedding-based retrieval systems</td>
 <td>Semantic embeddings and vector stores</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Retrieval augmented and interleaved generation</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">5</td>
 <td style="text-align: right;">24.11.</td>
-<td>Agent basics</td>
+<td>Agents and Pipelines</td>
 <td>Fundamentals of agents</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
-<td>Examples of agent-frameworks (Llamaindex, LangChain &amp; smolagents)</td>
+<td>Examples of agent-frameworks (Llamaindex &amp; smolagents)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">6</td>
 <td style="text-align: right;">26.11.</td>
-<td>LLM-pipelines</td>
-<td></td>
+<td>Evaluation and pipelines</td>
+<td>LLM-as-a-judge and pipelines</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;">7</td>
 <td style="text-align: right;">1.12.</td>
 <td>LLM-based automated Data Analysis</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">8</td>
 <td style="text-align: right;">3.12.</td>
 <td>AI image generation I</td>
 <td>AI image generator basics</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Diffusion Models and Variational Autoencoders</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Multimodal models</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;">9</td>
 <td style="text-align: right;">8.12.</td>
 <td>AI image generation II</td>
 <td>Using Open Source AI image generation models</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>AI image generators in agent systems</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;">10</td>
 <td style="text-align: right;">10.12.</td>
 <td>Finetuning Basics</td>
 <td>Basics of Finetuning strategies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td>Rank adaptation</td>
 <td>Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>(Q)LoRA fine-tuning using Unsloth</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">11</td>
 <td style="text-align: right;">15.12.</td>
 <td>Alignment</td>
 <td>Central principles of Model-Alignment</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td></td>
 <td>Reinforcement Learning from Human Feedback (RLHF)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: right;">12</td>
 <td style="text-align: right;">17.12.</td>
 <td>Project presentations</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: right;"></td>
 <td style="text-align: right;">16.01.</td>
 <td>Project submission on moodle</td>

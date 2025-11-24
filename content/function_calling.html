@@ -205,7 +205,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent basics</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agents and Pipelines</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -239,28 +239,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Other</span></a>
+ <span class="menu-text">Finetuning</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/model_context_protocol.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Context Protocol</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Finetuning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Finetuning Approaches</span></a>
@@ -282,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title"><img src="../imgs/function calling.png" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
-Function Calling<br>
+Chatbots and Function Calling<br>
 </h3>
    
   <ul>
@@ -402,8 +386,9 @@ Tip&nbsp;5.1: Simple LLM call
 <li><p>In your notebook, write a chat function or method that does the following:</p>
 <ul>
 <li>saves the conversation history.</li>
-<li>adds the user’ message to the messages.</li>
-<li>sends the system message plus conversation to the LLM. adds the response to the history</li>
+<li>adds the user’ message to the history.</li>
+<li>sends the system message plus conversation to the LLM.</li>
+<li>adds the response to the history</li>
 </ul></li>
 <li><p>Test the chat function as above.</p></li>
 <li><p>Can you see any downsides of this approach? What about long conversations?</p></li>
@@ -459,23 +444,15 @@ Tip&nbsp;5.1: Simple LLM call
 </ol>
 <p>We obviously need the conversation history from earlier for this to work. We also need to give the system access to the functions.</p>
 <p><strong>Note:</strong> As stated above, the functions need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however not the best idea for reasons of security.</p>
-<!-- ## Code generation and function calling -->
-<!-- The basic idea of function calling is to use an LLM to generate valid, executable code from the user input. That is, the user's input is sent to the LLM, together with a prompt, urging it to return structured output in a specific format. This output can then be taken and executed. For this to work properly, of course, the generated output *must* be valid code (in our case python code). There are two approaches for that: -->
 <p>There are two main ways to implement function calling:</p>
 <ol type="1">
 <li><strong>Structured output</strong>: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the function and its parameters.</li>
-<li><strong>Code generation</strong>: Here, we ask the LLM to generate the function calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined functions. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine. <!-- Here, we ask the LLM to generate a complete python script from the user input. This approach has the advantage of being simple and straightforward, but it can be prone to errors if the LLM does not fully understand the task at hand or if it makes mistakes in its code generation. It can also pose a severe security issue because this approach hinges on running generated code on your machine.  --> <!-- 2. **Function calling**: Here, we ask the LLM to generate a function call from the user input. This approach has the advantage of being more robust and accurate than code generation, as it is easier for the LLM to generate a correct function call than a complete python script. However, it requires that the functions that can be called are already defined and that they are properly documented. --></li>
+<li><strong>Code generation</strong>: Here, we ask the LLM to generate the function calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined functions. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine.</li>
 </ol>
-<!-- Here, we will focus on function calling.  -->
-<!-- Still the challenge is to get the LLM to generate valid output. There are two main strategies to facilitate that:
-
-1. using a large, generalized LLM (e.g. GPT-4) with good prompt engineering and
-2. using a smaller model fine tuned to generate function calls. -->
 <p>Today, we will not implement the full agentic workflow outlined above. We will get there eventually, though. Here, we want to focus on step 3, the function call. The aim is to take a user request and translate it into structured output, either JSON or code. In the following, we will explore how to do it.</p>
 </section>
 <section id="structured-output" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="structured-output">Structured output</h3>
-<!-- some smart sentences -->
 <p>The traditional way<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. We already talked about generating structured output before. Here, we will use it to generate a function call.</p>
 <div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;In this context, <em>traditional</em> means: people have been using it for more than a year. </p></div></div><section id="function-definition" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="function-definition">Function definition</h4>
@@ -525,8 +502,8 @@ Assistant: {
 </div>
 </div>
 </section>
-<section id="challenges-finetuned-models-and-the-influence-of-size" class="level4">
-<h4 class="anchored" data-anchor-id="challenges-finetuned-models-and-the-influence-of-size">Challenges, finetuned models and the influence of size</h4>
+<section id="challenges-fine-tuned-models-and-the-influence-of-size" class="level4">
+<h4 class="anchored" data-anchor-id="challenges-fine-tuned-models-and-the-influence-of-size">Challenges, fine-tuned models and the influence of size</h4>
 <p>The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.</p>
 <ul>
 <li>They can hallucinate functions or arguments that do not exist.</li>
@@ -555,9 +532,10 @@ Assistant: {
 <p>As above, but this time</p>
 <!--  update models -->
 <ol type="1">
-<li>use a very small model (e.g <a href="https://huggingface.co/lmstudio-community/Llama-3.2-1B-Instruct-GGUF">a small Llama model</a>)</li>
-<li>use a model finetuned for the task (you could try <a href="https://huggingface.co/bartowski/llama-3-8B-function-calling-GGUF">this one</a>)</li>
-<li>a larger model (<a href="https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF">a larger llama in this case</a>)</li>
+<li>use a very small model (e.g <a href="https://huggingface.co/unsloth/Qwen3-0.6B-GGUF">a small qwen model</a>)</li>
+<li>use a larger model pf the same model family (e.g.&nbsp;<a href="https://huggingface.co/Qwen/Qwen3-8B-GGUF">this one</a>)</li>
+<li>use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try <a href="https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF">this one</a> <!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) --></li>
+<li>use a model of the same family not fine-tuned on this</li>
 </ol>
 </div>
 </div>
@@ -565,7 +543,6 @@ Assistant: {
 </section>
 <section id="code-generation" class="level3">
 <h3 class="anchored" data-anchor-id="code-generation">Code Generation</h3>
-<!-- smolagents as example (more on agents later), or not... Just try it using LLM call-->
 <p>The exception mentioned above is the <a href="https://huggingface.co/docs/smolagents/index">smolagents framework</a>. Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -605,57 +582,13 @@ Assistant: {
 </ol>
 </div>
 </div>
-<!-- 
-## Agents recap
-
-We introduced agents already back in chapter 3. To give a quick recap, an agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request better. The agent has several modules at its disposal, the memory, some tools and a planning tool. 
-
-The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e. the LLM) along with the system prompt and the current user input. 
-
-The planning module then decides which tools to use, if any, to answer the user request. The output of the planning module is a response message containing one or several tool calls (or a final answer). The agent then executes the tool calls by first parsing the response, then executing the functions. Based on the tool outputs, a final answer is generated and sent back to the user.
-
-
-### React agents
-
-There a several types of agent. Now, we want to fucus on the ReAct agent introduced by [@yaoReActSynergizingReasoning2023]. The ReAct agent is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of "thought-action-observation" loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.
-
-
-### Llamaindex
-
-LLamaindex is a framework that  makes it easy to implement and use agents. In Llamaindex an agent consists a an *agent runner* and an *agent_worker*. Think of the agent runner as the agent core in the architecture schematics and the agent worker as the planning module. The tools are functions implemented in python that can be executed by the agent worker. Finally, the memory module consists of a simple text buffer, logging the conversation history between the user and the agent and between the agent and the tools.
-
-
-::: {.callout-note}
-## 📝 Task
-
-Let's have a look!
-
-1. Open a notebook and connect it with a local LLM using LM Studio.
-2. Define a function that can be called by the agent to get the current weather in a given location. (Implement it this time, it doesn't need to work, just return random weather)
-3. Initialize a ReAct agent using LLamaindex (you can use [this tutorial](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as the starting point)
-<!-- (we will use [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) as a starting point, since it reimplements the function calling agent and returns a step-by step breakdown of its thought process). 
-4. Have a look at the prompt, the agent gives to the LLM (you can find it using `agent.get_prompts()`)
-5. Discuss the prompt with the group! What does it do? How does it do it?
-6. Ask the agent to tell you the weather in a given location.
-7. Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.
-8. Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said "Hi" and it went into an infinite loop because it did not need a tool for that and there wasn't a "none" tool 😜.)
-9. Upload to Moodle
-
-:::
--->
 </section>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
-<!-- 
-On the Llamaindex website on the ["examples" page](https://docs.llamaindex.ai/en/stable/examples/) you will find a **lot** of helpful material: examples, notebooks, recipes and more. I recommend to have a look at them! For our case, check the "agents" section. For an even more in-depth dive, go to the "workflows" part.
-
-- In [this example](https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner/) you find an agent implementation that returns a step-by-step breakdown of its thought process.
-- To go even more low level then that see [this example](https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/) that will walk you through setting up a Workflow to construct a function calling agent from scratch. -->
 <ul>
 <li><a href="https://blog.dottxt.co/say-what-you-mean.html">Here</a> is a <em>very</em> nice paper about generating structured output.</li>
 </ul>
-<!-- ## References -->
 
 
 </section>

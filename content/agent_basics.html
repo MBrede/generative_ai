@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Agent basics – Generative AI</title>
+<title>Agents and Pipelines – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,7 +105,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agent basics</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agents and Pipelines</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -190,7 +190,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agent basics</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agents and Pipelines</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -224,28 +224,12 @@ div.csl-indent {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Other</span></a>
+ <span class="menu-text">Finetuning</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/model_context_protocol.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Context Protocol</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Finetuning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Finetuning Approaches</span></a>
@@ -267,28 +251,31 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title"><img src="../imgs/robotic_agent.png" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
-Agent basics<br>
+Agents and Pipelines<br>
 </h3>
    
   <ul>
-  <li><a href="#what-is-an-agent" id="toc-what-is-an-agent" class="nav-link active" data-scroll-target="#what-is-an-agent">What is an agent?</a></li>
+  <li><a href="#motivation-and-learning-objectives" id="toc-motivation-and-learning-objectives" class="nav-link active" data-scroll-target="#motivation-and-learning-objectives">Motivation and learning objectives</a></li>
+  <li><a href="#what-is-an-agent" id="toc-what-is-an-agent" class="nav-link" data-scroll-target="#what-is-an-agent">What is an agent?</a>
+  <ul class="collapse">
+  <li><a href="#a-motivating-example" id="toc-a-motivating-example" class="nav-link" data-scroll-target="#a-motivating-example">A motivating example</a></li>
+  </ul></li>
   <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent framework</a>
   <ul class="collapse">
-  <li><a href="#agent" id="toc-agent" class="nav-link" data-scroll-target="#agent">Agent</a></li>
+  <li><a href="#agent-core" id="toc-agent-core" class="nav-link" data-scroll-target="#agent-core">Agent (core)</a></li>
   <li><a href="#planning" id="toc-planning" class="nav-link" data-scroll-target="#planning">Planning</a></li>
   <li><a href="#tools" id="toc-tools" class="nav-link" data-scroll-target="#tools">Tools</a></li>
   <li><a href="#memory" id="toc-memory" class="nav-link" data-scroll-target="#memory">Memory</a></li>
-  <li><a href="#multi-step-agents" id="toc-multi-step-agents" class="nav-link" data-scroll-target="#multi-step-agents">Multi-step agents</a></li>
+  <li><a href="#multi-step-agents-and-react" id="toc-multi-step-agents-and-react" class="nav-link" data-scroll-target="#multi-step-agents-and-react">Multi-step agents and ReAct</a></li>
   </ul></li>
-  <li><a href="#examples-of-agent-frameworks" id="toc-examples-of-agent-frameworks" class="nav-link" data-scroll-target="#examples-of-agent-frameworks">Examples of agent-frameworks</a></li>
-  <li><a href="#summary-and-recap" id="toc-summary-and-recap" class="nav-link" data-scroll-target="#summary-and-recap">Summary and recap</a>
+  <li><a href="#agent-frameworks-in-practice" id="toc-agent-frameworks-in-practice" class="nav-link" data-scroll-target="#agent-frameworks-in-practice">Agent frameworks in practice</a></li>
+  <li><a href="#the-eda-agent-as-a-running-example" id="toc-the-eda-agent-as-a-running-example" class="nav-link" data-scroll-target="#the-eda-agent-as-a-running-example">The EDA agent as a running example</a>
   <ul class="collapse">
-  <li><a href="#agents" id="toc-agents" class="nav-link" data-scroll-target="#agents">Agents</a></li>
-  <li><a href="#react-agents" id="toc-react-agents" class="nav-link" data-scroll-target="#react-agents">React agents</a></li>
-  <li><a href="#why-agents" id="toc-why-agents" class="nav-link" data-scroll-target="#why-agents">Why agents?</a></li>
-  <li><a href="#pros-and-cons" id="toc-pros-and-cons" class="nav-link" data-scroll-target="#pros-and-cons">Pros and Cons</a></li>
-  <li><a href="#react-agents-1" id="toc-react-agents-1" class="nav-link" data-scroll-target="#react-agents-1">React agents</a></li>
+  <li><a href="#problem-setting" id="toc-problem-setting" class="nav-link" data-scroll-target="#problem-setting">Problem setting</a></li>
+  <li><a href="#roles-of-tools-in-the-eda-agent" id="toc-roles-of-tools-in-the-eda-agent" class="nav-link" data-scroll-target="#roles-of-tools-in-the-eda-agent">Roles of tools in the EDA agent</a></li>
   </ul></li>
+  <li><a href="#pipelines-vs.-agents-when-do-we-need-agency" id="toc-pipelines-vs.-agents-when-do-we-need-agency" class="nav-link" data-scroll-target="#pipelines-vs.-agents-when-do-we-need-agency">Pipelines vs.&nbsp;agents – when do we need agency?</a></li>
+  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -296,9 +283,9 @@ Agent basics<br>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agent basics</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agents and Pipelines</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-agents" class="quarto-section-identifier"><span class="chapter-title">Agent basics</span></span></h1>
+<h1 class="title"><span id="sec-agents" class="quarto-section-identifier"><span class="chapter-title">Agents and Pipelines</span></span></h1>
 </div>
 
 
@@ -315,32 +302,50 @@ Agent basics<br>
 </header>
 
 
-<!-- ## Fundamentals of agents and train-of-thought prompting -->
+<section id="motivation-and-learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-and-learning-objectives">Motivation and learning objectives</h2>
+<p>In the first four sessions of this course you have seen language models as components in applications: as one-of calls, as chatbots, tools users can query, or models that are connected to a vector store.</p>
+<p>From now on, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.</p>
+<p>In this session we will:</p>
+<ul>
+<li>understand what an LLM agent is and how it differs from a “plain” LLM call,</li>
+<li>analyse the core components of agent frameworks (planning, tools, memory),</li>
+<li>explore a concrete EDA agent as a running example, and</li>
+<li>get a first feel for when a simple pipeline is preferable to a full agentic setup.</li>
+</ul>
+<p>This prepares the ground for session <a href="agent_interaction.html" class="quarto-xref"><span>LLM pipelines</span></a>, where we will add an evaluation layer using LLM as a judge and build evaluation pipelines for our systems.</p>
+</section>
 <section id="what-is-an-agent" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-an-agent">What is an agent?</h2>
 <p>“An AI agent is a system that uses an LLM to decide the control flow of an application.” <span class="citation" data-cites="WhatAIAgent2024">(<a href="#ref-WhatAIAgent2024" role="doc-biblioref"><span>“What Is an <span>AI</span> Agent?”</span> 2024</a>)</span></p>
-<p>An agent (from latin <em>agere</em>, to act) is defined by its ability to make decisions based on the circumstances to achieve a predefined goal. In the context of large language models, agents are LLM-based systems where the control flow of an application is decided by the LLM based on its understanding of the situation at hand. Often, it also means that the agent has access to the external world i.e.&nbsp;it has <strong>agency</strong>. In Practice, this means that the LLM decides what do do next, which tool to use (if any), which information to retrieve, etc. based on its understanding of the situation. A nice Example of such an <em>agentic</em> system is <em>Vending-Bench</em> <span class="citation" data-cites="backlundVendingBenchBenchmarkLongTerm2025">(<a href="#ref-backlundVendingBenchBenchmarkLongTerm2025" role="doc-biblioref">Backlund &amp; Petersson, 2025</a>)</span>, where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/vending_bench.png" class="img-fluid figure-img"></p>
-<figcaption>Vending-Bench architecture <span class="citation" data-cites="backlundVendingBenchBenchmarkLongTerm2025">(<a href="#ref-backlundVendingBenchBenchmarkLongTerm2025" role="doc-biblioref">Backlund &amp; Petersson, 2025</a>)</span></figcaption>
-</figure>
-</div>
-<!-- In the context of large language models, agents are LLM-based systems that can solve complex tasks. Imagine asking a question like:  -->
-<p>But let’s keep it simpler for now. Let’s say you want to know:</p>
-<p><strong>“What were the key learnings from the Generative AI elective module in SoSe 25 at FH Kiel?”</strong></p>
-<p>Could you just ask an LLM that question and expect a correct answer?</p>
-<p>As stated earlier, it is in theory possible, but in reality usually not. So we need a more complex approach.</p>
-<!-- It is in theory possible, that an LLM could answer that directly, but only if it was trained on this information, that is, if a text describing the module exists, is accessible from the web and was used in training the model. However, usually we can not expect the LLM to have this knowledge.  -->
-<p>Let’s think for a moment how a human would answer that (one that did not attend the module). We would probably try to get a copy of the script, maybe we saved the script to our hard drive or other data storage. Maybe we could search the web for a description or text version of the module. Having obtained a copy of the script, we would probably read it. Then, we would try to distill the information hidden therein, to answer the question.</p>
-<p>So, for our LLM to answer that question, it needs to be able to perform several tasks:</p>
+<p>The term agent (from Latin agere – to act) emphasises action and decision-making. An agent is not just a model that generates text; it is a system that:</p>
 <ul>
-<li>Searching the web or a local file storage for relevant documents</li>
-<li>Reading and understanding a document</li>
-<li>Summarizing the content of a document</li>
-<li>Answering questions based on the summary of a document</li>
+<li>receives a goal or task,</li>
+<li>decides which actions or tools to use in which order,</li>
+<li>observes the results of these actions, and</li>
+<li>continues until the goal is reached (or judged to be unreachable).</li>
 </ul>
-<p>This is where agents come into play. Agents are LLM-based systems that can solve complex tasks by performing several subtasks in sequence, using an LLM to decide which subtask to perform next. In our example, the agent would first search the web for relevant documents, then read and understand them, summarize them and finally answer the question based on the summary.</p>
+<p>In practice, this often means that the LLM has some degree of agency in your application. It can:</p>
+<ul>
+<li>choose which tool to call (if any),</li>
+<li>decide which information to retrieve from a vector store or database,</li>
+<li>plan intermediate steps,</li>
+<li>and determine when to stop and return a final answer.</li>
+</ul>
+<section id="a-motivating-example" class="level3">
+<h3 class="anchored" data-anchor-id="a-motivating-example">A motivating example</h3>
+<p>Assume the following question:</p>
+<p><strong>“What were the key learnings from the Generative AI elective module in SoSe 25 at FH Kiel?”</strong></p>
+<p>If the module script is not in the LLM’s training data, a single vanilla LLM call will likely hallucinate. A more promising route is a multi-step process:</p>
+<ol type="1">
+<li>Locate the relevant material (e.g.&nbsp;a PDF script in your local storage or in a course repository).</li>
+<li>Read and understand the document.</li>
+<li>Summarise the important topics and activities.</li>
+<li>Answer the original question based on this summary.</li>
+</ol>
+<p>An agent can automate this process: it decides that it first needs to search, then read, then summarise, then answer, and it calls the corresponding tools.</p>
+<p>In this course, we will work with a similar multi-step scenario – but instead of reading a script, our agent will perform an exploratory data analysis (EDA) on a dataset.</p>
+</section>
 </section>
 <section id="agent-framework" class="level2">
 <h2 class="anchored" data-anchor-id="agent-framework">Agent framework</h2>
@@ -350,84 +355,72 @@ Agent basics<br>
 <figcaption>Architecture of the agent framework <span class="citation" data-cites="LLMAgentsNextra2024">(<a href="#ref-LLMAgentsNextra2024" role="doc-biblioref"><em><span>LLM Agents</span> – <span>Nextra</span></em>, 2024</a>)</span></figcaption>
 </figure>
 </div>
-<p>To facilitate this, an agent system consists of several components:</p>
+<p>Most agent frameworks share a similar high-level architecture:</p>
+<section id="agent-core" class="level3">
+<h3 class="anchored" data-anchor-id="agent-core">Agent (core)</h3>
+<p>The general-purpose LLM that acts as the brain of the system. It receives the current state (task, context, history) and decides:</p>
 <ul>
-<li><strong>Agent</strong>: the agent core acting as coordinator</li>
-<li><strong>Planning</strong>: Assists the agent in breaking down the complex task into subtasks</li>
-<li><strong>Tools</strong>: functions that the agent can use to perform a specific task</li>
-<li><strong>Memory</strong>: used to store information about previous interactions with the agent</li>
+<li>which tool to call next,</li>
+<li>how to interpret tool outputs,</li>
+<li>when to stop and return a final answer.</li>
 </ul>
-<p>We will describe each of them below.</p>
-<section id="agent" class="level3">
-<h3 class="anchored" data-anchor-id="agent">Agent</h3>
-<p>This is a general-purpose LLM, that functions as the brain and main decision-making component of an agent. It determines which tools to use and how to combine their results to solve complex tasks. The agent core uses the output of the previous tool as input for the next tool. It also uses an LLM to decide when to stop using tools and return a final answer. The behavior of the agent and the tools, it has at its disposal, is defined by a prompt template.</p>
 </section>
 <section id="planning" class="level3">
 <h3 class="anchored" data-anchor-id="planning">Planning</h3>
-<p>Planning is the process of breaking down a complex task into subtasks and deciding which tools to use for each subtask. The planning module is not easily separable from the agent core. It is more like the setup that defines how the LLM should approach the problem (e.g.&nbsp;multi-step thought process), rather than an independent component.</p>
-<!-- usually also an LLM, it can be one fine-tuned to this specific task or receive a specialized prompt. It uses techniques like __chain-of-thought__ (CoT) prompting to generate a plan of action [@weiChainofThoughtPromptingElicits2023]. CoT prompting is a technique that encourages the model to explain its reasoning step by step, making it easier for us to understand and evaluate its answers. Other strategies include __Tree-of-Thoughts__ [@longLargeLanguageModel2023], [@yaoTreeThoughtsDeliberate2023], [@hulbertUsingTreeThoughtPrompting2023] or __ReAct__ [@yaoReActSynergizingReasoning2023]. -->
-<p><!-- and __Reflexion__ [@shinnReflexionLanguageAgents2023].  --> <!-- We will discuss these in more detail later. --></p>
+<p>The mechanism that breaks down a complex task into smaller steps and orders them. In many frameworks, planning is not a separate module but largely encoded in the system prompt and the examples we give the LLM (“reason step by step”, “decide which tool to use next”, etc.).</p>
 </section>
 <section id="tools" class="level3">
 <h3 class="anchored" data-anchor-id="tools">Tools</h3>
-<p>Tools are functions that the agent can use to perform a specific task. They can be pre-defined or dynamically generated based on the user’s needs. Tools can be simple, such as a calculator, or complex, such as a web search engine. Tools can also be other agents, allowing for the creation of multi-agent systems. In our example, the tools would be a web search engine and a document reader. Other popular tools are a data store or a python interpreter.</p>
+<p>Functions the agent can call – this is where the “real work” happens: data loading, statistics, plotting, web search, calling another API, … Tools can be simple (e.g.&nbsp;a calculator) or complex (e.g.&nbsp;a database query, another agent). For our EDA agent, tools will include things like <code>inspect_schema</code>, <code>basic_stats</code>, or <code>plot_distribution</code>.</p>
 </section>
 <section id="memory" class="level3">
 <h3 class="anchored" data-anchor-id="memory">Memory</h3>
-<p>Memory is used to store information about previous interactions with the agent. This allows the agent to remember past conversations and use this information in future interactions. Memory can be short-term, such as a conversation buffer, or long-term, such as a database. Memory can also be used to store the results of previous tool uses, allowing the agent to reuse them if necessary.</p>
-<!-- ### Chain-of-Thought prompting
-
-Chain-of-Thought (CoT) prompting refers to the technique of giving the LLM hints in the user input on how to solve the problem step by step, similar to what we did above. In the original paper, this was used with few-shot prompting (giving the LLM examples in the prompt), see figure below. But it is also possible to use it with zero-shot prompting (i.e. without examples) by invoking the magical words "Let's think step by step" [@kojimaLargeLanguageModels2023a]^[Note that these informations get old *fast*. Newer LLMs may have this functionality build in already]. 
-
-![Chain-of-Thought prompting illustrated [@weiChainofThoughtPromptingElicits2023]](../imgs/chain_of_thought.png)
-
-
-### Tree of Thoughts
-
-Tree of Thoughts (ToT) is a generalization on CoT prompting. The papers on ToT are somewhat complex, so we will not discuss them in detail here. In short, LLMs are used to generate thoughts, that serve as intermediate steps towards the solution. The difference to CoT is basically, that several thoughts are generated at each step, creating a tree-like structure. This tree is then searched using breadth-first search or depth-first search until a solution is found. A simplified example is given by [@hulbertUsingTreeThoughtPrompting2023]: 
-
-    Imagine three different experts are answering this question.
-    All experts will write down 1 step of their thinking,
-    then share it with the group.
-    Then all experts will go on to the next step, etc.
-    If any expert realises they're wrong at any point then they leave.
-    The question is... -->
+<p>Storage for past interactions and intermediate results. Memory can be:</p>
+<ul>
+<li>short-term: conversation history or recent tool outputs,</li>
+<li>long-term: a vector store or database with previously seen information. Memory enables the agent to build on earlier steps instead of starting from scratch each time.</li>
+</ul>
 </section>
-<section id="multi-step-agents" class="level3">
-<h3 class="anchored" data-anchor-id="multi-step-agents">Multi-step agents</h3>
-<p>The <em>de-facto</em> standard for multi-step agents is ReAct introduced by Yao et al. <span class="citation" data-cites="yaoReActSynergizingReasoning2023">(<a href="#ref-yaoReActSynergizingReasoning2023" role="doc-biblioref">Yao et al., 2023</a>)</span>. ReAct is short for Synergizing Reasoning and Acting. In this approach, the agent updates its reasoning after each step of tool use. Basically, it is running a while loop:</p>
-<p>First, the agent is initialized with a system prompt, tools and a task to solve. Then it goes through these steps:</p>
+<section id="multi-step-agents-and-react" class="level3">
+<h3 class="anchored" data-anchor-id="multi-step-agents-and-react">Multi-step agents and ReAct</h3>
+<p>A widely used pattern for multi-step agents is ReAct (Reasoning + Acting) by Yao et al. <span class="citation" data-cites="yaoReActSynergizingReasoning2023">(<a href="#ref-yaoReActSynergizingReasoning2023" role="doc-biblioref">Yao et al., 2023</a>)</span>. The core idea:</p>
 <ol type="1">
-<li>The agent reasons about the task and selects a tool to use based on its reasoning.</li>
-<li>The tool is executed. Both the tool usage and the result are recorded to memory.</li>
-<li>Based on the output from the tool, the agent updates its reasoning and may select another tool if needed.</li>
-<li><strong>Repeat</strong> until the goal is achieved or deemed unachievable.</li>
-<li>The final answer is generated based on the memory.</li>
+<li>The agent reasons about the current situation (“Thought”).</li>
+<li>It chooses and executes an action (e.g.&nbsp;a tool call).</li>
+<li>It observes the result (“Observation”).</li>
+<li>It updates its reasoning and decides on the next action.</li>
+<li>This thought–action–observation loop repeats until a stopping condition is met.</li>
 </ol>
-<p>Or, in code structure (from <a href="https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents">the smolagents site</a>):</p>
+<p>In pseudocode (adapted from the <a href="https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents">smolagents documentation</a>):</p>
 <pre><code>memory = [user_defined_task]
-while llm_should_continue(memory): # this loop is the multi-step part
-    action = llm_get_next_action(memory) # this is the tool-calling part
+
+while llm_should_continue(memory):
+    action = llm_get_next_action(memory)
     observations = execute_action(action)
-    memory += [action, observations] # this is the memory update part
-return llm_generate_answer(memory) # this is the final answer generation part</code></pre>
-<!-- ReAct (short for Synergizing Reasoning and Acting) is a technique based on CoT, that updates its reasoning after each step of tool use. This allows the agent to react (pun intended) to unforeseen results during the step-by-step solution i.e. failed tool use. The agent can then follow a different chain of thoughts. This makes it very well suited to tool use. An illustration is given in the figure below.  -->
-<!-- ![Comparison of ReAct with other prompting techniques [@yaoReActSynergizingReasoning2023]](../imgs/ReAct.png) -->
+    memory += [action, observations]
+
+final_answer = llm_generate_answer(memory)
+return final_answer</code></pre>
+<p>The intelligence of the system lies in:</p>
+<ul>
+<li>the prompting that shapes how the LLM reasons and chooses actions,</li>
+<li>the tool design (signatures, descriptions), and</li>
+<li>how we represent memory (what gets recorded, in which format, with which limits).</li>
+</ul>
 </section>
 </section>
-<section id="examples-of-agent-frameworks" class="level2">
-<h2 class="anchored" data-anchor-id="examples-of-agent-frameworks">Examples of agent-frameworks</h2>
-<p>There are <em>a lot</em> of agent frameworks out there. In this module we will focus on two of them: LlamaIndex and smolagents. They all have their own strengths and weaknesses, but they all share the same basic architecture as described above. We will describe each of them below.</p>
+<section id="agent-frameworks-in-practice" class="level2">
+<h2 class="anchored" data-anchor-id="agent-frameworks-in-practice">Agent frameworks in practice</h2>
+<p>There are many frameworks for building LLM-based agents. In this course we focus on two:</p>
 <ul>
-<li><a href="https://github.com/run-llama/llama_index">Llamaindex</a>: LlamaIndex is a data framework for building LLM applications. LLamaindex is easy to use out of the box. The documentation consists mainly of examples and tutorials that guide the user through the process of building an agent application. These can of course be combined or varied in many ways to create more complex applications.</li>
-<li><a href="https://huggingface.co/docs/smolagents/index">smolagents</a>: Smolagents is an agent framework for LLMs developed by the huggingface team. It is designed to be lightweight and easy to use. Smolagents is quite new but the documentation is quite good and the community is very active.</li>
+<li><a href="https://github.com/run-llama/llama_index">Llamaindex</a>: Originally a data framework for building LLM applications around your own data. It offers convenient abstractions for tools, agents, and memory, and comes with many examples and tutorials.</li>
+<li><a href="https://huggingface.co/docs/smolagents/index">smolagents</a>: A lightweight agent framework by Hugging Face. It is designed to be simple and hackable, with good conceptual documentation and an active community.</li>
 </ul>
-<p>We will also give honorary mentions to two other frameworks, which are also very popular in the LLM community.</p>
+<p>Two other popular frameworks you might encounter:</p>
 <ul>
-<li><a href="https://github.com/hwchase17/langchain">LangChain</a>: LangChain is a popular framework. It is designed to be modular and easy to use. It is designed for developers who want to build applications with LLMs but do not necessarily have a lot of time to spend on building the infrastructure.</li>
-<li><a href="https://github.com/deepset-ai/haystack">Haystack</a>: Haystack is an open source NLP framework that enables you to build production-ready applications around LLMs and other models. The company behind Haystack, Deepset, is based in Germany and has a strong focus on open source. It is a good choice for production environments where you need high performance and scalability.</li>
+<li><a href="https://github.com/hwchase17/langchain">LangChain</a>: a modular library for building LLM applications (chains, agents, tools), with a large ecosystem of integrations.</li>
+<li><a href="https://github.com/deepset-ai/haystack">Haystack</a>: an open-source NLP framework focused on production-ready applications with LLMs and classic models, developed by deepset (Germany).</li>
 </ul>
-<p><!-- - [AutoGen](https://github.com/microsoft/autogen): AutoGen is an open source framework for developing large language model (LLM) applications using multiple LLMs that can collaborate with each other. It enables the development of multi-agent systems, where each agent has a specific role and can communicate with other agents to solve complex tasks. --></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -443,65 +436,54 @@ return llm_generate_answer(memory) # this is the final answer generation part</c
 <ul>
 <li><a href="https://docs.llamaindex.ai/en/stable/understanding/agent/">Llamaindex</a> You can use <a href="https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/">the ReAct example</a> as a starting point.</li>
 <li><a href="https://huggingface.co/docs/smolagents/tutorials/building_good_agents">Smolagents</a></li>
+<li>Another framework of your choice.</li>
 </ul>
+<p>For your chosen framework, do the following:</p>
 <ol type="1">
 <li>Set up a local LLM (e.g.&nbsp;using Ollama or LM Studio) to be used by the agent.</li>
 <li>Choose a small task for your agent, e.g.&nbsp;answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)</li>
 <li>Implement the agent using one of the frameworks listed above.</li>
-<li>Present your results and your experiences with the frameworks in a short presentation. (presenting the notebook is fine.) <!-- 5. Submit your code and report on moodle. --></li>
+<li>Have a deeper look! Try to find the system prompt, the agent gives to the LLM ( in LLamaindex you can find it using agent.get_prompts()). Try to find it in smolagents.</li>
+<li>Present your results and your experiences with the frameworks (presenting the notebook is fine.) <!-- 5. Submit your code and report on moodle. --></li>
 </ol>
 </div>
 </div>
 </section>
-<section id="summary-and-recap" class="level2">
-<h2 class="anchored" data-anchor-id="summary-and-recap">Summary and recap</h2>
-<section id="agents" class="level3">
-<h3 class="anchored" data-anchor-id="agents">Agents</h3>
-<p>An agent is a wrapper layer, that takes the user input and pipes it to an LLM, together with a custom system prompt, that allows the LLM to answer the user request better. The agent has several modules at its disposal, the memory, some tools and a planning tool.</p>
-<p>The memory function is what allows chat models to retain a memory of the past conversation with the user. This information is saved as plain text in the memory and given to the planning module (i.e.&nbsp;the LLM) along with the system prompt and the current user input.</p>
-<p>The planning module then decides which tools to use, if any, to answer the user request. The output of the planning module is a response message containing one or several tool calls (or a final answer). The agent then executes the tool calls by first parsing the response, then executing the functions. Based on the tool outputs, a final answer is generated and sent back to the user.</p>
-</section>
-<section id="react-agents" class="level3">
-<h3 class="anchored" data-anchor-id="react-agents">React agents</h3>
-<p>There a several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of “thought-action-observation” loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.</p>
-</section>
-<section id="why-agents" class="level3">
-<h3 class="anchored" data-anchor-id="why-agents">Why agents?</h3>
-<p>Agents make decisions that control the flow of an application. The question is: when is this helpful? If the workflow is really simple, you basically don’t need an agent. Just run the LLM calls in a pipeline. Actually, most of the examples you find in tutorials will be better solved with a pipeline. We will use the example from the <a href="https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents">smolagents introduction</a> to illustrate that.</p>
-<p>Let’s take an example: say you’re making an app that handles customer requests on a surfing trip website.</p>
-<p>You could know in advance that the requests will belong to either of 2 buckets (based on user choice), and you have a predefined workflow for each of these 2 cases.</p>
+<section id="the-eda-agent-as-a-running-example" class="level2">
+<h2 class="anchored" data-anchor-id="the-eda-agent-as-a-running-example">The EDA agent as a running example</h2>
+<p>For the remainder of this session, we use a concrete use case:</p>
+<p><strong>EDA Agent for tabular data:</strong> A system that receives a dataset and automatically produces a first EDA report.</p>
+<section id="problem-setting" class="level3">
+<h3 class="anchored" data-anchor-id="problem-setting">Problem setting</h3>
+<p>Data scientists regularly receive new datasets and need to answer questions like:</p>
 <ul>
-<li>Want some knowledge on the trips? ⇒ give them access to a search bar to search your knowledge base</li>
-<li>Wants to talk to sales? ⇒ let them type in a contact form.</li>
+<li>Which variables are present? With which types?</li>
+<li>Are there missing values or obvious data quality issues?</li>
+<li>How are key variables distributed?</li>
+<li>Are there potentially interesting relationships or anomalies?</li>
 </ul>
-<p>If that deterministic workflow fits all queries, by all means just code everything! This will give you a 100% reliable system with no risk of error introduced by letting unpredictable LLMs meddle in your workflow. For the sake of simplicity and robustness, it’s advised to regularize towards not using any agentic behaviour.</p>
-<p>But what if the workflow can’t be determined that well in advance?</p>
-<p>For instance, a user wants to ask: “I can come on Monday, but I forgot my passport so risk being delayed to Wednesday, is it possible to take me and my stuff to surf on Tuesday morning, with a cancellation insurance?” This question hinges on many factors, and probably none of the predetermined criteria above will suffice for this request.</p>
-<p>If the pre-determined workflow falls short too often, that means you need more flexibility.</p>
-<p>That is where an agentic setup helps.</p>
+<p>This can become repetitive and time-consuming. Our EDA agent aims to automate the first pass of this process.</p>
 </section>
-<section id="pros-and-cons" class="level3">
-<h3 class="anchored" data-anchor-id="pros-and-cons">Pros and Cons</h3>
-<p>There are some obvious pros and cons with using agents</p>
-<p><strong>Pros</strong></p>
+<section id="roles-of-tools-in-the-eda-agent" class="level3">
+<h3 class="anchored" data-anchor-id="roles-of-tools-in-the-eda-agent">Roles of tools in the EDA agent</h3>
+<p>Sample tools could be:</p>
 <ul>
-<li>You don’t have to do it yourself.<br>
-</li>
-<li>Sometimes they perform better than humans.</li>
-<li>they are easily scalable.</li>
+<li><code>inspect_schema(dataset)</code>: column names, types, basic info</li>
+<li><code>basic_stats(dataset, columns)</code>: mean, median, min/max, missing values</li>
+<li><code>plot_distribution(dataset, column)</code>: create histograms or boxplots</li>
+<li><code>sample_rows(dataset, n)</code>: show a small sample for inspection</li>
+<li>optional: <code>vector_store_search(query)</code>: retrieve background information (e.g.&nbsp;on feature names)</li>
 </ul>
-<p><strong>Cons</strong></p>
-<ul>
-<li>sometimes they fail spectacularly at easy tasks. See again the vending machine example <span class="citation" data-cites="backlundVendingBenchBenchmarkLongTerm2025">(<a href="#ref-backlundVendingBenchBenchmarkLongTerm2025" role="doc-biblioref">Backlund &amp; Petersson, 2025</a>)</span> from earlier for some hilarious anecdotes.</li>
-</ul>
-<!-- ### Llamaindex
-
-LLamaindex is a framework that  makes it easy to implement and use agents. In Llamaindex an agent consists a an *agent runner* and an *agent_worker*. Think of the agent runner as the agent core in the architecture schematics and the agent worker as the planning module. The tools are functions implemented in python that can be executed by the agent worker. Finally, the memory module consists of a simple text buffer, logging the conversation history between the user and the agent and between the agent and the tools. -->
-</section>
-<section id="react-agents-1" class="level3">
-<h3 class="anchored" data-anchor-id="react-agents-1">React agents</h3>
-<p>There are several types of agent, of which the ReAct agent is most often used. It is a type of agent that uses the ReAct framework to solve complex tasks by reasoning in multiple steps. It is based on the idea of “thought-action-observation” loops. The LLM is given a task and it generates a thought, which is then used to decide on an action. The action is executed and the observation is fed back into the LLM. This process is repeated until the LLM decides that it has enough information to answer the question or if the maximum number of iterations is reached.</p>
-<p>Let us have a closer look at the inner workings of react agents.</p>
+<p>The agent receives a task such as:</p>
+<p>“Please perform a first exploratory analysis of this dataset and summarise the main findings.”</p>
+<p>It then:</p>
+<ol type="1">
+<li>Calls inspect_schema to understand the structure.</li>
+<li>Decides which columns deserve a closer look.</li>
+<li>Calls basic_stats and plot_distribution for selected columns.</li>
+<li>Collects the outputs in memory.</li>
+<li>Generates a structured EDA report (e.g.&nbsp;“Data overview”, “Key distributions”, “Missing values”, “First hypotheses”).</li>
+</ol>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -512,22 +494,45 @@ LLamaindex is a framework that  makes it easy to implement and use agents. In Ll
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Let’s have a deeper look!</p>
+<p>Do the EDA agent</p>
 <ol type="1">
-<li>Reopen the notebook from earlier where you defined your agents</li>
-<li>Have a look at the prompt, the agent gives to the LLM ( in LLamaindex you can find it using <code>agent.get_prompts()</code>). Try to find it in smolagents.</li>
-<li>Discuss the prompt with the group! What does it do? How does it do it?</li>
-<li>Ask the agent to tell you the weather in a given location.</li>
-<li>Watch in LM Studio how the LLM called by the agent creates the thought process, function calls and the final response.</li>
-<li>Try to break the agent by asking stuff it cannot answer. Be creative. (On one occasion I just said “Hi” and it went into an infinite loop because it did not need a tool for that and there wasn’t a “none” tool 😜.)</li>
-<li>Upload your notebook to Moodle</li>
+<li>In your agent setup, implement the above functions for doing the EDA. This should be simple enough.</li>
+<li>Give it a dataset ,e.g.&nbsp;<a href="https://www.kaggle.com/competitions/titanic/data">the titanic dataset from kaggle</a> or some other simple dataset you have laying around.</li>
+<li>Test the agent with several prompts and observe when it uses tools, when it doesn’t, and where it struggles.</li>
+<li>Try to get it to do the above steps.</li>
+<li>Present to the group.</li>
+<li>Upload your Notebook to Moodle.</li>
 </ol>
 </div>
 </div>
-<!-- ## Further Readings -->
-<!-- - [This paper](@wangSurveyLargeLanguage2024) compares different planning strategies -->
-<!-- - In addition to the websites listed above see also [@IntroductionLLMAgents2023] -->
 </section>
+</section>
+<section id="pipelines-vs.-agents-when-do-we-need-agency" class="level2">
+<h2 class="anchored" data-anchor-id="pipelines-vs.-agents-when-do-we-need-agency">Pipelines vs.&nbsp;agents – when do we need agency?</h2>
+<p>An agent is defined by its ability to decide. This brings flexibility – but also complexity and potential instability. You have to decide, if an agent is necessary to solve your problem or if you are better of using a pipeline. Actually, most of the examples you find in tutorials will be better solved with a pipeline. We will use the example from the <a href="https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents">smolagents introduction</a> to illustrate that.</p>
+<p>Let’s take an example: say you’re making an app that handles customer requests on a surfing trip website. Consider these two scenarios:</p>
+<p><strong>1. Simple, predictable workflow</strong></p>
+<p>You know in advance that user requests fall into a few categories and can be handled by a fixed sequence of steps.</p>
+<ul>
+<li>If the user wants general information on surf trips → show a search interface over your FAQ.</li>
+<li>If the user wants to talk to sales → collect their contact details in a form.</li>
+</ul>
+<p>Here, a hand-coded workflow is simpler, more robust, and easier to test.</p>
+<p><strong>2. Open-ended, complex workflow</strong> Let’s assume he user asks:</p>
+<p>“I can come on Monday, but I forgot my passport so I might be delayed to Wednesday. Is it possible to take me and my luggage surfing on Tuesday morning, with cancellation insurance?”</p>
+<p>This touches several aspects (availability, logistics, insurance) where a fixed decision tree might become unwieldy. An agent can interpret the request and decide which information and tools are needed.</p>
+<p><strong>Rule of thumb:</strong></p>
+<p>If your workflow is essentially “always do A, then B, then C”, a pipeline of LLM calls (plus classic code) is often enough. If you regularly need adaptive decisions, an agent becomes attractive.</p>
+<p>For RAG-style systems, this is particularly relevant:</p>
+<ul>
+<li>If retrieval is mandatory for correctness, you may not want to leave the “call retrieval or not?” decision to the LLM.</li>
+<li>Instead, you enforce: “always retrieve, then generate”, implemented as a pipeline.</li>
+</ul>
+<p>We will build on this distinction in session <a href="agent_interaction.html" class="quarto-xref"><span>LLM pipelines</span></a>, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense.</p>
+</section>
+<section id="further-readings" class="level2">
+<h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<p>A nice Example of an agent system is <em>Vending-Bench</em> <span class="citation" data-cites="backlundVendingBenchBenchmarkLongTerm2025">(<a href="#ref-backlundVendingBenchBenchmarkLongTerm2025" role="doc-biblioref">Backlund &amp; Petersson, 2025</a>)</span>, where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors. It provides valuable insights into how and why these systems fail and is a very good read overall.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
