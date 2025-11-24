@@ -365,7 +365,7 @@ Embedding-based LLM-systems<br>
 <p>Though most modern LLMs are increasingly capable in answering basic knowledge-questions, the more complex a topic or the more relevant the factual basis of an answer is, the more it is important to base generated answers on actual data.</p>
 <section id="semantic-embeddings-and-vector-stores" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="semantic-embeddings-and-vector-stores">Semantic embeddings and vector stores</h2>
-<p>To empower a LLM too look up information during its thought-process, one has to build a tool that allows a LLM to use natural language to retrieve information necessary for a task. The fundamental principle to do this are so-called <em>semantic embeddings</em>. These are pretty close to the concept we introduced when talking about the foundations of LLMs (see <a href="getting_started_with_llms">here</a>) and can be understood as a way to map textual data into a vector space. The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonably small distance between them. The go-to standard to measure this distance is the <strong>cosine similarity</strong>, which has proven useful enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in <a href="https://cookbook.openai.com/examples/recommendation_using_embeddings">OpenAI tutorials</a> and in <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/understand-embeddings">Azure embedding-applications</a>). The cosine similarity is defined as:</p>
+<p>To empower a LLM too look up information during its thought-process, one has to build a tool that allows a LLM to use natural language to retrieve information necessary for a task. The fundamental principle to do this are so-called <em>semantic embeddings</em>. These are pretty close to the concept we introduced when talking about the foundations of LLMs (see <a href="getting_started_with_llms">here</a>) and can be understood as a way to map textual data into a vector space. The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonably small distance between them. The go-to standard to measure this distance is the <strong>cosine similarity</strong>, which has proven useful enough to be the standard for a range of semantic retrieval implementations (i.e., they are used in <a href="https://cookbook.openai.com/examples/recommendation_using_embeddings">OpenAI tutorials</a> and in <a href="https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/understand-embeddings?view=foundry-classic&amp;viewFallbackFrom=foundry">Azure AI Foundry embedding-applications</a>). The cosine similarity is defined as:</p>
 <p><span class="math display">\[
 \text{cosine\_similarity}(u, v) = \frac{u \cdot v}{\|u\| \|v\|} = \frac{\sum_{i=1}^{n} u_i v_i}{\sqrt{\sum_{i=1}^{n} u_i^2} \sqrt{\sum_{i=1}^{n} v_i^2}}
 \]</span> The rationale here is that sequences with semantically similar contents should point to similar directions in the high dimensional vector space. See <a href="#fig-cosineSimilarity" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> for an illustration of this and other common similarity concepts seen in semantic retrieval.</p>
@@ -463,7 +463,7 @@ Fig&nbsp;6.2: Illustration of the usage of embedding-based distances in retrieva
 </div>
 <div class="callout-body-container callout-body">
 <p>Install the qdrant-client python-sdk.</p>
-<p>Create a collection for the claims and one for the evidence in <a href="https://huggingface.co/datasets/tdiggelm/climate_fever">the climate_fever-dataset</a>. Add the first 200 entries to each of these collections. Use qdrants sentencetransformers to do this, <a href="https://medium.com/@hassanqureshi700/semantic-search-a-step-by-step-tutorial-using-qdrant-53e93f787828">here</a> is a medium tutorial that leads you through the process.</p>
+<p>Create a collection for the claims and one for the evidence in <a href="https://huggingface.co/datasets/tdiggelm/climate_fever">the climate_fever-dataset</a>. Add the first 200 entries to each of these collections. Use sentence_transformers to do this, <a href="https://qdrant.tech/documentation/beginner-tutorials/search-beginners/">here</a> is a tutorial by qdrant that leads you through the process.</p>
 <p>Test the similarity search on a question you formulate.</p>
 </div>
 </div>
@@ -503,10 +503,10 @@ Fig&nbsp;6.3: Illustration of a RAG-system.
 </div>
 </div>
 <p>Most agent frameworks provide integrations for a variety of vector databases.</p>
-<p>In terms of llamaindex, there are not just one but two tutorials on how to get qdrant to integrate into your agent, one from <a href="https://qdrant.tech/documentation/frameworks/llama-index/">qdrant</a> for general integration and one from <a href="https://docs.llamaindex.ai/en/stable/examples/vector_stores/QdrantIndexDemo/">llamaindex</a>.</p>
+<p>In terms of llamaindex, there are not just one but two tutorials on how to get qdrant to integrate into your agent, one from <a href="https://qdrant.tech/documentation/frameworks/llama-index/">qdrant</a> for general integration and one from <a href="https://developers.llamaindex.ai/python/examples/vector_stores/qdrantindexdemo/">llamaindex</a>.</p>
 <p>The pipeline is pretty close to what we discussed until here, it just uses the llamaindex-typical wrapper classes. See <a href="#tip-llamaindexRag" class="quarto-xref">Tip&nbsp;<span>6.1</span></a> for an example RAG-system implemented in Llamaindex.</p>
 <div id="tip-llamaindexRag" class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -515,7 +515,7 @@ Tip&nbsp;6.1: Llamaindex Rag
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The first thing in both the Llamaindex and the manual way of creating a retrieval pipeline is the setup of a vector database:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> qdrant_client <span class="im">import</span> QdrantClient</span>
@@ -971,19 +971,6 @@ Self-attention, also known as intra-attention, is an attention mechanism that co
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(response))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code> In the context of self-attention, "Query" refers to the keys that are used to retrieve relevant information from a sequence. "Key" represents the values associated with each element in the sequence, which determine their importance or relevance. "Value" corresponds to the actual data being processed by the attention mechanism.</code></pre>
 <p>Finally an answer we can work with!</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>📝 Task
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Build a llamaindex-application that allows you to <a href="https://docs.llamaindex.ai/en/stable/examples/chat_engine/chat_engine_best/">chat</a> with the climate_fever evidence.</p>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -1028,7 +1015,7 @@ Self-attention, also known as intra-attention, is an attention mechanism that co
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Implement query expansion for the climate_fever dataset using llamaindex. <a href="https://docs.llamaindex.ai/en/stable/module_guides/querying/pipeline/usage_pattern/#defining-a-custom-query-component">This</a> might be helpful.</p>
+<p>Implement query expansion for the climate_fever dataset using llamaindex. <a href="https://developers.llamaindex.ai/python/framework/optimizing/advanced_retrieval/query_transformations/">This</a> might be helpful.</p>
 <p>Experiment with different prompts and temperatures.</p>
 </div>
 </div>

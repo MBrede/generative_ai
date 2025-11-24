@@ -501,7 +501,6 @@ return final_answer</code></pre>
 <li>Test the agent with several prompts and observe when it uses tools, when it doesn’t, and where it struggles.</li>
 <li>Try to get it to do the above steps.</li>
 <li>Present to the group.</li>
-<li>Upload your Notebook to Moodle.</li>
 </ol>
 </div>
 </div>
@@ -528,7 +527,25 @@ return final_answer</code></pre>
 <li>If retrieval is mandatory for correctness, you may not want to leave the “call retrieval or not?” decision to the LLM.</li>
 <li>Instead, you enforce: “always retrieve, then generate”, implemented as a pipeline.</li>
 </ul>
-<p>We will build on this distinction in session <a href="agent_interaction.html" class="quarto-xref"><span>LLM pipelines</span></a>, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense.</p>
+<!-- We will build on this distinction in session @sec-evalpipelines, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense. -->
+<p>What does this mean for our EDA agent?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Discuss: for our EDA example, does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?</li>
+<li>Implement your agent from above as a pipeline.</li>
+<li>Upload your Notebook to Moodle.</li>
+</ol>
+</div>
+</div>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
