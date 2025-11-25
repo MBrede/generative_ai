@@ -91,6 +91,16 @@ format:
   #     text: |
   #       \printindex
 
-
+mermaid:
+  theme: neutral
+  # themeVariables:
+  #   primaryColor: '#ffffff'
+  #   primaryTextColor: '#000000'
+  #   primaryBorderColor: '#000000'
+  #   lineColor: '#000000'
+  #   background: '#ffffff'
+  #   mainBkg: '#ffffff'
+  #   nodeBorder: '#000000'
+  #   edgeLabelBackground: '#ffffff'
 
 

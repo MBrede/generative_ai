@@ -6,146 +6,234 @@ toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>LLM pipelines</h3
 
 <!-- in @sec-agents we bla  -->
 
+## Motivation and learning objectives
+
+In session 5 we focused on __agentic decision-making__ and the EDA agent as a motivating example. In this session, we will:
+
+- distinguish more clearly between __agents__ and __LLM pipelines__,
+- understand the concept of __LLM as a judge__ and why evaluation is a bottleneck in generative AI systems,
+- design and discuss __evaluation pipelines__ for our EDA agent and related use cases, and
+- connect these ideas to your own project work.
+
+After this session you should be able to:
+
+- design a simple pipeline of LLM calls and tools,
+- use an LLM to evaluate model outputs along explicit criteria, and
+- reflect critically on the strengths and weaknesses of LLM-based evaluation.
 
 
-## Pipelines vs. agents
+## Pipelines: from input to output
 
-As already mentioned, an agent is defined by its ability to make decisions. This means the agent decides if and what tool to use or not to use. One potential problem with this is that, a lot of the time, the LLM may decide not to use any tool. This is especially true for retrieval augmented generation (RAG) tasks, where looking up the answer in a document store is not really optional, but the whole reason to have the system in the first place. 
+As discussed, an agent decides dynamically which tools to use. A pipeline, in contrast, follows a pre-defined sequence of steps:
 
-At other times, the workflow may just not be complex enough to warrant the additional complexity of using agents in your application. When you find yourself having a workflow where you basically iterate through a number of steps in always the same order, you may skip the agent altogether and just hardcode a series of LLM calls instead. This is called an LLM pipeline. 
+1. Receive input.
+2. Transform it through a series of modules (some LLM calls, some classic code).
+3. Produce an output – optionally with internal loops, but without LLM-driven control flow.
 
-We will discuss an example pipeline and the difference to agent systems in detail below. But before we get to this, we want to introduce a concept, which is widely used in a lot of LLM-based systems. 
+Pipelines are attractive because they are:
+
+- easier to __test and debug__,
+- often more __robust__,
+- and usually more __efficient__ than agentic setups when the workflow is well understood.
+
+### Example: simple EDA pipeline (no agent)
+
+A non-agentic pipeline for our EDA use case could be:
+
+1. __Preprocessing__: load the CSV, detect column types, basic validation.
+2. __Analytics__: compute standard statistics and sample plots using Python code.
+3. __Report generation__: call an LLM once to turn the statistics and plots into a narrative EDA report.
+
+No tool selection is delegated to the LLM; it only writes the report. This is already powerful – but the __quality__ of the report still varies, and we need a way to __evaluate__ it.
+
 
 ## LLM as a judge {#sec-llmJudge}
 
-The basic idea is to use a an LLM to criticize (to judge) a text snippet. To understand why this would be useful, please do the following task: 
+The core idea of LLM as a judge is simple:
+
+__Use a (possibly different) LLM to evaluate the quality of outputs produced by an LLM-based system.__
+
+__Why is this useful?__
+
+Consider a small experiment:
 
 ::: {.callout-note}
 ## 📝 Task
 
 1. Open a notebook and connect it with a local LLM using LM Studio (or other).
-2. Ask it to generate a story containing fried eggs on a sunrise. 
-3. How good is the story? Do you like it? What is good and what is not so good? How did you come to this conclusion? 
-4. Now generate 100 such stories. Dial up the temperature so you do not get the same story every time. 
-5. Repeat step 3 for all of the 100 stories...
+2. Ask it to generate __one__ story containing fried eggs on a sunrise. 
+3. Informally evaluate the story: What works well? What doesn’t? How did you decid
+4. Now ask the model to generate __50–100__ such stories (use a higher temperature).
+5. Try to evaluate all of them manually...
+
+Reflect: How long does it take? How consistent are your own judgements?
 
 :::
 
-... or don't. 
+Typical pattern:
 
-Based on our experience, we can formulate a problem description. 
+1. We generate large amounts of text, code, or structured output.
+2. We suspect that quality is variable.
+3. We need a way to __assess__ that quality.
+4. Reading and judging everything manually is too slow and doesn’t scale. (We don't have time for this.)
+
+Instead, we can use an LLM in an evaluation role:
+
+- It receives the output to be evaluated (e.g. an EDA report).
+- It receives __criteria__ (e.g. correctness, completeness, clarity).
+- It returns scores, labels, or structured feedback.
+
+The evaluation can then be used to:
+
+- accept or reject outputs,
+- select the best out of several candidates,
+- give automated feedback for improvement,
+- or serve as a signal for fine-tuning or reinforcement learning (e.g. Constitutional AI [@ConstitutionalAIHarmlessness]).
+
+This approach is called LLM as a judge.
+
+### Benefits and drawbacks
+
+__Benefits:__
+
+- Scales to large numbers of outputs.
+- Can approximate nuanced, qualitative judgements when well-prompted.
+- Easy to combine with existing systems (few additional components).
+- Flexible: different prompts and criteria for different tasks.
+
+__Drawbacks:__
+
+- __Cost:__ multiple LLM calls per sample.
+- __Bias:__ models might prefer their own style or longer answers.
+- __Subjectivity:__ evaluation depends on the prompt and the judge model.
+- __Mismatch with humans:__ high scores do not always mean humans agree.
+
+Because of these limitations, LLM-based judgements should be:
+
+- designed carefully (clear rubrics),
+- and, ideally, __calibrated__ against human ratings.
 
 
-1. We generate text (be it natural language or structured output) using LLMs. 
-2. The generated text is not always correct or appropriate for our use case.
-3. We need a way to evaluate the quality of the generated text. 
-4. To do this, we have to read it.
-5. We don't have time for this.
+## Evaluation pipelines: general pattern
 
-The solution to this problem is, of course, to use an LLM to read and evaluate the text. This is only fair and proper, since it was an LLM that generated the text in the first place. The generated evaluation can then be used 
+Many applications follow a similar structure:
 
-- to decide whether to accept or reject the generated text. This is the most basic form of judgement. 
-- to improve the model itself e.g., for fine-tuning it on the generated text and its evaluation. This was used in fine tuning the "Claude" model family by anthropic [@ConstitutionalAIHarmlessness]
-- to get an LLM to improve the text based on the evaluation. This is used in a variety of frameworks, e.g. textgrad [@yuksekgonulTextGradAutomaticDifferentiation2024]. 
+1. __Generator:__ produces a candidate output (text, code, EDA report, answer, …).
+2. __Judge:__ evaluates the output (via an LLM with evaluation prompt).
+3. __Editor (optional):__ improves the output based on the feedback.
+4. __Loop (optional):__ repeat 2 and 3 until a stopping criterion is met.
 
-This approach is called LLM as a judge. It is an example of a system that uses several calls to one or several LLMs to solve a problem. 
+This pattern applies to:
 
-This approach has a number of benefits as well as drawbacks. 
-
- - Benefits:
-    - The evaluation can be very accurate and fast.
-    - It is easy to implement.
-    - It is easy to scale up the number of LLMs used for evaluation.
-    - It is easy to use different LLMs for generation and evaluation.
-    - It is easy to use different prompts for generation and evaluation.
-  - Drawbacks:
-    - The evaluation can be very expensive, since it requires several calls to the LLM.
-    - The evaluation can be biased, especially when it is evaluating its own text. Indeed many LLMs tend to like their own creations.
-    - The evaluation can be subjective, since it is based on the LLMs' interpretation of the prompt.
-    - The evaluation can be misleading, since it is based on the LLMs' interpretation of the generated text, which may not be the same as the human interpretation. For example, many LLMs seem to prefer long answers over shorter ones. 
+- EDA reports,
+- answers in Q&A systems,
+- code generation,
+- many more
 
 
-## A basic pipeline
+## Example: Dataset hypothesis creation pipeline
 
-Let us now look at a simple example of such a system. We will use the following scenario: We want to generate Anki flashcards from text.^[The following is loosely based on @BuildingMultiAgentFramework2024, though I took the liberty to streamline and simplify it a bit. ]
-To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct). Later, we will expand it to a full agentic system to illustrate the differences between the two concepts. The Agents we will use here are:
+We will now modify our EDA agent/pipeline from earlier to illustrate this. We will build a pipeline that will generate a __hypothesis__ based on superficial knowledge of the dataset. 
 
-1. An Anki card generator that generates Anki flashcards from a text.
-2. A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.
-3. An Editor, that generates a new set of Anki flashcards based on the reviewer's feedback.
+::: {.callout-note}
+## ℹ️ Info 
+A __hypothesis__ is a testable prediction or proposed explanation for a phenomenon, based on limited evidence that serves as a starting point for further investigation. It typically takes the form of an "if-then" statement that can be supported or refuted through experimentation and observation. A good scientific hypothesis must be __falsifiable__ — meaning there must be a possible way to prove it wrong through empirical evidence.
+:::
 
-Optionally, when building an agent system, not a pipeline, there is also 
+For now, we will not try to falsify (or verify) the hypothesis, just checking, if the generated output makes a good hypothesis. Our workflow looks thusly:
 
-4. An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop. 
-
-We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation. 
-
+1. __Hypothesis generator__
+    - Receives the dataset and additional metadata about the data
+    - Produces a hypothesis
+2. __Judge-LLM__
+    - Receives the hypothesis + a rubric, e.g. with criteria:
+        - Is this a prediction?
+        - Does it explain something?
+        - Is it falsifiable?
+    - Returns:
+        - scores (e.g. 1–5) per criterion, and
+        - short textual feedback for each.
+3. __Optional editor step__
+    - Another LLM call (possibly with a different model) revises the hypothesis
+4. __Stopping condition__
+    - For example: stop after 2–3 improvement iterations or if all scores exceed a threshold.
 
 
 ### Generator
 
-![](../imgs/pipe_gen.png)
+Let's have a closer look at the generator:
 
-Let us first implement the Anki card generator. It will take text as input and return a card. A system prompt for the generator could look like this:
+```{mermaid}
 
-    You are an educational content creator specializing in Anki flashcard generation.
-    Your task is to create one clear, concise flashcards following these guidelines:
-
-    1. The card should focus on ONE specific concept
-    2. The question should be clear and unambiguous
-    3. The answer should be concise but complete
-    4. Include relevant extra information in the extra field
-    5. Follow the minimum information principle
-
-    Format the card as:
-    <card>
-        <question>Your question here</question>
-        <answer>Your answer here</answer>
-        <extra>Additional context, examples, or explanations</extra>
-    </card>
+flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
+gen(Generator)
+hyp[Hypothesis]
+data --> gen
+gen --> hyp
+```
 
 
-Instead of the complicated formatting above, you can simply use a pydantic class, of course. 
+A system prompt for the generator could be:
+
+    You are a research asssistant tasked with generating a first hypothesis on a given dataset. 
+    You will receive a brief summary of the dataset in question. this might include metadata, example rows, a list of columns etc. 
+    Your Task is to generate a hypothesis based on this superficial knowledge, that will be testet at a later stage. 
+
+When calling the generator, you should give the relevant information in the user prompt:
+
+    Metadata:
+    {dataset_metadata}
+
+    columns: 
+    {dataset.columns}
+
+    example rows:
+    {dataset.head()}
+
+
 
 ::: {.callout-note}
 ## 📝 Task
 
 Your turn!
 
-1. In your notebook, implement a card generator. You can use a simple wrapper around an LLM call or use one of the agent frameworks to implement it as an agent with no tools. 
-2. Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.
-3. Let it generate cards from the text below (or any other text of your choice).
+In your notebook, implement a hypothesis generator. 
 
-    LLM-as-a-Judge is an evaluation method to assess the quality of text outputs from any LLM-powered product, including chatbots, Q&A systems, or agents.
-    It uses a large language model (LLM) with an evaluation prompt to rate generated text based on criteria you define.
-
+1. Get a dataset. You can use the [the titanic dataset from kaggle](https://www.kaggle.com/competitions/titanic/data) again or something else. 
+2. Compile some relevant information e.g. ``df.head()``, ``df.describe()`` etc. along other information. The titanic dataset has a very good description at the website. 
+3. Send a good system prompt and the relevant information to an LLM. You may want to increase the model's temperature. 
 4. Evaluate the results.
 :::
 
-### Reviewer
 
-![](../imgs/pipe_rev.png)
+### Reviewer (LLM as a judge)
 
- Let us now implement the reviewer. It will take a card as input and return feedback on how to improve it. A system prompt for the reviewer could look like this:
 
-    You are an expert in educational content creation, specializing in Anki flashcard generation.
-    You are the Reviewer agent. Your task is to review an Anki flashcard based on the following rules:
+```{mermaid}
 
-    1. The card should test ONE piece of information
-    2. The question must be:
-        - Simple and direct
-        - Testing a single fact
-        - Using cloze format (cloze deletion or occlusion) when appropriate
-    3. The answers must be:
-        - Brief and precise
-        - Limited to essential information
-    4. The extra field must include:
-        - Detailed explanations
-        - Examples
-        - Context
-    5. Information should not be repeated, i.e. the extra information should not repeat the answer. 
-   
-    Please give brief and concise feedback to the card you received in natural language. 
+flowchart LR
+
+hyp[Hypothesis]
+rev(Reviewer)
+feedback[Feedback]
+hyp --> rev
+rev --> feedback
+```
+
+The reviewer is a judge-LLM with a rubric for a good hypothesis:
+
+    You are a research assistant. Your task is to review a hypothesis based on these rules:
+    1. Is this a prediction?
+    2. Does it explain something?
+    3. Is it falsifiable?
+    Provide concise feedback on how to improve the hypothesis.
+
+Here, LLM-as-judge is used to evaluate and guide improvements.
+
 
 ::: {.callout-note}
 ## 📝 Task
@@ -153,158 +241,187 @@ Your turn!
 Let's build us a very judgemental robot!
 
 1. In the same notebook, initialize a reviewer as well. 
-2. Let the reviewer review the cards generated by the generator. You may find that the reviewer always thinks the cards are great. This happens a lot. So:
-3. Get the reviewer to actually find stuff to improve.
+2. Let the reviewer review the hypothesis generated by the generator. 
+3. Adjust the rubric until the reviewer finds stuff to improve. 
 :::
 
 ### Editor
 
-![](../imgs/pipe_ed.png)
+```{mermaid}
 
-Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the editor could look like this:
+flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
 
-    You are an expert in educational content creation, specializing in Anki flashcard generation.
-    You are the Editor agent. Your task is to generate a new Anki flashcard based on the original card and the feedback you received from the Reviewer.
-    Follow these guidelines:
+hyp[Hypothesis]
+feedback[Feedback]
+editor(Editor)
+new_hyp[Hypothesis]
+data --> editor
+hyp --> editor
+feedback --> editor
+editor --> new_hyp
+```
 
-    1. Incorporate the feedback into your new card
-    2. The new card should still focus on ONE specific concept
-    3. The question should be clear and unambiguous 
-    4. The answer should be concise but complete 
-    5. Include relevant extra information in the extra field 
-    6. Follow the minimum information principle
-    7. If no feedback is provided, return the original card
-    8. Format the card as:
-
-    <card>
-        <question>Your question here</question>
-        <answer>Your answer here</answer>
-        <extra>Additional context, examples, or explanations</extra>
-    </card>
+The editor uses the original input + hypothesis + feedback to produce a revised hypothesis. Its prompt encodes this behaviour explicitly (incorporate feedback, keep focus, improve wording, etc.).
 
 ::: {.callout-note}
 ## 📝 Task
 
 Time to improve!
 
-1. In the same notebook, initialize the editor as well.
-2. Let the editor generate new cards based on the feedback from the reviewer.
-3. Get the editor to actually generate something that is different from the generators version! (Play around with models, prompts and/or input text. In this example, this only worked for me when using a weaker model as a generator and a larger one as reviewer and editor.)
+1. In the same notebook, implement the editor as well. Make a new LLM call/prompt or adapt your original generator. 
+2. Let the editor generate a new hypothesis or improve an existing one based on the feedback from the reviewer.
+3. Get the editor to actually generate something that is different from the generators version!
 :::
+
 
 ### Full pipeline
 
-We now basically have a working LLM pipeline. 
+We now basically have a working LLM-based pipeline. 
 
-![](../imgs/pipe_simple.png)
+```{mermaid}
 
-A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. In pseudocode, this could look like this:
+flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
+gen(Generator)
+hyp[Hypothesis]
+rev(Reviewer)
+feedback[Feedback]
+editor(Editor)
+new_hyp[Hypothesis]
+data --> gen
+gen --> hyp
+hyp --> rev
+rev --> feedback
+data --> editor
+hyp --> editor
+feedback --> editor
+editor --> new_hyp
+```
 
-    # Pseudocode
-    initialize:
-        Generator
-        Reviewer
-        Editor
-    
-    card = Generator.generate(input text)
 
-    # now the loop
-    while n < max_iter:  # define maximum number of review steps
-        n += 1
-        review = Reviewer.review(card)
-        if review is positive:  # this has to be defined
-            stop
-        else:
-            card = Editor.edit(card, review)
-    return card
+A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. This could look like this:
 
-For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance, prompt the reviewer to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!
+```python
+hypothesis = generator.generate(dataset_description)
+
+for _ in range(max_iter):
+    review = reviewer.review(hypothesis)
+    if review_is_positive_enough(review):
+        break
+    hypothesis = editor.edit(dataset_description, hypothesis, review)
+
+return hypothesis
+```
+
+```{mermaid}
+
+flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
+gen(Generator)
+hyp[Hypothesis]
+rev(Reviewer)
+feedback[Feedback]
+editor(Editor)
+if{good enough?}
+stop((stop))
+data --> gen
+gen --> hyp
+hyp --> rev
+rev --> feedback
+data --> editor
+hyp --> editor
+feedback --> if
+if -- no --> editor
+if -- yes --> stop
+editor --> hyp
+```
+
+
+The missing piece is review_is_positive_enough, where you might:
+
+- search for a specific “OK” marker in the review,
+- ask the reviewer to output a score and threshold it,
+- or run an additional small LLM classification step.
+
+Alternatively, you can just generate a lot of hypotheses and choose the best one (or the best _n_). 
+
+Exactly the same pattern can be transferred to __your own project outputs__.
 
 ::: {.callout-note}
 ## 📝 Task
 
 Build it!
 
-1. Think of a way to stop the review process once the card is good enough. 
+1. Think of a way to stop the review process once the hypothesis is good enough. 
 2. Implement the loop. 
 
 This is the minimum goal for today, so when you are done, you can upload your notebook to moodle. Alternatively, go on and implement the agent (see below) as well!
 
 :::
 
-### Orchestrator agent
+### From pipeline to orchestrated agents
 
-While we're at it, we can implement the orchestrator as well. Let us think for a moment what the orchestrators job should be. Its task should be decision making. That is, it's the orchestrators job to decide which of the other agents to call next. It is also responsible for deciding whether the job is finished or not, i.e. whether to call any more agents. In terms of input and output, the orchestrator should get a current state of affairs along with the current chat history and output a decision. So the output can be one of the other agents or a stop signal. 
+The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next:
 
-An example prompt for our case would be:
+    You are tasked with creating high-quality scientific hypothesis for a given dataset. Use the tools at your disposal to ensure good quality. 
+    Available tools:
+    – Generator – creates hypotheses
+    – Reviewer – evaluates hypothesis quality
+    – Editor – improves hypothesis based on feedback
+    Decision guidelines:
+    – Use Generator to create hypothesis.
+    – Use Reviewer to generate feedback.
+    – Use Editor to improve hypothesis.
+    – Choose END when the hypothesis is good enough.
+    Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").
 
-    You are the Orchestrator agent. Your task is to coordinate the interaction between all agents to create high-quality flashcards.
+The agent is now just a loop around this orchestrator: 
 
-    Available agents:
-    * Generator - Creates flashcards
-    * Reviewer - Improves card quality
-    * Editor
+```python
+# pseudocode
+initialize: 
+    tools
+    history
 
-    Decision Guidelines:
-    - Use Generator to create cards
-    - Use Reviewer to generate feedback
-    - Use Editor to improve cards based on feedback.
-    - Choose END when the cards are ready
+while true:
+    response = orchestrator(history)
+    if response == "END"
+    break
+    if response == "generator" 
+        history += generator.generate()
+    # same for other tools
 
-    Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END")
+```
 
-### Agent workflow
+![Image credit https://x.com/adamdotdev (from [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents))](../imgs/agent_loop_tinyagents.jpg)
 
-Now, all we have to do is integrate our agents into a pipeline. The basic idea is to call the orchestrator at each step and let it decide which agent to call next or wether to stop. For this, the agent will need an understanding of the basic state of affairs and the past interaction. This is easily implemented like this:
+This is essentially the agentic version of the same pipeline. The pros and cons are analogous to those discussed in session @sec-agents:
 
-    state = {
-        "input_text": text,
-        "qa_card": "",
-        "review_status": "pending",
-        "edit_status": "pending"
-        }
-    
-    memory = ChatMemoryBuffer.from_defaults(token_limit=8000) # using LLamaindex here
+- more flexibility,
+- but also more complexity and less predictability.
 
-The memory can be read using the `memory.get()` method. 
-
-Then we define our workflow as an iterative process. Below is a piece of pseudocode illustrating the basic idea:
-
-    # pseudocode
-    initialize:
-        generator
-        reviewer
-        editor
-        orchestrator
-        state
-        memory
-
-    while true
-        send state and memory to orchestrator -> response
-        if response == "end" 
-            stop
-        if response == "generator" 
-            send input text to generator -> card, change state and memory
-        (same for the other agents)
-    return state
+For your projects, you should decide consciously whether you need this flexibility – or whether a simple pipeline with a clear evaluation step is sufficient.
 
 
 ::: {.callout-note}
 ## 📝 Task
 
-Time to play!
 
-1. In the same notebook, initialize the orchestrator as well.
+1. In the same notebook, initialize the orchestrator agent as well.
 2. Implement the workflow shown above in real code. 
 3. Watch happily as it all works without any issues whatsoever. 
 4. Upload to Moodle. 
 :::
-
-
-**What we did not cover** but what would be a great idea:
-
-- Right now, we just assume that generator and editor return valid output. It would be better to build an automated check using a pydantic class for that. 
-- We let the orchestrator agent decide for how long this process lasts. \<sarcasm\>I cannot imagine that leading to problems under any circumstances.\</sarcasm\> It would be better to give it a timeout or maximal number of iterations.
 
 
 ## Project work
@@ -314,7 +431,7 @@ Time to work on your projects!
 ::: {.callout-note}
 ## 📝 Task
 
-1. Discuss a topic for your project. 
+1. Discuss your project. 
 2. Set up the repository
 3. Plan the project
 4. Start collecting data or finding a data set
@@ -329,6 +446,7 @@ Happy coding!
 
 ## Further Readings
 
+- [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents) really helps understanding agents. 
 - [Here](https://www.youtube.com/watch?v=ewLMYLCWvcI) is a video describing other multi-agent systems, including an [agent hospital](https://arxiv.org/abs/2405.02957) and a [multi-agent translator](https://arxiv.org/html/2405.11804v1)
 
 
