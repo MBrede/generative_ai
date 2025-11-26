@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -91,12 +126,16 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<meta name="mermaid-theme" content="neutral">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked slimcontent quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -255,16 +294,23 @@ LLM pipelines<br>
 </h3>
    
   <ul>
-  <li><a href="#pipelines-vs.-agents" id="toc-pipelines-vs.-agents" class="nav-link active" data-scroll-target="#pipelines-vs.-agents">Pipelines vs.&nbsp;agents</a></li>
-  <li><a href="#sec-llmJudge" id="toc-sec-llmJudge" class="nav-link" data-scroll-target="#sec-llmJudge">LLM as a judge</a></li>
-  <li><a href="#a-basic-pipeline" id="toc-a-basic-pipeline" class="nav-link" data-scroll-target="#a-basic-pipeline">A basic pipeline</a>
+  <li><a href="#motivation-and-learning-objectives" id="toc-motivation-and-learning-objectives" class="nav-link active" data-scroll-target="#motivation-and-learning-objectives">Motivation and learning objectives</a></li>
+  <li><a href="#pipelines-from-input-to-output" id="toc-pipelines-from-input-to-output" class="nav-link" data-scroll-target="#pipelines-from-input-to-output">Pipelines: from input to output</a>
+  <ul class="collapse">
+  <li><a href="#example-simple-eda-pipeline-no-agent" id="toc-example-simple-eda-pipeline-no-agent" class="nav-link" data-scroll-target="#example-simple-eda-pipeline-no-agent">Example: simple EDA pipeline (no agent)</a></li>
+  </ul></li>
+  <li><a href="#sec-llmJudge" id="toc-sec-llmJudge" class="nav-link" data-scroll-target="#sec-llmJudge">LLM as a judge</a>
+  <ul class="collapse">
+  <li><a href="#benefits-and-drawbacks" id="toc-benefits-and-drawbacks" class="nav-link" data-scroll-target="#benefits-and-drawbacks">Benefits and drawbacks</a></li>
+  </ul></li>
+  <li><a href="#evaluation-pipelines-general-pattern" id="toc-evaluation-pipelines-general-pattern" class="nav-link" data-scroll-target="#evaluation-pipelines-general-pattern">Evaluation pipelines: general pattern</a></li>
+  <li><a href="#example-dataset-hypothesis-creation-pipeline" id="toc-example-dataset-hypothesis-creation-pipeline" class="nav-link" data-scroll-target="#example-dataset-hypothesis-creation-pipeline">Example: Dataset hypothesis creation pipeline</a>
   <ul class="collapse">
   <li><a href="#generator" id="toc-generator" class="nav-link" data-scroll-target="#generator">Generator</a></li>
-  <li><a href="#reviewer" id="toc-reviewer" class="nav-link" data-scroll-target="#reviewer">Reviewer</a></li>
+  <li><a href="#reviewer-llm-as-a-judge" id="toc-reviewer-llm-as-a-judge" class="nav-link" data-scroll-target="#reviewer-llm-as-a-judge">Reviewer (LLM as a judge)</a></li>
   <li><a href="#editor" id="toc-editor" class="nav-link" data-scroll-target="#editor">Editor</a></li>
   <li><a href="#full-pipeline" id="toc-full-pipeline" class="nav-link" data-scroll-target="#full-pipeline">Full pipeline</a></li>
-  <li><a href="#orchestrator-agent" id="toc-orchestrator-agent" class="nav-link" data-scroll-target="#orchestrator-agent">Orchestrator agent</a></li>
-  <li><a href="#agent-workflow" id="toc-agent-workflow" class="nav-link" data-scroll-target="#agent-workflow">Agent workflow</a></li>
+  <li><a href="#from-pipeline-to-orchestrated-agents" id="toc-from-pipeline-to-orchestrated-agents" class="nav-link" data-scroll-target="#from-pipeline-to-orchestrated-agents">From pipeline to orchestrated agents</a></li>
   </ul></li>
   <li><a href="#project-work" id="toc-project-work" class="nav-link" data-scroll-target="#project-work">Project work</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
@@ -273,7 +319,7 @@ LLM pipelines<br>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">LLM pipelines</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -295,15 +341,53 @@ LLM pipelines<br>
 
 
 <!-- in @sec-agents we bla  -->
-<section id="pipelines-vs.-agents" class="level2">
-<h2 class="anchored" data-anchor-id="pipelines-vs.-agents">Pipelines vs.&nbsp;agents</h2>
-<p>As already mentioned, an agent is defined by its ability to make decisions. This means the agent decides if and what tool to use or not to use. One potential problem with this is that, a lot of the time, the LLM may decide not to use any tool. This is especially true for retrieval augmented generation (RAG) tasks, where looking up the answer in a document store is not really optional, but the whole reason to have the system in the first place.</p>
-<p>At other times, the workflow may just not be complex enough to warrant the additional complexity of using agents in your application. When you find yourself having a workflow where you basically iterate through a number of steps in always the same order, you may skip the agent altogether and just hardcode a series of LLM calls instead. This is called an LLM pipeline.</p>
-<p>We will discuss an example pipeline and the difference to agent systems in detail below. But before we get to this, we want to introduce a concept, which is widely used in a lot of LLM-based systems.</p>
+<section id="motivation-and-learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-and-learning-objectives">Motivation and learning objectives</h2>
+<p>In session 5 we focused on <strong>agentic decision-making</strong> and the EDA agent as a motivating example. In this session, we will:</p>
+<ul>
+<li>distinguish more clearly between <strong>agents</strong> and <strong>LLM pipelines</strong>,</li>
+<li>understand the concept of <strong>LLM as a judge</strong> and why evaluation is a bottleneck in generative AI systems,</li>
+<li>design and discuss <strong>evaluation pipelines</strong> for our EDA agent and related use cases, and</li>
+<li>connect these ideas to your own project work.</li>
+</ul>
+<p>After this session you should be able to:</p>
+<ul>
+<li>design a simple pipeline of LLM calls and tools,</li>
+<li>use an LLM to evaluate model outputs along explicit criteria, and</li>
+<li>reflect critically on the strengths and weaknesses of LLM-based evaluation.</li>
+</ul>
+</section>
+<section id="pipelines-from-input-to-output" class="level2">
+<h2 class="anchored" data-anchor-id="pipelines-from-input-to-output">Pipelines: from input to output</h2>
+<p>As discussed, an agent decides dynamically which tools to use. A pipeline, in contrast, follows a pre-defined sequence of steps:</p>
+<ol type="1">
+<li>Receive input.</li>
+<li>Transform it through a series of modules (some LLM calls, some classic code).</li>
+<li>Produce an output – optionally with internal loops, but without LLM-driven control flow.</li>
+</ol>
+<p>Pipelines are attractive because they are:</p>
+<ul>
+<li>easier to <strong>test and debug</strong>,</li>
+<li>often more <strong>robust</strong>,</li>
+<li>and usually more <strong>efficient</strong> than agentic setups when the workflow is well understood.</li>
+</ul>
+<section id="example-simple-eda-pipeline-no-agent" class="level3">
+<h3 class="anchored" data-anchor-id="example-simple-eda-pipeline-no-agent">Example: simple EDA pipeline (no agent)</h3>
+<p>A non-agentic pipeline for our EDA use case could be:</p>
+<ol type="1">
+<li><strong>Preprocessing</strong>: load the CSV, detect column types, basic validation.</li>
+<li><strong>Analytics</strong>: compute standard statistics and sample plots using Python code.</li>
+<li><strong>Report generation</strong>: call an LLM once to turn the statistics and plots into a narrative EDA report.</li>
+</ol>
+<p>No tool selection is delegated to the LLM; it only writes the report. This is already powerful – but the <strong>quality</strong> of the report still varies, and we need a way to <strong>evaluate</strong> it.</p>
+</section>
 </section>
 <section id="sec-llmJudge" class="level2">
 <h2 class="anchored" data-anchor-id="sec-llmJudge">LLM as a judge</h2>
-<p>The basic idea is to use a an LLM to criticize (to judge) a text snippet. To understand why this would be useful, please do the following task:</p>
+<p>The core idea of LLM as a judge is simple:</p>
+<p><strong>Use a (possibly different) LLM to evaluate the quality of outputs produced by an LLM-based system.</strong></p>
+<p><strong>Why is this useful?</strong></p>
+<p>Consider a small experiment:</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -316,81 +400,157 @@ LLM pipelines<br>
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>Open a notebook and connect it with a local LLM using LM Studio (or other).</li>
-<li>Ask it to generate a story containing fried eggs on a sunrise.</li>
-<li>How good is the story? Do you like it? What is good and what is not so good? How did you come to this conclusion?</li>
-<li>Now generate 100 such stories. Dial up the temperature so you do not get the same story every time.</li>
-<li>Repeat step 3 for all of the 100 stories…</li>
+<li>Ask it to generate <strong>one</strong> story containing fried eggs on a sunrise.</li>
+<li>Informally evaluate the story: What works well? What doesn’t? How did you decid</li>
+<li>Now ask the model to generate <strong>50–100</strong> such stories (use a higher temperature).</li>
+<li>Try to evaluate all of them manually…</li>
 </ol>
+<p>Reflect: How long does it take? How consistent are your own judgements?</p>
 </div>
 </div>
-<p>… or don’t.</p>
-<p>Based on our experience, we can formulate a problem description.</p>
+<p>Typical pattern:</p>
 <ol type="1">
-<li>We generate text (be it natural language or structured output) using LLMs.</li>
-<li>The generated text is not always correct or appropriate for our use case.</li>
-<li>We need a way to evaluate the quality of the generated text.</li>
-<li>To do this, we have to read it.</li>
-<li>We don’t have time for this.</li>
+<li>We generate large amounts of text, code, or structured output.</li>
+<li>We suspect that quality is variable.</li>
+<li>We need a way to <strong>assess</strong> that quality.</li>
+<li>Reading and judging everything manually is too slow and doesn’t scale. (We don’t have time for this.)</li>
 </ol>
-<p>The solution to this problem is, of course, to use an LLM to read and evaluate the text. This is only fair and proper, since it was an LLM that generated the text in the first place. The generated evaluation can then be used</p>
+<p>Instead, we can use an LLM in an evaluation role:</p>
 <ul>
-<li>to decide whether to accept or reject the generated text. This is the most basic form of judgement.</li>
-<li>to improve the model itself e.g., for fine-tuning it on the generated text and its evaluation. This was used in fine tuning the “Claude” model family by anthropic <span class="citation" data-cites="ConstitutionalAIHarmlessness">(<a href="#ref-ConstitutionalAIHarmlessness" role="doc-biblioref"><em>Constitutional <span>AI</span></em>, n.d.</a>)</span></li>
-<li>to get an LLM to improve the text based on the evaluation. This is used in a variety of frameworks, e.g.&nbsp;textgrad <span class="citation" data-cites="yuksekgonulTextGradAutomaticDifferentiation2024">(<a href="#ref-yuksekgonulTextGradAutomaticDifferentiation2024" role="doc-biblioref">Yuksekgonul et al., 2024</a>)</span>.</li>
+<li>It receives the output to be evaluated (e.g.&nbsp;an EDA report).</li>
+<li>It receives <strong>criteria</strong> (e.g.&nbsp;correctness, completeness, clarity).</li>
+<li>It returns scores, labels, or structured feedback.</li>
 </ul>
-<p>This approach is called LLM as a judge. It is an example of a system that uses several calls to one or several LLMs to solve a problem.</p>
-<p>This approach has a number of benefits as well as drawbacks.</p>
+<p>The evaluation can then be used to:</p>
 <ul>
-<li>Benefits:
+<li>accept or reject outputs,</li>
+<li>select the best out of several candidates,</li>
+<li>give automated feedback for improvement,</li>
+<li>or serve as a signal for fine-tuning or reinforcement learning (e.g.&nbsp;Constitutional AI <span class="citation" data-cites="ConstitutionalAIHarmlessness">(<a href="#ref-ConstitutionalAIHarmlessness" role="doc-biblioref"><em>Constitutional <span>AI</span></em>, n.d.</a>)</span>).</li>
+</ul>
+<p>This approach is called LLM as a judge.</p>
+<section id="benefits-and-drawbacks" class="level3">
+<h3 class="anchored" data-anchor-id="benefits-and-drawbacks">Benefits and drawbacks</h3>
+<p><strong>Benefits:</strong></p>
 <ul>
-<li>The evaluation can be very accurate and fast.</li>
-<li>It is easy to implement.</li>
-<li>It is easy to scale up the number of LLMs used for evaluation.</li>
-<li>It is easy to use different LLMs for generation and evaluation.</li>
-<li>It is easy to use different prompts for generation and evaluation.</li>
-</ul></li>
-<li>Drawbacks:
+<li>Scales to large numbers of outputs.</li>
+<li>Can approximate nuanced, qualitative judgements when well-prompted.</li>
+<li>Easy to combine with existing systems (few additional components).</li>
+<li>Flexible: different prompts and criteria for different tasks.</li>
+</ul>
+<p><strong>Drawbacks:</strong></p>
 <ul>
-<li>The evaluation can be very expensive, since it requires several calls to the LLM.</li>
-<li>The evaluation can be biased, especially when it is evaluating its own text. Indeed many LLMs tend to like their own creations.</li>
-<li>The evaluation can be subjective, since it is based on the LLMs’ interpretation of the prompt.</li>
-<li>The evaluation can be misleading, since it is based on the LLMs’ interpretation of the generated text, which may not be the same as the human interpretation. For example, many LLMs seem to prefer long answers over shorter ones.</li>
-</ul></li>
+<li><strong>Cost:</strong> multiple LLM calls per sample.</li>
+<li><strong>Bias:</strong> models might prefer their own style or longer answers.</li>
+<li><strong>Subjectivity:</strong> evaluation depends on the prompt and the judge model.</li>
+<li><strong>Mismatch with humans:</strong> high scores do not always mean humans agree.</li>
+</ul>
+<p>Because of these limitations, LLM-based judgements should be:</p>
+<ul>
+<li>designed carefully (clear rubrics),</li>
+<li>and, ideally, <strong>calibrated</strong> against human ratings.</li>
 </ul>
 </section>
-<section id="a-basic-pipeline" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="a-basic-pipeline">A basic pipeline</h2>
-<p>Let us now look at a simple example of such a system. We will use the following scenario: We want to generate Anki flashcards from text.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To do this, we will build a system that consists of a series of specialized LLM calls (we will call them agents for now, even though this may not be completely correct). Later, we will expand it to a full agentic system to illustrate the differences between the two concepts. The Agents we will use here are:</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The following is loosely based on <span class="citation" data-cites="BuildingMultiAgentFramework2024"><span>“Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>”</span> (<a href="#ref-BuildingMultiAgentFramework2024" role="doc-biblioref">2024</a>)</span>, though I took the liberty to streamline and simplify it a bit. </p></div></div><ol type="1">
-<li>An Anki card generator that generates Anki flashcards from a text.</li>
-<li>A Reviewer, that reviews the generated Anki flashcards and gives tips on how to improve them.</li>
-<li>An Editor, that generates a new set of Anki flashcards based on the reviewer’s feedback.</li>
+</section>
+<section id="evaluation-pipelines-general-pattern" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation-pipelines-general-pattern">Evaluation pipelines: general pattern</h2>
+<p>Many applications follow a similar structure:</p>
+<ol type="1">
+<li><strong>Generator:</strong> produces a candidate output (text, code, EDA report, answer, …).</li>
+<li><strong>Judge:</strong> evaluates the output (via an LLM with evaluation prompt).</li>
+<li><strong>Editor (optional):</strong> improves the output based on the feedback.</li>
+<li><strong>Loop (optional):</strong> repeat 2 and 3 until a stopping criterion is met.</li>
 </ol>
-<p>Optionally, when building an agent system, not a pipeline, there is also</p>
-<ol start="4" type="1">
-<li>An Orchestrator, that serves as the decision maker, managing the other agents and deciding when to stop.</li>
+<p>This pattern applies to:</p>
+<ul>
+<li>EDA reports,</li>
+<li>answers in Q&amp;A systems,</li>
+<li>code generation,</li>
+<li>many more</li>
+</ul>
+</section>
+<section id="example-dataset-hypothesis-creation-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="example-dataset-hypothesis-creation-pipeline">Example: Dataset hypothesis creation pipeline</h2>
+<p>We will now modify our EDA agent/pipeline from earlier to illustrate this. We will build a pipeline that will generate a <strong>hypothesis</strong> based on superficial knowledge of the dataset.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>ℹ️ Info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>hypothesis</strong> is a testable prediction or proposed explanation for a phenomenon, based on limited evidence that serves as a starting point for further investigation. It typically takes the form of an “if-then” statement that can be supported or refuted through experimentation and observation. A good scientific hypothesis must be <strong>falsifiable</strong> — meaning there must be a possible way to prove it wrong through empirical evidence.</p>
+</div>
+</div>
+<p>For now, we will not try to falsify (or verify) the hypothesis, just checking, if the generated output makes a good hypothesis. Our workflow looks thusly:</p>
+<ol type="1">
+<li><strong>Hypothesis generator</strong>
+<ul>
+<li>Receives the dataset and additional metadata about the data</li>
+<li>Produces a hypothesis</li>
+</ul></li>
+<li><strong>Judge-LLM</strong>
+<ul>
+<li>Receives the hypothesis + a rubric, e.g.&nbsp;with criteria:
+<ul>
+<li>Is this a prediction?</li>
+<li>Does it explain something?</li>
+<li>Is it falsifiable?</li>
+</ul></li>
+<li>Returns:
+<ul>
+<li>scores (e.g.&nbsp;1–5) per criterion, and</li>
+<li>short textual feedback for each.</li>
+</ul></li>
+</ul></li>
+<li><strong>Optional editor step</strong>
+<ul>
+<li>Another LLM call (possibly with a different model) revises the hypothesis</li>
+</ul></li>
+<li><strong>Stopping condition</strong>
+<ul>
+<li>For example: stop after 2–3 improvement iterations or if all scores exceed a threshold.</li>
+</ul></li>
 </ol>
-<p>We could also add more specialized agents, like a fact checker agent, that checks the generated cards for factual correctness, a translator that translates either the input text or the generated cards, or a topic analyzer that breaks down down complex topics into manageable parts before card generation.</p>
 <section id="generator" class="level3">
 <h3 class="anchored" data-anchor-id="generator">Generator</h3>
-<p><img src="../imgs/pipe_gen.png" class="img-fluid"></p>
-<p>Let us first implement the Anki card generator. It will take text as input and return a card. A system prompt for the generator could look like this:</p>
-<pre><code>You are an educational content creator specializing in Anki flashcard generation.
-Your task is to create one clear, concise flashcards following these guidelines:
+<p>Let’s have a closer look at the generator:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
+gen(Generator)
+hyp[Hypothesis]
+data --&gt; gen
+gen --&gt; hyp
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>A system prompt for the generator could be:</p>
+<pre><code>You are a research asssistant tasked with generating a first hypothesis on a given dataset. 
+You will receive a brief summary of the dataset in question. this might include metadata, example rows, a list of columns etc. 
+Your Task is to generate a hypothesis based on this superficial knowledge, that will be testet at a later stage. </code></pre>
+<p>When calling the generator, you should give the relevant information in the user prompt:</p>
+<pre><code>Metadata:
+{dataset_metadata}
 
-1. The card should focus on ONE specific concept
-2. The question should be clear and unambiguous
-3. The answer should be concise but complete
-4. Include relevant extra information in the extra field
-5. Follow the minimum information principle
+columns: 
+{dataset.columns}
 
-Format the card as:
-&lt;card&gt;
-    &lt;question&gt;Your question here&lt;/question&gt;
-    &lt;answer&gt;Your answer here&lt;/answer&gt;
-    &lt;extra&gt;Additional context, examples, or explanations&lt;/extra&gt;
-&lt;/card&gt;</code></pre>
-<p>Instead of the complicated formatting above, you can simply use a pydantic class, of course.</p>
+example rows:
+{dataset.head()}</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -402,38 +562,43 @@ Format the card as:
 </div>
 <div class="callout-body-container callout-body">
 <p>Your turn!</p>
+<p>In your notebook, implement a hypothesis generator.</p>
 <ol type="1">
-<li><p>In your notebook, implement a card generator. You can use a simple wrapper around an LLM call or use one of the agent frameworks to implement it as an agent with no tools.</p></li>
-<li><p>Discuss: is it still an agent, if it does not have tools? Ask an LLM about its opinion on that 😉.</p></li>
-<li><p>Let it generate cards from the text below (or any other text of your choice).</p>
-<p>LLM-as-a-Judge is an evaluation method to assess the quality of text outputs from any LLM-powered product, including chatbots, Q&amp;A systems, or agents. It uses a large language model (LLM) with an evaluation prompt to rate generated text based on criteria you define.</p></li>
-<li><p>Evaluate the results.</p></li>
+<li>Get a dataset. You can use the <a href="https://www.kaggle.com/competitions/titanic/data">the titanic dataset from kaggle</a> again or something else.</li>
+<li>Compile some relevant information e.g.&nbsp;<code>df.head()</code>, <code>df.describe()</code> etc. along other information. The titanic dataset has a very good description at the website.</li>
+<li>Send a good system prompt and the relevant information to an LLM. You may want to increase the model’s temperature.</li>
+<li>Evaluate the results.</li>
 </ol>
 </div>
 </div>
 </section>
-<section id="reviewer" class="level3">
-<h3 class="anchored" data-anchor-id="reviewer">Reviewer</h3>
-<p><img src="../imgs/pipe_rev.png" class="img-fluid"></p>
-<p>Let us now implement the reviewer. It will take a card as input and return feedback on how to improve it. A system prompt for the reviewer could look like this:</p>
-<pre><code>You are an expert in educational content creation, specializing in Anki flashcard generation.
-You are the Reviewer agent. Your task is to review an Anki flashcard based on the following rules:
+<section id="reviewer-llm-as-a-judge" class="level3">
+<h3 class="anchored" data-anchor-id="reviewer-llm-as-a-judge">Reviewer (LLM as a judge)</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
 
-1. The card should test ONE piece of information
-2. The question must be:
-    - Simple and direct
-    - Testing a single fact
-    - Using cloze format (cloze deletion or occlusion) when appropriate
-3. The answers must be:
-    - Brief and precise
-    - Limited to essential information
-4. The extra field must include:
-    - Detailed explanations
-    - Examples
-    - Context
-5. Information should not be repeated, i.e. the extra information should not repeat the answer. 
-
-Please give brief and concise feedback to the card you received in natural language. </code></pre>
+hyp[Hypothesis]
+rev(Reviewer)
+feedback[Feedback]
+hyp --&gt; rev
+rev --&gt; feedback
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The reviewer is a judge-LLM with a rubric for a good hypothesis:</p>
+<pre><code>You are a research assistant. Your task is to review a hypothesis based on these rules:
+1. Is this a prediction?
+2. Does it explain something?
+3. Is it falsifiable?
+Provide concise feedback on how to improve the hypothesis.</code></pre>
+<p>Here, LLM-as-judge is used to evaluate and guide improvements.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -447,34 +612,40 @@ Please give brief and concise feedback to the card you received in natural langu
 <p>Let’s build us a very judgemental robot!</p>
 <ol type="1">
 <li>In the same notebook, initialize a reviewer as well.</li>
-<li>Let the reviewer review the cards generated by the generator. You may find that the reviewer always thinks the cards are great. This happens a lot. So:</li>
-<li>Get the reviewer to actually find stuff to improve.</li>
+<li>Let the reviewer review the hypothesis generated by the generator.</li>
+<li>Adjust the rubric until the reviewer finds stuff to improve.</li>
 </ol>
 </div>
 </div>
 </section>
 <section id="editor" class="level3">
 <h3 class="anchored" data-anchor-id="editor">Editor</h3>
-<p><img src="../imgs/pipe_ed.png" class="img-fluid"></p>
-<p>Let us now implement the Editor. It will take a card and feedback as input and return a new card based on the feedback. A system prompt for the editor could look like this:</p>
-<pre><code>You are an expert in educational content creation, specializing in Anki flashcard generation.
-You are the Editor agent. Your task is to generate a new Anki flashcard based on the original card and the feedback you received from the Reviewer.
-Follow these guidelines:
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
 
-1. Incorporate the feedback into your new card
-2. The new card should still focus on ONE specific concept
-3. The question should be clear and unambiguous 
-4. The answer should be concise but complete 
-5. Include relevant extra information in the extra field 
-6. Follow the minimum information principle
-7. If no feedback is provided, return the original card
-8. Format the card as:
-
-&lt;card&gt;
-    &lt;question&gt;Your question here&lt;/question&gt;
-    &lt;answer&gt;Your answer here&lt;/answer&gt;
-    &lt;extra&gt;Additional context, examples, or explanations&lt;/extra&gt;
-&lt;/card&gt;</code></pre>
+hyp[Hypothesis]
+feedback[Feedback]
+editor(Editor)
+new_hyp[Hypothesis]
+data --&gt; editor
+hyp --&gt; editor
+feedback --&gt; editor
+editor --&gt; new_hyp
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The editor uses the original input + hypothesis + feedback to produce a revised hypothesis. Its prompt encodes this behaviour explicitly (incorporate feedback, keep focus, improve wording, etc.).</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -487,36 +658,97 @@ Follow these guidelines:
 <div class="callout-body-container callout-body">
 <p>Time to improve!</p>
 <ol type="1">
-<li>In the same notebook, initialize the editor as well.</li>
-<li>Let the editor generate new cards based on the feedback from the reviewer.</li>
-<li>Get the editor to actually generate something that is different from the generators version! (Play around with models, prompts and/or input text. In this example, this only worked for me when using a weaker model as a generator and a larger one as reviewer and editor.)</li>
+<li>In the same notebook, implement the editor as well. Make a new LLM call/prompt or adapt your original generator.</li>
+<li>Let the editor generate a new hypothesis or improve an existing one based on the feedback from the reviewer.</li>
+<li>Get the editor to actually generate something that is different from the generators version!</li>
 </ol>
 </div>
 </div>
 </section>
 <section id="full-pipeline" class="level3">
 <h3 class="anchored" data-anchor-id="full-pipeline">Full pipeline</h3>
-<p>We now basically have a working LLM pipeline.</p>
-<p><img src="../imgs/pipe_simple.png" class="img-fluid"></p>
-<p>A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. In pseudocode, this could look like this:</p>
-<pre><code># Pseudocode
-initialize:
-    Generator
-    Reviewer
-    Editor
-
-card = Generator.generate(input text)
-
-# now the loop
-while n &lt; max_iter:  # define maximum number of review steps
-    n += 1
-    review = Reviewer.review(card)
-    if review is positive:  # this has to be defined
-        stop
-    else:
-        card = Editor.edit(card, review)
-return card</code></pre>
-<p>For this to work, you need to find a way to determine if the reviewer feedback is positive enough to stop and return the card. You could, for instance, prompt the reviewer to return a certain phrase when satisfied and than parse the response for that. Or you could make a sentiment analysis, or you could make an LLM call!</p>
+<p>We now basically have a working LLM-based pipeline.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
+gen(Generator)
+hyp[Hypothesis]
+rev(Reviewer)
+feedback[Feedback]
+editor(Editor)
+new_hyp[Hypothesis]
+data --&gt; gen
+gen --&gt; hyp
+hyp --&gt; rev
+rev --&gt; feedback
+data --&gt; editor
+hyp --&gt; editor
+feedback --&gt; editor
+editor --&gt; new_hyp
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. This could look like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hypothesis <span class="op">=</span> generator.generate(dataset_description)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(max_iter):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    review <span class="op">=</span> reviewer.review(hypothesis)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> review_is_positive_enough(review):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    hypothesis <span class="op">=</span> editor.edit(dataset_description, hypothesis, review)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> hypothesis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+data["`dataset,
+metadata,
+columns,
+...`"]
+gen(Generator)
+hyp[Hypothesis]
+rev(Reviewer)
+feedback[Feedback]
+editor(Editor)
+if{good enough?}
+stop((stop))
+data --&gt; gen
+gen --&gt; hyp
+hyp --&gt; rev
+rev --&gt; feedback
+data --&gt; editor
+hyp --&gt; editor
+feedback --&gt; if
+if -- no --&gt; editor
+if -- yes --&gt; stop
+editor --&gt; hyp
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The missing piece is review_is_positive_enough, where you might:</p>
+<ul>
+<li>search for a specific “OK” marker in the review,</li>
+<li>ask the reviewer to output a score and threshold it,</li>
+<li>or run an additional small LLM classification step.</li>
+</ul>
+<p>Alternatively, you can just generate a lot of hypotheses and choose the best one (or the best <em>n</em>).</p>
+<p>Exactly the same pattern can be transferred to <strong>your own project outputs</strong>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -529,62 +761,52 @@ return card</code></pre>
 <div class="callout-body-container callout-body">
 <p>Build it!</p>
 <ol type="1">
-<li>Think of a way to stop the review process once the card is good enough.</li>
+<li>Think of a way to stop the review process once the hypothesis is good enough.</li>
 <li>Implement the loop.</li>
 </ol>
 <p>This is the minimum goal for today, so when you are done, you can upload your notebook to moodle. Alternatively, go on and implement the agent (see below) as well!</p>
 </div>
 </div>
 </section>
-<section id="orchestrator-agent" class="level3">
-<h3 class="anchored" data-anchor-id="orchestrator-agent">Orchestrator agent</h3>
-<p>While we’re at it, we can implement the orchestrator as well. Let us think for a moment what the orchestrators job should be. Its task should be decision making. That is, it’s the orchestrators job to decide which of the other agents to call next. It is also responsible for deciding whether the job is finished or not, i.e.&nbsp;whether to call any more agents. In terms of input and output, the orchestrator should get a current state of affairs along with the current chat history and output a decision. So the output can be one of the other agents or a stop signal.</p>
-<p>An example prompt for our case would be:</p>
-<pre><code>You are the Orchestrator agent. Your task is to coordinate the interaction between all agents to create high-quality flashcards.
-
-Available agents:
-* Generator - Creates flashcards
-* Reviewer - Improves card quality
-* Editor
-
-Decision Guidelines:
-- Use Generator to create cards
-- Use Reviewer to generate feedback
-- Use Editor to improve cards based on feedback.
-- Choose END when the cards are ready
-
-Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END")</code></pre>
-</section>
-<section id="agent-workflow" class="level3">
-<h3 class="anchored" data-anchor-id="agent-workflow">Agent workflow</h3>
-<p>Now, all we have to do is integrate our agents into a pipeline. The basic idea is to call the orchestrator at each step and let it decide which agent to call next or wether to stop. For this, the agent will need an understanding of the basic state of affairs and the past interaction. This is easily implemented like this:</p>
-<pre><code>state = {
-    "input_text": text,
-    "qa_card": "",
-    "review_status": "pending",
-    "edit_status": "pending"
-    }
-
-memory = ChatMemoryBuffer.from_defaults(token_limit=8000) # using LLamaindex here</code></pre>
-<p>The memory can be read using the <code>memory.get()</code> method.</p>
-<p>Then we define our workflow as an iterative process. Below is a piece of pseudocode illustrating the basic idea:</p>
-<pre><code># pseudocode
-initialize:
-    generator
-    reviewer
-    editor
-    orchestrator
-    state
-    memory
-
-while true
-    send state and memory to orchestrator -&gt; response
-    if response == "end" 
-        stop
-    if response == "generator" 
-        send input text to generator -&gt; card, change state and memory
-    (same for the other agents)
-return state</code></pre>
+<section id="from-pipeline-to-orchestrated-agents" class="level3">
+<h3 class="anchored" data-anchor-id="from-pipeline-to-orchestrated-agents">From pipeline to orchestrated agents</h3>
+<p>The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next:</p>
+<pre><code>You are tasked with creating high-quality scientific hypothesis for a given dataset. Use the tools at your disposal to ensure good quality. 
+Available tools:
+– Generator – creates hypotheses
+– Reviewer – evaluates hypothesis quality
+– Editor – improves hypothesis based on feedback
+Decision guidelines:
+– Use Generator to create hypothesis.
+– Use Reviewer to generate feedback.
+– Use Editor to improve hypothesis.
+– Choose END when the hypothesis is good enough.
+Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").</code></pre>
+<p>The agent is now just a loop around this orchestrator:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pseudocode</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>initialize: </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    tools</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    history</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> true:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> orchestrator(history)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> response <span class="op">==</span> <span class="st">"END"</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> response <span class="op">==</span> <span class="st">"generator"</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        history <span class="op">+=</span> generator.generate()</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># same for other tools</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/agent_loop_tinyagents.jpg" class="img-fluid figure-img"></p>
+<figcaption>Image credit https://x.com/adamdotdev (from <a href="https://huggingface.co/blog/tiny-agents">the Tiny Agents blogpost</a>)</figcaption>
+</figure>
+</div>
+<p>This is essentially the agentic version of the same pipeline. The pros and cons are analogous to those discussed in session <a href="agent_basics.html" class="quarto-xref"><span>Agents and Pipelines</span></a>:</p>
+<ul>
+<li>more flexibility,</li>
+<li>but also more complexity and less predictability.</li>
+</ul>
+<p>For your projects, you should decide consciously whether you need this flexibility – or whether a simple pipeline with a clear evaluation step is sufficient.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -595,20 +817,14 @@ return state</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Time to play!</p>
 <ol type="1">
-<li>In the same notebook, initialize the orchestrator as well.</li>
+<li>In the same notebook, initialize the orchestrator agent as well.</li>
 <li>Implement the workflow shown above in real code.</li>
 <li>Watch happily as it all works without any issues whatsoever.</li>
 <li>Upload to Moodle.</li>
 </ol>
 </div>
 </div>
-<p><strong>What we did not cover</strong> but what would be a great idea:</p>
-<ul>
-<li>Right now, we just assume that generator and editor return valid output. It would be better to build an automated check using a pydantic class for that.</li>
-<li>We let the orchestrator agent decide for how long this process lasts. &lt;sarcasm&gt;I cannot imagine that leading to problems under any circumstances.&lt;/sarcasm&gt; It would be better to give it a timeout or maximal number of iterations.</li>
-</ul>
 </section>
 </section>
 <section id="project-work" class="level2">
@@ -625,7 +841,7 @@ return state</code></pre>
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Discuss a topic for your project.</li>
+<li>Discuss your project.</li>
 <li>Set up the repository</li>
 <li>Plan the project</li>
 <li>Start collecting data or finding a data set</li>
@@ -638,6 +854,7 @@ return state</code></pre>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 <ul>
+<li><a href="https://huggingface.co/blog/tiny-agents">the Tiny Agents blogpost</a> really helps understanding agents.</li>
 <li><a href="https://www.youtube.com/watch?v=ewLMYLCWvcI">Here</a> is a video describing other multi-agent systems, including an <a href="https://arxiv.org/abs/2405.02957">agent hospital</a> and a <a href="https://arxiv.org/html/2405.11804v1">multi-agent translator</a></li>
 </ul>
 </section>
@@ -646,18 +863,11 @@ return state</code></pre>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-BuildingMultiAgentFramework2024" class="csl-entry" role="listitem">
-Building a <span>Multi-Agent Framework</span> from <span>Scratch</span> with <span>LlamaIndex</span>. (2024). In <em>DEV Community</em>. https://dev.to/yukooshima/building-a-multi-agent-framework-from-scratch-with-llamaindex-5ecn.
-</div>
 <div id="ref-ConstitutionalAIHarmlessness" class="csl-entry" role="listitem">
 <em>Constitutional <span>AI</span>: <span>Harmlessness</span> from <span>AI Feedback</span></em>. (n.d.). https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback.
 </div>
-<div id="ref-yuksekgonulTextGradAutomaticDifferentiation2024" class="csl-entry" role="listitem">
-Yuksekgonul, M., Bianchi, F., Boen, J., Liu, S., Huang, Z., Guestrin, C., &amp; Zou, J. (2024). <em><span>TextGrad</span>: <span>Automatic</span> "<span>Differentiation</span>" via <span>Text</span></em> (arXiv:2406.07496). arXiv. <a href="https://doi.org/10.48550/arXiv.2406.07496">https://doi.org/10.48550/arXiv.2406.07496</a>
-</div>
 </div>
 </section>
-
 
 </main> <!-- /main -->
 <script>
