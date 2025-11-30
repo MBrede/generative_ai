@@ -1,0 +1,71 @@
+---
+toc-title: '![](){width=240px}<br> <h3>Data analysis</h3>'
+---
+
+# LLM-based data analysis
+
+## motivation
+
+- talk to a dataset
+- insight generation pipeline
+- Problematisierung: Bezug zu einem Problem herstellen / motivierendes beispiel? als coding task
+
+## theory
+
+- grundlegende begriffe einführen
+
+    - hypothesis
+    - question (with regards to the dataset and in contrast to a hypothesis)
+    - insight, what is an insight (see paper)
+    - claim, insight can be broken into claims
+    - correctness of insight
+    - insightfulness of insight
+    - Completeness of answer
+
+- query agent
+    - natural language to query
+    - execution, basically call exec() on generated code (unsafe)
+    - save execution
+        - predefined list of tools, see agent session (limiting)
+        - blacklist (limiting, unsafe)
+        - LLM judge (unreliable)
+        - sandboxing, virtual environment
+
+
+
+## Pipeline-architektur
+
+- high level overview (see paper)
+- hypothesis generator (see last session)
+- query agent 
+- summarizer
+- with example 
+
+
+## hypothesis generator
+
+- high-level-question (see last session)
+- break high level questions into a set of low-level questions
+- with coding task (implement this step)
+
+
+## query agent
+
+for every low level question:
+- natural language to pandas
+- **SAVE** execution
+- result to natural language (answer)
+
+- with coding task (implement this step)
+
+
+## summarizer
+
+- low-level answers to insight
+- with coding task (implement this step)
+
+## optional verifier
+
+- difficult because no ground truth
+- LLM-as-a-judge?
+- with coding task
