@@ -9,7 +9,7 @@ This and the following chapters will focus on the topic of AI image generation. 
 ## AI image generator basics
 
 You can not talk about the history of AI image generation without talking about GANs [@goodfellowGenerativeAdversarialNetworks2014]. 
-To have a nicer chunking of the courses contents though, we will talk about them in the chapter @sec-GANS and focus on more recent approaches here.
+To focus on the more recent approaches, we will not go into detail about GANs in this course though, but you can find more details in @sec-GANS.
 GANs are the architecture behind the page [thispersondoesnotexist.com](https://www.thispersondoesnotexist.com) and its [clones](https://thisxdoesnotexist.com/).
 
 ### DALL-E
