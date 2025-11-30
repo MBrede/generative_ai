@@ -2,9 +2,7 @@
 toc-title: '![](../imgs/robot_painter_2.png){width=240px}<br> <h3>Augmentation of image datasets</h3>'
 ---
 
-# AI image generation II {#sec-GANS}
-
-In [AI Image Generation I](@sec-diffModels) we mentioned GANs without going into details. In this chapter, we will take a closer look at them. We will also briefly touch on image augmentation. 
+# Traditional AI image generation {#sec-GANS}
 
 ## Generative Adversarial Nets (GAN)
 
