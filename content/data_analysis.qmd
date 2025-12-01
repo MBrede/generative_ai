@@ -1,0 +1,683 @@
+---
+toc-title: '![](){width=240px}<br> <h3>Data analysis</h3>'
+---
+
+# LLM-based data analysis
+
+
+## Introduction & Motivation
+
+In this session we focus on **LLM-based data analysis**: using a Large Language Model as a core component in a data analysis pipeline.
+
+By now you have seen:
+
+- basic LLM usage and prompting,
+- chatbots and function calling,
+- embedding-based retrieval and RAG,
+- agent systems and LLM pipelines,
+- LLM-as-a-judge style evaluation.
+
+Today we zoom in on the **“data analysis”** capability that your final project should support:
+
+> A system that can *talk to a dataset* and decide which analysis steps to perform, then execute them and turn the results into human-readable insights.
+
+We will:
+
+- clarify key concepts (hypotheses, questions, insights, claims),
+- design and implement a simple **LLM-driven data analysis pipeline** with:
+  - a *hypothesis generator*,
+  - a *query agent* (natural language → pandas),
+  - a *summarizer*,
+  - an optional *verifier* (LLM as judge),
+- and connect this pipeline explicitly to your own project.
+
+Throughout, we use a **running example** from e-commerce analytics.
+
+<!-- TODO: find such a dataset -->
+<!-- TODO: Demo: LLM erhält kleine Tabelle + Frage („Which countries generate the highest revenue?“) → generiert sowohl pandas-Code als auch verbale Antwort.
+
+Problematisierung: „Wie weit darf man dem trauen? Wo sind Risiken?“ (Stichworte: Halluzinationen, falscher Code, Sicherheitsrisiken). -->
+
+
+## Key Concepts
+
+In LLM-based data analysis we need clear language to talk about what the system is doing. We will use the following terms (adapted from [@perezLLMBasedApproachInsight2025] and [@baiInsightAgentsLLMBased2025]):
+
+### Hypothesis
+
+A **hypothesis** is a testable, domain-specific assumption about the data.
+
+- It usually relates multiple variables and suggests a pattern.
+- It should be *falsifiable* – there must be a way to check whether it is wrong.
+
+**Example (e-commerce):**
+
+> *“Mobile users have a higher return rate than desktop users.”*
+
+This is a prediction about the relationship between `device_type` and `is_return`.
+
+### Question
+
+A **question** is a concrete, answerable request about the dataset.
+
+- It is closer to an actual query.
+- It often mentions specific columns or aggregations.
+
+**Example:**
+
+> *“What is the average return rate by device_type?”*
+
+Questions are typically what the **query agent** will turn into pandas or SQL code.
+
+**Hypotheses vs. questions**
+
+- Hypotheses are **high-level, interpretive**.
+- Questions are **low-level, operational** steps that help test or explore hypotheses.
+
+### Insight
+
+An **insight** is a *short textual finding* derived from the data.
+
+- It should be concise (e.g. no more than 2–3 sentences).
+- It often synthesizes multiple low-level questions / analyses.
+
+**Example:**
+
+> *“Mobile users show a higher return rate (18%) than desktop users (12%), especially in the last quarter.  
+> This suggests that mobile purchasing behaviour is more exploratory or less informed.”*
+
+Insights are what you ultimately want to show to users or stakeholders.
+
+### Claim
+
+An **insight** consists of one or more **claims**.
+
+A **claim** is an atomic factual statement that can be true or false.
+
+Example, from the insight above:
+
+1. *“Mobile users have an 18% return rate.”*  
+2. *“Desktop users have a 12% return rate.”*  
+3. *“The difference is more pronounced in the last quarter.”*
+
+Each of these can, in principle, be checked against the data.
+
+Structuring insights as *lists of claims* is extremely helpful for evaluation and verification.
+
+### Correctness of an insight
+
+Given that an insight is a set of claims, we can define its **correctness** as:
+
+- the fraction of claims that are factually correct with respect to the data.
+
+If an insight has 4 claims and 3 are true, correctness = 3/4.
+
+In practice we often approximate this using:
+
+- direct checks on numeric aggregates, and/or
+- an LLM acting as a judge (given evidence).
+
+### Insightfulness of an insight
+
+**Insightfulness** is more subjective.
+
+Intuitively, an insight is more insightful if it is:
+
+- *relevant* to the user’s goals,
+- *novel* (not obvious),
+- *actionable* (it could change a decision),
+- or provides a meaningful *explanation*.
+
+Insightfulness depends on:
+
+- the *user* (a beginner vs. expert),
+- the *domain*,
+- and the *context* of use.
+
+<!-- In research and practice, people often think of insightfulness as a combination of these underlying factors. -->
+
+These metrics cannot be explicitly calculated given only the dataset as input and must be estimated by the user [@perezLLMBasedApproachInsight2025]. 
+
+### Completeness of an answer
+
+**Completeness** asks:
+
+> *“Does this answer cover the important aspects of the question?”*
+
+For example, if the question is:
+
+> *“How do return rates differ by device type and country?”*
+
+then an answer that only discusses device type but ignores country is incomplete.
+
+Completeness becomes especially important when:
+
+- multiple sub-questions are combined,
+- or when the system is supposed to give a *high-level summary*.
+
+
+
+### Why these concepts matter for LLM-based data analysis
+
+When you plug an LLM into a data analysis pipeline, it will happily produce text. Without structure, however, it is hard to tell:
+
+- whether the text is *factually correct*,
+- whether it is actually *insightful*,
+- whether it is *complete* enough to support decisions.
+
+By explicitly using **hypotheses, questions, insights, claims, correctness, insightfulness and completeness**:
+
+- you can design better pipelines,
+- you can build simple metrics for quality,
+- and you can integrate LLM-as-a-judge components more systematically.
+
+We will now see how these ideas shape a concrete pipeline architecture.
+
+
+## Pipeline Architecture
+
+We will use a 4-component architecture:
+
+1. **Hypothesis generator**
+2. **Query agent**
+3. **Summarizer**
+4. **Optional verifier**
+
+```{mermaid}
+flowchart LR
+    A[Data desription] --> B(Hypothesis Generator)
+    B --> C[Low-level questions]
+    C --> D(Query Agent)
+    D --> E["`Intermediate answers
+    (tables, stats, text)`"]
+    E --> F(Summarizer)
+    F --> G[Insight]
+
+```
+
+Data flow (intuitively):
+
+- The hypothesis generator takes a high-level question or a description of the dataset and proposes high-level hypotheses and low-level questions.
+- The query agent turns each low-level question into code (e.g. pandas), executes it safely and returns concise answers.
+- The summarizer aggregates low-level answers into human-readable insights and explicit claims.
+- The optional verifier (not shown) checks these claims for correctness and flags issues.
+
+<!-- In your final project, some of these components might already exist (e.g. you may already have an agent with tools). Today we focus on the data analysis side. -->
+
+### Running Example (Use Case)
+
+We use a realistic e-commerce analytics scenario as a running example.
+
+#### Dataset description
+
+Imagine a transactional dataset of an online shop. Each row is a line item in an order.
+
+Example columns:
+
+- ``order_id`` – unique order identifier
+- ``customer_id`` – unique customer identifier
+- ``order_date`` – timestamp of the order
+- ``country`` – country of the customer
+- ``device_type`` – "mobile" or "desktop"
+- ``channel`` – "web", "app", "marketplace", …
+- ``product_category`` – category of the item
+- ``quantity`` – number of units
+- ``unit_price`` – price per unit
+- ``revenue`` – computed revenue (quantity * unit_price)
+- ``is_return`` – boolean, whether the item was returned
+- ``is_new_customer`` – boolean, first-time customer or not
+
+We assume tens of thousands of rows.
+
+#### Example high-level questions
+
+- _“Which customer segments contribute most to total revenue?”_
+- _“How do return rates differ by country and device type?”_
+- _“Are new customers more likely to return items than returning customers?”_
+- _“Did revenue patterns change over the last 6 months?”_
+
+#### Example low-level questions
+
+For the high-level question:
+
+> _“Which customer segments contribute most to total revenue?”_
+
+low-level questions might include:
+
+- Q1: _“What is the total revenue per country?”_
+- Q2: _“What is the total revenue per device_type?”_
+- Q3: _“What is the average revenue per order for new vs. returning customers?”_
+- Q4: _“How many unique customers are active in each country?”_
+
+For the hypothesis:
+
+> _“Mobile users have a higher return rate than desktop users.”_
+
+we might ask:
+
+- Q5: _“What is the overall return rate per device_type?”_
+- Q6: _“How has the return rate for mobile vs. desktop changed over time?”_
+
+We will use this fictitious dataset and these types of questions in the code examples.
+
+
+## Hypothesis Generator
+
+We introduced a hypothesis generator in the last session. Today, we will expand it to additionally break a hypothesis down into smaller questions. The hypothesis generator is responsible for:
+
+- turning a high-level task or dataset description into
+    - high-level, domain-relevant hypotheses and/or
+    - concrete low-level questions that the query agent can answer.
+
+### Concept
+
+Input:
+
+- a short description of the dataset (columns, domain),
+- optionally a high-level question or user goal.
+
+Output:
+
+- a list of high-level hypotheses, and,
+- for each hypothesis, a list of low-level questions.
+
+The design of prompts is important:
+
+- If you keep the dataset description too detailed, the model might stay “shallow”.
+- If you keep it too vague, questions may not be answerable from the data.
+
+### Example prompts
+
+:::{#high-level .callout-tip collapse="true" appearance="minimal"}
+### High-level hypothesis prompt
+
+    You are a data analyst for an e-commerce company.
+
+    You receive the following dataset schema:
+
+    - order_id (string): unique order identifier
+    - customer_id (string): customer identifier
+    - order_date (datetime): order timestamp
+    - country (string): customer country
+    - device_type (string): mobile or desktop
+    - channel (string): web, app or marketplace
+    - product_category (string)
+    - quantity (int)
+    - unit_price (float)
+    - revenue (float): quantity * unit_price
+    - is_return (bool)
+    - is_new_customer (bool)
+
+    Task:
+    Suggest 3 high-level hypotheses that could be interesting for marketing and operations.
+
+    Each hypothesis should:
+    - be testable from the dataset,
+    - relate at least two variables,
+    - be phrased as a clear, falsifiable statement.
+
+:::
+
+:::{#low-level .callout-tip collapse="true" appearance="minimal"}
+### Low-level questions prompt
+
+    You are a data analyst.
+
+    Given the following high-level hypothesis:
+
+    "Mobile users have a higher return rate than desktop users."
+
+    and the dataset schema:
+
+    {dataset schema}
+
+    Generate 3–5 concrete, low-level questions that can be answered with pandas code on this dataset.
+
+    Each question should:
+    - mention the relevant columns,
+    - be answerable with groupby/aggregation operations,
+    - help test or explore the hypothesis.
+
+    Return the questions as a numbered list.
+
+:::
+
+
+
+::: {.callout-note}
+
+## 📝 Task
+
+Build a Hypothesis Generator. You already build the high-level generator last time. Expand it to include the low-level breakdown.
+
+1. Find an interesting dataset (e.g. fom [the world bank](https://data.worldbank.org/)) and load it. You can, of course, also use the fictitious e-commerce dataset from the example, but it is more fun with real data. 
+<!-- TODO: get the data set -->
+2. Implement a function generate_low_level_questions similar to the example above.
+3. Test it with at least two different high-level questions, for example:
+    - “Which customer segments drive the most revenue?”
+    - “Do new customers behave differently from returning customers?”
+
+4. Inspect the generated questions:
+    - Are they answerable with the available columns?
+    - Do they match the high-level question?
+
+**Goal**: Practice the distinction between high-level and low-level questions and build a first pipeline component.
+:::
+
+## Query Agent
+
+The query agent is responsible for:
+
+* turning low-level natural language questions into pandas code,
+* executing this code safely,
+* returning short, interpretable answers.
+
+### Concept
+
+For each low-level question:
+
+1. Generate pandas code using an LLM.
+2. Execute the code in a restricted environment.
+3. Extract a small, human-readable answer (e.g. `result.head()`).
+
+#### Step 1: Natural language → pandas code
+
+Typical pattern:
+
+```python
+User question:
+"What is the return rate per device_type?"
+
+Expected code:
+result = (
+    df.groupby("device_type")["is_return"]
+      .mean()
+      .sort_values(ascending=False)
+)
+```
+
+We want the LLM to:
+
+* use the correct column names,
+* use simple, safe `pandas` operations,
+* assign the final result to a variable `result`.
+
+#### Step 2: Safe execution
+
+The dangerous version would be:
+
+```python
+exec(generated_code)
+```
+
+This allows arbitrary code execution. We need safeguards:
+
+* Restrict the globals and locals dictionaries passed to `exec`.
+* Forbid imports and access to sensitive modules like `os`, `sys`, `subprocess`.
+* Optionally inspect the generated code before execution.
+
+Minimal example idea:
+
+```python
+SAFE_GLOBALS = {
+    "__builtins__": {},  # or a small subset
+    "pd": pd,
+}
+
+SAFE_LOCALS = {
+    "df": df,
+}
+exec(code, SAFE_GLOBALS, SAFE_LOCALS)
+result = SAFE_LOCALS["result"]
+```
+
+This is still not bullet-proof, but much safer than unconstrained `exec`.
+
+#### Alternative safeguards
+
+* Whitelist allowed functions and methods (e.g. `df.groupby`, `mean`, `sum`, `count`, `value_counts`).
+* Blacklist certain patterns (`import`, `__`, `open(`, `os.`).
+* Let an LLM-as-a-judge check whether the code is safe before execution.
+* Use sandboxing (separate process / container (docker env)) with resource limits.
+
+Each approach trades off safety, flexibility and implementation complexity. The safest option, of course, is to ask an expert. (On the other hand, the expert will almost certainly just say __"NO"__.)
+
+### Example
+
+:::{#safe-exec .callout-tip collapse="true" appearance="minimal"}
+### Safer execution example
+
+Disclaimer: This is an example for safe-ish code execution generated by ChatGPT for educational purposes. It is by no means **SAFE**. Please use at own risk. 
+
+```python
+FORBIDDEN_PATTERNS = [
+    r"\bimport\b",
+    r"\bopen(",
+    r"__",
+    r"os.",
+    r"sys.",
+]
+
+def is_code_safe(code: str) -> bool:
+    """Very simple static checks for obviously dangerous patterns."""
+    for pat in FORBIDDEN_PATTERNS:
+        if re.search(pat, code):
+            return False
+    return True
+
+def safe_execute(code: str, df: pd.DataFrame) -> Any:
+    """Execute pandas code in a restricted namespace and return `result`."""
+    if not is_code_safe(code):
+        raise ValueError("Generated code failed safety checks.")
+    safe_globals = {
+        "__builtins__": {},  # optionally allow a small subset of builtins
+        "pd": pd,
+    }
+    safe_locals = {"df": df}
+
+    exec(code, safe_globals, safe_locals)  # noqa: S102 (we know this is a teaching example)
+
+    if "result" not in safe_locals:
+        raise ValueError("No variable named `result` found after code execution.")
+
+    return safe_locals["result"]
+
+```
+
+:::
+
+
+::: {.callout-note}
+
+## 📝 Task: Query Agent Prototype
+
+1. Load your dataset into a DataFrame `df`. Here, you will want an actual dataset.
+2. Implement functions:
+   * `generate_pandas_code(question, columns)`
+   * `safe_execute(code, df)`
+   * `run_query_agent(question, df)`
+3. Test your query agent on at least three questions, for example:
+   * "What is the total revenue per country?"
+   * "What is the return rate per device_type?"
+   * "What is the average order revenue for new vs. returning customers?"
+4. Inspect:
+   * Does the generated code execute without errors?
+   * Are the results correct and interpretable?
+   * Did your safety checks catch any problematic code?
+
+**Goal:** See how LLM-driven code generation and controlled execution can work together.
+
+:::
+
+
+
+## Summarizer
+
+The summarizer turns multiple low-level answers into:
+
+- more coherent, high-level insights and
+- explicitly structured claims.
+
+Input:
+
+- a set of (low-level question, answer) pairs.
+
+Output:
+
+- 1–3 short insight texts,
+- for each insight, a list of claims.
+
+__Why structure matters__
+
+Without structure:
+
+- it is hard to evaluate correctness and completeness,
+- we cannot easily let another component (verifier) check each statement.
+
+With explicit claims:
+
+- we can later run a verification step claim-by-claim,
+- we can trace each claim back to the questions and data that support it.
+
+:::{#summarizer .callout-tip collapse="true" appearance="minimal"}
+### Summarizer prompt
+
+System message:
+
+    You are a data analyst. You write short, high-quality data insights and extract atomic claims.
+
+User message:
+
+    You are given answers to several low-level data questions:
+
+    {formatted_answers}
+
+    Task:
+
+    1. Write 1–2 short insights (max 3 sentences each) that synthesize these answers.
+    2. For each insight, extract 2–4 atomic factual claims.
+    3. For each claim, reference the question IDs it is based on.
+
+    Return the result as JSON with the following structure:
+
+    {{
+        "insights": [
+            {{
+                "text": "...",
+                "claims": [
+                    {{
+                        "text": "...",
+                        "source_questions": ["Q1", "Q3"]
+                    }}
+                ]
+            }}
+        ]
+    }}
+
+:::
+
+::: {.callout-note}
+
+## 📝 Task: From Low-Level Answers to Insights
+
+
+1. Use your query agent (or hand-written pandas code) to generate answers to at least 2–3 low-level questions.
+2. Build a dictionary `answers = {"Q1": "...", "Q2": "...", ...}`.
+3. Implement `summarize_insights(answers)`.
+4. Inspect the output:
+   * Are the insights short and understandable?
+   * Are the claims atomic and clearly grounded in the answers?
+5. (Optional) Manually label each claim as correct/incorrect/uncertain based on the data.
+
+**Goal:** Practice turning fragmented analysis results into structured insights and claims.
+
+:::
+
+## Verifier
+
+Even with structured claims, we often lack a clear ground truth. We can still ask an LLM to act as a verifier or judge.
+
+__Concept__
+
+The verifier receives:
+
+- the list of claims,
+- the low-level answers or relevant tables/statistics as evidence.
+
+It outputs, for each claim:
+
+- a label: "correct", "incorrect", or "uncertain",
+- a short explanation.
+
+This is a form of LLM-as-a-judge applied to data analysis.
+
+::: {.callout-note}
+
+## 📝 (optional Task) – Designing a Simple Verifier
+
+1. Take 3–4 claims generated by your summarizer.
+2. Collect the corresponding low-level answers as evidence.
+3. Design a prompt (or implement a function) similar to verify_claims above.
+4. Run the verifier and inspect the labels and explanations.
+5. Reflect:
+    - Does the verifier correctly identify clearly true/false claims?
+    - When does it answer uncertain?
+    - Where could this be integrated into your project (e.g. as a filter, a warning, or part of an evaluation pipeline)?
+
+Goal: Explore the idea of using an LLM as a judge for data analysis results.
+:::
+
+
+## Reflection & Project Transfer
+
+In your final projects you can integrate a non-trivial data analysis as a core component. The pipeline in this session is one candidate building block.
+
+Use the following questions to reflect and sketch how LLM-based data analysis can fit your project.
+
+::: {.callout-note}
+## 🧠 Reflection – Applying This to Your Project
+
+In your project teams: 
+
+
+1. Data & scope
+    * Which tables or datasets in your project are suitable for LLM-based hypothesis generation and exploration?
+    * Are they clean and structured enough, or do you need a preprocessing step first?
+2. Role of the LLM
+    * Which parts of the analysis do you want the LLM to handle (hypotheses, questions, code generation, interpretation)?
+    * Which parts should remain classical, hand-written data analysis code?
+3. Error impact & responsibility
+    * What happens if your query agent generates wrong code or your summarizer produces incorrect insights?
+    * How critical would these mistakes be for your intended users?
+4. Interpretability & transparency
+    * How will you expose underlying questions, code and data to users so they can understand where an insight comes from?
+    * Will you show claims, confidence scores, or links to data?
+5. Safeguards
+    * Which safeguards will you implement (whitelists, sandboxing, LLM-based verification, human review loops)?
+    * At which points in the pipeline (code generation, execution, summarization) are safeguards most important?
+
+:::
+
+
+## Summary
+
+In this session you:
+
+- learned a vocabulary for LLM-based data analysis:
+    - hypotheses, questions, insights, claims,
+    - correctness, insightfulness, completeness,
+- designed and implemented a simple pipeline:
+    - Hypothesis generator → Query agent → Summarizer → (Verifier),
+- explored safeguards for executing LLM-generated code, and
+- reflected on how to integrate such pipelines into your final project.
+
+In your project work, you can now:
+
+- embed a “talk to your dataset” feature,
+- evaluate it using LLM-as-a-judge components,
+- and reason more systematically about the quality and safety of LLM-based data analysis.
+
+
+## References
+
+

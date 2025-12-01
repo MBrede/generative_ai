@@ -130,6 +130,8 @@ This pattern applies to:
 - code generation,
 - many more
 
+<!-- TODO:give the anthropic harmless finetuning example here (imgs/CAI_illustration.png)-->
+
 
 ## Example: Dataset hypothesis creation pipeline
 
@@ -205,7 +207,8 @@ In your notebook, implement a hypothesis generator.
 
 1. Get a dataset. You can use the [the titanic dataset from kaggle](https://www.kaggle.com/competitions/titanic/data) again or something else. 
 2. Compile some relevant information e.g. ``df.head()``, ``df.describe()`` etc. along other information. The titanic dataset has a very good description at the website. 
-3. Send a good system prompt and the relevant information to an LLM. You may want to increase the model's temperature. 
+3. Send a good system prompt and the relevant information to an LLM. 
+4. Let it generate a hypothesis (or several). You may want to increase the model's temperature to get some variation. 
 4. Evaluate the results.
 :::
 
@@ -224,15 +227,18 @@ hyp --> rev
 rev --> feedback
 ```
 
-The reviewer is a judge-LLM with a rubric for a good hypothesis:
+The reviewer is a judge-LLM with a rubric for a good hypothesis. Here is an example:
 
     You are a research assistant. Your task is to review a hypothesis based on these rules:
     1. Is this a prediction?
     2. Does it explain something?
     3. Is it falsifiable?
+    4. Is it specific?
     Provide concise feedback on how to improve the hypothesis.
 
-Here, LLM-as-judge is used to evaluate and guide improvements.
+You may want to adapt the rubric to get the desired result. You can use one reviewer as shown here, or do several reviewers each with a specific criterion of the rubric. 
+
+<!-- Here, LLM-as-judge is used to evaluate and guide improvements. -->
 
 
 ::: {.callout-note}
@@ -371,7 +377,7 @@ This is the minimum goal for today, so when you are done, you can upload your no
 
 ### From pipeline to orchestrated agents
 
-The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next:
+The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next^[Note that this is, of course, only one way to implement this as an agent system.]:
 
     You are tasked with creating high-quality scientific hypothesis for a given dataset. Use the tools at your disposal to ensure good quality. 
     Available tools:
