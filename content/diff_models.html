@@ -227,6 +227,11 @@ window.Quarto = {
   <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM pipelines</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/data_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM-based data analysis</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -339,7 +344,7 @@ AI image generation<br>
 <li>A Variational Autoencoder (VAE)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> to compress the image data into a latent space. This means, that each image was compressed into a 32x32 grid, for which each grid cell was encoded as a discrete probability distribution with 8192 dimensions. This latent “token”-space is, although the architecture is pretty different, quite close to what our text-transformers outputted in the MLM-task.</li>
 <li>A Transformer to learn the relationship between text-captions and the latent space. This was done by encoding images using the pretrained VAE und argmax choosing the 32x32-token-representation of the image. The text-captions were limited to 256 tokens and concatenated with the 1024-dimensional image-tokens. The model is then trained to predict the next token in the sequence, which is either a text or an image token, similarly to the learning-paradigm we discussed when talking about the transformer-training.</li>
 </ol>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Since the latent space these images are compressed to is of a defined set of classes, the authors call the model a discrete VAE which makes a lot of sense.</p></div></div><p>The resulting 1024 image-tokens can then be fed into the decoder-Block of the VAE to generate an image. An illustration of the training-process can be seen in <a href="#fig-dVAE" class="quarto-xref">Figure&nbsp;<span>10.1</span></a>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Since the latent space these images are compressed to is of a defined set of classes, the authors call the model a discrete VAE which makes a lot of sense.</p></div></div><p>The resulting 1024 image-tokens can then be fed into the decoder-Block of the VAE to generate an image. An illustration of the training-process can be seen in <a href="#fig-dVAE" class="quarto-xref">Figure&nbsp;<span>11.1</span></a>.</p>
 <div id="fig-dVAE" class="quarto-float quarto-figure quarto-figure-center anchored" data-cap-location="bottom">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dVAE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -347,21 +352,21 @@ AI image generation<br>
 <p><img src="../imgs/dalle_stack.png" class="img-fluid figure-img"></p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dVAE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;10.1: Illustration of the DALL-E-VAE (A) and Illustration of the whole DALL-E-Stack (B). Both images are taken from <span class="citation" data-cites="abideenHowOpenAIsDALLE2023">Abideen (<a href="#ref-abideenHowOpenAIsDALLE2023" role="doc-biblioref">2023</a>)</span>.
+Fig&nbsp;11.1: Illustration of the DALL-E-VAE (A) and Illustration of the whole DALL-E-Stack (B). Both images are taken from <span class="citation" data-cites="abideenHowOpenAIsDALLE2023">Abideen (<a href="#ref-abideenHowOpenAIsDALLE2023" role="doc-biblioref">2023</a>)</span>.
 </figcaption>
 </figure>
 </div>
 </section>
 <section id="clip" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="clip">CLIP</h3>
-<p>Close to the release of DALL-E, the team at OpenAI did also publish CLIP <span class="citation" data-cites="radfordLearningTransferableVisual2021">(<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">Radford et al., 2021</a>)</span>. The paper, which introduced a contrastive<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> method to learn visual representations from images and text descriptions, bridged the gap between image and text embeddings. This contrastive principle is illustrated in <a href="#fig-CLIP" class="quarto-xref">Figure&nbsp;<span>10.2</span></a>.</p>
+<p>Close to the release of DALL-E, the team at OpenAI did also publish CLIP <span class="citation" data-cites="radfordLearningTransferableVisual2021">(<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">Radford et al., 2021</a>)</span>. The paper, which introduced a contrastive<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> method to learn visual representations from images and text descriptions, bridged the gap between image and text embeddings. This contrastive principle is illustrated in <a href="#fig-CLIP" class="quarto-xref">Figure&nbsp;<span>11.2</span></a>.</p>
 <div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Contrastive also being the namesake of the method (Contrastive Language-Image Pre-training)</p></div></div><div id="fig-CLIP" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-CLIP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/clip.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CLIP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;10.2: Illustration of the contrastive learning paradigm used in CLIP, taken from <span class="citation" data-cites="radfordLearningTransferableVisual2021">Radford et al. (<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">2021</a>)</span>
+Fig&nbsp;11.2: Illustration of the contrastive learning paradigm used in CLIP, taken from <span class="citation" data-cites="radfordLearningTransferableVisual2021">Radford et al. (<a href="#ref-radfordLearningTransferableVisual2021" role="doc-biblioref">2021</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -378,14 +383,14 @@ Fig&nbsp;10.2: Illustration of the contrastive learning paradigm used in CLIP, t
 <li><strong>Gradual Complexity:</strong> By progressively corrupting the image, the model can learn to reverse the process in manageable steps, leading to a better understanding of how to reconstruct data at each stage.</li>
 <li><strong>Mathematical Framework:</strong> This approach aligns with the stochastic differential equation (SDE) framework, enabling the model to map the noise distribution back to the original data distribution iteratively.</li>
 </ul>
-<p>This approach, rather than predicting the denoised image directly, also offers practical advantages: it allows for efficient parallelization during training since the noise is parameterized by a scheduler and can be applied dynamically. This stepwise noise-addition is visually represented in <a href="#fig-diffusion" class="quarto-xref">Figure&nbsp;<span>10.3</span></a>.</p>
+<p>This approach, rather than predicting the denoised image directly, also offers practical advantages: it allows for efficient parallelization during training since the noise is parameterized by a scheduler and can be applied dynamically. This stepwise noise-addition is visually represented in <a href="#fig-diffusion" class="quarto-xref">Figure&nbsp;<span>11.3</span></a>.</p>
 <div id="fig-diffusion" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-diffusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/diffusion_process.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diffusion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;10.3: Illustration of the diffusion process. The first row shows a 2-d swiss roll gradually getting more noisy, the second row shows the corresponding outputs of the diffusion model. Image taken from <span class="citation" data-cites="sohl-dicksteinDeepUnsupervisedLearning2015">Sohl-Dickstein et al. (<a href="#ref-sohl-dicksteinDeepUnsupervisedLearning2015" role="doc-biblioref">2015</a>)</span>.
+Fig&nbsp;11.3: Illustration of the diffusion process. The first row shows a 2-d swiss roll gradually getting more noisy, the second row shows the corresponding outputs of the diffusion model. Image taken from <span class="citation" data-cites="sohl-dicksteinDeepUnsupervisedLearning2015">Sohl-Dickstein et al. (<a href="#ref-sohl-dicksteinDeepUnsupervisedLearning2015" role="doc-biblioref">2015</a>)</span>.
 </figcaption>
 </figure>
 </div>
@@ -406,7 +411,7 @@ Fig&nbsp;10.3: Illustration of the diffusion process. The first row shows a 2-d 
 <img src="../imgs/ldm.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ldm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;10.4: Illustration of the Latent Diffusion Model architecture. Image taken from <span class="citation" data-cites="rombachHighResolutionImageSynthesis2022">Rombach et al. (<a href="#ref-rombachHighResolutionImageSynthesis2022" role="doc-biblioref">2022</a>)</span>
+Fig&nbsp;11.4: Illustration of the Latent Diffusion Model architecture. Image taken from <span class="citation" data-cites="rombachHighResolutionImageSynthesis2022">Rombach et al. (<a href="#ref-rombachHighResolutionImageSynthesis2022" role="doc-biblioref">2022</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -437,14 +442,14 @@ Fig&nbsp;10.4: Illustration of the Latent Diffusion Model architecture. Image ta
 <p>So called multimodal models are models that are trained to fit one latent distribution for multiple modalities. This means that instead of only using the image encoder and decoder with some kind of informed diffusion model to generate images in between, encoders and decoders for multiple modalities are trained to map onto the same latent space. This results in a family of models that can take inputs in multiple modalities and create outputs in a similar fashion. There are different approaches to solve this task, of which two will be discussed in the following section</p>
 <section id="unidiffuser" class="level3">
 <h3 class="anchored" data-anchor-id="unidiffuser">Unidiffuser</h3>
-<p>One of the first multimodal models is Unidiffuser, an architecture described in <span class="citation" data-cites="baoOneTransformerFits2023">Bao et al. (<a href="#ref-baoOneTransformerFits2023" role="doc-biblioref">2023</a>)</span>. The architecture is illustrated in <a href="#fig-unidiffuser" class="quarto-xref">Figure&nbsp;<span>10.5</span></a>.</p>
+<p>One of the first multimodal models is Unidiffuser, an architecture described in <span class="citation" data-cites="baoOneTransformerFits2023">Bao et al. (<a href="#ref-baoOneTransformerFits2023" role="doc-biblioref">2023</a>)</span>. The architecture is illustrated in <a href="#fig-unidiffuser" class="quarto-xref">Figure&nbsp;<span>11.5</span></a>.</p>
 <div id="fig-unidiffuser" class="enlarge-onhover quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-unidiffuser-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../imgs/unidiffuser.png" class="enlarge-onhover img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-unidiffuser-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Fig&nbsp;10.5: Illustration of the Unidiffuser architecture. Image taken from <span class="citation" data-cites="baoOneTransformerFits2023">Bao et al. (<a href="#ref-baoOneTransformerFits2023" role="doc-biblioref">2023</a>)</span>
+Fig&nbsp;11.5: Illustration of the Unidiffuser architecture. Image taken from <span class="citation" data-cites="baoOneTransformerFits2023">Bao et al. (<a href="#ref-baoOneTransformerFits2023" role="doc-biblioref">2023</a>)</span>
 </figcaption>
 </figure>
 </div>

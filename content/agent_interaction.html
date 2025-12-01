@@ -85,7 +85,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/gans_and_augmentation.html" rel="next">
+<link href="../content/data_analysis.html" rel="next">
 <link href="../content/agent_basics.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -135,7 +135,7 @@ div.csl-indent {
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked slimcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -237,6 +237,11 @@ div.csl-indent {
   <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">LLM pipelines</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/data_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM-based data analysis</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -324,7 +329,7 @@ LLM pipelines<br>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_interaction.html"><span class="chapter-title">LLM pipelines</span></a></li></ol></nav>
 <div class="quarto-title">
@@ -473,8 +478,9 @@ LLM pipelines<br>
 <li>code generation,</li>
 <li>many more</li>
 </ul>
+<!-- TODO:give the anthropic harmless finetuning example here (imgs/CAI_illustration.png)-->
 </section>
-<section id="example-dataset-hypothesis-creation-pipeline" class="level2">
+<section id="example-dataset-hypothesis-creation-pipeline" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="example-dataset-hypothesis-creation-pipeline">Example: Dataset hypothesis creation pipeline</h2>
 <p>We will now modify our EDA agent/pipeline from earlier to illustrate this. We will build a pipeline that will generate a <strong>hypothesis</strong> based on superficial knowledge of the dataset.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -571,7 +577,8 @@ example rows:
 <ol type="1">
 <li>Get a dataset. You can use the <a href="https://www.kaggle.com/competitions/titanic/data">the titanic dataset from kaggle</a> again or something else.</li>
 <li>Compile some relevant information e.g.&nbsp;<code>df.head()</code>, <code>df.describe()</code> etc. along other information. The titanic dataset has a very good description at the website.</li>
-<li>Send a good system prompt and the relevant information to an LLM. You may want to increase the model’s temperature.</li>
+<li>Send a good system prompt and the relevant information to an LLM.</li>
+<li>Let it generate a hypothesis (or several). You may want to increase the model’s temperature to get some variation.</li>
 <li>Evaluate the results.</li>
 </ol>
 </div>
@@ -597,13 +604,15 @@ rev --&gt; feedback
 </div>
 </div>
 </div>
-<p>The reviewer is a judge-LLM with a rubric for a good hypothesis:</p>
+<p>The reviewer is a judge-LLM with a rubric for a good hypothesis. Here is an example:</p>
 <pre><code>You are a research assistant. Your task is to review a hypothesis based on these rules:
 1. Is this a prediction?
 2. Does it explain something?
 3. Is it falsifiable?
+4. Is it specific?
 Provide concise feedback on how to improve the hypothesis.</code></pre>
-<p>Here, LLM-as-judge is used to evaluate and guide improvements.</p>
+<p>You may want to adapt the rubric to get the desired result. You can use one reviewer as shown here, or do several reviewers each with a specific criterion of the rubric.</p>
+<!-- Here, LLM-as-judge is used to evaluate and guide improvements. -->
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -773,10 +782,10 @@ editor --&gt; hyp
 </div>
 </div>
 </section>
-<section id="from-pipeline-to-orchestrated-agents" class="level3">
+<section id="from-pipeline-to-orchestrated-agents" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="from-pipeline-to-orchestrated-agents">From pipeline to orchestrated agents</h3>
-<p>The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next:</p>
-<pre><code>You are tasked with creating high-quality scientific hypothesis for a given dataset. Use the tools at your disposal to ensure good quality. 
+<p>The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Note that this is, of course, only one way to implement this as an agent system.</p></div></div><pre><code>You are tasked with creating high-quality scientific hypothesis for a given dataset. Use the tools at your disposal to ensure good quality. 
 Available tools:
 – Generator – creates hypotheses
 – Reviewer – evaluates hypothesis quality
@@ -873,6 +882,7 @@ Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").
 </div>
 </div>
 </section>
+
 
 </main> <!-- /main -->
 <script>
@@ -1316,8 +1326,8 @@ document.addEventListener('DOMContentLoaded', function() {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/gans_and_augmentation.html" class="pagination-link" aria-label="Traditional AI image generation">
-        <span class="nav-page-text"><span class="chapter-title">Traditional AI image generation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/data_analysis.html" class="pagination-link" aria-label="LLM-based data analysis">
+        <span class="nav-page-text"><span class="chapter-title">LLM-based data analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

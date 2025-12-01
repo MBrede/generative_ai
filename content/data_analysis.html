@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>LLM-based data analysis – Generative AI</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../content/gans_and_augmentation.html" rel="next">
+<link href="../content/agent_interaction.html" rel="prev">
+<link href="../cover.jpg" rel="icon" type="image/jpeg">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7c56b0cb14979e59e30aba88ccee8faa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="mermaid-theme" content="neutral">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/data_analysis.html"><span class="chapter-title">LLM-based data analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../cover.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../cover.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Generative AI</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/MBrede/generative_ai" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="../Generative-AI.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/orga.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Organizational Details</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/project_details.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Details</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Language Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/getting_started_with_llms.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Getting started with (L)LMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/prompting.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Prompting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/function_calling.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Towards Agents: chatbots and function calling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/embeddings.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Embedding-based LLM-systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agents and Pipelines</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM pipelines</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/data_analysis.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">LLM-based data analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Image Generation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/gans_and_augmentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Traditional AI image generation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/diff_models.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI image generation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/generation_in_agent_pipelines.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">AI image generation pipelines</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Finetuning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/finetuning_approaches.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Finetuning Approaches</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/alignment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alignment</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title"><img src=".png" class="img-fluid" width="240"><br><br>
+</h2><h3 class="anchored"><br>
+Data analysis<br>
+</h3>
+   
+  <ul>
+  <li><a href="#introduction-motivation" id="toc-introduction-motivation" class="nav-link active" data-scroll-target="#introduction-motivation">Introduction &amp; Motivation</a></li>
+  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts">Key Concepts</a>
+  <ul class="collapse">
+  <li><a href="#hypothesis" id="toc-hypothesis" class="nav-link" data-scroll-target="#hypothesis">Hypothesis</a></li>
+  <li><a href="#question" id="toc-question" class="nav-link" data-scroll-target="#question">Question</a></li>
+  <li><a href="#insight" id="toc-insight" class="nav-link" data-scroll-target="#insight">Insight</a></li>
+  <li><a href="#claim" id="toc-claim" class="nav-link" data-scroll-target="#claim">Claim</a></li>
+  <li><a href="#correctness-of-an-insight" id="toc-correctness-of-an-insight" class="nav-link" data-scroll-target="#correctness-of-an-insight">Correctness of an insight</a></li>
+  <li><a href="#insightfulness-of-an-insight" id="toc-insightfulness-of-an-insight" class="nav-link" data-scroll-target="#insightfulness-of-an-insight">Insightfulness of an insight</a></li>
+  <li><a href="#completeness-of-an-answer" id="toc-completeness-of-an-answer" class="nav-link" data-scroll-target="#completeness-of-an-answer">Completeness of an answer</a></li>
+  <li><a href="#why-these-concepts-matter-for-llm-based-data-analysis" id="toc-why-these-concepts-matter-for-llm-based-data-analysis" class="nav-link" data-scroll-target="#why-these-concepts-matter-for-llm-based-data-analysis">Why these concepts matter for LLM-based data analysis</a></li>
+  </ul></li>
+  <li><a href="#pipeline-architecture" id="toc-pipeline-architecture" class="nav-link" data-scroll-target="#pipeline-architecture">Pipeline Architecture</a>
+  <ul class="collapse">
+  <li><a href="#running-example-use-case" id="toc-running-example-use-case" class="nav-link" data-scroll-target="#running-example-use-case">Running Example (Use Case)</a></li>
+  </ul></li>
+  <li><a href="#hypothesis-generator" id="toc-hypothesis-generator" class="nav-link" data-scroll-target="#hypothesis-generator">Hypothesis Generator</a>
+  <ul class="collapse">
+  <li><a href="#concept" id="toc-concept" class="nav-link" data-scroll-target="#concept">Concept</a></li>
+  <li><a href="#example-prompts" id="toc-example-prompts" class="nav-link" data-scroll-target="#example-prompts">Example prompts</a></li>
+  </ul></li>
+  <li><a href="#query-agent" id="toc-query-agent" class="nav-link" data-scroll-target="#query-agent">Query Agent</a>
+  <ul class="collapse">
+  <li><a href="#concept-1" id="toc-concept-1" class="nav-link" data-scroll-target="#concept-1">Concept</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
+  </ul></li>
+  <li><a href="#summarizer" id="toc-summarizer" class="nav-link" data-scroll-target="#summarizer">Summarizer</a></li>
+  <li><a href="#verifier" id="toc-verifier" class="nav-link" data-scroll-target="#verifier">Verifier</a></li>
+  <li><a href="#reflection-project-transfer" id="toc-reflection-project-transfer" class="nav-link" data-scroll-target="#reflection-project-transfer">Reflection &amp; Project Transfer</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/data_analysis.html"><span class="chapter-title">LLM-based data analysis</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">LLM-based data analysis</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-motivation" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-motivation">Introduction &amp; Motivation</h2>
+<p>In this session we focus on <strong>LLM-based data analysis</strong>: using a Large Language Model as a core component in a data analysis pipeline.</p>
+<p>By now you have seen:</p>
+<ul>
+<li>basic LLM usage and prompting,</li>
+<li>chatbots and function calling,</li>
+<li>embedding-based retrieval and RAG,</li>
+<li>agent systems and LLM pipelines,</li>
+<li>LLM-as-a-judge style evaluation.</li>
+</ul>
+<p>Today we zoom in on the <strong>“data analysis”</strong> capability that your final project should support:</p>
+<blockquote class="blockquote">
+<p>A system that can <em>talk to a dataset</em> and decide which analysis steps to perform, then execute them and turn the results into human-readable insights.</p>
+</blockquote>
+<p>We will:</p>
+<ul>
+<li>clarify key concepts (hypotheses, questions, insights, claims),</li>
+<li>design and implement a simple <strong>LLM-driven data analysis pipeline</strong> with:
+<ul>
+<li>a <em>hypothesis generator</em>,</li>
+<li>a <em>query agent</em> (natural language → pandas),</li>
+<li>a <em>summarizer</em>,</li>
+<li>an optional <em>verifier</em> (LLM as judge),</li>
+</ul></li>
+<li>and connect this pipeline explicitly to your own project.</li>
+</ul>
+<p>Throughout, we use a <strong>running example</strong> from e-commerce analytics.</p>
+<!-- TODO: find such a dataset -->
+<!-- TODO: Demo: LLM erhält kleine Tabelle + Frage („Which countries generate the highest revenue?“) → generiert sowohl pandas-Code als auch verbale Antwort.
+
+Problematisierung: „Wie weit darf man dem trauen? Wo sind Risiken?“ (Stichworte: Halluzinationen, falscher Code, Sicherheitsrisiken). -->
+</section>
+<section id="key-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="key-concepts">Key Concepts</h2>
+<p>In LLM-based data analysis we need clear language to talk about what the system is doing. We will use the following terms (adapted from <span class="citation" data-cites="perezLLMBasedApproachInsight2025">(<a href="#ref-perezLLMBasedApproachInsight2025" role="doc-biblioref">Pérez et al., 2025</a>)</span> and <span class="citation" data-cites="baiInsightAgentsLLMBased2025">(<a href="#ref-baiInsightAgentsLLMBased2025" role="doc-biblioref">Bai et al., 2025</a>)</span>):</p>
+<section id="hypothesis" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis">Hypothesis</h3>
+<p>A <strong>hypothesis</strong> is a testable, domain-specific assumption about the data.</p>
+<ul>
+<li>It usually relates multiple variables and suggests a pattern.</li>
+<li>It should be <em>falsifiable</em> – there must be a way to check whether it is wrong.</li>
+</ul>
+<p><strong>Example (e-commerce):</strong></p>
+<blockquote class="blockquote">
+<p><em>“Mobile users have a higher return rate than desktop users.”</em></p>
+</blockquote>
+<p>This is a prediction about the relationship between <code>device_type</code> and <code>is_return</code>.</p>
+</section>
+<section id="question" class="level3">
+<h3 class="anchored" data-anchor-id="question">Question</h3>
+<p>A <strong>question</strong> is a concrete, answerable request about the dataset.</p>
+<ul>
+<li>It is closer to an actual query.</li>
+<li>It often mentions specific columns or aggregations.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<blockquote class="blockquote">
+<p><em>“What is the average return rate by device_type?”</em></p>
+</blockquote>
+<p>Questions are typically what the <strong>query agent</strong> will turn into pandas or SQL code.</p>
+<p><strong>Hypotheses vs.&nbsp;questions</strong></p>
+<ul>
+<li>Hypotheses are <strong>high-level, interpretive</strong>.</li>
+<li>Questions are <strong>low-level, operational</strong> steps that help test or explore hypotheses.</li>
+</ul>
+</section>
+<section id="insight" class="level3">
+<h3 class="anchored" data-anchor-id="insight">Insight</h3>
+<p>An <strong>insight</strong> is a <em>short textual finding</em> derived from the data.</p>
+<ul>
+<li>It should be concise (e.g.&nbsp;no more than 2–3 sentences).</li>
+<li>It often synthesizes multiple low-level questions / analyses.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<blockquote class="blockquote">
+<p><em>“Mobile users show a higher return rate (18%) than desktop users (12%), especially in the last quarter.<br>
+This suggests that mobile purchasing behaviour is more exploratory or less informed.”</em></p>
+</blockquote>
+<p>Insights are what you ultimately want to show to users or stakeholders.</p>
+</section>
+<section id="claim" class="level3">
+<h3 class="anchored" data-anchor-id="claim">Claim</h3>
+<p>An <strong>insight</strong> consists of one or more <strong>claims</strong>.</p>
+<p>A <strong>claim</strong> is an atomic factual statement that can be true or false.</p>
+<p>Example, from the insight above:</p>
+<ol type="1">
+<li><em>“Mobile users have an 18% return rate.”</em><br>
+</li>
+<li><em>“Desktop users have a 12% return rate.”</em><br>
+</li>
+<li><em>“The difference is more pronounced in the last quarter.”</em></li>
+</ol>
+<p>Each of these can, in principle, be checked against the data.</p>
+<p>Structuring insights as <em>lists of claims</em> is extremely helpful for evaluation and verification.</p>
+</section>
+<section id="correctness-of-an-insight" class="level3">
+<h3 class="anchored" data-anchor-id="correctness-of-an-insight">Correctness of an insight</h3>
+<p>Given that an insight is a set of claims, we can define its <strong>correctness</strong> as:</p>
+<ul>
+<li>the fraction of claims that are factually correct with respect to the data.</li>
+</ul>
+<p>If an insight has 4 claims and 3 are true, correctness = 3/4.</p>
+<p>In practice we often approximate this using:</p>
+<ul>
+<li>direct checks on numeric aggregates, and/or</li>
+<li>an LLM acting as a judge (given evidence).</li>
+</ul>
+</section>
+<section id="insightfulness-of-an-insight" class="level3">
+<h3 class="anchored" data-anchor-id="insightfulness-of-an-insight">Insightfulness of an insight</h3>
+<p><strong>Insightfulness</strong> is more subjective.</p>
+<p>Intuitively, an insight is more insightful if it is:</p>
+<ul>
+<li><em>relevant</em> to the user’s goals,</li>
+<li><em>novel</em> (not obvious),</li>
+<li><em>actionable</em> (it could change a decision),</li>
+<li>or provides a meaningful <em>explanation</em>.</li>
+</ul>
+<p>Insightfulness depends on:</p>
+<ul>
+<li>the <em>user</em> (a beginner vs.&nbsp;expert),</li>
+<li>the <em>domain</em>,</li>
+<li>and the <em>context</em> of use.</li>
+</ul>
+<!-- In research and practice, people often think of insightfulness as a combination of these underlying factors. -->
+<p>These metrics cannot be explicitly calculated given only the dataset as input and must be estimated by the user <span class="citation" data-cites="perezLLMBasedApproachInsight2025">(<a href="#ref-perezLLMBasedApproachInsight2025" role="doc-biblioref">Pérez et al., 2025</a>)</span>.</p>
+</section>
+<section id="completeness-of-an-answer" class="level3">
+<h3 class="anchored" data-anchor-id="completeness-of-an-answer">Completeness of an answer</h3>
+<p><strong>Completeness</strong> asks:</p>
+<blockquote class="blockquote">
+<p><em>“Does this answer cover the important aspects of the question?”</em></p>
+</blockquote>
+<p>For example, if the question is:</p>
+<blockquote class="blockquote">
+<p><em>“How do return rates differ by device type and country?”</em></p>
+</blockquote>
+<p>then an answer that only discusses device type but ignores country is incomplete.</p>
+<p>Completeness becomes especially important when:</p>
+<ul>
+<li>multiple sub-questions are combined,</li>
+<li>or when the system is supposed to give a <em>high-level summary</em>.</li>
+</ul>
+</section>
+<section id="why-these-concepts-matter-for-llm-based-data-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="why-these-concepts-matter-for-llm-based-data-analysis">Why these concepts matter for LLM-based data analysis</h3>
+<p>When you plug an LLM into a data analysis pipeline, it will happily produce text. Without structure, however, it is hard to tell:</p>
+<ul>
+<li>whether the text is <em>factually correct</em>,</li>
+<li>whether it is actually <em>insightful</em>,</li>
+<li>whether it is <em>complete</em> enough to support decisions.</li>
+</ul>
+<p>By explicitly using <strong>hypotheses, questions, insights, claims, correctness, insightfulness and completeness</strong>:</p>
+<ul>
+<li>you can design better pipelines,</li>
+<li>you can build simple metrics for quality,</li>
+<li>and you can integrate LLM-as-a-judge components more systematically.</li>
+</ul>
+<p>We will now see how these ideas shape a concrete pipeline architecture.</p>
+</section>
+</section>
+<section id="pipeline-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-architecture">Pipeline Architecture</h2>
+<p>We will use a 4-component architecture:</p>
+<ol type="1">
+<li><strong>Hypothesis generator</strong></li>
+<li><strong>Query agent</strong></li>
+<li><strong>Summarizer</strong></li>
+<li><strong>Optional verifier</strong></li>
+</ol>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A[Data desription] --&gt; B(Hypothesis Generator)
+    B --&gt; C[Low-level questions]
+    C --&gt; D(Query Agent)
+    D --&gt; E["`Intermediate answers
+    (tables, stats, text)`"]
+    E --&gt; F(Summarizer)
+    F --&gt; G[Insight]
+
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Data flow (intuitively):</p>
+<ul>
+<li>The hypothesis generator takes a high-level question or a description of the dataset and proposes high-level hypotheses and low-level questions.</li>
+<li>The query agent turns each low-level question into code (e.g.&nbsp;pandas), executes it safely and returns concise answers.</li>
+<li>The summarizer aggregates low-level answers into human-readable insights and explicit claims.</li>
+<li>The optional verifier (not shown) checks these claims for correctness and flags issues.</li>
+</ul>
+<!-- In your final project, some of these components might already exist (e.g. you may already have an agent with tools). Today we focus on the data analysis side. -->
+<section id="running-example-use-case" class="level3">
+<h3 class="anchored" data-anchor-id="running-example-use-case">Running Example (Use Case)</h3>
+<p>We use a realistic e-commerce analytics scenario as a running example.</p>
+<section id="dataset-description" class="level4">
+<h4 class="anchored" data-anchor-id="dataset-description">Dataset description</h4>
+<p>Imagine a transactional dataset of an online shop. Each row is a line item in an order.</p>
+<p>Example columns:</p>
+<ul>
+<li><code>order_id</code> – unique order identifier</li>
+<li><code>customer_id</code> – unique customer identifier</li>
+<li><code>order_date</code> – timestamp of the order</li>
+<li><code>country</code> – country of the customer</li>
+<li><code>device_type</code> – “mobile” or “desktop”</li>
+<li><code>channel</code> – “web”, “app”, “marketplace”, …</li>
+<li><code>product_category</code> – category of the item</li>
+<li><code>quantity</code> – number of units</li>
+<li><code>unit_price</code> – price per unit</li>
+<li><code>revenue</code> – computed revenue (quantity * unit_price)</li>
+<li><code>is_return</code> – boolean, whether the item was returned</li>
+<li><code>is_new_customer</code> – boolean, first-time customer or not</li>
+</ul>
+<p>We assume tens of thousands of rows.</p>
+</section>
+<section id="example-high-level-questions" class="level4">
+<h4 class="anchored" data-anchor-id="example-high-level-questions">Example high-level questions</h4>
+<ul>
+<li><em>“Which customer segments contribute most to total revenue?”</em></li>
+<li><em>“How do return rates differ by country and device type?”</em></li>
+<li><em>“Are new customers more likely to return items than returning customers?”</em></li>
+<li><em>“Did revenue patterns change over the last 6 months?”</em></li>
+</ul>
+</section>
+<section id="example-low-level-questions" class="level4">
+<h4 class="anchored" data-anchor-id="example-low-level-questions">Example low-level questions</h4>
+<p>For the high-level question:</p>
+<blockquote class="blockquote">
+<p><em>“Which customer segments contribute most to total revenue?”</em></p>
+</blockquote>
+<p>low-level questions might include:</p>
+<ul>
+<li>Q1: <em>“What is the total revenue per country?”</em></li>
+<li>Q2: <em>“What is the total revenue per device_type?”</em></li>
+<li>Q3: <em>“What is the average revenue per order for new vs.&nbsp;returning customers?”</em></li>
+<li>Q4: <em>“How many unique customers are active in each country?”</em></li>
+</ul>
+<p>For the hypothesis:</p>
+<blockquote class="blockquote">
+<p><em>“Mobile users have a higher return rate than desktop users.”</em></p>
+</blockquote>
+<p>we might ask:</p>
+<ul>
+<li>Q5: <em>“What is the overall return rate per device_type?”</em></li>
+<li>Q6: <em>“How has the return rate for mobile vs.&nbsp;desktop changed over time?”</em></li>
+</ul>
+<p>We will use this fictitious dataset and these types of questions in the code examples.</p>
+</section>
+</section>
+</section>
+<section id="hypothesis-generator" class="level2">
+<h2 class="anchored" data-anchor-id="hypothesis-generator">Hypothesis Generator</h2>
+<p>We introduced a hypothesis generator in the last session. Today, we will expand it to additionally break a hypothesis down into smaller questions. The hypothesis generator is responsible for:</p>
+<ul>
+<li>turning a high-level task or dataset description into
+<ul>
+<li>high-level, domain-relevant hypotheses and/or</li>
+<li>concrete low-level questions that the query agent can answer.</li>
+</ul></li>
+</ul>
+<section id="concept" class="level3">
+<h3 class="anchored" data-anchor-id="concept">Concept</h3>
+<p>Input:</p>
+<ul>
+<li>a short description of the dataset (columns, domain),</li>
+<li>optionally a high-level question or user goal.</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>a list of high-level hypotheses, and,</li>
+<li>for each hypothesis, a list of low-level questions.</li>
+</ul>
+<p>The design of prompts is important:</p>
+<ul>
+<li>If you keep the dataset description too detailed, the model might stay “shallow”.</li>
+<li>If you keep it too vague, questions may not be answerable from the data.</li>
+</ul>
+</section>
+<section id="example-prompts" class="level3">
+<h3 class="anchored" data-anchor-id="example-prompts">Example prompts</h3>
+<div id="high-level" class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>High-level hypothesis prompt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre><code>You are a data analyst for an e-commerce company.
+
+You receive the following dataset schema:
+
+- order_id (string): unique order identifier
+- customer_id (string): customer identifier
+- order_date (datetime): order timestamp
+- country (string): customer country
+- device_type (string): mobile or desktop
+- channel (string): web, app or marketplace
+- product_category (string)
+- quantity (int)
+- unit_price (float)
+- revenue (float): quantity * unit_price
+- is_return (bool)
+- is_new_customer (bool)
+
+Task:
+Suggest 3 high-level hypotheses that could be interesting for marketing and operations.
+
+Each hypothesis should:
+- be testable from the dataset,
+- relate at least two variables,
+- be phrased as a clear, falsifiable statement.</code></pre>
+</div>
+</div>
+</div>
+<div id="low-level" class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Low-level questions prompt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre><code>You are a data analyst.
+
+Given the following high-level hypothesis:
+
+"Mobile users have a higher return rate than desktop users."
+
+and the dataset schema:
+
+{dataset schema}
+
+Generate 3–5 concrete, low-level questions that can be answered with pandas code on this dataset.
+
+Each question should:
+- mention the relevant columns,
+- be answerable with groupby/aggregation operations,
+- help test or explore the hypothesis.
+
+Return the questions as a numbered list.</code></pre>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Build a Hypothesis Generator. You already build the high-level generator last time. Expand it to include the low-level breakdown.</p>
+<ol type="1">
+<li>Find an interesting dataset (e.g.&nbsp;fom <a href="https://data.worldbank.org/">the world bank</a>) and load it. You can, of course, also use the fictitious e-commerce dataset from the example, but it is more fun with real data. <!-- TODO: get the data set --></li>
+<li>Implement a function generate_low_level_questions similar to the example above.</li>
+<li>Test it with at least two different high-level questions, for example:
+<ul>
+<li>“Which customer segments drive the most revenue?”</li>
+<li>“Do new customers behave differently from returning customers?”</li>
+</ul></li>
+<li>Inspect the generated questions:
+<ul>
+<li>Are they answerable with the available columns?</li>
+<li>Do they match the high-level question?</li>
+</ul></li>
+</ol>
+<p><strong>Goal</strong>: Practice the distinction between high-level and low-level questions and build a first pipeline component.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="query-agent" class="level2">
+<h2 class="anchored" data-anchor-id="query-agent">Query Agent</h2>
+<p>The query agent is responsible for:</p>
+<ul>
+<li>turning low-level natural language questions into pandas code,</li>
+<li>executing this code safely,</li>
+<li>returning short, interpretable answers.</li>
+</ul>
+<section id="concept-1" class="level3">
+<h3 class="anchored" data-anchor-id="concept-1">Concept</h3>
+<p>For each low-level question:</p>
+<ol type="1">
+<li>Generate pandas code using an LLM.</li>
+<li>Execute the code in a restricted environment.</li>
+<li>Extract a small, human-readable answer (e.g.&nbsp;<code>result.head()</code>).</li>
+</ol>
+<section id="step-1-natural-language-pandas-code" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-natural-language-pandas-code">Step 1: Natural language → pandas code</h4>
+<p>Typical pattern:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>User question:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">"What is the return rate per device_type?"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>Expected code:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    df.groupby(<span class="st">"device_type"</span>)[<span class="st">"is_return"</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      .mean()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      .sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We want the LLM to:</p>
+<ul>
+<li>use the correct column names,</li>
+<li>use simple, safe <code>pandas</code> operations,</li>
+<li>assign the final result to a variable <code>result</code>.</li>
+</ul>
+</section>
+<section id="step-2-safe-execution" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-safe-execution">Step 2: Safe execution</h4>
+<p>The dangerous version would be:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(generated_code)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This allows arbitrary code execution. We need safeguards:</p>
+<ul>
+<li>Restrict the globals and locals dictionaries passed to <code>exec</code>.</li>
+<li>Forbid imports and access to sensitive modules like <code>os</code>, <code>sys</code>, <code>subprocess</code>.</li>
+<li>Optionally inspect the generated code before execution.</li>
+</ul>
+<p>Minimal example idea:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>SAFE_GLOBALS <span class="op">=</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"__builtins__"</span>: {},  <span class="co"># or a small subset</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pd"</span>: pd,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>SAFE_LOCALS <span class="op">=</span> {</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"df"</span>: df,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(code, SAFE_GLOBALS, SAFE_LOCALS)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> SAFE_LOCALS[<span class="st">"result"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This is still not bullet-proof, but much safer than unconstrained <code>exec</code>.</p>
+</section>
+<section id="alternative-safeguards" class="level4">
+<h4 class="anchored" data-anchor-id="alternative-safeguards">Alternative safeguards</h4>
+<ul>
+<li>Whitelist allowed functions and methods (e.g.&nbsp;<code>df.groupby</code>, <code>mean</code>, <code>sum</code>, <code>count</code>, <code>value_counts</code>).</li>
+<li>Blacklist certain patterns (<code>import</code>, <code>__</code>, <code>open(</code>, <code>os.</code>).</li>
+<li>Let an LLM-as-a-judge check whether the code is safe before execution.</li>
+<li>Use sandboxing (separate process / container (docker env)) with resource limits.</li>
+</ul>
+<p>Each approach trades off safety, flexibility and implementation complexity. The safest option, of course, is to ask an expert. (On the other hand, the expert will almost certainly just say <strong>“NO”</strong>.)</p>
+</section>
+</section>
+<section id="example" class="level3">
+<h3 class="anchored" data-anchor-id="example">Example</h3>
+<div id="safe-exec" class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Safer execution example
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Disclaimer: This is an example for safe-ish code execution generated by ChatGPT for educational purposes. It is by no means <strong>SAFE</strong>. Please use at own risk.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FORBIDDEN_PATTERNS <span class="op">=</span> [</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"</span><span class="dv">\b</span><span class="vs">import</span><span class="dv">\b</span><span class="vs">"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"</span><span class="dv">\b</span><span class="vs">open</span><span class="kw">(</span><span class="vs">"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"__"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"os</span><span class="dv">.</span><span class="vs">"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"sys</span><span class="dv">.</span><span class="vs">"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_code_safe(code: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Very simple static checks for obviously dangerous patterns."""</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pat <span class="kw">in</span> FORBIDDEN_PATTERNS:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> re.search(pat, code):</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> safe_execute(code: <span class="bu">str</span>, df: pd.DataFrame) <span class="op">-&gt;</span> Any:</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Execute pandas code in a restricted namespace and return `result`."""</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> is_code_safe(code):</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Generated code failed safety checks."</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    safe_globals <span class="op">=</span> {</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"__builtins__"</span>: {},  <span class="co"># optionally allow a small subset of builtins</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pd"</span>: pd,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    safe_locals <span class="op">=</span> {<span class="st">"df"</span>: df}</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exec</span>(code, safe_globals, safe_locals)  <span class="co"># noqa: S102 (we know this is a teaching example)</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">"result"</span> <span class="kw">not</span> <span class="kw">in</span> safe_locals:</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"No variable named `result` found after code execution."</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> safe_locals[<span class="st">"result"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task: Query Agent Prototype
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Load your dataset into a DataFrame <code>df</code>. Here, you will want an actual dataset.</li>
+<li>Implement functions:
+<ul>
+<li><code>generate_pandas_code(question, columns)</code></li>
+<li><code>safe_execute(code, df)</code></li>
+<li><code>run_query_agent(question, df)</code></li>
+</ul></li>
+<li>Test your query agent on at least three questions, for example:
+<ul>
+<li>“What is the total revenue per country?”</li>
+<li>“What is the return rate per device_type?”</li>
+<li>“What is the average order revenue for new vs.&nbsp;returning customers?”</li>
+</ul></li>
+<li>Inspect:
+<ul>
+<li>Does the generated code execute without errors?</li>
+<li>Are the results correct and interpretable?</li>
+<li>Did your safety checks catch any problematic code?</li>
+</ul></li>
+</ol>
+<p><strong>Goal:</strong> See how LLM-driven code generation and controlled execution can work together.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="summarizer" class="level2">
+<h2 class="anchored" data-anchor-id="summarizer">Summarizer</h2>
+<p>The summarizer turns multiple low-level answers into:</p>
+<ul>
+<li>more coherent, high-level insights and</li>
+<li>explicitly structured claims.</li>
+</ul>
+<p>Input:</p>
+<ul>
+<li>a set of (low-level question, answer) pairs.</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>1–3 short insight texts,</li>
+<li>for each insight, a list of claims.</li>
+</ul>
+<p><strong>Why structure matters</strong></p>
+<p>Without structure:</p>
+<ul>
+<li>it is hard to evaluate correctness and completeness,</li>
+<li>we cannot easily let another component (verifier) check each statement.</li>
+</ul>
+<p>With explicit claims:</p>
+<ul>
+<li>we can later run a verification step claim-by-claim,</li>
+<li>we can trace each claim back to the questions and data that support it.</li>
+</ul>
+<div id="summarizer" class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Summarizer prompt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>System message:</p>
+<pre><code>You are a data analyst. You write short, high-quality data insights and extract atomic claims.</code></pre>
+<p>User message:</p>
+<pre><code>You are given answers to several low-level data questions:
+
+{formatted_answers}
+
+Task:
+
+1. Write 1–2 short insights (max 3 sentences each) that synthesize these answers.
+2. For each insight, extract 2–4 atomic factual claims.
+3. For each claim, reference the question IDs it is based on.
+
+Return the result as JSON with the following structure:
+
+{{
+    "insights": [
+        {{
+            "text": "...",
+            "claims": [
+                {{
+                    "text": "...",
+                    "source_questions": ["Q1", "Q3"]
+                }}
+            ]
+        }}
+    ]
+}}</code></pre>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task: From Low-Level Answers to Insights
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Use your query agent (or hand-written pandas code) to generate answers to at least 2–3 low-level questions.</li>
+<li>Build a dictionary <code>answers = {"Q1": "...", "Q2": "...", ...}</code>.</li>
+<li>Implement <code>summarize_insights(answers)</code>.</li>
+<li>Inspect the output:
+<ul>
+<li>Are the insights short and understandable?</li>
+<li>Are the claims atomic and clearly grounded in the answers?</li>
+</ul></li>
+<li>(Optional) Manually label each claim as correct/incorrect/uncertain based on the data.</li>
+</ol>
+<p><strong>Goal:</strong> Practice turning fragmented analysis results into structured insights and claims.</p>
+</div>
+</div>
+</section>
+<section id="verifier" class="level2">
+<h2 class="anchored" data-anchor-id="verifier">Verifier</h2>
+<p>Even with structured claims, we often lack a clear ground truth. We can still ask an LLM to act as a verifier or judge.</p>
+<p><strong>Concept</strong></p>
+<p>The verifier receives:</p>
+<ul>
+<li>the list of claims,</li>
+<li>the low-level answers or relevant tables/statistics as evidence.</li>
+</ul>
+<p>It outputs, for each claim:</p>
+<ul>
+<li>a label: “correct”, “incorrect”, or “uncertain”,</li>
+<li>a short explanation.</li>
+</ul>
+<p>This is a form of LLM-as-a-judge applied to data analysis.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 (optional Task) – Designing a Simple Verifier
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Take 3–4 claims generated by your summarizer.</li>
+<li>Collect the corresponding low-level answers as evidence.</li>
+<li>Design a prompt (or implement a function) similar to verify_claims above.</li>
+<li>Run the verifier and inspect the labels and explanations.</li>
+<li>Reflect:
+<ul>
+<li>Does the verifier correctly identify clearly true/false claims?</li>
+<li>When does it answer uncertain?</li>
+<li>Where could this be integrated into your project (e.g.&nbsp;as a filter, a warning, or part of an evaluation pipeline)?</li>
+</ul></li>
+</ol>
+<p>Goal: Explore the idea of using an LLM as a judge for data analysis results.</p>
+</div>
+</div>
+</section>
+<section id="reflection-project-transfer" class="level2">
+<h2 class="anchored" data-anchor-id="reflection-project-transfer">Reflection &amp; Project Transfer</h2>
+<p>In your final projects you can integrate a non-trivial data analysis as a core component. The pipeline in this session is one candidate building block.</p>
+<p>Use the following questions to reflect and sketch how LLM-based data analysis can fit your project.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>🧠 Reflection – Applying This to Your Project
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In your project teams:</p>
+<ol type="1">
+<li>Data &amp; scope
+<ul>
+<li>Which tables or datasets in your project are suitable for LLM-based hypothesis generation and exploration?</li>
+<li>Are they clean and structured enough, or do you need a preprocessing step first?</li>
+</ul></li>
+<li>Role of the LLM
+<ul>
+<li>Which parts of the analysis do you want the LLM to handle (hypotheses, questions, code generation, interpretation)?</li>
+<li>Which parts should remain classical, hand-written data analysis code?</li>
+</ul></li>
+<li>Error impact &amp; responsibility
+<ul>
+<li>What happens if your query agent generates wrong code or your summarizer produces incorrect insights?</li>
+<li>How critical would these mistakes be for your intended users?</li>
+</ul></li>
+<li>Interpretability &amp; transparency
+<ul>
+<li>How will you expose underlying questions, code and data to users so they can understand where an insight comes from?</li>
+<li>Will you show claims, confidence scores, or links to data?</li>
+</ul></li>
+<li>Safeguards
+<ul>
+<li>Which safeguards will you implement (whitelists, sandboxing, LLM-based verification, human review loops)?</li>
+<li>At which points in the pipeline (code generation, execution, summarization) are safeguards most important?</li>
+</ul></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this session you:</p>
+<ul>
+<li>learned a vocabulary for LLM-based data analysis:
+<ul>
+<li>hypotheses, questions, insights, claims,</li>
+<li>correctness, insightfulness, completeness,</li>
+</ul></li>
+<li>designed and implemented a simple pipeline:
+<ul>
+<li>Hypothesis generator → Query agent → Summarizer → (Verifier),</li>
+</ul></li>
+<li>explored safeguards for executing LLM-generated code, and</li>
+<li>reflected on how to integrate such pipelines into your final project.</li>
+</ul>
+<p>In your project work, you can now:</p>
+<ul>
+<li>embed a “talk to your dataset” feature,</li>
+<li>evaluate it using LLM-as-a-judge components,</li>
+<li>and reason more systematically about the quality and safety of LLM-based data analysis.</li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-baiInsightAgentsLLMBased2025" class="csl-entry" role="listitem">
+Bai, J., Zhang, Z., Zhang, J., &amp; Zhu, J. (2025). Insight <span>Agents</span>: <span>An LLM-Based Multi-Agent System</span> for <span>Data Insights</span>. <em>Proceedings of the 48th <span>International ACM SIGIR Conference</span> on <span>Research</span> and <span>Development</span> in <span>Information Retrieval</span></em>, 4335–4339. <a href="https://doi.org/10.1145/3726302.3731959">https://doi.org/10.1145/3726302.3731959</a>
+</div>
+<div id="ref-perezLLMBasedApproachInsight2025" class="csl-entry" role="listitem">
+Pérez, A. S., Boukhary, A., Papotti, P., Lozano, L. C., &amp; Elwood, A. (2025). <em>An <span>LLM-Based Approach</span> for <span>Insight Generation</span> in <span>Data Analysis</span></em> (arXiv:2503.11664). arXiv. <a href="https://doi.org/10.48550/arXiv.2503.11664">https://doi.org/10.48550/arXiv.2503.11664</a>
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script>
+var elements = document.getElementsByClassName('card');
+
+var myFunction = function() {
+  var overlay = this.querySelector('.overlay');
+  var content = this.querySelector('.content');
+  content.classList.toggle('blur-effect');
+  if (overlay) {
+    overlay.classList.toggle('show-overlay')
+  }
+}
+
+for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener('click', myFunction, false);
+    myFunction.call(elements[i]);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const images = document.querySelectorAll('.gif-image');
+  
+  images.forEach(function(image) {
+    image.addEventListener('click', function() {
+        console.log(this.src)
+        console.log(this.src.slice(0,-4))
+        if(this.src.substr(-4) == '.gif') {
+          this.src = this.src.slice(0,-4) + '.png'
+        } else {
+          this.src = this.src.slice(0,-4) + '.gif'
+        }
+      });
+  });
+});
+
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../content/agent_interaction.html" class="pagination-link" aria-label="LLM pipelines">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">LLM pipelines</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../content/gans_and_augmentation.html" class="pagination-link" aria-label="Traditional AI image generation">
+        <span class="nav-page-text"><span class="chapter-title">Traditional AI image generation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p><a rel="license" href=" https://creativecommons.org/licenses/by-nc-sa/4.0/" style="padding-right: 10px;"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a></p>
+</div>   
+    <div class="nav-footer-center">
+<p>All images are generated using Python, R, draw.io, Flux or Stable Diffusion XL if not indicated otherwise.</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
