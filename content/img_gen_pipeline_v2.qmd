@@ -1,0 +1,58 @@
+---
+toc-title: '![](../imgs/img_gen_pipeline.png){width=240px}<br> <h3>AI image generation pipelines</h3>'
+---
+
+# AI image generation pipelines
+
+<!-- 
+## motivation
+
+- überleitung vom letzten mal
+- verknüpfung mit projekt
+- we need to run it in a pipeline
+
+ -->
+
+
+## Basics of using Open Source AI image generation models
+
+
+
+<!-- 
+motivation: use it easily and comfortably on local device comparable to ollama, lmstudio for LLMs. Tools for this include
+
+- automatic1111's open web ui (not maintained anymore)
+- comfy ui (sehr mächtig, low code)
+- huggingface, see last session
+
+task: 
+
+- try one or more of these tools
+- try generation parameters (maybe with more input from lecturer? mention them before in main text. or make this a second task. )
+- try loading another img gen model
+
+We want API mode, explain API mode, basically call from python
+
+task: if using some ui (not on hugging face) try api mode
+
+
+ -->
+
+## AI image generators in agent systems or pipelines
+
+<!-- 
+thoughts: first full pipeline and then motivate singe steps? or step by step motivation?
+
+motivation: the project, include image gen in a agent system or pipeline. we want to generate illustrations for our text. so pipeline needs to work on generic text input, not specialized image prompts. pipeline:
+
+- generic text block, e.g. generated, the text from text gen pipeline or other
+- image prompt generation
+- image generation
+- quality assurance
+
+how would we do it?
+
+- example: just use some text and try to generate an image (either only gedankenexperiment, but better to try this, i.e. the corgi wikipedia header text)
+- example: generate an image prompt first. is it better? should be (can only handle short descriptions based on its training, also text is not normally good image prompt)
+
+ -->
