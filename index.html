@@ -8,7 +8,7 @@
 
 <meta name="author" content="Max Brede">
 <meta name="author" content="Alwin Klick">
-<meta name="dcterms.date" content="2025-12-01">
+<meta name="dcterms.date" content="2025-12-09">
 
 <title>Generative AI</title>
 <style>
@@ -278,7 +278,7 @@ Introduction<br>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 1, 2025</p>
+      <p class="date">December 9, 2025</p>
     </div>
   </div>
   
@@ -563,6 +563,19 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   });
 });
+
+
+document.querySelectorAll('.enlarge-onhover').forEach(el => {
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    el.classList.toggle('active');
+  });
+});
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.enlarge-onhover.active').forEach(el => el.classList.remove('active'));
+});
+
 
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
