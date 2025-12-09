@@ -31,4 +31,17 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+
+document.querySelectorAll('.enlarge-onhover').forEach(el => {
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    el.classList.toggle('active');
+  });
+});
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.enlarge-onhover.active').forEach(el => el.classList.remove('active'));
+});
+
+
 </script>
