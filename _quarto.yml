@@ -32,17 +32,18 @@ book:
         - content/getting_started_with_llms.qmd
         - content/prompting.qmd
         - content/function_calling.qmd
-        - content/agent_basics.qmd
         - content/embeddings.qmd
+        - content/agent_basics.qmd
         - content/agent_interaction.qmd
+        - content/data_analysis.qmd
     - part: "Image Generation"
       chapters:
         - content/gans_and_augmentation.qmd
         - content/diff_models.qmd
         - content/generation_in_agent_pipelines.qmd
-    - part: "Other" # will do it like this for now to keep the script in chronological order. it naturally belongs to language models part
-      chapters:
-        - content/model_context_protocol.qmd
+    # - part: "Other" # will do it like this for now to keep the script in chronological order. it naturally belongs to language models part
+    #   chapters:
+    #     - content/model_context_protocol.qmd
     - part: "Finetuning"
       chapters: 
         - content/finetuning_approaches.qmd
@@ -91,6 +92,16 @@ format:
   #     text: |
   #       \printindex
 
-
+mermaid:
+  theme: neutral
+  # themeVariables:
+  #   primaryColor: '#ffffff'
+  #   primaryTextColor: '#000000'
+  #   primaryBorderColor: '#000000'
+  #   lineColor: '#000000'
+  #   background: '#ffffff'
+  #   mainBkg: '#ffffff'
+  #   nodeBorder: '#000000'
+  #   edgeLabelBackground: '#ffffff'
 
 
