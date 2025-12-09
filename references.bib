@@ -136,6 +136,23 @@
   archiveprefix = {arXiv}
 }
 
+@inproceedings{baiInsightAgentsLLMBased2025,
+  title = {Insight {{Agents}}: {{An LLM-Based Multi-Agent System}} for {{Data Insights}}},
+  shorttitle = {Insight {{Agents}}},
+  booktitle = {Proceedings of the 48th {{International ACM SIGIR Conference}} on {{Research}} and {{Development}} in {{Information Retrieval}}},
+  author = {Bai, Jincheng and Zhang, Zhenyu and Zhang, Jennifer and Zhu, Jason},
+  year = 2025,
+  month = jul,
+  pages = {4335--4339},
+  publisher = {ACM},
+  address = {Padua Italy},
+  doi = {10.1145/3726302.3731959},
+  urldate = {2025-11-30},
+  abstract = {Today, E-commerce sellers face several key challenges, including difficulties in discovering and effectively utilizing available programs and tools, and struggling to understand and utilize rich data from various tools. We therefore aim to develop Insight Agents (IA), a conversational multi-agent Data Insight system, to provide E-commerce sellers with personalized data and business insights through automated information retrieval. Our hypothesis is that IA will serve as a force multiplier for sellers, thereby driving incremental seller adoption by reducing the effort required and increase speed at which sellers make good business decisions. In this paper, we introduce this new LLM-backed end-to-end agentic workflow designed for comprehensive coverage, high accuracy, and low latency. It features a hierarchical multi-agent structure, consisting of manager agent and two worker agents: data presentation and insight generation, for efficient information retrieval and problem-solving. We design a simple yet effective ML solution for manager agent that combines Out-of-Domain (OOD) detection using a lightweight encoder-decoder model and agent routing through a BERT-based classifier, optimizing both accuracy and latency. Within the two worker agents, a strategic planning is designed for API-based data model that breaks down queries into granular components to generate more accurate responses, and domain knowledge is dynamically injected to to enhance the insight generator. IA has been launched for Amazon sellers in US, which has achieved high accuracy of 89.5\% based on human evaluation, with latency of P90 below 15s.},
+  isbn = {979-8-4007-1592-1},
+  langid = {english}
+}
+
 @inproceedings{baoAllAreWorth2022,
   title = {All Are Worth Words: A Vit Backbone for Score-Based Diffusion Models},
   shorttitle = {All Are Worth Words},
@@ -1215,6 +1232,23 @@
   pages = {27730--27744},
   urldate = {2024-12-15},
   langid = {english}
+}
+
+@misc{perezLLMBasedApproachInsight2025,
+  title = {An {{LLM-Based Approach}} for {{Insight Generation}} in {{Data Analysis}}},
+  author = {P{\'e}rez, Alberto S{\'a}nchez and Boukhary, Alaa and Papotti, Paolo and Lozano, Luis Castej{\'o}n and Elwood, Adam},
+  year = 2025,
+  month = feb,
+  number = {arXiv:2503.11664},
+  eprint = {2503.11664},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2503.11664},
+  urldate = {2025-11-30},
+  abstract = {Generating insightful and actionable information from databases is critical in data analysis. This paper introduces a novel approach using Large Language Models (LLMs) to automatically generate textual insights. Given a multi-table database as input, our method leverages LLMs to produce concise, text-based insights that reflect interesting patterns in the tables. Our framework includes a Hypothesis Generator to formulate domain-relevant questions, a Query Agent to answer such questions by generating SQL queries against a database, and a Summarization module to verbalize the insights. The insights are evaluated for both correctness and subjective insightfulness using a hybrid model of human judgment and automated metrics. Experimental results on public and enterprise databases demonstrate that our approach generates more insightful insights than other approaches while maintaining correctness.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Databases}
 }
 
 @misc{petersDeepContextualizedWord2018,
