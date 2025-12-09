@@ -183,16 +183,20 @@ slides > slide {
 }
 
 .enlarge-onhover {
+  display: block;
   width: 100%;
-  transition: width .2s ease, box-shadow .2s ease;
+  max-width: none;     /* override .img-fluid max-width:100% */
+  height: auto;
+  transition: transform .2s ease, width .2s ease, box-shadow .2s ease;
 }
 
 .enlarge-onhover.active {
-  width: 75vw;
+  transform: scale(1.4);
   position: relative;
   z-index: 2;
   background-color: #FCFCFC;
   box-shadow: 0px -1px 4px rgba(200,200,200,0.6);
+  width: auto; max-width: none;
 }
 
 
