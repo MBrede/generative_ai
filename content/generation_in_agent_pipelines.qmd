@@ -174,8 +174,10 @@ motivation: images are not always great!
 ways of doing it:
 
 - embedding based (semantic fit)
-- photo quality rating, look online for open source tools
-- other (factually correct?, most colorful, ... )
+- photo quality rating, see OpenCV, image quality assessment, BRISQUE (https://learnopencv.com/image-quality-assessment-brisque/)
+- https://github.com/chaofengc/IQA-PyTorch
+- other (factually correct?, most colorful, suitably grimdark, what makes sense for your project ),  look online for open source tools 
+- AI based, see e.g. this project https://github.com/prasadabhishek/photo-quality-analyzer
 - a combination of the above
 
  -->
