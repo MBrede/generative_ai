@@ -66,31 +66,31 @@ Students engaging with this module will:
 
 | Number: | Date: | Title: | Topics: |
 |---:|---:|---|---|
-|1| 10.11.  | Getting started with (L)LMs| Language Model Basics  |
+|1| 12.5.  | Getting started with (L)LMs| Language Model Basics  |
 ||         || Choosing open source models |
 ||         || Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
-|2|  12.11. | Prompting| Prompting strategies  |
+|2|  13.5. | Prompting| Prompting strategies  |
 ||         || Generation of synthetic texts  |
-|3| 17.11.  | Function Calling| Code generation and function calling  |
+|3| 19.5.  | Function Calling| Code generation and function calling  |
 ||         ||MCP| Model Context Protocol  |
-|4|  19.11. | Embedding-based retrieval systems| Semantic embeddings and vector stores |
+|4|  20.5. | Embedding-based retrieval systems| Semantic embeddings and vector stores |
 ||         || Retrieval augmented and interleaved generation  |
-|5|  24.11. | Agent basics| Fundamentals of agents |
+|5|  26.5. | Agent basics| Fundamentals of agents |
 ||         || Examples of agent-frameworks (Llamaindex, LangChain & smolagents)|
-|6|  26.11. | LLM-pipelines |  |
-|7| 1.12.  | LLM-based automated Data Analysis | | 
-|8| 3.12.  |AI image generation I|  AI image generator basics |
+|6|  27.5 | LLM-pipelines |  |
+|7| 2.6.  | LLM-based automated Data Analysis | |
+|8| 3.6.  |AI image generation I|  AI image generator basics |
 ||         || Diffusion Models and Variational Autoencoders |
 ||         || Multimodal models |
-|9|  8.12. |AI image generation II| Using Open Source AI image generation models |
+|9|  9.6. |AI image generation II| Using Open Source AI image generation models |
 ||         || AI image generators in agent systems | 
-|10| 10.12.  |Finetuning Basics| Basics of Finetuning strategies  |
+|10| 10.6.  |Finetuning Basics| Basics of Finetuning strategies  |
 ||         |Rank adaptation| Fundamentals of High and Low-Rank Adaptation of Language and Diffusion Models  |
 ||         || (Q)LoRA fine-tuning using Unsloth |
-|11|  15.12. |Alignment | Central principles of Model-Alignment |
+|11|  16.6. |Alignment | Central principles of Model-Alignment |
 ||         || Reinforcement Learning from Human Feedback (RLHF) |
-|12| 17.12. |Project presentations||
-|  | 16.01. | Project submission on moodle ||
+|12| 17.6. |Project presentations||
+|  | 16.07. | Project submission on moodle ||
 
 
 ---
