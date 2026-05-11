@@ -206,5 +206,6 @@ slides > slide {
 
 .ai-inject {
   line-height: 0;
-  color: transparent;
+  color: transparent;  
+  font-size: 0;
 }
