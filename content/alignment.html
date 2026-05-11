@@ -179,7 +179,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/function_calling.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Towards Agents: chatbots and function calling</span></a>
+  <a href="../content/function_calling.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chatbots and Function Calling</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -189,17 +189,17 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agents and Pipelines</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent Basics</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM pipelines</span></a>
+  <a href="../content/llm_pipelines.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM pipelines</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/data_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM-based data analysis</span></a>
+  <a href="../content/data_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM-based Data Analysis</span></a>
   </div>
 </li>
       </ul>
@@ -632,7 +632,7 @@ Fig&nbsp;14.5: Overview of challenges posed by RLHF. Taken from <span class="cit
 <p>Another interesting method is to let one or multiple agents debate about the correct action. This can be done by having a single agent that generates multiple arguments for and against each action and then selects the best one, or by having multiple agents that each generate an argument. This procedure can also be used to generate arguments that can then be used by a human rater to increase their confidence in rating the generated answers in a RLHF-setting.</p>
 <p><span class="citation" data-cites="duImprovingFactualityReasoning2023">Du et al. (<a href="#ref-duImprovingFactualityReasoning2023" role="doc-biblioref">2023</a>)</span> used a multi-agent approach to improve a LLMs mathematical and strategic reasoning. Their approach is composed of the following steps:</p>
 <ol type="1">
-<li>Multiple agents (not in the sense defined in our agent-chapter <a href="agent_basics.html" class="quarto-xref"><span>Agents and Pipelines</span></a>, but in the sense of multiple LLM-calls) generate initial answers to a question.</li>
+<li>Multiple agents (not in the sense defined in our agent-chapter <a href="agent_basics.html" class="quarto-xref"><span>Agent Basics</span></a>, but in the sense of multiple LLM-calls) generate initial answers to a question.</li>
 <li>All responses are concatenated and presented as context to each agent, combined with the instruction to construct a new response based on those presented which could look like this: &gt; “These are the solutions to the problem from other agents: [other answers] Based off the opinion of other agents, can you give an updated response . . .” <span class="citation" data-cites="duImprovingFactualityReasoning2023">(<a href="#ref-duImprovingFactualityReasoning2023" role="doc-biblioref">Du et al., 2023, p. 4</a>)</span></li>
 <li>An iterative repetition of step 2 for multiple rounds</li>
 </ol>

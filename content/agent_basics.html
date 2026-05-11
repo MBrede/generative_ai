@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Agents and Pipelines – Generative AI</title>
+<title>Agent Basics – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -50,7 +50,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/agent_interaction.html" rel="next">
+<link href="../content/llm_pipelines.html" rel="next">
 <link href="../content/embeddings.html" rel="prev">
 <link href="../cover.jpg" rel="icon" type="image/jpeg">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -105,7 +105,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agents and Pipelines</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agent Basics</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -180,7 +180,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/function_calling.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Towards Agents: chatbots and function calling</span></a>
+  <a href="../content/function_calling.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Chatbots and Function Calling</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -190,17 +190,17 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agents and Pipelines</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agent Basics</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_interaction.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM pipelines</span></a>
+  <a href="../content/llm_pipelines.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM pipelines</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/data_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM-based data analysis</span></a>
+  <a href="../content/data_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LLM-based Data Analysis</span></a>
   </div>
 </li>
       </ul>
@@ -261,7 +261,7 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title"><img src="../imgs/robotic_agent.png" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
-Agents and Pipelines<br>
+Agent Basics<br>
 </h3>
    
   <ul>
@@ -293,9 +293,9 @@ Agents and Pipelines<br>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agents and Pipelines</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agent Basics</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-agents" class="quarto-section-identifier"><span class="chapter-title">Agents and Pipelines</span></span></h1>
+<h1 class="title"><span id="sec-agents" class="quarto-section-identifier"><span class="chapter-title">Agent Basics</span></span></h1>
 </div>
 
 
@@ -323,7 +323,7 @@ Agents and Pipelines<br>
 <li>explore a concrete EDA agent as a running example, and</li>
 <li>get a first feel for when a simple pipeline is preferable to a full agentic setup.</li>
 </ul>
-<p>This prepares the ground for session <a href="agent_interaction.html" class="quarto-xref"><span>LLM pipelines</span></a>, where we will add an evaluation layer using LLM as a judge and build evaluation pipelines for our systems.</p>
+<p>This prepares the ground for session <a href="llm_pipelines.html" class="quarto-xref"><span>LLM pipelines</span></a>, where we will add an evaluation layer using LLM as a judge and build evaluation pipelines for our systems.</p>
 </section>
 <section id="what-is-an-agent" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-an-agent">What is an agent?</h2>
@@ -1050,7 +1050,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/agent_interaction.html" class="pagination-link" aria-label="LLM pipelines">
+      <a href="../content/llm_pipelines.html" class="pagination-link" aria-label="LLM pipelines">
         <span class="nav-page-text"><span class="chapter-title">LLM pipelines</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
