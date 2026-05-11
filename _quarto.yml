@@ -34,7 +34,7 @@ book:
         - content/function_calling.qmd
         - content/embeddings.qmd
         - content/agent_basics.qmd
-        - content/agent_interaction.qmd
+        - content/llm_pipelines.qmd
         - content/data_analysis.qmd
     - part: "Image Generation"
       chapters:

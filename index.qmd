@@ -86,14 +86,16 @@ Students
 ||         || Basics of using open source models (Huggingface, Ollama, LLM-Studio, Llama.cpp, ...)  |
 |2|  13.5. | Prompting| Prompting strategies  |
 ||         || Generation of synthetic texts  |
-|3| 19.5.  | Function Calling| Code generation and function calling  |
+|3| 19.5.  | Chatbots and Function Calling| Code generation and function calling  |
 ||         ||MCP| Model Context Protocol  |
 |4|  20.5. | Embedding-based retrieval systems| Semantic embeddings and vector stores |
 ||         || Retrieval augmented and interleaved generation  |
 |5|  26.5. | Agent basics| Fundamentals of agents |
 ||         || Examples of agent-frameworks (Llamaindex, LangChain & smolagents)|
-|6|  27.5 | LLM-pipelines |  |
-|7| 2.6.  | LLM-based automated Data Analysis | |
+|6|  27.5 | LLM-pipelines | Multi-agent pipelines |
+||        ||Agent orchestration|
+|7| 2.6.  | LLM-based Data Analysis | Key concepts|
+|||| Pipeline architecture |
 |8| 3.6.  |AI image generation I|  AI image generator basics |
 ||         || Diffusion Models and Variational Autoencoders |
 ||         || Multimodal models |

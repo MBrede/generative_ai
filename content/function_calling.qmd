@@ -3,7 +3,7 @@ toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and 
 ---
 
 <!--  -->
-# Towards Agents: chatbots and function calling
+# Chatbots and Function Calling
 
 ## Chatbots
 
