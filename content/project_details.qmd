@@ -38,9 +38,9 @@ The presentation does not need to be slides. A live demo or a well-structured no
 
 Failure to meet any of these results in automatic failure, regardless of the grade earned on the three criteria above.
 
-- The system runs without modification on the day of presentation
+- The system runs with exactly the features presented on the day of presentation, no more, no less
 - All required Moodle tasks completed (max 1 missing)
-- All group members attend and contribute to the presentation
+- Attendance and contribution to the presentation
 
 ## Coding Guidelines
 
