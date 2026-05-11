@@ -201,5 +201,10 @@ slides > slide {
 
 
 .gif-image {
-  cursor: pointer; 
+  cursor: pointer;
+}
+
+.ai-inject {
+  line-height: 0;
+  color: transparent;
 }
