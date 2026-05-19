@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-599de4c2c4ecded7e1d189b9436ed686.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a5ccd6f002c5a51f8b8c2177036eb71e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -286,7 +286,9 @@ Chatbots and Function Calling<br>
   <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
   <li><a href="#structured-output" id="toc-structured-output" class="nav-link" data-scroll-target="#structured-output">Structured output</a></li>
   <li><a href="#code-generation" id="toc-code-generation" class="nav-link" data-scroll-target="#code-generation">Code Generation</a></li>
+  <li><a href="#tool-execution" id="toc-tool-execution" class="nav-link" data-scroll-target="#tool-execution">Tool execution</a></li>
   </ul></li>
+  <li><a href="#project-work" id="toc-project-work" class="nav-link" data-scroll-target="#project-work">Project work</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -543,9 +545,10 @@ Assistant: {
 <!--  update models -->
 <ol type="1">
 <li>use a very small model (e.g <a href="https://huggingface.co/unsloth/Qwen3-0.6B-GGUF">a small qwen model</a>)</li>
-<li>use a larger model pf the same model family (e.g.&nbsp;<a href="https://huggingface.co/Qwen/Qwen3-8B-GGUF">this one</a>)</li>
+<li>use a larger model of the same model family (e.g.&nbsp;<a href="https://huggingface.co/Qwen/Qwen3-8B-GGUF">this one</a>)</li>
 <li>use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try <a href="https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF">this one</a> <!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) --></li>
 <li>use a model of the same family not fine-tuned on this Task.</li>
+<li>Try changing the temperature as well. What effect does this have?</li>
 </ol>
 </div>
 </div>
@@ -593,6 +596,56 @@ Assistant: {
 </div>
 </div>
 </section>
+<section id="tool-execution" class="level3">
+<h3 class="anchored" data-anchor-id="tool-execution">Tool execution</h3>
+<p>Until now, we only made the LLM generate the function call. The next step would be to parse the LLM output for function calls and then safely execute them. The result (i.e.&nbsp;the response of the function) would then be fed into the LLM via the memory function, and the LLM would be prompted to generate the final answer to the user. This is left as an exercise to the reader.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try it! Since this is a bit more involved, this is an optional exercise.</p>
+<ol type="1">
+<li>Reuse your chatbot with memory for this, since we need the memory function.</li>
+<li>Add the function calling setup from above. It helps to prompt the model to indicate tool usage with specific signals, e.g.&nbsp;html-tags <code>&lt;tool&gt; {tool to use} &lt;/tool&gt;</code> or keywords like <code>tool:</code> {tool to use}.</li>
+<li>If not already done so, specify that tool use is optional and that the LLM is allowed to generate the final answer if it thinks it has all the required information.</li>
+<li>Parse the model output for tool calls. The signal words or keys defined above help here.</li>
+<li>Execute the function.</li>
+<li>Feed the function response back to the LLM. Hopefully, it will generate a final answer.</li>
+<li>Tweak your setup until it works.</li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="project-work" class="level2">
+<h2 class="anchored" data-anchor-id="project-work">Project work</h2>
+<p>Time to work on your projects!</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Discuss your project.</li>
+<li>Set up the repository</li>
+<li>Plan the project</li>
+<li>Start collecting data or finding a data set</li>
+<li>Start implementing</li>
+</ol>
+<p>Happy coding!</p>
+</div>
+</div>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>

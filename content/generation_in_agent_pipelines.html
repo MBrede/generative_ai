@@ -43,7 +43,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-599de4c2c4ecded7e1d189b9436ed686.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a5ccd6f002c5a51f8b8c2177036eb71e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -278,10 +278,37 @@ AI image generation pipelines<br>
 </header>
 
 
+<!-- 
+## motivation
+
+- überleitung vom letzten mal
+- verknüpfung mit projekt
+- we need to run it in a pipeline
+
+ -->
 <section id="basics-of-using-open-source-ai-image-generation-models" class="level2">
 <h2 class="anchored" data-anchor-id="basics-of-using-open-source-ai-image-generation-models">Basics of using Open Source AI image generation models</h2>
 <!-- - AUTOMATIC1111 -->
 <!-- TODO: comfyUI -->
+<!-- 
+motivation: use it easily and comfortably on local device comparable to ollama, lmstudio for LLMs. Tools for this include
+
+- automatic1111's open web ui (not maintained anymore)
+- comfy ui (sehr mächtig, low code)
+- huggingface, see last session
+
+task: 
+
+- try one or more of these tools
+- try generation parameters (maybe with more input from lecturer? mention them before in main text. or make this a second task. )
+- try loading another img gen model
+
+
+We want API mode, explain API mode, basically call from python
+
+task: if using some ui (not on hugging face) try api mode
+
+ -->
 <p>One of the challenges of using image generation models is the required computational power and the fine-tuning effort needed to obtain high quality images. This can be a significant barrier for individuals or smaller organizations that may not have access to large computing resources. It is, therefore, good to have access to pre-trained image generation models. Today, we want to focus on using image generation models locally and how to integrate them into pipelines.</p>
 <p>For large language models, we used mainly LM Studio to run the models on our laptops. Image generation models, however, do not run in LM Studio as of 2025. Additionally, there is no real equivalent for image generation models. There is, however, a tool that makes running image generation models locally more convenient: <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111’s Stable Diffusion web UI</a>.</p>
 <p><!-- Let us use this tool to see how we can run an AI image generator on our laptops, using the open source model [SDXL Base 1.0](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0) from StabilityAI. This is a very short summary of the features of AUTOMATIC1111's web UI, which we will use in this article for running an AI image generator on our laptops:   --></p>
@@ -328,6 +355,22 @@ AI image generation pipelines<br>
 </section>
 <section id="ai-image-generators-in-agent-systems-or-pipelines" class="level2">
 <h2 class="anchored" data-anchor-id="ai-image-generators-in-agent-systems-or-pipelines">AI image generators in agent systems or pipelines</h2>
+<!-- 
+thoughts: first full pipeline and then motivate singe steps? or step by step motivation?
+
+motivation: the project, include image gen in a agent system or pipeline. we want to generate illustrations for our text. so pipeline needs to work on generic text input, not specialized image prompts. pipeline:
+
+- generic text block, e.g. generated, the text from text gen pipeline or other
+- image prompt generation
+- image generation
+- quality assurance
+
+how would we do it?
+
+- example: just use some text and try to generate an image (either only gedankenexperiment, but better to try this, i.e. the corgi wikipedia header text or article summary)
+- example: generate an image prompt first. is it better? should be (can only handle short descriptions based on its training, also text is not normally good image prompt)
+
+ -->
 <p>In this section we want to explore the use of AI image generators as components in agent systems or LLM pipelines. An example for this might be a system that takes a few keywords, generates a text from it and then uses a language model to generate an image generation prompt based on this text. This prompt is used to generate an image. The final image is then sent to some quality assurance system to check if the output matches the input (or at least makes sense).</p>
 <!-- We covered agent systems extensively already. This time we want to focus on building a language model pipeline instead. In this section, we will: -->
 <p>So, we want to build a pipeline that</p>
@@ -338,9 +381,18 @@ AI image generation pipelines<br>
 <li>does some kind of quality assurance by comparing the original text embedding with the generated image embedding.</li>
 </ul>
 <p>Note, that comparing the embeddings of the generated image with the input text may not be the best way of judging image quality.</p>
-<p>Most agent frameworks we already introduced support building pipelines in addition to agents. See for example <a href="https://docs.llamaindex.ai/en/stable/examples/pipeline/query_pipeline/">this tutorial</a> on how to implement query pipelines in llamaindex or <a href="https://docs.haystack.deepset.ai/docs/pipelines">this documentation</a> for pipelines in haystack. To get a full understanding of the basic principles, it is most educational to implement a pipeline from scratch.</p>
+<!-- dont need this any more 
+Most agent frameworks we already introduced support building pipelines in addition to agents. See for example [this tutorial](https://docs.llamaindex.ai/en/stable/examples/pipeline/query_pipeline/) on how to implement query pipelines in llamaindex or [this documentation](https://docs.haystack.deepset.ai/docs/pipelines) for pipelines in haystack. To get a full understanding of the basic principles, it is most educational to implement a pipeline from scratch.  -->
 <section id="text-generation-or-retrieval" class="level3">
 <h3 class="anchored" data-anchor-id="text-generation-or-retrieval">Text generation or retrieval</h3>
+<!-- 
+motivate this better: in your project, you have this text gen pipeline. now you want to generate images that fit this portion of your text. it should generate an image illustrating this paragraph... 
+
+so, the starting point is some generic text, not an actual img gen prompt or image caption. 
+
+task: use your text gen pipeline, or some substitute, a short news article, a paragraph from a book, ...
+
+ -->
 <p>The pipeline we are about to build starts with some input given by the user. In previous chapters we covered several ways of doing this. You could:</p>
 <ul>
 <li>use a local LLM to generate the text for you.</li>
@@ -389,6 +441,22 @@ AI image generation pipelines<br>
 </section>
 <section id="quality-assurance" class="level3">
 <h3 class="anchored" data-anchor-id="quality-assurance">Quality assurance</h3>
+<!-- 
+motivation: images are not always great!
+
+- we need QA
+- we want it automated
+
+ways of doing it:
+
+- embedding based (semantic fit)
+- photo quality rating, see OpenCV, image quality assessment, BRISQUE (https://learnopencv.com/image-quality-assessment-brisque/)
+- https://github.com/chaofengc/IQA-PyTorch
+- other (factually correct?, most colorful, suitably grimdark, what makes sense for your project ),  look online for open source tools 
+- AI based, see e.g. this project https://github.com/prasadabhishek/photo-quality-analyzer
+- a combination of the above
+
+ -->
 <p>Now that we have the image, we want to assure that it fits the text. There are several ways of doing this. We could, for instance, evaluate text and images manually (or, rather, by eyeballing it). This works well for small amounts of images. However, it is not scalable for larger amounts.</p>
 <p>One way of automating the examination is to check if the image matches the text semantically, i.e.&nbsp;in meaning. One could translate the image back to text, using an image-to-text model. This description of the image can then be compared to the original text using embeddings and a suitable distance metric, e.g.&nbsp;cosine. Or we could embed both image and text using a multi-modal model and calculate the distance directly. In both cases, we need a predefined criterion, i.e.&nbsp;a fixed distance, that has to be reached to accept the image as good enough. Alternatively, we could generate several images and just chose the best matching one.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -412,6 +480,9 @@ AI image generation pipelines<br>
 </section>
 <section id="pipeline" class="level3">
 <h3 class="anchored" data-anchor-id="pipeline">Pipeline</h3>
+<!-- 
+see thoughts above
+ -->
 <p>Finally, we can wrap everything in a pipeline. The pseudocode below shows the general principle. This is shown here for generating a number of images and picking the best matching one, but it can easily be converted to generate images until a predefined criterion is matched.</p>
 <pre><code>## pseudocode
 def image_gen_pipeline(user_input):
@@ -440,7 +511,14 @@ def image_gen_pipeline(user_input):
 </ul>
 </div>
 </div>
+<!-- 
+## project work
+
+think about how to use it in your projects
+
+ -->
 <!-- ## Further Readings -->
+<!-- ## References -->
 
 
 </section>
