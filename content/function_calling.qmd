@@ -266,6 +266,25 @@ Try it!
 :::
 
 
+### Tool execution
+
+Until now, we only made the LLM generate the function call. The next step would be to parse the LLM output for function calls and then safely execute them. The result (i.e. the response of the function) would then be fed into the LLM via the memory function, and the LLM would be prompted to generate the final answer to the user. This is left as an exercise to the reader. 
+
+::: {.callout-note}
+## 📝 Task
+
+Try it! Since this is a bit more involved, this is an optional exercise. 
+
+1. Reuse your chatbot with memory for this, since we need the memory function.
+2. Add the function calling setup from above. It helps to prompt the model to indicate tool usage with specific signals, e.g. html-tags `<tool> {tool to use} <\tool>` or keywords like `tool:` {tool to use}. 
+3. If not already done so, specify that tool use is optional and that the LLM is allowed to generate the final answer if it thinks it has all the required information.
+4. Parse the model output for tool calls. The signal words or keys defined above help here. 
+5. Execute the function. 
+6. Feed the function response back to the LLM. Hopefully, it will generate a final answer.
+7. Tweak your setup until it works. 
+
+
+:::
 
 
 
