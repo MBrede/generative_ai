@@ -2,7 +2,7 @@
 toc-title: '![](){width=240px}<br> <h3>Data analysis</h3>'
 ---
 
-# LLM-based data analysis
+# LLM-based Data Analysis
 
 
 ## Introduction & Motivation

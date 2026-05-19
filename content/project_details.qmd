@@ -5,98 +5,58 @@ toc-title: '![](../imgs/cover.jpg){width=240px}<br> <h3>Project Details</h3>'
 
 # Project Details
 
-Projects should allow students to apply what they've learned throughout the course. They must implement an LLM-based system that includes at least two of the following features:
+Projects allow you to apply what you have learned throughout the course. The only hard constraint is that your project must implement an LLM-based system that does something meaningful. What exactly you build is your decision, as long as it is approved by the instructor and implemented in Python.
 
-- Retrieval Augmentation/RAG (i.e., the system should query documents or other content in an index for its answers and reference the sources of its generation)
-- Data Analysis (i.e., the system should "talk" to a dataset and decide on which analysis-steps are to be taken to then execute them)
-- Multi-step LLM Pipeline (i.e., multiple coordinated LLM calls should work together, for example in a generator-reviewer arrangement, planner-executor setup, or using agent systems)
-- Fine-tuning on (Synthetic) Data (i.e., a small LM or SDM should be finetuned on (synthetic) data to adapt it to your needs. You could as an example train a model to only answer in nouns.)
+To give you some orientation, the following are the kinds of techniques covered in this course that a project could draw from:
 
-The project should also include function-calling-based interface ("a tool") to an AI image generator.
+- **Retrieval Augmented Generation (RAG)**: the system queries a document index and references sources in its responses
+- **LLM-based Data Analysis**: the system interprets a dataset and decides which analysis steps to execute
+- **Multi-step LLM Pipeline**: multiple coordinated LLM calls work together, for example in a generator-reviewer or planner-executor arrangement, or using agent frameworks
+- **Fine-tuning**: rather than implementing fine-tuning (compute and time constraints make this impractical for most projects), you design and justify a fine-tuning strategy for your use case: which model, which technique (e.g., LoRA, QLoRA), what training data and why, and what you would expect to gain over prompting alone. The strategy must be specific to your project; a generic description will not count.
 
-Students are free to choose their project topic, as long as it fits within the course scope and is approved by the instructor. All projects must be implemented in Python.
+Your project should integrate at least two of these (or comparable techniques). How you combine them, and for what purpose, is up to you.
 
-The active participation on the course will be taken into account before grading. This means that all tasks asking the students to upload their results to moodle should be completed.
-If more than one of the required tasks is missing, the student will not be graded.
+## Grading
 
-The projects are to be presented in the last session of the course.
-The students of each group need to take part in this session. 
-The presentation will become part of the overall grade.
-The presentation can but does not have to be prepared in PPT, any other mode of presentation (including a live-demo based on a nice notebook) is fine.
+Your project is graded on three criteria, each counting for one third of the project grade. Grades follow the scale defined in the [Prüfungsverfahrensordnung (PVO)](https://www.haw-kiel.de/wir/hochschulrecht/recht-der-haw-kiel/studien-und-pruefungsangelegenheiten/pruefungsverfahrensordnung/).
 
+### 1. Functionality
 
-## Grading Rubric
+The system must run end-to-end. Setup instructions must work. What you build and how you combine techniques is your decision; the grade reflects whether the result does something non-trivial and whether the implementation is complete.
 
-**Grading Scale:** [German Notenpunkte System](https://de.wikipedia.org/wiki/Vorlage%3APunktesystem_der_gymnasialen_Oberstufe)  
-**Passing Grade:** 20 points (4 Notenpunkte)
+### 2. Code Quality
 
-### Binary Requirements (MUST ALL BE MET TO PASS)
+Your code is evaluated on structure, readability, and documentation. Follow the coding guidelines below.
 
-**Failure to meet any of these requirements results in automatic failure (0 Notenpunkte), regardless of points earned.**
+### 3. Presentation
 
-- [ ] At least TWO core components implemented (from list above)
-- [ ] Image generation integration via function calling
-- [ ] Runnable code with setup instructions provided
-- [ ] Documentation included (docstrings, notebooks, or report)
-- [ ] Active participation: All required Moodle tasks completed (max 1 missing)
-- [ ] Presentation attendance and delivery
+You present your project and answer technical questions. We are less interested in what you built than in whether you understand why you built it the way you did: the tradeoffs you made, what broke, and how you fixed it. Only features you present will be graded.
 
-**Once all binary requirements are met, the project receives 20 points (4- grade) as baseline.**
+The presentation does not need to be slides. A live demo or a well-structured notebook walkthrough is equally valid.
 
-### Point-Based Evaluation
+## Mandatory Requirements
 
-**Maximum Points: 40 points** (20 baseline + up to 40 additional = 60 total before bonus)
+Failure to meet any of these results in automatic failure, regardless of the grade earned on the three criteria above.
 
-**Core Components Quality (up to 20 points)**
+- The system runs with exactly the features presented on the day of presentation, no more, no less
+- All required Moodle tasks completed (max 1 missing)
+- Attendance and contribution to the presentation
 
-Choose at least TWO (required for binary requirements above):
+## Coding Guidelines
 
-- Retrieval Augmentation/RAG with source citations (up to 10 points)
-- Data Analysis capabilities with executable analysis steps (up to 10 points)
-- Multi-step LLM pipeline with multiple coordinated LLM calls (e.g., generator-reviewer, planner-executor, or agent systems) (up to 10 points)
-- Fine-tuning on (synthetic) data (up to 10 points)
+- No god-files. Split responsibilities across modules.
+- Functions do one thing. If you need "and" to describe it, split it.
+- Names are documentation: avoid `data`, `result`, `tmp`, `x`.
+- No commented-out code in the final submission.
+- Comments explain why, not what. If the name explains it, no comment is needed.
+- No hardcoded model names or file paths; use constants or `.env`.
+- No external APIs or services requiring registration or a paid account. All models must run locally or on infrastructure you control.
+- If you copied it, you must be able to explain every line.
+- If it works but you don't know why, it doesn't work.
 
-*Points awarded based on implementation quality, completeness, and sophistication.*
+## Bonus
 
-**Implementation Quality (up to 5 points)**
-
-- Code quality, structure, and documentation (up to 5 points)
-
-**Presentation (up to 15 points)**
-
-- Time management (up to 3 points)
-- Question handling & understanding demonstration (up to 8 points)
-- Clarity of explanation and live demo (up to 4 points)
-
-**TOTAL: 20 baseline + up to 40 points = 60 points maximum before bonus**
-
-### Bonus Features
-
-**Maximum Bonus Points: 40 points** (total cannot exceed 100 points)
-
-**Additional Core Components**
-
-- Implementation of 3rd core component (up to 10 points)
-- Implementation of all 4 core components (up to 10 points for 4th)
-
-**Advanced Features (examples, non-exhaustive):**
-
-- Prompt optimization/engineering framework (~5-10 points)
-- Custom evaluation metrics for LLM outputs (~5-10 points)
-- Streaming responses with proper UI (~5 points)
-- Multi-modal input handling (text + images) (~10 points)
-- Advanced RAG (hybrid search, re-ranking, query rewriting) (~10-15 points)
-- Chain-of-thought or reasoning traces visualization (~5-10 points)
-- LLM caching/optimization strategies (~5 points)
-- Synthetic data generation pipeline for fine-tuning (~10 points)
-- Agent memory/conversation history management (~5-10 points)
-- MCP (Model Context Protocol) integration (~10-15 points)
-- LoRA/QLoRA implementation details and analysis (~10 points)
-- Production-ready deployment (containerization, API) (~10-15 points)
-- Novel combination or creative application of techniques (~5-25 points)
-
-**This list is not exhaustive.** Be creative and propose your own features!
-
+Additional technical depth, creative application, or production-ready features can earn bonus points. Complexity and justification matter more than quantity. The presentation is the feature proposal; you will only be graded on what you present and can explain.
 
 **Example Project Ideas**:
 
