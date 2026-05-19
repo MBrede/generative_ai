@@ -225,17 +225,19 @@ As above, but this time
 <!--  update models -->
 
 1. use a very small model (e.g [a small qwen model](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF))
-2. use a larger model pf the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
+2. use a larger model of the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
 3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
 <!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
 4. use a model of the same family not fine-tuned on this Task.
-
+5. Try changing the temperature as well. What effect does this have? 
 
 :::
+
 
 ### Code Generation
 
 The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
+
 
 ::: {.callout-note}
 ## 📝 Task
@@ -245,7 +247,6 @@ Try it!
 1. In your notebook, define the weather function (and/or some other function of your choice) in python code. 
 2. Write an appropriate prompt that makes it clear that you expect python code calling the defined function(s). 
 3. Test your prompt with an example input.
-
 
 :::
 
