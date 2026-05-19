@@ -132,6 +132,7 @@ This pattern applies to:
 
 <!-- TODO:give the anthropic harmless finetuning example here (imgs/CAI_illustration.png)-->
 
+<!-- ![]() -->
 
 ## Example: Dataset hypothesis creation pipeline
 
