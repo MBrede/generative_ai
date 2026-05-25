@@ -1,0 +1,114 @@
+
+
+# Agents
+
+
+## Introduction
+
+
+So far in this course we covered the fundamentals of language models. We talked about chatbots and we discussed function calling (even thought we did not implement the function execution). We also covered retrieval augmented generation in some detail. 
+
+Today, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.
+
+<!-- In this session we will:
+
+- understand what an LLM agent is and how it differs from a “plain” LLM call,
+- analyse the core components of agent frameworks (planning, tools, memory),
+- explore a concrete EDA agent as a running example, and
+- get a first feel for when a simple pipeline is preferable to a full agentic setup. -->
+
+But let's talk some more about tools. there are two kinds: 
+
+1. read only
+    - read files
+    - search a vector store
+    - quick web search
+
+2. actions (needs better name)
+    - write, change or delete files
+    - execute commands, scripts, code
+    - open or interact with other applications
+    - install additional software
+    - delete all your files
+    - corrupt your operating system
+
+as discussed in the function calling chapter, tool calling needs the following:
+
+1. the LLM needs to know about the available tools
+2. The LLM needs to be instructed to generate its answer in a structured format in order to use a tool
+3. The LLM response needs to be parsed for tool calls
+4. The tool needs to be executed
+
+with this setup, we are only one step away from an agent. 
+
+
+## Agents: closing the loop
+
+Once tool calling and execution is implemented, the agent is basically just a loop around the tool call. 
+
+![Image credit https://x.com/adamdotdev (from [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents))](../imgs/agent_loop_tinyagents.jpg)
+
+
+<!-- ### ReAct -->
+
+A widely used pattern for multi-step agents is _ReAct_ (Reasoning + Acting) by Yao et al. [@yaoReActSynergizingReasoning2023]. The core idea:
+
+1. The agent reasons about the current situation (“Thought”).
+2. It chooses and executes an action (e.g. a tool call).
+3. It observes the result (“Observation”).
+4. It updates its reasoning and decides on the next action.
+5. This thought–action–observation loop repeats until a stopping condition is met.
+
+In pseudocode (adapted from the [smolagents documentation](https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents)):
+
+    memory = [user_defined_task]
+
+    while llm_should_continue(memory):
+        action = llm_get_next_action(memory)
+        observations = execute_action(action)
+        memory += [action, observations]
+
+    final_answer = llm_generate_answer(memory)
+    return final_answer
+
+
+The intelligence of the system lies in:
+
+- the prompting that shapes how the LLM reasons and chooses actions,
+- the tool design (signatures, descriptions), and
+- how we represent memory (what gets recorded, in which format, with which limits).
+
+
+## Frameworks
+
+Implementing this from scratch, while good for education, is getting a bit too involved. it is a good idea, therefore, to use a framework. there is no shortage of those. here is a notn-exhaustive list: 
+
+<!-- - Smolagents
+- LLamaindex
+- Haystack
+- Langchain
+- Langgraph
+- ADK
+- ... -->
+
+- [smolagents](https://huggingface.co/docs/smolagents/index): A lightweight agent framework by Hugging Face. It is designed to be simple and hackable, with good conceptual documentation and an active community.
+- [Llamaindex](https://github.com/run-llama/llama_index): Originally a data framework for building LLM applications around your own data. It offers convenient abstractions for tools, agents, and memory, and comes with many examples and tutorials.
+- [Haystack](https://github.com/deepset-ai/haystack): an open-source NLP framework focused on production-ready applications with LLMs and classic models, developed by deepset (Germany).
+- [LangChain](https://github.com/hwchase17/langchain): a modular library for building LLM applications (chains, agents, tools), with a large ecosystem of integrations.
+- [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview): AI agent framework by Langchain
+- [Agent Development Kit (ADK)](https://adk.dev): AI agent framework by google, introduced in April 2025
+
+for something quick, smolagents is fine. for production use, adk seems a good idea. 
+
+
+## here the task
+
+build something with smolagents, with adk
+
+which is better, why?
+
+
+
+## Model context protocol
+
+
