@@ -46,28 +46,19 @@ Smaller local models (Ollama, LM Studio) are not reliable orchestrators. They te
 
 There are real gains to this decomposition. Routing queries to a cheaper model for simpler subtasks rather than sending everything to one large generalist can reduce inference costs by more than 2x without measurable quality loss [@ong2024routellm]. The tradeoff is real: you give up the emergent flexibility of a single capable model and invest more effort in upfront design. The same tradeoff exists between microservices and monoliths, and neither is universally the right answer.
 
-<!-- ## Google ADK: first contact {#sec-adk}
+## Google ADK: key types {#sec-adk}
 
-Google's **Agent Development Kit (ADK)** is a Python framework for building multi-agent systems with explicit graph-topology primitives [@huizenga2025adk]. Its main advantage for teaching is the built-in Dev UI, which renders the agent graph and execution trace in a browser with zero configuration. Comparable frameworks you may encounter include LangGraph (more granular node-based control), CrewAI (role-based agent teams), and AutoGen (conversation-based multi-agent coordination). ADK sits at the structured and illustrative end of this spectrum.
+The four types used throughout this session:
 
-ADK does not speak to Ollama or LM Studio directly. It routes model calls through LiteLLM, a provider-agnostic adapter library. The model string must include a **provider prefix** that tells LiteLLM which backend to use, and that string is passed directly to the `Agent`:
-
-```python
-import os
-
-# Ollama
-os.environ["OLLAMA_API_BASE"] = "http://localhost:11434"
-model = "ollama_chat/gemma3:latest"
-
-# LM Studio — requires manual registration, see note below
-os.environ["LM_STUDIO_API_BASE"] = "http://localhost:1234"
-model = "lm_studio/gemma3"
-```
-
-Without the prefix LiteLLM cannot route the request and raises a `BadRequestError`. The prefix is the only required change when switching backends.
+| Type | Role |
+|---|---|
+| `Agent` | Leaf node: one LLM call, one system prompt |
+| `Workflow` | Graph of nodes; edges define sequential, conditional, and looping flows |
+| `InMemoryRunner` | Executes a pipeline against an in-memory session; suitable for notebooks and local dev |
+| `Session` | Holds conversation and pipeline state across agent turns |
 
 ::: {.callout-note}
-**LM Studio users:** the `lm_studio/` prefix is not registered in ADK's model registry by default, so passing it as a plain string will raise a `ValueError`. Add one line before creating any agent:
+**LM Studio users:** the `lm_studio/` prefix is not pre-registered in ADK's model registry. Add this before creating any agent:
 
 ```python
 from google.adk.models.lite_llm import LiteLlm
@@ -76,60 +67,6 @@ from google.adk.models.registry import LLMRegistry
 LLMRegistry._register(r"lm_studio/.*", LiteLlm)
 ```
 :::
-
-The three types needed for first contact are `Agent`, `InMemoryRunner`, and `Session`. An `Agent` is a leaf node: a single LLM call with a system prompt and optional tools. `InMemoryRunner` executes a pipeline against a `Session`, which holds conversation and pipeline state. ADK has further composition types that are introduced when they are needed below.
-
-| Type | Role |
-|---|---|
-| `Agent` | Leaf node: one LLM call, one system prompt |
-| `Workflow` | Graph of nodes; edges define sequential, conditional, and looping flows |
-| `InMemoryRunner` | Executes a pipeline against an in-memory session; suitable for notebooks and local dev |
-| `Session` | Holds conversation and pipeline state |
-
-Full API reference: https://google.github.io/adk-docs/
-
-```bash
-uv add google-adk litellm
-```
-
-::: {.callout-note}
-## 📝 Task
-
-1. Install the dependencies: `uv add google-adk litellm`
-2. Make sure Ollama is running with a model that supports tool calls (e.g. `gemma3`, `qwen2.5`, `llama3:instruct`).
-3. Run the following minimal agent and confirm it responds:
-
-```python
-from google.adk import Agent
-from google.adk.runners import InMemoryRunner
-from google.genai import types
-import os
-
-os.environ["OLLAMA_API_BASE"] = "http://localhost:11434"
-
-agent = Agent(
-    name="Hello",
-    model="ollama_chat/gemma3:latest",
-    instruction="You are a helpful assistant. Answer briefly.",
-)
-
-runner = InMemoryRunner(agent=agent, app_name="hello")
-runner.auto_create_session = True
-
-for event in runner.run(
-    user_id="student",
-    session_id="s1",
-    new_message=types.Content(role="user", parts=[types.Part(text="Say hello!")])
-):
-    if event.content and event.content.parts:
-        for part in event.content.parts:
-            if part.text:
-                print(part.text)
-```
-
-4. Start the Dev UI: `adk web` and explore the agent tree in the browser.
-
-::: -->
 
 
 ## A prompt advisor {#sec-promptadvisor}
@@ -215,10 +152,9 @@ def hard_check(node_input: str, ctx):
 ## 📝 Task
 
 1. Define a `PromptConstitution` dataclass with 3–5 rules of your choice (you can use the component mapping above or define domain-specific criteria).
-2. Write a `PromptPipeline` class that takes a `PromptConstitution` in its constructor.
-3. Implement the `hard_check` function above (or extend it with your own criteria). No wrapper class is needed — pass it directly in the edge tuple.
-4. Wire as a `Workflow`: `("START", advisor, hard_check, {"pass": ...})`. Task 4 fills in the target of the `"pass"` edge.
-5. Test it: what happens when you pass a minimal spec that produces a short output?
+2. Implement the `hard_check` function above (or extend it with your own criteria). No wrapper class is needed — pass it directly in the edge tuple.
+3. Wire as a `Workflow`: `("START", advisor, hard_check, {"pass": ...})`. Task 4 fills in the target of the `"pass"` edge.
+4. Test it: what happens when you pass a minimal spec that produces a short output?
 
 This pre-check illustrates the control spectrum: deterministic function checks are fast and free; LLM-powered checks are slower and more expensive. Run the cheap ones first.
 
