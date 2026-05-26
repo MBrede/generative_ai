@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>LLM pipelines – Generative AI</title>
+<title>Multi-Agent Orchestration – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +144,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/llm_pipelines.html"><span class="chapter-title">LLM pipelines</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/llm_pipelines.html"><span class="chapter-title">Multi-Agent Orchestration</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -234,7 +234,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/llm_pipelines.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">LLM pipelines</span></a>
+  <a href="../content/llm_pipelines.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Multi-Agent Orchestration</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -300,30 +300,28 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title"><img src="../imgs/llm-pipeline.jpg" class="img-fluid" width="240"><br><br>
 </h2><h3 class="anchored"><br>
-LLM pipelines<br>
+Multi-Agent Orchestration<br>
 </h3>
    
   <ul>
-  <li><a href="#motivation-and-learning-objectives" id="toc-motivation-and-learning-objectives" class="nav-link active" data-scroll-target="#motivation-and-learning-objectives">Motivation and learning objectives</a></li>
-  <li><a href="#pipelines-from-input-to-output" id="toc-pipelines-from-input-to-output" class="nav-link" data-scroll-target="#pipelines-from-input-to-output">Pipelines: from input to output</a>
+  <li><a href="#two-kinds-of-orchestration" id="toc-two-kinds-of-orchestration" class="nav-link active" data-scroll-target="#two-kinds-of-orchestration">Two kinds of orchestration</a>
   <ul class="collapse">
-  <li><a href="#example-simple-eda-pipeline-no-agent" id="toc-example-simple-eda-pipeline-no-agent" class="nav-link" data-scroll-target="#example-simple-eda-pipeline-no-agent">Example: simple EDA pipeline (no agent)</a></li>
+  <li><a href="#agent-driven-orchestration-a-motivating-example" id="toc-agent-driven-orchestration-a-motivating-example" class="nav-link" data-scroll-target="#agent-driven-orchestration-a-motivating-example">Agent-driven orchestration: a motivating example</a></li>
+  <li><a href="#why-we-focus-on-deterministic-pipelines-today" id="toc-why-we-focus-on-deterministic-pipelines-today" class="nav-link" data-scroll-target="#why-we-focus-on-deterministic-pipelines-today">Why we focus on deterministic pipelines today</a></li>
   </ul></li>
-  <li><a href="#sec-llmJudge" id="toc-sec-llmJudge" class="nav-link" data-scroll-target="#sec-llmJudge">LLM as a judge</a>
+  <li><a href="#sec-adk" id="toc-sec-adk" class="nav-link" data-scroll-target="#sec-adk">Google ADK: key types</a></li>
+  <li><a href="#sec-promptadvisor" id="toc-sec-promptadvisor" class="nav-link" data-scroll-target="#sec-promptadvisor">A prompt advisor</a></li>
+  <li><a href="#sec-harnessing" id="toc-sec-harnessing" class="nav-link" data-scroll-target="#sec-harnessing">Harnessing</a>
   <ul class="collapse">
-  <li><a href="#benefits-and-drawbacks" id="toc-benefits-and-drawbacks" class="nav-link" data-scroll-target="#benefits-and-drawbacks">Benefits and drawbacks</a></li>
+  <li><a href="#the-constitution" id="toc-the-constitution" class="nav-link" data-scroll-target="#the-constitution">The constitution</a></li>
   </ul></li>
-  <li><a href="#evaluation-pipelines-general-pattern" id="toc-evaluation-pipelines-general-pattern" class="nav-link" data-scroll-target="#evaluation-pipelines-general-pattern">Evaluation pipelines: general pattern</a></li>
-  <li><a href="#example-dataset-hypothesis-creation-pipeline" id="toc-example-dataset-hypothesis-creation-pipeline" class="nav-link" data-scroll-target="#example-dataset-hypothesis-creation-pipeline">Example: Dataset hypothesis creation pipeline</a>
+  <li><a href="#sec-llmjudge" id="toc-sec-llmjudge" class="nav-link" data-scroll-target="#sec-llmjudge">LLM as a judge</a>
   <ul class="collapse">
-  <li><a href="#generator" id="toc-generator" class="nav-link" data-scroll-target="#generator">Generator</a></li>
-  <li><a href="#reviewer-llm-as-a-judge" id="toc-reviewer-llm-as-a-judge" class="nav-link" data-scroll-target="#reviewer-llm-as-a-judge">Reviewer (LLM as a judge)</a></li>
-  <li><a href="#editor" id="toc-editor" class="nav-link" data-scroll-target="#editor">Editor</a></li>
-  <li><a href="#full-pipeline" id="toc-full-pipeline" class="nav-link" data-scroll-target="#full-pipeline">Full pipeline</a></li>
-  <li><a href="#from-pipeline-to-orchestrated-agents" id="toc-from-pipeline-to-orchestrated-agents" class="nav-link" data-scroll-target="#from-pipeline-to-orchestrated-agents">From pipeline to orchestrated agents</a></li>
+  <li><a href="#wiring-agents-in-sequence-and-passing-state" id="toc-wiring-agents-in-sequence-and-passing-state" class="nav-link" data-scroll-target="#wiring-agents-in-sequence-and-passing-state">Wiring agents in sequence and passing state</a></li>
   </ul></li>
-  <li><a href="#project-work" id="toc-project-work" class="nav-link" data-scroll-target="#project-work">Project work</a></li>
-  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
+  <li><a href="#sec-editor" id="toc-sec-editor" class="nav-link" data-scroll-target="#sec-editor">Editor and improvement loop</a></li>
+  <li><a href="#sec-observability" id="toc-sec-observability" class="nav-link" data-scroll-target="#sec-observability">Observability</a></li>
+  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further readings</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MBrede/generative_ai/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -331,9 +329,9 @@ LLM pipelines<br>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/llm_pipelines.html"><span class="chapter-title">LLM pipelines</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/llm_pipelines.html"><span class="chapter-title">Multi-Agent Orchestration</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-evalpipelines" class="quarto-section-identifier"><span class="chapter-title">LLM pipelines</span></span></h1>
+<h1 class="title"><span id="sec-orchestration" class="quarto-section-identifier"><span class="chapter-title">Multi-Agent Orchestration</span></span></h1>
 </div>
 
 
@@ -350,54 +348,191 @@ LLM pipelines<br>
 </header>
 
 
-<!-- in @sec-agents we bla  -->
-<section id="motivation-and-learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="motivation-and-learning-objectives">Motivation and learning objectives</h2>
-<p>In session 5 we focused on <strong>agentic decision-making</strong> and the EDA agent as a motivating example. In this session, we will:</p>
-<ul>
-<li>distinguish more clearly between <strong>agents</strong> and <strong>LLM pipelines</strong>,</li>
-<li>understand the concept of <strong>LLM as a judge</strong> and why evaluation is a bottleneck in generative AI systems,</li>
-<li>design and discuss <strong>evaluation pipelines</strong> for our EDA agent and related use cases, and</li>
-<li>connect these ideas to your own project work.</li>
-</ul>
-<p>After this session you should be able to:</p>
-<ul>
-<li>design a simple pipeline of LLM calls and tools,</li>
-<li>use an LLM to evaluate model outputs along explicit criteria, and</li>
-<li>reflect critically on the strengths and weaknesses of LLM-based evaluation.</li>
-</ul>
+<p>Multi-agent systems are, at their core, a bet on decomposition: split a hard task into narrower subtasks, assign each to a specialised agent, and coordinate the results. Whether that coordination is worth the overhead depends almost entirely on how you orchestrate the pieces. This session introduces two fundamentally different approaches to that coordination, explains why we focus on one of them for practical work with local models, and then builds a working constitutional prompt-advisor pipeline step by step using Google ADK.</p>
+<section id="two-kinds-of-orchestration" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="two-kinds-of-orchestration">Two kinds of orchestration</h2>
+<p>Before writing a single line of code it helps to name the landscape. When people talk about “multi-agent systems” they usually mean one of two very different things, and the choice between them has large practical consequences.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;The terms <em>LLM pipeline</em>, <em>multi-step pipeline</em>, and <em>agentic pipeline</em> are all used in the field for multi-step LLM workflows; the distinction between deterministic and LLM-driven routing is rarely explicit in the naming.</p></div></div><table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>LLM pipelines with deterministic routing</th>
+<th>Agent-driven orchestration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Who decides routing?</td>
+<td>Your Python code</td>
+<td>An LLM at runtime</td>
+</tr>
+<tr class="even">
+<td>Predictability</td>
+<td>Generally more predictable</td>
+<td>Less predictable</td>
+</tr>
+<tr class="odd">
+<td>Traceability</td>
+<td>Routing is explicit and inspectable</td>
+<td>LLM decisions are implicit</td>
+</tr>
+<tr class="even">
+<td>Feasible with small models?</td>
+<td>More feasible per node</td>
+<td>Needs a capable orchestrator</td>
+</tr>
+<tr class="odd">
+<td>Cost</td>
+<td>Generally lower</td>
+<td>Generally higher</td>
+</tr>
+</tbody>
+</table>
+<p>Both approaches can involve the same set of agents and components. The distinction is what controls which one runs next, not the agents themselves.</p>
+<section id="agent-driven-orchestration-a-motivating-example" class="level3">
+<h3 class="anchored" data-anchor-id="agent-driven-orchestration-a-motivating-example">Agent-driven orchestration: a motivating example</h3>
+<p>Agent-driven orchestration is useful when exact routing of a workflow cannot be specified upfront. A deep-research agent is a good illustration: the orchestrator LLM decides dynamically which sub-agents to call based on what it has learned so far.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    user[User query] --&gt; orch(Orchestrator LLM)
+    orch --&gt;|calls SearchAgent| search(Search Agent)
+    orch --&gt;|calls SummaryAgent| sum(Summary Agent)
+    orch --&gt;|calls CritiqueAgent| crit(Critique Agent)
+    search --&gt; orch
+    sum --&gt; orch
+    crit --&gt; orch
+    orch --&gt;|decides: enough?| out[Final answer]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The orchestrator selects which sub-agent to invoke based on current state rather than a fixed plan <span class="citation" data-cites="anthropic2025multiagent wang2024moa">(<a href="#ref-anthropic2025multiagent" role="doc-biblioref">Anthropic Engineering, 2025</a>; <a href="#ref-wang2024moa" role="doc-biblioref">Wang et al., 2024</a>)</span>. <!-- 
+Google ADK supports this pattern via `AgentTool`, which exposes sub-agents as callable tools for a root `Agent`. We will not build this today, but it is important to know it exists. --></p>
 </section>
-<section id="pipelines-from-input-to-output" class="level2">
-<h2 class="anchored" data-anchor-id="pipelines-from-input-to-output">Pipelines: from input to output</h2>
-<p>As discussed, an agent decides dynamically which tools to use. A pipeline, in contrast, follows a pre-defined sequence of steps:</p>
-<ol type="1">
-<li>Receive input.</li>
-<li>Transform it through a series of modules (some LLM calls, some classic code).</li>
-<li>Produce an output – optionally with internal loops, but without LLM-driven control flow.</li>
-</ol>
-<p>Pipelines are attractive because they are:</p>
-<ul>
-<li>easier to <strong>test and debug</strong>,</li>
-<li>often more <strong>robust</strong>,</li>
-<li>and usually more <strong>efficient</strong> than agentic setups when the workflow is well understood.</li>
-</ul>
-<section id="example-simple-eda-pipeline-no-agent" class="level3">
-<h3 class="anchored" data-anchor-id="example-simple-eda-pipeline-no-agent">Example: simple EDA pipeline (no agent)</h3>
-<p>A non-agentic pipeline for our EDA use case could be:</p>
-<ol type="1">
-<li><strong>Preprocessing</strong>: load the CSV, detect column types, basic validation.</li>
-<li><strong>Analytics</strong>: compute standard statistics and sample plots using Python code.</li>
-<li><strong>Report generation</strong>: call an LLM once to turn the statistics and plots into a narrative EDA report.</li>
-</ol>
-<p>No tool selection is delegated to the LLM; it only writes the report. This is already powerful – but the <strong>quality</strong> of the report still varies, and we need a way to <strong>evaluate</strong> it.</p>
+<section id="why-we-focus-on-deterministic-pipelines-today" class="level3">
+<h3 class="anchored" data-anchor-id="why-we-focus-on-deterministic-pipelines-today">Why we focus on deterministic pipelines today</h3>
+<p>Smaller local models (Ollama, LM Studio) are not reliable orchestrators. They tend to lose track of state, enter routing loops, or ignore instructions under context pressure. Deterministic pipelines achieve the same task decomposition with predictable, auditable behaviour. For the majority of practical use cases, a well-designed fixed graph is the better engineering choice.</p>
+<p>There are real gains to this decomposition. Routing queries to a cheaper model for simpler subtasks rather than sending everything to one large generalist can reduce inference costs by more than 2x without measurable quality loss <span class="citation" data-cites="ong2024routellm">(<a href="#ref-ong2024routellm" role="doc-biblioref">Ong et al., 2024</a>)</span>. The tradeoff is real: you give up the emergent flexibility of a single capable model and invest more effort in upfront design. The same tradeoff exists between microservices and monoliths, and neither is universally the right answer.</p>
 </section>
 </section>
-<section id="sec-llmJudge" class="level2">
-<h2 class="anchored" data-anchor-id="sec-llmJudge">LLM as a judge</h2>
-<p>The core idea of LLM as a judge is simple:</p>
-<p><strong>Use a (possibly different) LLM to evaluate the quality of outputs produced by an LLM-based system.</strong></p>
-<p><strong>Why is this useful?</strong></p>
-<p>Consider a small experiment:</p>
+<section id="sec-adk" class="level2">
+<h2 class="anchored" data-anchor-id="sec-adk">Google ADK: key types</h2>
+<p>The four types used throughout this session:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Agent</code></td>
+<td>Leaf node: one LLM call, one system prompt</td>
+</tr>
+<tr class="even">
+<td><code>Workflow</code></td>
+<td>Graph of nodes; edges define sequential, conditional, and looping flows</td>
+</tr>
+<tr class="odd">
+<td><code>InMemoryRunner</code></td>
+<td>Executes a pipeline against an in-memory session; suitable for notebooks and local dev</td>
+</tr>
+<tr class="even">
+<td><code>Session</code></td>
+<td>Holds conversation and pipeline state across agent turns</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>LM Studio users:</strong> the <code>lm_studio/</code> prefix is not pre-registered in ADK’s model registry. Add this before creating any agent:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.models.lite_llm <span class="im">import</span> LiteLlm</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.models.registry <span class="im">import</span> LLMRegistry</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>LLMRegistry._register(<span class="vs">r"lm_studio/</span><span class="dv">.</span><span class="op">*</span><span class="vs">"</span>, LiteLlm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="sec-promptadvisor" class="level2">
+<h2 class="anchored" data-anchor-id="sec-promptadvisor">A prompt advisor</h2>
+<p>The domain for today is <strong>prompt writing</strong>: an agent that takes a description of a desired AI assistant and produces a well-structured system prompt for it. This is deliberately self-referential: you are building an agent that writes prompts for agents.</p>
+<p>Good system prompts share a common structure. <span class="citation" data-cites="mao2025promptstemplatessystematicprompt">Mao et al. (<a href="#ref-mao2025promptstemplatessystematicprompt" role="doc-biblioref">2025</a>)</span> analysed 2,163 real production system prompts from repositories of companies including Uber, Microsoft, and LAION-AI, and identified seven components that appear with measurable frequency in deployed LLM applications. OpenAI, Anthropic, and Google each independently converge on the same set in their prompt engineering documentation.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 50%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th style="text-align: center;">Frequency</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Directive / Task</td>
+<td style="text-align: center;">87%</td>
+<td>The core instruction: what the agent should do</td>
+</tr>
+<tr class="even">
+<td>Context / Background</td>
+<td style="text-align: center;">56%</td>
+<td>Information the agent needs to do the task well</td>
+</tr>
+<tr class="odd">
+<td>Output Format</td>
+<td style="text-align: center;">40%</td>
+<td>How the response should be structured or formatted</td>
+</tr>
+<tr class="even">
+<td>Constraints</td>
+<td style="text-align: center;">36%</td>
+<td>What the agent must not do, or limits on behaviour</td>
+</tr>
+<tr class="odd">
+<td>Role / Profile</td>
+<td style="text-align: center;">28%</td>
+<td>The persona or expertise the agent should adopt</td>
+</tr>
+<tr class="even">
+<td>Workflow / Steps</td>
+<td style="text-align: center;">28%</td>
+<td>Sequential process when task order matters</td>
+</tr>
+<tr class="odd">
+<td>Examples</td>
+<td style="text-align: center;">20%</td>
+<td>Demonstrations of the desired output</td>
+</tr>
+</tbody>
+</table>
+<p>Your agent receives a Python dict with these fields and produces a complete system prompt.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -409,419 +544,217 @@ LLM pipelines<br>
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Open a notebook and connect it with a local LLM using LM Studio (or other).</li>
-<li>Ask it to generate <strong>one</strong> story containing fried eggs on a sunrise.</li>
-<li>Informally evaluate the story: What works well? What doesn’t? How did you decid</li>
-<li>Now ask the model to generate <strong>50–100</strong> such stories (use a higher temperature).</li>
-<li>Try to evaluate all of them manually…</li>
+<li>Define an <code>Agent</code> whose system prompt instructs it to write system prompts. Something like:</li>
 </ol>
-<p>Reflect: How long does it take? How consistent are your own judgements?</p>
-</div>
-</div>
-<p>Typical pattern:</p>
-<ol type="1">
-<li>We generate large amounts of text, code, or structured output.</li>
-<li>We suspect that quality is variable.</li>
-<li>We need a way to <strong>assess</strong> that quality.</li>
-<li>Reading and judging everything manually is too slow and doesn’t scale. (We don’t have time for this.)</li>
-</ol>
-<p>Instead, we can use an LLM in an evaluation role:</p>
-<ul>
-<li>It receives the output to be evaluated (e.g.&nbsp;an EDA report).</li>
-<li>It receives <strong>criteria</strong> (e.g.&nbsp;correctness, completeness, clarity).</li>
-<li>It returns scores, labels, or structured feedback.</li>
-</ul>
-<p>The evaluation can then be used to:</p>
-<ul>
-<li>accept or reject outputs,</li>
-<li>select the best out of several candidates,</li>
-<li>give automated feedback for improvement,</li>
-<li>or serve as a signal for fine-tuning or reinforcement learning (e.g.&nbsp;Constitutional AI <span class="citation" data-cites="ConstitutionalAIHarmlessness">(<a href="#ref-ConstitutionalAIHarmlessness" role="doc-biblioref"><em>Constitutional <span>AI</span></em>, n.d.</a>)</span>).</li>
-</ul>
-<p>This approach is called LLM as a judge.</p>
-<section id="benefits-and-drawbacks" class="level3">
-<h3 class="anchored" data-anchor-id="benefits-and-drawbacks">Benefits and drawbacks</h3>
-<p><strong>Benefits:</strong></p>
-<ul>
-<li>Scales to large numbers of outputs.</li>
-<li>Can approximate nuanced, qualitative judgements when well-prompted.</li>
-<li>Easy to combine with existing systems (few additional components).</li>
-<li>Flexible: different prompts and criteria for different tasks.</li>
-</ul>
-<p><strong>Drawbacks:</strong></p>
-<ul>
-<li><strong>Cost:</strong> multiple LLM calls per sample.</li>
-<li><strong>Bias:</strong> models might prefer their own style or longer answers.</li>
-<li><strong>Subjectivity:</strong> evaluation depends on the prompt and the judge model.</li>
-<li><strong>Mismatch with humans:</strong> high scores do not always mean humans agree.</li>
-</ul>
-<p>Because of these limitations, LLM-based judgements should be:</p>
-<ul>
-<li>designed carefully (clear rubrics),</li>
-<li>and, ideally, <strong>calibrated</strong> against human ratings.</li>
-</ul>
-</section>
-</section>
-<section id="evaluation-pipelines-general-pattern" class="level2">
-<h2 class="anchored" data-anchor-id="evaluation-pipelines-general-pattern">Evaluation pipelines: general pattern</h2>
-<p>Many applications follow a similar structure:</p>
-<ol type="1">
-<li><strong>Generator:</strong> produces a candidate output (text, code, EDA report, answer, …).</li>
-<li><strong>Judge:</strong> evaluates the output (via an LLM with evaluation prompt).</li>
-<li><strong>Editor (optional):</strong> improves the output based on the feedback.</li>
-<li><strong>Loop (optional):</strong> repeat 2 and 3 until a stopping criterion is met.</li>
-</ol>
-<p>This pattern applies to:</p>
-<ul>
-<li>EDA reports,</li>
-<li>answers in Q&amp;A systems,</li>
-<li>code generation,</li>
-<li>many more</li>
-</ul>
-<!-- TODO:give the anthropic harmless finetuning example here (imgs/CAI_illustration.png)-->
-<!-- ![]() -->
-</section>
-<section id="example-dataset-hypothesis-creation-pipeline" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="example-dataset-hypothesis-creation-pipeline">Example: Dataset hypothesis creation pipeline</h2>
-<p>We will now modify our EDA agent/pipeline from earlier to illustrate this. We will build a pipeline that will generate a <strong>hypothesis</strong> based on superficial knowledge of the dataset.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>ℹ️ Info
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>A <strong>hypothesis</strong> is a testable prediction or proposed explanation for a phenomenon, based on limited evidence that serves as a starting point for further investigation. It typically takes the form of an “if-then” statement that can be supported or refuted through experimentation and observation. A good scientific hypothesis must be <strong>falsifiable</strong> — meaning there must be a possible way to prove it wrong through empirical evidence.</p>
-</div>
-</div>
-<p>For now, we will not try to falsify (or verify) the hypothesis, just checking, if the generated output makes a good hypothesis. Our workflow looks thusly:</p>
-<ol type="1">
-<li><strong>Hypothesis generator</strong>
-<ul>
-<li>Receives the dataset and additional metadata about the data</li>
-<li>Produces a hypothesis</li>
-</ul></li>
-<li><strong>Judge-LLM</strong>
-<ul>
-<li>Receives the hypothesis + a rubric, e.g.&nbsp;with criteria:
-<ul>
-<li>Is this a prediction?</li>
-<li>Does it explain something?</li>
-<li>Is it falsifiable?</li>
-</ul></li>
-<li>Returns:
-<ul>
-<li>scores (e.g.&nbsp;1–5) per criterion, and</li>
-<li>short textual feedback for each.</li>
-</ul></li>
-</ul></li>
-<li><strong>Optional editor step</strong>
-<ul>
-<li>Another LLM call (possibly with a different model) revises the hypothesis</li>
-</ul></li>
-<li><strong>Stopping condition</strong>
-<ul>
-<li>For example: stop after 2–3 improvement iterations or if all scores exceed a threshold.</li>
-</ul></li>
-</ol>
-<section id="generator" class="level3">
-<h3 class="anchored" data-anchor-id="generator">Generator</h3>
-<p>Let’s have a closer look at the generator:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-gen(Generator)
-hyp[Hypothesis]
-data --&gt; gen
-gen --&gt; hyp
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>A system prompt for the generator could be:</p>
-<pre><code>You are a research asssistant tasked with generating a first hypothesis on a given dataset. 
-You will receive a brief summary of the dataset in question. this might include metadata, example rows, a list of columns etc. 
-Your Task is to generate a hypothesis based on this superficial knowledge, that will be testet at a later stage. </code></pre>
-<p>When calling the generator, you should give the relevant information in the user prompt:</p>
-<pre><code>Metadata:
-{dataset_metadata}
-
-columns: 
-{dataset.columns}
-
-example rows:
-{dataset.head()}</code></pre>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>📝 Task
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Your turn!</p>
-<p>In your notebook, implement a hypothesis generator.</p>
-<ol type="1">
-<li>Get a dataset. You can use the <a href="https://www.kaggle.com/competitions/titanic/data">the titanic dataset from kaggle</a> again or something else.</li>
-<li>Compile some relevant information e.g.&nbsp;<code>df.head()</code>, <code>df.describe()</code> etc. along other information. The titanic dataset has a very good description at the website.</li>
-<li>Send a good system prompt and the relevant information to an LLM.</li>
-<li>Let it generate a hypothesis (or several). You may want to increase the model’s temperature to get some variation.</li>
-<li>Evaluate the results.</li>
+<pre><code>You are an expert prompt engineer. Given a description of an AI assistant
+across up to seven dimensions (Role, Context, Task, Output Format,
+Constraints, Workflow, Examples), write a complete system prompt that
+addresses each provided dimension clearly. Output only the system prompt text.</code></pre>
+<ol start="2" type="1">
+<li>Call it with a test input — for example, a customer support agent for a software company.</li>
+<li>Inspect the output: does it address the dimensions you provided?</li>
+<li>Open <code>adk web</code> and examine the agent graph.</li>
 </ol>
 </div>
 </div>
 </section>
-<section id="reviewer-llm-as-a-judge" class="level3">
-<h3 class="anchored" data-anchor-id="reviewer-llm-as-a-judge">Reviewer (LLM as a judge)</h3>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-
-hyp[Hypothesis]
-rev(Reviewer)
-feedback[Feedback]
-hyp --&gt; rev
-rev --&gt; feedback
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>The reviewer is a judge-LLM with a rubric for a good hypothesis. Here is an example:</p>
-<pre><code>You are a research assistant. Your task is to review a hypothesis based on these rules:
-1. Is this a prediction?
-2. Does it explain something?
-3. Is it falsifiable?
-4. Is it specific?
-Provide concise feedback on how to improve the hypothesis.</code></pre>
-<p>You may want to adapt the rubric to get the desired result. You can use one reviewer as shown here, or do several reviewers each with a specific criterion of the rubric.</p>
-<!-- Here, LLM-as-judge is used to evaluate and guide improvements. -->
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>📝 Task
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Let’s build us a very judgemental robot!</p>
-<ol type="1">
-<li>In the same notebook, initialize a reviewer as well.</li>
-<li>Let the reviewer review the hypothesis generated by the generator.</li>
-<li>Adjust the rubric until the reviewer finds stuff to improve.</li>
-</ol>
-</div>
-</div>
-</section>
-<section id="editor" class="level3">
-<h3 class="anchored" data-anchor-id="editor">Editor</h3>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-
-hyp[Hypothesis]
-feedback[Feedback]
-editor(Editor)
-new_hyp[Hypothesis]
-data --&gt; editor
-hyp --&gt; editor
-feedback --&gt; editor
-editor --&gt; new_hyp
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>The editor uses the original input + hypothesis + feedback to produce a revised hypothesis. Its prompt encodes this behaviour explicitly (incorporate feedback, keep focus, improve wording, etc.).</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>📝 Task
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Time to improve!</p>
-<ol type="1">
-<li>In the same notebook, implement the editor as well. Make a new LLM call/prompt or adapt your original generator.</li>
-<li>Let the editor generate a new hypothesis or improve an existing one based on the feedback from the reviewer.</li>
-<li>Get the editor to actually generate something that is different from the generators version!</li>
-</ol>
-</div>
-</div>
-</section>
-<section id="full-pipeline" class="level3">
-<h3 class="anchored" data-anchor-id="full-pipeline">Full pipeline</h3>
-<p>We now basically have a working LLM-based pipeline.</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-gen(Generator)
-hyp[Hypothesis]
-rev(Reviewer)
-feedback[Feedback]
-editor(Editor)
-new_hyp[Hypothesis]
-data --&gt; gen
-gen --&gt; hyp
-hyp --&gt; rev
-rev --&gt; feedback
-data --&gt; editor
-hyp --&gt; editor
-feedback --&gt; editor
-editor --&gt; new_hyp
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. This could look like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hypothesis <span class="op">=</span> generator.generate(dataset_description)</span>
+<section id="sec-harnessing" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="sec-harnessing">Harnessing</h2>
+<p>The prompt advisor works, but it is unguarded. It will happily write a prompt that omits the persona, ignores safety, or produces something grammatically fine but semantically wrong. To make it reliable we need a <strong>harness</strong>.</p>
+<p>A harness is the complete scaffolding around an LLM pipeline: the class or module that holds the rules, runs the agents in order, enforces checks, and decides when to stop. It is everything except the model weights. The entire pipeline we are building today <em>is</em> the harness; the constitution (defined below) is one component inside it.</p>
+<p>The Claude Code source leak (April 2026) gave an unusually detailed public view of what a production-grade harness looks like.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The Claude Code runtime turned out to be a sophisticated harness with three distinct control layers: <strong>guides</strong> (feedforward instructions, conventions, and bootstrap prompts injected before the model acts), <strong>sensors</strong> (linters, type checkers, and test suites that catch bad output after execution), and <strong>control checks</strong> (deterministic format and length validation first, then slower LLM-powered semantic review). The key observation from the leak analysis: agents do not mind being micromanaged: more constraints, more checks, and more structure tend to improve performance rather than limit it.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/</p></div><div id="fn3"><p><sup>3</sup>&nbsp;A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model’s output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.</p></div></div><section id="the-constitution" class="level3">
+<h3 class="anchored" data-anchor-id="the-constitution">The constitution</h3>
+<p>The term <em>constitution</em> comes from Anthropic’s Constitutional AI work <span class="citation" data-cites="bai2022constitutional">(<a href="#ref-bai2022constitutional" role="doc-biblioref">Bai et al., 2022</a>)</span>, where a model is evaluated against a written list of principles rather than vague notions of quality. We borrow the concept at the pipeline level, not for training but for evaluation: the judge applies the constitution’s rules to each generated output. The full treatment of Constitutional AI as a training technique is session 11 material; here it functions as an evaluation design pattern.</p>
+<p>The <strong>constitution</strong> is the component of the harness that encodes these quality criteria as explicit, auditable Python objects rather than buried prompt text. Rules defined in a dataclass are inspectable, version-controllable, and changeable without touching any agent’s system prompt.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass, field</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PromptConstitution:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    rules: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> field(default_factory<span class="op">=</span><span class="kw">lambda</span>: [</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must clearly specify a Role or persona"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must include relevant context or background knowledge"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must state the agent's core task explicitly"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must define output format or communication style"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must include constraints on behaviour or outputs"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These five rules map to the five most frequent components from <span class="citation" data-cites="mao2025promptstemplatessystematicprompt">Mao et al. (<a href="#ref-mao2025promptstemplatessystematicprompt" role="doc-biblioref">2025</a>)</span>, making the constitution the machine-readable equivalent of the framework. The harness injects this constitution into the judge at call time, not hardcoded into any agent’s system prompt.</p>
+<p>Before wiring agents together, we add a <strong>deterministic hard check</strong> as a plain Python function. Functions placed directly in an edge chain are automatically treated as nodes: ADK wraps them transparently, with no explicit wrapper class needed. Such a function can declare <code>node_input: str</code> to receive the previous node’s text output, and <code>ctx</code> to receive the <code>Context</code> object for reading and writing <code>ctx.state</code>. The function returns an <code>Event</code> to control routing: <code>Event(route="pass")</code> follows the matching conditional edge; <code>Event(message="...")</code> emits a terminal message and stops the workflow.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.events.event <span class="im">import</span> Event</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(max_iter):</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    review <span class="op">=</span> reviewer.review(hypothesis)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> review_is_positive_enough(review):</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    hypothesis <span class="op">=</span> editor.edit(dataset_description, hypothesis, review)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> hypothesis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hard_check(node_input: <span class="bu">str</span>, ctx):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(node_input.strip()) <span class="op">&lt;</span> <span class="dv">50</span>:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> Event(message<span class="op">=</span><span class="st">"Hard check failed: output shorter than 50 characters."</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"draft_prompt"</span>] <span class="op">=</span> node_input</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Event(route<span class="op">=</span><span class="st">"pass"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Define a <code>PromptConstitution</code> dataclass with 3–5 rules of your choice (you can use the component mapping above or define domain-specific criteria).</li>
+<li>Implement the <code>hard_check</code> function above (or extend it with your own criteria). No wrapper class is needed — pass it directly in the edge tuple.</li>
+<li>Wire as a <code>Workflow</code>: <code>("START", advisor, hard_check, {"pass": ...})</code>. Task 4 fills in the target of the <code>"pass"</code> edge.</li>
+<li>Test it: what happens when you pass a minimal spec that produces a short output?</li>
+</ol>
+<p>This pre-check illustrates the control spectrum: deterministic function checks are fast and free; LLM-powered checks are slower and more expensive. Run the cheap ones first.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-llmjudge" class="level2">
+<h2 class="anchored" data-anchor-id="sec-llmjudge">LLM as a judge</h2>
+<p>The deterministic pre-check catches obvious failures but cannot evaluate whether the generated system prompt actually addresses the required components meaningfully. For that we need semantic evaluation, and a natural approach is to use an LLM.</p>
+<p>The idea behind <strong>LLM-as-a-judge</strong> is straightforward: use a language model to evaluate the quality of outputs produced by another language model <span class="citation" data-cites="zheng2023judging">(<a href="#ref-zheng2023judging" role="doc-biblioref">Zheng et al., 2023</a>)</span>. This is attractive because it scales to large volumes of outputs, can approximate nuanced qualitative judgement when prompted carefully, and requires no separate annotation pipeline. <span class="citation" data-cites="zheng2023judging">Zheng et al. (<a href="#ref-zheng2023judging" role="doc-biblioref">2023</a>)</span> showed that strong LLM judges achieve over 80% agreement with human raters on instruction-following tasks, comparable to inter-human agreement rates. The pattern has known limitations, however. Models may prefer their own output style, reward verbosity over accuracy, or be manipulated by superficially confident-sounding responses. LLM judgements should therefore be treated as approximate signals rather than ground truth, and ideally calibrated against human ratings for high-stakes applications.</p>
+<p>In the constitutional setting introduced by <span class="citation" data-cites="bai2022constitutional">Bai et al. (<a href="#ref-bai2022constitutional" role="doc-biblioref">2022</a>)</span>, the judge does not evaluate against vague notions of quality but against an explicit, enumerable list of principles. This makes the evaluation more consistent and the failure modes more interpretable. Our judge receives the generated system prompt directly as <code>node_input</code> (the previous node’s text output passed through the edge chain), and the constitution’s rules are embedded into its instruction string via a Python f-string at definition time. The judge evaluates each rule and returns a structured verdict.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>constitution <span class="op">=</span> PromptConstitution()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>judge <span class="op">=</span> Agent(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"Judge"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"ollama_chat/gemma3:latest"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    instruction<span class="op">=</span><span class="ss">f"""You are a strict quality evaluator for AI system prompts.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ss">Evaluate the following system prompt against each rule and return a JSON object</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ss">with keys "rule_scores" (dict mapping each rule to 0 or 1),</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ss">"approved" (true only if all scores are 1), and</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ss">"feedback" (one sentence per failed rule).</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ss">Rules:</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="sc">{</span>constitution<span class="sc">.</span>as_text()<span class="sc">}</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="ss">Return only valid JSON: </span><span class="ch">{{</span><span class="ss">"approved": true/false, "rule_scores": </span><span class="ch">{{</span><span class="ss">...</span><span class="ch">}}</span><span class="ss">, "feedback": "..."</span><span class="ch">}}</span><span class="ss">"""</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The system prompt to evaluate is not a template variable here — the judge receives it as the user message of its conversation turn, delivered automatically by ADK from the previous node’s output. If the judge returns output that cannot be parsed as JSON, the pipeline defaults to <code>approved=False</code>. This deterministic fallback ensures the harness never silently passes a bad output because the judge misbehaved.</p>
+<section id="wiring-agents-in-sequence-and-passing-state" class="level3">
+<h3 class="anchored" data-anchor-id="wiring-agents-in-sequence-and-passing-state">Wiring agents in sequence and passing state</h3>
+<p>A <code>Workflow</code> runs its nodes in the order defined by its edges. Within a single edge chain (a tuple), each node’s text output is passed as <code>node_input</code> to the next function in the chain, and as the user message to the next <code>Agent</code>. This is the primary mechanism for sequential data flow.</p>
+<p>For <strong>cross-branch data sharing</strong> — when two separate branches of the graph both need access to the same value — use <code>ctx.state</code>. A function writes to <code>ctx.state["key"]</code> and any downstream agent can read it via a template variable <code>{key}</code> in its instruction string. Template variables in <code>{curly_braces}</code> are filled from <code>ctx.state</code> before the instruction reaches the model. Literal braces that should appear in the output (such as in a JSON schema) must be doubled: <code>{{</code> and <code>}}</code>.</p>
+<p>In our pipeline the feedback agent and editor both need the current draft, so <code>hard_check</code> writes it to <code>ctx.state["draft_prompt"]</code>. The feedback agent reads <code>{draft_prompt}</code> and <code>{judge_feedback}</code> from state; the editor reads <code>{draft_prompt}</code> and <code>{feedback}</code>. The judge, however, receives the draft purely as <code>node_input</code> — no state read needed for its main input.</p>
+<p>The full <code>judge</code>, <code>feedback_agent</code>, and <code>editor</code> definitions, along with the loop routing functions, are consolidated in the next section.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Define a <code>judge</code> (<code>Agent</code>) with the evaluation instruction above, embedding the constitution rules via Python f-string.</li>
+<li>Write a <code>route_after_judge</code> routing function that parses the judge’s JSON output, writes <code>judge_feedback</code> to state, and returns <code>Event(route="approved")</code> or <code>Event(route="rejected")</code>. If parsing fails, force <code>approved=False</code>.</li>
+<li>Wire the hard check and judge into the graph using the chain tuple syntax: <code>("START", advisor, hard_check, {"pass": judge})</code> and continue from there with <code>route_after_judge</code>. The full workflow is now <code>START → advisor →[hard_check]→[pass]→ judge →[route_after_judge]→ ...</code>.</li>
+<li>Run the full pipeline on two inputs: one you expect to pass and one you expect to fail. Inspect the judge’s feedback for each.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Rubric judging and qualitative content coding
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The binary judge (pass/fail) is the simplest form of LLM evaluation. A natural extension is to evaluate each rule independently on a 1/0 basis, giving partial credit and a more informative failure signal. This <em>rubric</em> approach has a precise analogue in qualitative research methodology.</p>
+<p>Rubric-based LLM judging is structurally identical to <strong>content coding</strong>: a coder (the judge) applies a coding scheme (the rubric/constitution) to a unit of text (the output), producing a code (the score). Qualitative research has decades of accumulated best practice for this workflow, centred on inter-rater reliability. The standard measure is <strong>Krippendorff’s alpha</strong> <span class="citation" data-cites="krippendorff2004content">(<a href="#ref-krippendorff2004content" role="doc-biblioref">Krippendorff, 2004</a>)</span>, a coefficient that accounts for chance agreement across nominal, ordinal, and interval scales. When multiple LLM judges disagree, alpha quantifies whether the disagreement is systematic (a codebook problem) or random (noise). <span class="citation" data-cites="hayes2007kripp">Hayes &amp; Krippendorff (<a href="#ref-hayes2007kripp" role="doc-biblioref">2007</a>)</span> provide the computational procedure and a reference implementation; the practical target is alpha &gt; 0.8 before treating coded data as reliable.</p>
+<p>The design principles that make content coding reliable translate directly to constitution design. Rules should be mutually exclusive, covering distinct non-overlapping aspects of quality; collectively exhaustive, together covering all dimensions that matter; and anchored clearly enough that it is unambiguous what counts as a 0 and what counts as a 1. The constitution in our pipeline is the machine-readable equivalent of a codebook. If your judge scores are noisy or inconsistent, the remedy is the same as in qualitative research: refine the codebook until the criteria are unambiguous.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-editor" class="level2">
+<h2 class="anchored" data-anchor-id="sec-editor">Editor and improvement loop</h2>
+<p>A single judge pass identifies problems but does not fix them. The natural next step is an improvement loop: the judge evaluates, a feedback agent proposes concrete changes, and an editor applies them. This loop repeats until the judge approves or a maximum iteration count is reached.</p>
+<p>This three-role structure is worth keeping explicit rather than merging roles. The judge computes <em>what is wrong</em> with the current output; the feedback agent computes <em>what to change</em> in response; the editor <em>applies</em> the change to produce the next candidate. Keeping them separate makes each role narrower and easier to prompt precisely, and it maps naturally to the structure of Constitutional AI <span class="citation" data-cites="bai2022constitutional">(<a href="#ref-bai2022constitutional" role="doc-biblioref">Bai et al., 2022</a>)</span>, where critique and revision are distinct operations.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-gen(Generator)
-hyp[Hypothesis]
-rev(Reviewer)
-feedback[Feedback]
-editor(Editor)
-if{good enough?}
-stop((stop))
-data --&gt; gen
-gen --&gt; hyp
-hyp --&gt; rev
-rev --&gt; feedback
-data --&gt; editor
-hyp --&gt; editor
-feedback --&gt; if
-if -- no --&gt; editor
-if -- yes --&gt; stop
-editor --&gt; hyp
+    advisor(Prompt\nAdvisor)
+    check{Hard\nCheck}
+    judge(Judge)
+    feedback(Feedback\nAgent)
+    editor(Editor)
+    out((Approved\nPrompt))
+    fail[Reject]
+
+    advisor --&gt; check
+    check --&gt;|pass| judge
+    check --&gt;|fail| fail
+    judge --&gt;|approved| out
+    judge --&gt;|rejected| feedback
+    feedback --&gt; editor
+    editor --&gt; judge
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<p>The missing piece is review_is_positive_enough, where you might:</p>
-<ul>
-<li>search for a specific “OK” marker in the review,</li>
-<li>ask the reviewer to output a score and threshold it,</li>
-<li>or run an additional small LLM classification step.</li>
-</ul>
-<p>Alternatively, you can just generate a lot of hypotheses and choose the best one (or the best <em>n</em>).</p>
-<p>Exactly the same pattern can be transferred to <strong>your own project outputs</strong>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>📝 Task
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Build it!</p>
-<ol type="1">
-<li>Think of a way to stop the review process once the hypothesis is good enough.</li>
-<li>Implement the loop.</li>
-</ol>
-<p>This is the minimum goal for today, so when you are done, you can upload your notebook to moodle. Alternatively, go on and implement the agent (see below) as well!</p>
-</div>
-</div>
-</section>
-<section id="from-pipeline-to-orchestrated-agents" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="from-pipeline-to-orchestrated-agents">From pipeline to orchestrated agents</h3>
-<p>The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Note that this is, of course, only one way to implement this as an agent system.</p></div></div><pre><code>You are tasked with creating high-quality scientific hypothesis for a given dataset. Use the tools at your disposal to ensure good quality. 
-Available tools:
-– Generator – creates hypotheses
-– Reviewer – evaluates hypothesis quality
-– Editor – improves hypothesis based on feedback
-Decision guidelines:
-– Use Generator to create hypothesis.
-– Use Reviewer to generate feedback.
-– Use Editor to improve hypothesis.
-– Choose END when the hypothesis is good enough.
-Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").</code></pre>
-<p>The agent is now just a loop around this orchestrator:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pseudocode</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>initialize: </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    tools</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    history</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> true:</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> orchestrator(history)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> response <span class="op">==</span> <span class="st">"END"</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> response <span class="op">==</span> <span class="st">"generator"</span> </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        history <span class="op">+=</span> generator.generate()</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># same for other tools</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/agent_loop_tinyagents.jpg" class="img-fluid figure-img"></p>
-<figcaption>Image credit https://x.com/adamdotdev (from <a href="https://huggingface.co/blog/tiny-agents">the Tiny Agents blogpost</a>)</figcaption>
-</figure>
-</div>
-<p>This is essentially the agentic version of the same pipeline. The pros and cons are analogous to those discussed in session <a href="agent_basics.html" class="quarto-xref"><span>Agents</span></a>:</p>
-<ul>
-<li>more flexibility,</li>
-<li>but also more complexity and less predictability.</li>
-</ul>
-<p>For your projects, you should decide consciously whether you need this flexibility – or whether a simple pipeline with a clear evaluation step is sufficient.</p>
+<p>The <code>Workflow</code> in ADK manages the graph. Stopping conditions are encoded as <strong>conditional edges</strong>: an edge is only followed when the source node’s routing function returns an <code>Event</code> with a matching <code>route</code> value. Routing is handled by plain Python functions placed in the edge chain, not by callbacks attached to agents.</p>
+<p>The edge chain tuple syntax makes this concrete. A 4-tuple <code>(a, b, router_fn, {"x": c, "y": d})</code> means: run <code>a</code>, pass its output to <code>b</code>, then call <code>router_fn</code> with <code>b</code>’s output and route to <code>c</code> or <code>d</code> based on the <code>Event(route=...)</code> it returns. A plain 2-tuple <code>(a, b)</code> is an unconditional edge. A 3-tuple <code>(a, router_fn, {"x": c})</code> means <code>a</code>’s output goes directly to <code>router_fn</code> for routing, skipping any intermediate agent.</p>
+<p>The <code>route_after_judge</code> function parses the verdict JSON, writes <code>judge_feedback</code> to state, and returns <code>Event(route="approved")</code> or <code>Event(route="rejected")</code>. The <code>loop_or_stop</code> function increments an iteration counter and returns <code>Event(route="continue")</code> until <code>MAX_ITERATIONS</code> is reached; returning <code>None</code> terminates the workflow at that point. The <code>store_feedback</code> function writes the feedback agent’s output to state so the editor can read it as <code>{feedback}</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk <span class="im">import</span> Agent, Workflow</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.events.event <span class="im">import</span> Event</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>MAX_ITERATIONS <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> route_after_judge(node_input: <span class="bu">str</span>, ctx):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        verdict <span class="op">=</span> json.loads(node_input)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> (json.JSONDecodeError, <span class="pp">ValueError</span>):</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        verdict <span class="op">=</span> {<span class="st">"approved"</span>: <span class="va">False</span>, <span class="st">"feedback"</span>: <span class="st">"Could not parse verdict."</span>}</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"judge_feedback"</span>] <span class="op">=</span> verdict.get(<span class="st">"feedback"</span>, <span class="st">""</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Event(route<span class="op">=</span><span class="st">"approved"</span> <span class="cf">if</span> verdict.get(<span class="st">"approved"</span>) <span class="cf">else</span> <span class="st">"rejected"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> store_feedback(node_input: <span class="bu">str</span>, ctx):</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"feedback"</span>] <span class="op">=</span> node_input</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Event(route<span class="op">=</span><span class="st">"next"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loop_or_stop(node_input: <span class="bu">str</span>, ctx):</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"draft_prompt"</span>] <span class="op">=</span> node_input</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"iteration"</span>] <span class="op">=</span> ctx.state.get(<span class="st">"iteration"</span>, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ctx.state[<span class="st">"iteration"</span>] <span class="op">&lt;</span> MAX_ITERATIONS:</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> Event(route<span class="op">=</span><span class="st">"continue"</span>, output<span class="op">=</span>node_input)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This pattern generalises: routing functions receive the previous node’s text output as <code>node_input</code>, update state as needed, and return an <code>Event</code> to direct the graph. The same function signature works for both branching and looping.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>review_loop <span class="op">=</span> Workflow(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"ReviewLoop"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">=</span>[</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"START"</span>, judge, route_after_judge, {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"rejected"</span>: feedback_agent,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        }),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        (feedback_agent, store_feedback, {</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"next"</span>: editor,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        }),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        (editor, loop_or_stop, {</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"continue"</span>: judge,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        }),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>root_agent <span class="op">=</span> Workflow(</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"PromptPipeline"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">=</span>[</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"START"</span>, advisor, hard_check, {</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">"pass"</span>: review_loop,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        }),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -833,18 +766,85 @@ Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>In the same notebook, initialize the orchestrator agent as well.</li>
-<li>Implement the workflow shown above in real code.</li>
-<li>Watch happily as it all works without any issues whatsoever.</li>
-<li>Upload to Moodle.</li>
+<li>Define a <code>feedback_agent</code> (<code>Agent</code>) whose instruction reads from <code>{judge_feedback}</code> and <code>{draft_prompt}</code> (via state template variables) and proposes specific, concrete rewrites for each failed rule — a numbered list of changes, not a revised prompt.</li>
+<li>Define an <code>editor</code> (<code>Agent</code>) whose instruction reads from <code>{draft_prompt}</code> and <code>{feedback}</code> (via state template variables) and returns the revised system prompt. Write a <code>loop_or_stop</code> routing function that increments the iteration counter, writes the revised prompt back to <code>ctx.state["draft_prompt"]</code>, and returns <code>Event(route="continue")</code> until <code>MAX_ITERATIONS</code> is reached.</li>
+<li>Build the <code>ReviewLoop</code> as a <code>Workflow</code> using chain tuple syntax: <code>("START", judge, route_after_judge, {"rejected": feedback_agent})</code> for conditional branching; <code>(editor, loop_or_stop, {"continue": judge})</code> for the back-edge.</li>
+<li>Build the outer <code>Workflow</code>: <code>("START", advisor, hard_check, {"pass": review_loop})</code>.</li>
+<li>Run the full pipeline end-to-end. Open <code>adk web</code> and trace the execution: how many iterations did it take? Where did the judge’s score change?</li>
 </ol>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task (extension): LLM jury
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Instead of a single judge, run multiple judges in parallel, each focusing on a different subset of the constitution’s rules. Aggregate their verdicts by majority vote.</p>
+<ol type="1">
+<li>Define three <code>judge</code> (<code>Agent</code>) instances, each responsible for one or two rules.</li>
+<li>Wire them in parallel using <code>Workflow</code>’s fan-out syntax: <code>(advisor, (judge1, judge2, judge3))</code> fans out to all three simultaneously; <code>((judge1, judge2, judge3), aggregator)</code> fans back in.</li>
+<li>Add a plain <code>def aggregator(ctx)</code> function that combines the three verdicts from <code>ctx.state</code>.</li>
+<li>Compare the jury’s behaviour to the single judge on a set of test prompts.</li>
+</ol>
+<p><span class="citation" data-cites="juryon2025"><span>“Who Judges the Judge? <span>LLM</span> Jury-on-Demand”</span> (<a href="#ref-juryon2025" role="doc-biblioref">2025</a>)</span> discuss dynamic jury selection; <span class="citation" data-cites="chen2024chateval">Chan et al. (<a href="#ref-chen2024chateval" role="doc-biblioref">2023</a>)</span> show that diverse role prompts are essential; judges with identical instructions tend to degrade toward noise.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Side note: safety as a constitution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The same pipeline structure applies to safety evaluation. Replace or extend the quality rules in the constitution with safety criteria: for example, “must not produce instructions for harmful activities”, “must not impersonate real individuals”, or “must not claim capabilities the model does not have”. The judge becomes a safety gate; the constitution is the policy; the harness enforces it. Structurally identical to the quality pipeline: different constitution, same code.</p>
+</div>
+</div>
 </section>
-</section>
-<section id="project-work" class="level2">
-<h2 class="anchored" data-anchor-id="project-work">Project work</h2>
-<p>Time to work on your projects!</p>
+<section id="sec-observability" class="level2">
+<h2 class="anchored" data-anchor-id="sec-observability">Observability</h2>
+<p>A multi-step pipeline is harder to debug than a single LLM call. Failures can be buried two or three hops deep in the graph: the editor may have applied a change that satisfied the judge locally but broke a different rule in the next iteration.</p>
+<p>The ADK Dev UI (launched with <code>adk web</code>) is the primary debugging tool for today’s session. It shows the full agent tree, per-node input and output, and execution timing without any configuration.</p>
+<p>For production deployments, <strong>Langfuse</strong> (https://langfuse.com) provides open-source LLM observability with a self-hostable backend. ADK emits OpenTelemetry traces natively, so connecting it to Langfuse requires only setting two environment variables; no code changes to your agents are needed:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">OTEL_EXPORTER_OTLP_ENDPOINT</span><span class="op">=</span>https://your-langfuse-instance/api/public/otel</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="va">OTEL_EXPORTER_OTLP_HEADERS</span><span class="op">=</span>Authorization=Basic <span class="op">&lt;</span>base64-encoded-key<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Systematic variation and testing of your pipeline (different constitutions, different models, different iteration limits) is also where the <strong>Examples</strong> component from <span class="citation" data-cites="mao2025promptstemplatessystematicprompt">Mao et al. (<a href="#ref-mao2025promptstemplatessystematicprompt" role="doc-biblioref">2025</a>)</span> becomes practically relevant: running the pipeline across a set of test cases and inspecting the traces is how you discover whether your prompt spec produces consistent outputs. Tools like Langfuse make that process tractable by preserving the full trace of each run.</p>
+<!-- TODO: mcp with markdowns would be nicer -->
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Extension: context store
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>ADK’s <code>Session</code> object carries a <code>state</code> dict that persists across agent turns. The pipeline can accumulate previously approved prompts there, giving the editor access to examples of what has worked before — a lightweight form of episodic memory with no vector store or embeddings required.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add this inside loop_or_stop when the judge approved:</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ctx.state.setdefault(<span class="st">"approved_prompts"</span>, []).append(ctx.state.get(<span class="st">"draft_prompt"</span>, <span class="st">""</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Inject history into the editor's instruction:</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>editor <span class="op">=</span> Agent(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"Editor"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"ollama_chat/gemma3:latest"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    instruction<span class="op">=</span><span class="st">"""Apply the proposed changes to the current prompt.</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">Current prompt: </span><span class="sc">{draft_prompt}</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">Proposed changes: </span><span class="sc">{feedback}</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">Previously approved prompts for reference: </span><span class="sc">{approved_prompts}</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">Return only the revised system prompt."""</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -855,22 +855,24 @@ Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<ol type="1">
-<li>Discuss your project.</li>
-<li>Set up the repository</li>
-<li>Plan the project</li>
-<li>Start collecting data or finding a data set</li>
-<li>Start implementing</li>
-</ol>
-<p>Happy coding!</p>
+<p>Extend your pipeline to accumulate approved prompts in <code>session.state</code> and pass them to the editor. Run the pipeline on three different input specs in sequence and observe whether the editor’s revisions improve.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </section>
 <section id="further-readings" class="level2">
-<h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
+<h2 class="anchored" data-anchor-id="further-readings">Further readings</h2>
 <ul>
-<li><a href="https://huggingface.co/blog/tiny-agents">the Tiny Agents blogpost</a> really helps understanding agents.</li>
-<li><a href="https://www.youtube.com/watch?v=ewLMYLCWvcI">Here</a> is a video describing other multi-agent systems, including an <a href="https://arxiv.org/abs/2405.02957">agent hospital</a> and a <a href="https://arxiv.org/html/2405.11804v1">multi-agent translator</a></li>
+<li><span class="citation" data-cites="mao2025promptstemplatessystematicprompt">Mao et al. (<a href="#ref-mao2025promptstemplatessystematicprompt" role="doc-biblioref">2025</a>)</span>: empirical analysis of 2,163 real-world system prompt templates, identifying seven components and their frequencies</li>
+<li><span class="citation" data-cites="huizenga2025adk">Huizenga &amp; Yang (<a href="#ref-huizenga2025adk" role="doc-biblioref">2025</a>)</span>: the official ADK announcement with architecture overview</li>
+<li><span class="citation" data-cites="anthropic2025multiagent">Anthropic Engineering (<a href="#ref-anthropic2025multiagent" role="doc-biblioref">2025</a>)</span>: Anthropic’s account of building a production multi-agent research system</li>
+<li><span class="citation" data-cites="wang2024moa">Wang et al. (<a href="#ref-wang2024moa" role="doc-biblioref">2024</a>)</span>: the Mixture-of-Agents paper, showing that layered multi-agent pipelines outperform single large models on reasoning benchmarks</li>
+<li><span class="citation" data-cites="bai2022constitutional">Bai et al. (<a href="#ref-bai2022constitutional" role="doc-biblioref">2022</a>)</span>: the Constitutional AI paper introducing the principle of explicit enumerable rules for LLM evaluation</li>
+<li><span class="citation" data-cites="zheng2023judging">Zheng et al. (<a href="#ref-zheng2023judging" role="doc-biblioref">2023</a>)</span>: the foundational LLM-as-a-judge paper with MT-Bench and Chatbot Arena</li>
+<li><span class="citation" data-cites="masterman2024landscape">Masterman et al. (<a href="#ref-masterman2024landscape" role="doc-biblioref">2024</a>)</span>: a survey of emerging agent architectures with a taxonomy of scaffolding roles</li>
+<li><span class="citation" data-cites="krippendorff2004content">Krippendorff (<a href="#ref-krippendorff2004content" role="doc-biblioref">2004</a>)</span>: the standard reference for content analysis methodology and inter-rater reliability</li>
 </ul>
 </section>
 <section id="references" class="level2">
@@ -878,8 +880,41 @@ Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-ConstitutionalAIHarmlessness" class="csl-entry" role="listitem">
-<em>Constitutional <span>AI</span>: <span>Harmlessness</span> from <span>AI Feedback</span></em>. (n.d.). https://www.anthropic.com/research/constitutional-ai-harmlessness-from-ai-feedback.
+<div id="ref-anthropic2025multiagent" class="csl-entry" role="listitem">
+Anthropic Engineering. (2025). <em>How we built our multi-agent research system</em>. https://www.anthropic.com/engineering/multi-agent-research-system.
+</div>
+<div id="ref-bai2022constitutional" class="csl-entry" role="listitem">
+Bai, Y. et al. (2022). Constitutional <span>AI</span>: <span>Harmlessness</span> from <span>AI</span> feedback. <em>arXiv Preprint arXiv:2212.08073</em>. <a href="https://arxiv.org/abs/2212.08073">https://arxiv.org/abs/2212.08073</a>
+</div>
+<div id="ref-chen2024chateval" class="csl-entry" role="listitem">
+Chan, C.-M. et al. (2023). <span>ChatEval</span>: <span>Towards</span> better <span class="nocase">LLM-based</span> evaluators through multi-agent debate. <em>arXiv Preprint arXiv:2308.07201</em>. <a href="https://arxiv.org/abs/2308.07201">https://arxiv.org/abs/2308.07201</a>
+</div>
+<div id="ref-hayes2007kripp" class="csl-entry" role="listitem">
+Hayes, A. F., &amp; Krippendorff, K. (2007). Answering the call for a standard reliability measure for coding data. <em>Communication Methods and Measures</em>, <em>1</em>(1), 77–89. <a href="https://doi.org/10.1080/19312450709336866">https://doi.org/10.1080/19312450709336866</a>
+</div>
+<div id="ref-huizenga2025adk" class="csl-entry" role="listitem">
+Huizenga, E., &amp; Yang, B. (2025). <em>Agent development kit: <span>Making</span> it easy to build multi-agent applications</em>. https://developers.googleblog.com/en/agent-development-kit-easy-to-build-multi-agent-applications/; Google.
+</div>
+<div id="ref-krippendorff2004content" class="csl-entry" role="listitem">
+Krippendorff, K. (2004). <em>Content analysis: <span>An</span> introduction to its methodology</em>. Sage.
+</div>
+<div id="ref-mao2025promptstemplatessystematicprompt" class="csl-entry" role="listitem">
+Mao, Y., He, J., &amp; Chen, C. (2025). <em>From prompts to templates: A systematic prompt template analysis for real-world llmapps</em>. <a href="https://doi.org/10.48550/arXiv.2504.02052">https://doi.org/10.48550/arXiv.2504.02052</a>
+</div>
+<div id="ref-masterman2024landscape" class="csl-entry" role="listitem">
+Masterman, T. et al. (2024). The landscape of emerging <span>AI</span> agent architectures for reasoning, planning, and tool calling. <em>arXiv Preprint arXiv:2404.11584</em>. <a href="https://arxiv.org/abs/2404.11584">https://arxiv.org/abs/2404.11584</a>
+</div>
+<div id="ref-ong2024routellm" class="csl-entry" role="listitem">
+Ong, I. et al. (2024). <span>RouteLLM</span>: <span>Learning</span> to route <span>LLMs</span> with preference data. <em>arXiv Preprint arXiv:2406.18665</em>. <a href="https://arxiv.org/abs/2406.18665">https://arxiv.org/abs/2406.18665</a>
+</div>
+<div id="ref-wang2024moa" class="csl-entry" role="listitem">
+Wang, J. et al. (2024). Mixture-of-agents enhances large language model capabilities. <em>arXiv Preprint arXiv:2406.04692</em>. <a href="https://arxiv.org/abs/2406.04692">https://arxiv.org/abs/2406.04692</a>
+</div>
+<div id="ref-juryon2025" class="csl-entry" role="listitem">
+Who judges the judge? <span>LLM</span> jury-on-demand. (2025). <em>arXiv Preprint arXiv:2512.01786</em>. <a href="https://arxiv.org/abs/2512.01786">https://arxiv.org/abs/2512.01786</a>
+</div>
+<div id="ref-zheng2023judging" class="csl-entry" role="listitem">
+Zheng, L. et al. (2023). Judging <span class="nocase">LLM-as-a-judge</span> with <span class="nocase">MT-bench</span> and chatbot arena. <em><span>NeurIPS</span> 2023 Datasets and Benchmarks</em>.
 </div>
 </div>
 </section>
