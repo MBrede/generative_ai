@@ -1,0 +1,262 @@
+---
+toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent Basics</h3>'
+---
+
+# Agent Basics {#sec-agents}
+
+## Motivation and learning objectives
+
+In the first four sessions of this course you have seen language models as components in applications: as one-of calls, as chatbots, tools users can query, or models that are connected to a vector store.
+
+From now on, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.
+
+In this session we will:
+
+- understand what an LLM agent is and how it differs from a “plain” LLM call,
+- analyse the core components of agent frameworks (planning, tools, memory),
+- explore a concrete EDA agent as a running example, and
+- get a first feel for when a simple pipeline is preferable to a full agentic setup.
+
+This prepares the ground for session @sec-evalpipelines, where we will add an evaluation layer using LLM as a judge and build evaluation pipelines for our systems.
+
+## What is an agent? 
+
+"An AI agent is a system that uses an LLM to decide the control flow of an application." [@WhatAIAgent2024]
+
+The term agent (from Latin agere – to act) emphasises action and decision-making. An agent is not just a model that generates text; it is a system that:
+
+- receives a goal or task,
+- decides which actions or tools to use in which order,
+- observes the results of these actions, and
+- continues until the goal is reached (or judged to be unreachable).
+
+In practice, this often means that the LLM has some degree of agency in your application. It can:
+
+- choose which tool to call (if any),
+- decide which information to retrieve from a vector store or database,
+- plan intermediate steps,
+- and determine when to stop and return a final answer.
+
+
+### A motivating example
+
+Assume the following question:
+
+__"What were the key learnings from the Generative AI elective module in SoSe 25 at FH Kiel?"__
+
+If the module script is not in the LLM’s training data, a single vanilla LLM call will likely hallucinate. A more promising route is a multi-step process:
+
+1. Locate the relevant material (e.g. a PDF script in your local storage or in a course repository).
+2. Read and understand the document.
+3. Summarise the important topics and activities.
+4. Answer the original question based on this summary.
+
+An agent can automate this process: it decides that it first needs to search, then read, then summarise, then answer, and it calls the corresponding tools.
+
+In this course, we will work with a similar multi-step scenario – but instead of reading a script, our agent will perform an exploratory data analysis (EDA) on a dataset.
+
+
+
+
+## Agent framework
+
+![Architecture of the agent framework [@LLMAgentsNextra2024]](../imgs/agent-framework.png)
+
+Most agent frameworks share a similar high-level architecture:
+
+### Agent (core)
+The general-purpose LLM that acts as the brain of the system. It receives the current state (task, context, history) and decides:
+
+- which tool to call next,
+- how to interpret tool outputs,
+- when to stop and return a final answer.
+
+### Planning
+The mechanism that breaks down a complex task into smaller steps and orders them. In many frameworks, planning is not a separate module but largely encoded in the system prompt and the examples we give the LLM (“reason step by step”, “decide which tool to use next”, etc.).
+
+### Tools
+Functions the agent can call – this is where the “real work” happens: data loading, statistics, plotting, web search, calling another API, …
+Tools can be simple (e.g. a calculator) or complex (e.g. a database query, another agent). For our EDA agent, tools will include things like ``inspect_schema``, ``basic_stats``, or ``plot_distribution``.
+
+### Memory
+Storage for past interactions and intermediate results. Memory can be:
+
+- short-term: conversation history or recent tool outputs,
+- long-term: a vector store or database with previously seen information.
+Memory enables the agent to build on earlier steps instead of starting from scratch each time.
+
+
+### Multi-step agents and ReAct
+
+A widely used pattern for multi-step agents is ReAct (Reasoning + Acting) by Yao et al. [@yaoReActSynergizingReasoning2023]. The core idea:
+
+1. The agent reasons about the current situation (“Thought”).
+2. It chooses and executes an action (e.g. a tool call).
+3. It observes the result (“Observation”).
+4. It updates its reasoning and decides on the next action.
+5. This thought–action–observation loop repeats until a stopping condition is met.
+
+In pseudocode (adapted from the [smolagents documentation](https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents)):
+
+    memory = [user_defined_task]
+
+    while llm_should_continue(memory):
+        action = llm_get_next_action(memory)
+        observations = execute_action(action)
+        memory += [action, observations]
+
+    final_answer = llm_generate_answer(memory)
+    return final_answer
+
+The intelligence of the system lies in:
+
+- the prompting that shapes how the LLM reasons and chooses actions,
+- the tool design (signatures, descriptions), and
+- how we represent memory (what gets recorded, in which format, with which limits).
+
+
+## Agent frameworks in practice
+
+There are many frameworks for building LLM-based agents. In this course we focus on two:
+
+- [Llamaindex](https://github.com/run-llama/llama_index): Originally a data framework for building LLM applications around your own data. It offers convenient abstractions for tools, agents, and memory, and comes with many examples and tutorials.
+- [smolagents](https://huggingface.co/docs/smolagents/index): A lightweight agent framework by Hugging Face. It is designed to be simple and hackable, with good conceptual documentation and an active community.
+
+Two other popular frameworks you might encounter:
+
+- [LangChain](https://github.com/hwchase17/langchain): a modular library for building LLM applications (chains, agents, tools), with a large ecosystem of integrations.
+- [Haystack](https://github.com/deepset-ai/haystack): an open-source NLP framework focused on production-ready applications with LLMs and classic models, developed by deepset (Germany).
+
+
+::: {.callout-note}
+## 📝 Task
+
+Now it is your turn!
+
+Each group is to use one of the following frameworks to build a small demo agent:
+
+- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) You can use [the ReAct example](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as a starting point. 
+- [Smolagents](https://huggingface.co/docs/smolagents/tutorials/building_good_agents)
+- Another framework of your choice. 
+
+For your chosen framework, do the following:
+
+1. Set up a local LLM (e.g. using Ollama or LM Studio) to be used by the agent.
+2. Choose a small task for your agent, e.g. answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)
+3. Implement the agent using one of the frameworks listed above.
+4. Have a deeper look! Try to find the system prompt, the agent gives to the LLM ( in LLamaindex you can find it using agent.get_prompts()). Try to find it in smolagents.
+4. Present your results and your experiences with the frameworks (presenting the notebook is fine.)
+<!-- 5. Submit your code and report on moodle. -->
+
+:::
+
+
+## The EDA agent as a running example
+
+For the remainder of this session, we use a concrete use case:
+
+__EDA Agent for tabular data:__ A system that receives a dataset and automatically produces a first EDA report.
+
+### Problem setting
+
+Data scientists regularly receive new datasets and need to answer questions like:
+
+- Which variables are present? With which types?
+- Are there missing values or obvious data quality issues?
+- How are key variables distributed?
+- Are there potentially interesting relationships or anomalies?
+
+This can become repetitive and time-consuming. Our EDA agent aims to automate the first pass of this process.
+
+### Roles of tools in the EDA agent
+
+Sample tools could be:
+
+- ``inspect_schema(dataset)``: column names, types, basic info
+- ``basic_stats(dataset, columns)``: mean, median, min/max, missing values
+- ``plot_distribution(dataset, column)``: create histograms or boxplots
+- ``sample_rows(dataset, n)``: show a small sample for inspection
+- optional: ``vector_store_search(query)``: retrieve background information (e.g. on feature names)
+
+The agent receives a task such as:
+
+“Please perform a first exploratory analysis of this dataset and summarise the main findings.”
+
+It then:
+
+1. Calls inspect_schema to understand the structure.
+2. Decides which columns deserve a closer look.
+3. Calls basic_stats and plot_distribution for selected columns.
+4. Collects the outputs in memory.
+5. Generates a structured EDA report (e.g. “Data overview”, “Key distributions”, “Missing values”, “First hypotheses”).
+
+
+::: {.callout-note}
+## 📝 Task
+
+Do the EDA agent
+
+1. In your agent setup, implement the above functions for doing the EDA. This should be simple enough. 
+2. Give it a dataset ,e.g. [the titanic dataset from kaggle](https://www.kaggle.com/competitions/titanic/data) or some other simple dataset you have laying around. 
+3. Test the agent with several prompts and observe when it uses tools, when it doesn’t, and where it struggles. 
+4. Try to get it to do the above steps. 
+5. Present to the group. 
+
+:::
+
+
+## Pipelines vs. agents – when do we need agency?
+
+An agent is defined by its ability to decide. This brings flexibility – but also complexity and potential instability. You have to decide, if an agent is necessary to solve your problem or if you are better of using a pipeline. 
+Actually, most of the examples you find in tutorials will be better solved with a pipeline. We will use the example from the [smolagents introduction](https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents) to illustrate that.
+
+
+Let’s take an example: say you’re making an app that handles customer requests on a surfing trip website. Consider these two scenarios:
+
+__1. Simple, predictable workflow__
+
+You know in advance that user requests fall into a few categories and can be handled by a fixed sequence of steps.
+
+- If the user wants general information on surf trips → show a search interface over your FAQ.
+- If the user wants to talk to sales → collect their contact details in a form. 
+
+Here, a hand-coded workflow is simpler, more robust, and easier to test.
+
+__2. Open-ended, complex workflow__
+Let's assume he user asks:
+
+“I can come on Monday, but I forgot my passport so I might be delayed to Wednesday. Is it possible to take me and my luggage surfing on Tuesday morning, with cancellation insurance?”
+
+This touches several aspects (availability, logistics, insurance) where a fixed decision tree might become unwieldy. An agent can interpret the request and decide which information and tools are needed.
+
+__Rule of thumb:__
+
+If your workflow is essentially “always do A, then B, then C”, a pipeline of LLM calls (plus classic code) is often enough. If you regularly need adaptive decisions, an agent becomes attractive.
+
+For RAG-style systems, this is particularly relevant:
+
+- If retrieval is mandatory for correctness, you may not want to leave the “call retrieval or not?” decision to the LLM.
+- Instead, you enforce: “always retrieve, then generate”, implemented as a pipeline.
+
+<!-- We will build on this distinction in session @sec-evalpipelines, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense. -->
+
+What does this mean for our EDA agent?
+
+
+::: {.callout-note}
+## 📝 Task
+
+
+1. Discuss: for our EDA example, does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?
+2. Implement your agent from above as a pipeline. 
+3. Upload your Notebook to Moodle. 
+
+:::
+
+
+## Further Readings
+
+A nice Example of an agent system is *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors. It provides valuable insights into how and why these systems fail and is a very good read overall. 
+
+
+## References
