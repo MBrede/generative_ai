@@ -1,459 +1,470 @@
 ---
-toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>LLM pipelines</h3>'
+toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>Multi-Agent Orchestration</h3>'
 ---
 
-# LLM pipelines {#sec-evalpipelines}
+# Multi-Agent Orchestration {#sec-orchestration}
 
-<!-- in @sec-agents we bla  -->
+Multi-agent systems are, at their core, a bet on decomposition: split a hard task into narrower subtasks, assign each to a specialised agent, and coordinate the results. Whether that coordination is worth the overhead depends almost entirely on how you orchestrate the pieces. This session introduces two fundamentally different approaches to that coordination, explains why we focus on one of them for practical work with local models, and then builds a working constitutional prompt-advisor pipeline step by step using Google ADK.
 
-## Motivation and learning objectives
+## Two kinds of orchestration
 
-In session 5 we focused on __agentic decision-making__ and the EDA agent as a motivating example. In this session, we will:
+Before writing a single line of code it helps to name the landscape. When people talk about "multi-agent systems" they usually mean one of two very different things, and the choice between them has large practical consequences.^[The terms *LLM pipeline*, *multi-step pipeline*, and *agentic pipeline* are all used in the field for multi-step LLM workflows; the distinction between deterministic and LLM-driven routing is rarely explicit in the naming.]
 
-- distinguish more clearly between __agents__ and __LLM pipelines__,
-- understand the concept of __LLM as a judge__ and why evaluation is a bottleneck in generative AI systems,
-- design and discuss __evaluation pipelines__ for our EDA agent and related use cases, and
-- connect these ideas to your own project work.
+| | LLM pipelines with deterministic routing | Agent-driven orchestration |
+|--|--|--|
+| Who decides routing? | Your Python code | An LLM at runtime |
+| Predictability | Generally more predictable | Less predictable |
+| Traceability | Routing is explicit and inspectable | LLM decisions are implicit |
+| Feasible with small models? | More feasible per node | Needs a capable orchestrator |
+| Cost | Generally lower | Generally higher |
 
-After this session you should be able to:
+Both approaches can involve the same set of agents and components. The distinction is what controls which one runs next, not the agents themselves.
 
-- design a simple pipeline of LLM calls and tools,
-- use an LLM to evaluate model outputs along explicit criteria, and
-- reflect critically on the strengths and weaknesses of LLM-based evaluation.
+### Agent-driven orchestration: a motivating example
 
-
-## Pipelines: from input to output
-
-As discussed, an agent decides dynamically which tools to use. A pipeline, in contrast, follows a pre-defined sequence of steps:
-
-1. Receive input.
-2. Transform it through a series of modules (some LLM calls, some classic code).
-3. Produce an output – optionally with internal loops, but without LLM-driven control flow.
-
-Pipelines are attractive because they are:
-
-- easier to __test and debug__,
-- often more __robust__,
-- and usually more __efficient__ than agentic setups when the workflow is well understood.
-
-### Example: simple EDA pipeline (no agent)
-
-A non-agentic pipeline for our EDA use case could be:
-
-1. __Preprocessing__: load the CSV, detect column types, basic validation.
-2. __Analytics__: compute standard statistics and sample plots using Python code.
-3. __Report generation__: call an LLM once to turn the statistics and plots into a narrative EDA report.
-
-No tool selection is delegated to the LLM; it only writes the report. This is already powerful – but the __quality__ of the report still varies, and we need a way to __evaluate__ it.
-
-
-## LLM as a judge {#sec-llmJudge}
-
-The core idea of LLM as a judge is simple:
-
-__Use a (possibly different) LLM to evaluate the quality of outputs produced by an LLM-based system.__
-
-__Why is this useful?__
-
-Consider a small experiment:
-
-::: {.callout-note}
-## 📝 Task
-
-1. Open a notebook and connect it with a local LLM using LM Studio (or other).
-2. Ask it to generate __one__ story containing fried eggs on a sunrise. 
-3. Informally evaluate the story: What works well? What doesn’t? How did you decid
-4. Now ask the model to generate __50–100__ such stories (use a higher temperature).
-5. Try to evaluate all of them manually...
-
-Reflect: How long does it take? How consistent are your own judgements?
-
-:::
-
-Typical pattern:
-
-1. We generate large amounts of text, code, or structured output.
-2. We suspect that quality is variable.
-3. We need a way to __assess__ that quality.
-4. Reading and judging everything manually is too slow and doesn’t scale. (We don't have time for this.)
-
-Instead, we can use an LLM in an evaluation role:
-
-- It receives the output to be evaluated (e.g. an EDA report).
-- It receives __criteria__ (e.g. correctness, completeness, clarity).
-- It returns scores, labels, or structured feedback.
-
-The evaluation can then be used to:
-
-- accept or reject outputs,
-- select the best out of several candidates,
-- give automated feedback for improvement,
-- or serve as a signal for fine-tuning or reinforcement learning (e.g. Constitutional AI [@ConstitutionalAIHarmlessness]).
-
-This approach is called LLM as a judge.
-
-### Benefits and drawbacks
-
-__Benefits:__
-
-- Scales to large numbers of outputs.
-- Can approximate nuanced, qualitative judgements when well-prompted.
-- Easy to combine with existing systems (few additional components).
-- Flexible: different prompts and criteria for different tasks.
-
-__Drawbacks:__
-
-- __Cost:__ multiple LLM calls per sample.
-- __Bias:__ models might prefer their own style or longer answers.
-- __Subjectivity:__ evaluation depends on the prompt and the judge model.
-- __Mismatch with humans:__ high scores do not always mean humans agree.
-
-Because of these limitations, LLM-based judgements should be:
-
-- designed carefully (clear rubrics),
-- and, ideally, __calibrated__ against human ratings.
-
-
-## Evaluation pipelines: general pattern
-
-Many applications follow a similar structure:
-
-1. __Generator:__ produces a candidate output (text, code, EDA report, answer, …).
-2. __Judge:__ evaluates the output (via an LLM with evaluation prompt).
-3. __Editor (optional):__ improves the output based on the feedback.
-4. __Loop (optional):__ repeat 2 and 3 until a stopping criterion is met.
-
-This pattern applies to:
-
-- EDA reports,
-- answers in Q&A systems,
-- code generation,
-- many more
-
-<!-- TODO:give the anthropic harmless finetuning example here (imgs/CAI_illustration.png)-->
-
-
-## Example: Dataset hypothesis creation pipeline
-
-We will now modify our EDA agent/pipeline from earlier to illustrate this. We will build a pipeline that will generate a __hypothesis__ based on superficial knowledge of the dataset. 
-
-::: {.callout-note}
-## ℹ️ Info 
-A __hypothesis__ is a testable prediction or proposed explanation for a phenomenon, based on limited evidence that serves as a starting point for further investigation. It typically takes the form of an "if-then" statement that can be supported or refuted through experimentation and observation. A good scientific hypothesis must be __falsifiable__ — meaning there must be a possible way to prove it wrong through empirical evidence.
-:::
-
-For now, we will not try to falsify (or verify) the hypothesis, just checking, if the generated output makes a good hypothesis. Our workflow looks thusly:
-
-1. __Hypothesis generator__
-    - Receives the dataset and additional metadata about the data
-    - Produces a hypothesis
-2. __Judge-LLM__
-    - Receives the hypothesis + a rubric, e.g. with criteria:
-        - Is this a prediction?
-        - Does it explain something?
-        - Is it falsifiable?
-    - Returns:
-        - scores (e.g. 1–5) per criterion, and
-        - short textual feedback for each.
-3. __Optional editor step__
-    - Another LLM call (possibly with a different model) revises the hypothesis
-4. __Stopping condition__
-    - For example: stop after 2–3 improvement iterations or if all scores exceed a threshold.
-
-
-### Generator
-
-Let's have a closer look at the generator:
+Agent-driven orchestration is useful when exact routing of a workflow cannot be specified upfront. A deep-research agent is a good illustration: the orchestrator LLM decides dynamically which sub-agents to call based on what it has learned so far.
 
 ```{mermaid}
-
-flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-gen(Generator)
-hyp[Hypothesis]
-data --> gen
-gen --> hyp
+flowchart TD
+    user[User query] --> orch(Orchestrator LLM)
+    orch -->|calls SearchAgent| search(Search Agent)
+    orch -->|calls SummaryAgent| sum(Summary Agent)
+    orch -->|calls CritiqueAgent| crit(Critique Agent)
+    search --> orch
+    sum --> orch
+    crit --> orch
+    orch -->|decides: enough?| out[Final answer]
 ```
 
+The orchestrator selects which sub-agent to invoke based on current state rather than a fixed plan [@anthropic2025multiagent; @wang2024moa]. 
+<!-- 
+Google ADK supports this pattern via `AgentTool`, which exposes sub-agents as callable tools for a root `Agent`. We will not build this today, but it is important to know it exists. -->
 
-A system prompt for the generator could be:
+### Why we focus on deterministic pipelines today
 
-    You are a research asssistant tasked with generating a first hypothesis on a given dataset. 
-    You will receive a brief summary of the dataset in question. this might include metadata, example rows, a list of columns etc. 
-    Your Task is to generate a hypothesis based on this superficial knowledge, that will be testet at a later stage. 
+Smaller local models (Ollama, LM Studio) are not reliable orchestrators. They tend to lose track of state, enter routing loops, or ignore instructions under context pressure. Deterministic pipelines achieve the same task decomposition with predictable, auditable behaviour. For the majority of practical use cases, a well-designed fixed graph is the better engineering choice.
 
-When calling the generator, you should give the relevant information in the user prompt:
+There are real gains to this decomposition. Routing queries to a cheaper model for simpler subtasks rather than sending everything to one large generalist can reduce inference costs by more than 2x without measurable quality loss [@ong2024routellm]. The tradeoff is real: you give up the emergent flexibility of a single capable model and invest more effort in upfront design. The same tradeoff exists between microservices and monoliths, and neither is universally the right answer.
 
-    Metadata:
-    {dataset_metadata}
+<!-- ## Google ADK: first contact {#sec-adk}
 
-    columns: 
-    {dataset.columns}
+Google's **Agent Development Kit (ADK)** is a Python framework for building multi-agent systems with explicit graph-topology primitives [@huizenga2025adk]. Its main advantage for teaching is the built-in Dev UI, which renders the agent graph and execution trace in a browser with zero configuration. Comparable frameworks you may encounter include LangGraph (more granular node-based control), CrewAI (role-based agent teams), and AutoGen (conversation-based multi-agent coordination). ADK sits at the structured and illustrative end of this spectrum.
 
-    example rows:
-    {dataset.head()}
-
-
-
-::: {.callout-note}
-## 📝 Task
-
-Your turn!
-
-In your notebook, implement a hypothesis generator. 
-
-1. Get a dataset. You can use the [the titanic dataset from kaggle](https://www.kaggle.com/competitions/titanic/data) again or something else. 
-2. Compile some relevant information e.g. ``df.head()``, ``df.describe()`` etc. along other information. The titanic dataset has a very good description at the website. 
-3. Send a good system prompt and the relevant information to an LLM. 
-4. Let it generate a hypothesis (or several). You may want to increase the model's temperature to get some variation. 
-4. Evaluate the results.
-:::
-
-
-### Reviewer (LLM as a judge)
-
-
-```{mermaid}
-
-flowchart LR
-
-hyp[Hypothesis]
-rev(Reviewer)
-feedback[Feedback]
-hyp --> rev
-rev --> feedback
-```
-
-The reviewer is a judge-LLM with a rubric for a good hypothesis. Here is an example:
-
-    You are a research assistant. Your task is to review a hypothesis based on these rules:
-    1. Is this a prediction?
-    2. Does it explain something?
-    3. Is it falsifiable?
-    4. Is it specific?
-    Provide concise feedback on how to improve the hypothesis.
-
-You may want to adapt the rubric to get the desired result. You can use one reviewer as shown here, or do several reviewers each with a specific criterion of the rubric. 
-
-<!-- Here, LLM-as-judge is used to evaluate and guide improvements. -->
-
-
-::: {.callout-note}
-## 📝 Task
-
-Let's build us a very judgemental robot!
-
-1. In the same notebook, initialize a reviewer as well. 
-2. Let the reviewer review the hypothesis generated by the generator. 
-3. Adjust the rubric until the reviewer finds stuff to improve. 
-:::
-
-### Editor
-
-```{mermaid}
-
-flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-
-hyp[Hypothesis]
-feedback[Feedback]
-editor(Editor)
-new_hyp[Hypothesis]
-data --> editor
-hyp --> editor
-feedback --> editor
-editor --> new_hyp
-```
-
-The editor uses the original input + hypothesis + feedback to produce a revised hypothesis. Its prompt encodes this behaviour explicitly (incorporate feedback, keep focus, improve wording, etc.).
-
-::: {.callout-note}
-## 📝 Task
-
-Time to improve!
-
-1. In the same notebook, implement the editor as well. Make a new LLM call/prompt or adapt your original generator. 
-2. Let the editor generate a new hypothesis or improve an existing one based on the feedback from the reviewer.
-3. Get the editor to actually generate something that is different from the generators version!
-:::
-
-
-### Full pipeline
-
-We now basically have a working LLM-based pipeline. 
-
-```{mermaid}
-
-flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-gen(Generator)
-hyp[Hypothesis]
-rev(Reviewer)
-feedback[Feedback]
-editor(Editor)
-new_hyp[Hypothesis]
-data --> gen
-gen --> hyp
-hyp --> rev
-rev --> feedback
-data --> editor
-hyp --> editor
-feedback --> editor
-editor --> new_hyp
-```
-
-
-A good next step would be to add a loop around the review process, so that it only stops if the reviewer is happy. This could look like this:
+ADK does not speak to Ollama or LM Studio directly. It routes model calls through LiteLLM, a provider-agnostic adapter library. The model string must include a **provider prefix** that tells LiteLLM which backend to use, and that string is passed directly to the `Agent`:
 
 ```python
-hypothesis = generator.generate(dataset_description)
+import os
 
-for _ in range(max_iter):
-    review = reviewer.review(hypothesis)
-    if review_is_positive_enough(review):
-        break
-    hypothesis = editor.edit(dataset_description, hypothesis, review)
+# Ollama
+os.environ["OLLAMA_API_BASE"] = "http://localhost:11434"
+model = "ollama_chat/gemma3:latest"
 
-return hypothesis
+# LM Studio — requires manual registration, see note below
+os.environ["LM_STUDIO_API_BASE"] = "http://localhost:1234"
+model = "lm_studio/gemma3"
 ```
 
-```{mermaid}
-
-flowchart LR
-data["`dataset,
-metadata,
-columns,
-...`"]
-gen(Generator)
-hyp[Hypothesis]
-rev(Reviewer)
-feedback[Feedback]
-editor(Editor)
-if{good enough?}
-stop((stop))
-data --> gen
-gen --> hyp
-hyp --> rev
-rev --> feedback
-data --> editor
-hyp --> editor
-feedback --> if
-if -- no --> editor
-if -- yes --> stop
-editor --> hyp
-```
-
-
-The missing piece is review_is_positive_enough, where you might:
-
-- search for a specific “OK” marker in the review,
-- ask the reviewer to output a score and threshold it,
-- or run an additional small LLM classification step.
-
-Alternatively, you can just generate a lot of hypotheses and choose the best one (or the best _n_). 
-
-Exactly the same pattern can be transferred to __your own project outputs__.
+Without the prefix LiteLLM cannot route the request and raises a `BadRequestError`. The prefix is the only required change when switching backends.
 
 ::: {.callout-note}
-## 📝 Task
-
-Build it!
-
-1. Think of a way to stop the review process once the hypothesis is good enough. 
-2. Implement the loop. 
-
-This is the minimum goal for today, so when you are done, you can upload your notebook to moodle. Alternatively, go on and implement the agent (see below) as well!
-
-:::
-
-### From pipeline to orchestrated agents
-
-The example above is still essentially a pipeline: the order of steps is fixed (Generator → Reviewer → Editor …). We could, however, introduce an orchestrator agent that decides which component to call next^[Note that this is, of course, only one way to implement this as an agent system.]:
-
-    You are tasked with creating high-quality scientific hypothesis for a given dataset. Use the tools at your disposal to ensure good quality. 
-    Available tools:
-    – Generator – creates hypotheses
-    – Reviewer – evaluates hypothesis quality
-    – Editor – improves hypothesis based on feedback
-    Decision guidelines:
-    – Use Generator to create hypothesis.
-    – Use Reviewer to generate feedback.
-    – Use Editor to improve hypothesis.
-    – Choose END when the hypothesis is good enough.
-    Output only the next agent to run ("Generator", "Reviewer", "Editor", or "END").
-
-The agent is now just a loop around this orchestrator: 
+**LM Studio users:** the `lm_studio/` prefix is not registered in ADK's model registry by default, so passing it as a plain string will raise a `ValueError`. Add one line before creating any agent:
 
 ```python
-# pseudocode
-initialize: 
-    tools
-    history
+from google.adk.models.lite_llm import LiteLlm
+from google.adk.models.registry import LLMRegistry
 
-while true:
-    response = orchestrator(history)
-    if response == "END"
-    break
-    if response == "generator" 
-        history += generator.generate()
-    # same for other tools
+LLMRegistry._register(r"lm_studio/.*", LiteLlm)
+```
+:::
 
+The three types needed for first contact are `Agent`, `InMemoryRunner`, and `Session`. An `Agent` is a leaf node: a single LLM call with a system prompt and optional tools. `InMemoryRunner` executes a pipeline against a `Session`, which holds conversation and pipeline state. ADK has further composition types that are introduced when they are needed below.
+
+| Type | Role |
+|---|---|
+| `Agent` | Leaf node: one LLM call, one system prompt |
+| `Workflow` | Graph of nodes; edges define sequential, conditional, and looping flows |
+| `InMemoryRunner` | Executes a pipeline against an in-memory session; suitable for notebooks and local dev |
+| `Session` | Holds conversation and pipeline state |
+
+Full API reference: https://google.github.io/adk-docs/
+
+```bash
+uv add google-adk litellm
 ```
 
-![Image credit https://x.com/adamdotdev (from [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents))](../imgs/agent_loop_tinyagents.jpg)
+::: {.callout-note}
+## 📝 Task
 
-This is essentially the agentic version of the same pipeline. The pros and cons are analogous to those discussed in session @sec-agents:
+1. Install the dependencies: `uv add google-adk litellm`
+2. Make sure Ollama is running with a model that supports tool calls (e.g. `gemma3`, `qwen2.5`, `llama3:instruct`).
+3. Run the following minimal agent and confirm it responds:
 
-- more flexibility,
-- but also more complexity and less predictability.
+```python
+from google.adk import Agent
+from google.adk.runners import InMemoryRunner
+from google.genai import types
+import os
 
-For your projects, you should decide consciously whether you need this flexibility – or whether a simple pipeline with a clear evaluation step is sufficient.
+os.environ["OLLAMA_API_BASE"] = "http://localhost:11434"
 
+agent = Agent(
+    name="Hello",
+    model="ollama_chat/gemma3:latest",
+    instruction="You are a helpful assistant. Answer briefly.",
+)
+
+runner = InMemoryRunner(agent=agent, app_name="hello")
+runner.auto_create_session = True
+
+for event in runner.run(
+    user_id="student",
+    session_id="s1",
+    new_message=types.Content(role="user", parts=[types.Part(text="Say hello!")])
+):
+    if event.content and event.content.parts:
+        for part in event.content.parts:
+            if part.text:
+                print(part.text)
+```
+
+4. Start the Dev UI: `adk web` and explore the agent tree in the browser.
+
+::: -->
+
+
+## A prompt advisor {#sec-promptadvisor}
+
+The domain for today is **prompt writing**: an agent that takes a description of a desired AI assistant and produces a well-structured system prompt for it. This is deliberately self-referential: you are building an agent that writes prompts for agents.
+
+Good system prompts share a common structure. @mao2025promptstemplatessystematicprompt analysed 2,163 real production system prompts from repositories of companies including Uber, Microsoft, and LAION-AI, and identified seven components that appear with measurable frequency in deployed LLM applications. OpenAI, Anthropic, and Google each independently converge on the same set in their prompt engineering documentation.
+
+| Component | Frequency | Meaning |
+|--|:--:|--|
+| Directive / Task | 87% | The core instruction: what the agent should do |
+| Context / Background | 56% | Information the agent needs to do the task well |
+| Output Format | 40% | How the response should be structured or formatted |
+| Constraints | 36% | What the agent must not do, or limits on behaviour |
+| Role / Profile | 28% | The persona or expertise the agent should adopt |
+| Workflow / Steps | 28% | Sequential process when task order matters |
+| Examples | 20% | Demonstrations of the desired output |
+
+Your agent receives a Python dict with these fields and produces a complete system prompt.
 
 ::: {.callout-note}
 ## 📝 Task
 
+1. Define an `Agent` whose system prompt instructs it to write system prompts. Something like:
 
-1. In the same notebook, initialize the orchestrator agent as well.
-2. Implement the workflow shown above in real code. 
-3. Watch happily as it all works without any issues whatsoever. 
-4. Upload to Moodle. 
+```
+You are an expert prompt engineer. Given a description of an AI assistant
+across up to seven dimensions (Role, Context, Task, Output Format,
+Constraints, Workflow, Examples), write a complete system prompt that
+addresses each provided dimension clearly. Output only the system prompt text.
+```
+
+2. Call it with a test input — for example, a customer support agent for a software company.
+3. Inspect the output: does it address the dimensions you provided?
+4. Open `adk web` and examine the agent graph.
+
 :::
 
 
-## Project work
+## Harnessing {#sec-harnessing}
 
-Time to work on your projects!
+The prompt advisor works, but it is unguarded. It will happily write a prompt that omits the persona, ignores safety, or produces something grammatically fine but semantically wrong. To make it reliable we need a **harness**.
+
+A harness is the complete scaffolding around an LLM pipeline: the class or module that holds the rules, runs the agents in order, enforces checks, and decides when to stop. It is everything except the model weights. The entire pipeline we are building today *is* the harness; the constitution (defined below) is one component inside it.
+
+The Claude Code source leak (April 2026) gave an unusually detailed public view of what a production-grade harness looks like.^[The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/] The Claude Code runtime turned out to be a sophisticated harness with three distinct control layers: **guides** (feedforward instructions, conventions, and bootstrap prompts injected before the model acts), **sensors** (linters, type checkers, and test suites that catch bad output after execution), and **control checks** (deterministic format and length validation first, then slower LLM-powered semantic review). The key observation from the leak analysis: agents do not mind being micromanaged: more constraints, more checks, and more structure tend to improve performance rather than limit it.^[A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model's output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.]
+
+### The constitution
+
+The term *constitution* comes from Anthropic's Constitutional AI work [@bai2022constitutional], where a model is evaluated against a written list of principles rather than vague notions of quality. We borrow the concept at the pipeline level, not for training but for evaluation: the judge applies the constitution's rules to each generated output. The full treatment of Constitutional AI as a training technique is session 11 material; here it functions as an evaluation design pattern.
+
+The **constitution** is the component of the harness that encodes these quality criteria as explicit, auditable Python objects rather than buried prompt text. Rules defined in a dataclass are inspectable, version-controllable, and changeable without touching any agent's system prompt.
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class PromptConstitution:
+    rules: list[str] = field(default_factory=lambda: [
+        "Must clearly specify a Role or persona",
+        "Must include relevant context or background knowledge",
+        "Must state the agent's core task explicitly",
+        "Must define output format or communication style",
+        "Must include constraints on behaviour or outputs",
+    ])
+```
+
+These five rules map to the five most frequent components from @mao2025promptstemplatessystematicprompt, making the constitution the machine-readable equivalent of the framework. The harness injects this constitution into the judge at call time, not hardcoded into any agent's system prompt.
+
+Before wiring agents together, we add a **deterministic hard check** as a plain Python function. Functions placed directly in an edge chain are automatically treated as nodes: ADK wraps them transparently, with no explicit wrapper class needed. Such a function can declare `node_input: str` to receive the previous node's text output, and `ctx` to receive the `Context` object for reading and writing `ctx.state`. The function returns an `Event` to control routing: `Event(route="pass")` follows the matching conditional edge; `Event(message="...")` emits a terminal message and stops the workflow.
+
+```python
+from google.adk.events.event import Event
+
+def hard_check(node_input: str, ctx):
+    if len(node_input.strip()) < 50:
+        return Event(message="Hard check failed: output shorter than 50 characters.")
+    ctx.state["draft_prompt"] = node_input
+    return Event(route="pass")
+```
 
 ::: {.callout-note}
 ## 📝 Task
 
-1. Discuss your project. 
-2. Set up the repository
-3. Plan the project
-4. Start collecting data or finding a data set
-5. Start implementing
+1. Define a `PromptConstitution` dataclass with 3–5 rules of your choice (you can use the component mapping above or define domain-specific criteria).
+2. Write a `PromptPipeline` class that takes a `PromptConstitution` in its constructor.
+3. Implement the `hard_check` function above (or extend it with your own criteria). No wrapper class is needed — pass it directly in the edge tuple.
+4. Wire as a `Workflow`: `("START", advisor, hard_check, {"pass": ...})`. Task 4 fills in the target of the `"pass"` edge.
+5. Test it: what happens when you pass a minimal spec that produces a short output?
 
-Happy coding!
-
+This pre-check illustrates the control spectrum: deterministic function checks are fast and free; LLM-powered checks are slower and more expensive. Run the cheap ones first.
 
 :::
 
 
+## LLM as a judge {#sec-llmjudge}
 
-## Further Readings
+The deterministic pre-check catches obvious failures but cannot evaluate whether the generated system prompt actually addresses the required components meaningfully. For that we need semantic evaluation, and a natural approach is to use an LLM.
 
-- [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents) really helps understanding agents. 
-- [Here](https://www.youtube.com/watch?v=ewLMYLCWvcI) is a video describing other multi-agent systems, including an [agent hospital](https://arxiv.org/abs/2405.02957) and a [multi-agent translator](https://arxiv.org/html/2405.11804v1)
+The idea behind **LLM-as-a-judge** is straightforward: use a language model to evaluate the quality of outputs produced by another language model [@zheng2023judging]. This is attractive because it scales to large volumes of outputs, can approximate nuanced qualitative judgement when prompted carefully, and requires no separate annotation pipeline. @zheng2023judging showed that strong LLM judges achieve over 80% agreement with human raters on instruction-following tasks, comparable to inter-human agreement rates. The pattern has known limitations, however. Models may prefer their own output style, reward verbosity over accuracy, or be manipulated by superficially confident-sounding responses. LLM judgements should therefore be treated as approximate signals rather than ground truth, and ideally calibrated against human ratings for high-stakes applications.
+
+In the constitutional setting introduced by @bai2022constitutional, the judge does not evaluate against vague notions of quality but against an explicit, enumerable list of principles. This makes the evaluation more consistent and the failure modes more interpretable. Our judge receives the generated system prompt directly as `node_input` (the previous node's text output passed through the edge chain), and the constitution's rules are embedded into its instruction string via a Python f-string at definition time. The judge evaluates each rule and returns a structured verdict.
+
+```python
+constitution = PromptConstitution()
+
+judge = Agent(
+    name="Judge",
+    model="ollama_chat/gemma3:latest",
+    instruction=f"""You are a strict quality evaluator for AI system prompts.
+Evaluate the following system prompt against each rule and return a JSON object
+with keys "rule_scores" (dict mapping each rule to 0 or 1),
+"approved" (true only if all scores are 1), and
+"feedback" (one sentence per failed rule).
+
+Rules:
+{constitution.as_text()}
+
+Return only valid JSON: {{"approved": true/false, "rule_scores": {{...}}, "feedback": "..."}}""",
+)
+```
+
+The system prompt to evaluate is not a template variable here — the judge receives it as the user message of its conversation turn, delivered automatically by ADK from the previous node's output. If the judge returns output that cannot be parsed as JSON, the pipeline defaults to `approved=False`. This deterministic fallback ensures the harness never silently passes a bad output because the judge misbehaved.
+
+### Wiring agents in sequence and passing state
+
+A `Workflow` runs its nodes in the order defined by its edges. Within a single edge chain (a tuple), each node's text output is passed as `node_input` to the next function in the chain, and as the user message to the next `Agent`. This is the primary mechanism for sequential data flow.
+
+For **cross-branch data sharing** — when two separate branches of the graph both need access to the same value — use `ctx.state`. A function writes to `ctx.state["key"]` and any downstream agent can read it via a template variable `{key}` in its instruction string. Template variables in `{curly_braces}` are filled from `ctx.state` before the instruction reaches the model. Literal braces that should appear in the output (such as in a JSON schema) must be doubled: `{{` and `}}`.
+
+In our pipeline the feedback agent and editor both need the current draft, so `hard_check` writes it to `ctx.state["draft_prompt"]`. The feedback agent reads `{draft_prompt}` and `{judge_feedback}` from state; the editor reads `{draft_prompt}` and `{feedback}`. The judge, however, receives the draft purely as `node_input` — no state read needed for its main input.
+
+The full `judge`, `feedback_agent`, and `editor` definitions, along with the loop routing functions, are consolidated in the next section.
+
+::: {.callout-note}
+## 📝 Task
+
+1. Define a `judge` (`Agent`) with the evaluation instruction above, embedding the constitution rules via Python f-string.
+2. Write a `route_after_judge` routing function that parses the judge's JSON output, writes `judge_feedback` to state, and returns `Event(route="approved")` or `Event(route="rejected")`. If parsing fails, force `approved=False`.
+3. Wire the hard check and judge into the graph using the chain tuple syntax: `("START", advisor, hard_check, {"pass": judge})` and continue from there with `route_after_judge`. The full workflow is now `START → advisor →[hard_check]→[pass]→ judge →[route_after_judge]→ ...`.
+4. Run the full pipeline on two inputs: one you expect to pass and one you expect to fail. Inspect the judge's feedback for each.
+
+:::
+
+:::::{.callout-tip collapse="true" appearance="minimal"}
+## Rubric judging and qualitative content coding
+
+The binary judge (pass/fail) is the simplest form of LLM evaluation. A natural extension is to evaluate each rule independently on a 1/0 basis, giving partial credit and a more informative failure signal. This *rubric* approach has a precise analogue in qualitative research methodology.
+
+Rubric-based LLM judging is structurally identical to **content coding**: a coder (the judge) applies a coding scheme (the rubric/constitution) to a unit of text (the output), producing a code (the score). Qualitative research has decades of accumulated best practice for this workflow, centred on inter-rater reliability. The standard measure is **Krippendorff's alpha** [@krippendorff2004content], a coefficient that accounts for chance agreement across nominal, ordinal, and interval scales. When multiple LLM judges disagree, alpha quantifies whether the disagreement is systematic (a codebook problem) or random (noise). @hayes2007kripp provide the computational procedure and a reference implementation; the practical target is alpha > 0.8 before treating coded data as reliable.
+
+The design principles that make content coding reliable translate directly to constitution design. Rules should be mutually exclusive, covering distinct non-overlapping aspects of quality; collectively exhaustive, together covering all dimensions that matter; and anchored clearly enough that it is unambiguous what counts as a 0 and what counts as a 1. The constitution in our pipeline is the machine-readable equivalent of a codebook. If your judge scores are noisy or inconsistent, the remedy is the same as in qualitative research: refine the codebook until the criteria are unambiguous.
+
+:::::
+
+
+## Editor and improvement loop {#sec-editor}
+
+A single judge pass identifies problems but does not fix them. The natural next step is an improvement loop: the judge evaluates, a feedback agent proposes concrete changes, and an editor applies them. This loop repeats until the judge approves or a maximum iteration count is reached.
+
+This three-role structure is worth keeping explicit rather than merging roles. The judge computes *what is wrong* with the current output; the feedback agent computes *what to change* in response; the editor *applies* the change to produce the next candidate. Keeping them separate makes each role narrower and easier to prompt precisely, and it maps naturally to the structure of Constitutional AI [@bai2022constitutional], where critique and revision are distinct operations.
+
+```{mermaid}
+flowchart LR
+    advisor(Prompt\nAdvisor)
+    check{Hard\nCheck}
+    judge(Judge)
+    feedback(Feedback\nAgent)
+    editor(Editor)
+    out((Approved\nPrompt))
+    fail[Reject]
+
+    advisor --> check
+    check -->|pass| judge
+    check -->|fail| fail
+    judge -->|approved| out
+    judge -->|rejected| feedback
+    feedback --> editor
+    editor --> judge
+```
+
+The `Workflow` in ADK manages the graph. Stopping conditions are encoded as **conditional edges**: an edge is only followed when the source node's routing function returns an `Event` with a matching `route` value. Routing is handled by plain Python functions placed in the edge chain, not by callbacks attached to agents.
+
+The edge chain tuple syntax makes this concrete. A 4-tuple `(a, b, router_fn, {"x": c, "y": d})` means: run `a`, pass its output to `b`, then call `router_fn` with `b`'s output and route to `c` or `d` based on the `Event(route=...)` it returns. A plain 2-tuple `(a, b)` is an unconditional edge. A 3-tuple `(a, router_fn, {"x": c})` means `a`'s output goes directly to `router_fn` for routing, skipping any intermediate agent.
+
+The `route_after_judge` function parses the verdict JSON, writes `judge_feedback` to state, and returns `Event(route="approved")` or `Event(route="rejected")`. The `loop_or_stop` function increments an iteration counter and returns `Event(route="continue")` until `MAX_ITERATIONS` is reached; returning `None` terminates the workflow at that point. The `store_feedback` function writes the feedback agent's output to state so the editor can read it as `{feedback}`.
+
+```python
+from google.adk import Agent, Workflow
+from google.adk.events.event import Event
+import json
+
+MAX_ITERATIONS = 3
+
+def route_after_judge(node_input: str, ctx):
+    try:
+        verdict = json.loads(node_input)
+    except (json.JSONDecodeError, ValueError):
+        verdict = {"approved": False, "feedback": "Could not parse verdict."}
+    ctx.state["judge_feedback"] = verdict.get("feedback", "")
+    return Event(route="approved" if verdict.get("approved") else "rejected")
+
+def store_feedback(node_input: str, ctx):
+    ctx.state["feedback"] = node_input
+    return Event(route="next")
+
+def loop_or_stop(node_input: str, ctx):
+    ctx.state["draft_prompt"] = node_input
+    ctx.state["iteration"] = ctx.state.get("iteration", 0) + 1
+    if ctx.state["iteration"] < MAX_ITERATIONS:
+        return Event(route="continue", output=node_input)
+```
+
+This pattern generalises: routing functions receive the previous node's text output as `node_input`, update state as needed, and return an `Event` to direct the graph. The same function signature works for both branching and looping.
+
+```python
+review_loop = Workflow(
+    name="ReviewLoop",
+    edges=[
+        ("START", judge, route_after_judge, {
+            "rejected": feedback_agent,
+        }),
+        (feedback_agent, store_feedback, {
+            "next": editor,
+        }),
+        (editor, loop_or_stop, {
+            "continue": judge,
+        }),
+    ],
+)
+
+root_agent = Workflow(
+    name="PromptPipeline",
+    edges=[
+        ("START", advisor, hard_check, {
+            "pass": review_loop,
+        }),
+    ],
+)
+```
+
+::: {.callout-note}
+## 📝 Task
+
+1. Define a `feedback_agent` (`Agent`) whose instruction reads from `{judge_feedback}` and `{draft_prompt}` (via state template variables) and proposes specific, concrete rewrites for each failed rule — a numbered list of changes, not a revised prompt.
+2. Define an `editor` (`Agent`) whose instruction reads from `{draft_prompt}` and `{feedback}` (via state template variables) and returns the revised system prompt. Write a `loop_or_stop` routing function that increments the iteration counter, writes the revised prompt back to `ctx.state["draft_prompt"]`, and returns `Event(route="continue")` until `MAX_ITERATIONS` is reached.
+3. Build the `ReviewLoop` as a `Workflow` using chain tuple syntax: `("START", judge, route_after_judge, {"rejected": feedback_agent})` for conditional branching; `(editor, loop_or_stop, {"continue": judge})` for the back-edge.
+4. Build the outer `Workflow`: `("START", advisor, hard_check, {"pass": review_loop})`.
+5. Run the full pipeline end-to-end. Open `adk web` and trace the execution: how many iterations did it take? Where did the judge's score change?
+
+:::
+
+::: {.callout-note}
+## 📝 Task (extension): LLM jury
+
+Instead of a single judge, run multiple judges in parallel, each focusing on a different subset of the constitution's rules. Aggregate their verdicts by majority vote.
+
+1. Define three `judge` (`Agent`) instances, each responsible for one or two rules.
+2. Wire them in parallel using `Workflow`'s fan-out syntax: `(advisor, (judge1, judge2, judge3))` fans out to all three simultaneously; `((judge1, judge2, judge3), aggregator)` fans back in.
+3. Add a plain `def aggregator(ctx)` function that combines the three verdicts from `ctx.state`.
+4. Compare the jury's behaviour to the single judge on a set of test prompts.
+
+@juryon2025 discuss dynamic jury selection; @chen2024chateval show that diverse role prompts are essential; judges with identical instructions tend to degrade toward noise.
+
+:::
+
+::: {.callout-note}
+## Side note: safety as a constitution
+
+The same pipeline structure applies to safety evaluation. Replace or extend the quality rules in the constitution with safety criteria: for example, "must not produce instructions for harmful activities", "must not impersonate real individuals", or "must not claim capabilities the model does not have". The judge becomes a safety gate; the constitution is the policy; the harness enforces it. Structurally identical to the quality pipeline: different constitution, same code.
+
+:::
+
+
+## Observability {#sec-observability}
+
+A multi-step pipeline is harder to debug than a single LLM call. Failures can be buried two or three hops deep in the graph: the editor may have applied a change that satisfied the judge locally but broke a different rule in the next iteration.
+
+The ADK Dev UI (launched with `adk web`) is the primary debugging tool for today's session. It shows the full agent tree, per-node input and output, and execution timing without any configuration.
+
+For production deployments, **Langfuse** (https://langfuse.com) provides open-source LLM observability with a self-hostable backend. ADK emits OpenTelemetry traces natively, so connecting it to Langfuse requires only setting two environment variables; no code changes to your agents are needed:
+
+```bash
+OTEL_EXPORTER_OTLP_ENDPOINT=https://your-langfuse-instance/api/public/otel
+OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic <base64-encoded-key>
+```
+
+Systematic variation and testing of your pipeline (different constitutions, different models, different iteration limits) is also where the **Examples** component from @mao2025promptstemplatessystematicprompt becomes practically relevant: running the pipeline across a set of test cases and inspecting the traces is how you discover whether your prompt spec produces consistent outputs. Tools like Langfuse make that process tractable by preserving the full trace of each run.
+
+
+<!-- TODO: mcp with markdowns would be nicer -->
+
+:::::{.callout-tip collapse="true" appearance="minimal"}
+## Extension: context store
+
+ADK's `Session` object carries a `state` dict that persists across agent turns. The pipeline can accumulate previously approved prompts there, giving the editor access to examples of what has worked before — a lightweight form of episodic memory with no vector store or embeddings required.
+
+```python
+# Add this inside loop_or_stop when the judge approved:
+ctx.state.setdefault("approved_prompts", []).append(ctx.state.get("draft_prompt", ""))
+
+# Inject history into the editor's instruction:
+editor = Agent(
+    name="Editor",
+    model="ollama_chat/gemma3:latest",
+    instruction="""Apply the proposed changes to the current prompt.
+
+Current prompt: {draft_prompt}
+Proposed changes: {feedback}
+Previously approved prompts for reference: {approved_prompts}
+
+Return only the revised system prompt.""",
+)
+```
+
+::: {.callout-note}
+## 📝 Task
+
+Extend your pipeline to accumulate approved prompts in `session.state` and pass them to the editor. Run the pipeline on three different input specs in sequence and observe whether the editor's revisions improve.
+:::
+
+:::::
+
+
+
+## Further readings
+
+- @mao2025promptstemplatessystematicprompt: empirical analysis of 2,163 real-world system prompt templates, identifying seven components and their frequencies
+- @huizenga2025adk: the official ADK announcement with architecture overview
+- @anthropic2025multiagent: Anthropic's account of building a production multi-agent research system
+- @wang2024moa: the Mixture-of-Agents paper, showing that layered multi-agent pipelines outperform single large models on reasoning benchmarks
+- @bai2022constitutional: the Constitutional AI paper introducing the principle of explicit enumerable rules for LLM evaluation
+- @zheng2023judging: the foundational LLM-as-a-judge paper with MT-Bench and Chatbot Arena
+- @masterman2024landscape: a survey of emerging agent architectures with a taxonomy of scaffolding roles
+- @krippendorff2004content: the standard reference for content analysis methodology and inter-rater reliability
 
 
 ## References

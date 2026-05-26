@@ -93,6 +93,13 @@
   keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning,Statistics - Machine Learning}
 }
 
+@misc{anthropic2025multiagent,
+  title = {How We Built Our Multi-Agent Research System},
+  author = {{Anthropic Engineering}},
+  year = 2025,
+  howpublished = {https://www.anthropic.com/engineering/multi-agent-research-system}
+}
+
 @misc{askellGeneralLanguageAssistant2021,
   title = {A {{General Language Assistant}} as a {{Laboratory}} for {{Alignment}}},
   author = {Askell, Amanda and Bai, Yuntao and Chen, Anna and Drain, Dawn and Ganguli, Deep and Henighan, Tom and Jones, Andy and Joseph, Nicholas and Mann, Ben and DasSarma, Nova and Elhage, Nelson and {Hatfield-Dodds}, Zac and Hernandez, Danny and Kernion, Jackson and Ndousse, Kamal and Olsson, Catherine and Amodei, Dario and Brown, Tom and Clark, Jack and McCandlish, Sam and Olah, Chris and Kaplan, Jared},
@@ -133,6 +140,15 @@
   journal = {arXiv preprint arXiv:1409.0473},
   eprint = {1409.0473},
   urldate = {2024-11-09},
+  archiveprefix = {arXiv}
+}
+
+@article{bai2022constitutional,
+  title = {Constitutional {{AI}}: {{Harmlessness}} from {{AI}} Feedback},
+  author = {Bai, Yuntao and others},
+  year = 2022,
+  journal = {arXiv preprint arXiv:2212.08073},
+  eprint = {2212.08073},
   archiveprefix = {arXiv}
 }
 
@@ -323,6 +339,15 @@
   langid = {english}
 }
 
+@article{chen2024chateval,
+  title = {{{ChatEval}}: {{Towards}} Better {{LLM-based}} Evaluators through Multi-Agent Debate},
+  author = {Chan, Chi-Min and others},
+  year = 2023,
+  journal = {arXiv preprint arXiv:2308.07201},
+  eprint = {2308.07201},
+  archiveprefix = {arXiv}
+}
+
 @misc{chenReverseThinkingMakes2024,
   title = {Reverse {{Thinking Makes LLMs Stronger Reasoners}}},
   author = {Chen, Justin Chih-Yao and Wang, Zifeng and Palangi, Hamid and Han, Rujun and Ebrahimi, Sayna and Le, Long and Perot, Vincent and Mishra, Swaroop and Bansal, Mohit and Lee, Chen-Yu and Pfister, Tomas},
@@ -416,6 +441,12 @@
   pages = {8780--8794},
   publisher = {Curran Associates, Inc.},
   urldate = {2024-11-30}
+}
+
+@article{dickstein2025crispe,
+  title = {Improving {{ChatGPT}}'s Performance in Orthopedics: {{Opportunities}} Using the {{CRISPE}} Framework},
+  year = 2025,
+  journal = {JOSPT Methods}
 }
 
 @misc{doerschTutorialVariationalAutoencoders2021,
@@ -578,6 +609,17 @@
   langid = {english}
 }
 
+@article{hayes2007kripp,
+  title = {Answering the Call for a Standard Reliability Measure for Coding Data},
+  author = {Hayes, Andrew F. and Krippendorff, Klaus},
+  year = 2007,
+  journal = {Communication Methods and Measures},
+  volume = {1},
+  number = {1},
+  pages = {77--89},
+  doi = {10.1080/19312450709336866}
+}
+
 @misc{heidloffFinetuningSmallLLMs2023,
   title = {Fine-Tuning Small {{LLMs}} with {{Output}} from Large {{LLMs}}},
   author = {Heidloff, Niklas},
@@ -685,6 +727,14 @@
   abstract = {We analyze the type of learned optimization that occurs when a learned model (such as a neural network) is itself an optimizer - a situation we refer to as mesa-optimization, a neologism we introduce in this paper. We believe that the possibility of mesa-optimization raises two important questions for the safety and transparency of advanced machine learning systems. First, under what circumstances will learned models be optimizers, including when they should not be? Second, when a learned model is an optimizer, what will its objective be - how will it differ from the loss function it was trained under - and how can it be aligned? In this paper, we provide an in-depth analysis of these two primary questions and provide an overview of topics for future research.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence}
+}
+
+@misc{huizenga2025adk,
+  title = {Agent Development Kit: {{Making}} It Easy to Build Multi-Agent Applications},
+  author = {Huizenga, Erwin and Yang, Bo},
+  year = 2025,
+  publisher = {Google},
+  howpublished = {https://developers.googleblog.com/en/agent-development-kit-easy-to-build-multi-agent-applications/}
 }
 
 @misc{hulbertUsingTreeThoughtPrompting2023,
@@ -837,6 +887,14 @@
   howpublished = {https://huggingface.co/jphme/em\_german\_13b\_v01}
 }
 
+@article{juryon2025,
+  title = {Who Judges the Judge? {{LLM}} Jury-on-Demand},
+  year = 2025,
+  journal = {arXiv preprint arXiv:2512.01786},
+  eprint = {2512.01786},
+  archiveprefix = {arXiv}
+}
+
 @misc{kalaiWhyLanguageModels2025,
   title = {Why {{Language Models Hallucinate}}},
   author = {Kalai, Adam Tauman and Nachum, Ofir and Vempala, Santosh S. and Zhang, Edwin},
@@ -943,6 +1001,14 @@
   abstract = {Pretrained large language models (LLMs) are widely used in many sub-fields of natural language processing (NLP) and generally known as excellent few-shot learners with task-specific exemplars. Notably, chain of thought (CoT) prompting, a recent technique for eliciting complex multi-step reasoning through step-by-step answer examples, achieved the state-of-the-art performances in arithmetics and symbolic reasoning, difficult system-2 tasks that do not follow the standard scaling laws for LLMs. While these successes are often attributed to LLMs' ability for few-shot learning, we show that LLMs are decent zero-shot reasoners by simply adding "Let's think step by step" before each answer. Experimental results demonstrate that our Zero-shot-CoT, using the same single prompt template, significantly outperforms zero-shot LLM performances on diverse benchmark reasoning tasks including arithmetics (MultiArith, GSM8K, AQUA-RAT, SVAMP), symbolic reasoning (Last Letter, Coin Flip), and other logical reasoning tasks (Date Understanding, Tracking Shuffled Objects), without any hand-crafted few-shot examples, e.g. increasing the accuracy on MultiArith from 17.7\% to 78.7\% and GSM8K from 10.4\% to 40.7\% with large InstructGPT model (text-davinci-002), as well as similar magnitudes of improvements with another off-the-shelf large model, 540B parameter PaLM. The versatility of this single prompt across very diverse reasoning tasks hints at untapped and understudied fundamental zero-shot capabilities of LLMs, suggesting high-level, multi-task broad cognitive capabilities may be extracted by simple prompting. We hope our work not only serves as the minimal strongest zero-shot baseline for the challenging reasoning benchmarks, but also highlights the importance of carefully exploring and analyzing the enormous zero-shot knowledge hidden inside LLMs before crafting finetuning datasets or few-shot exemplars.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
+@book{krippendorff2004content,
+  title = {Content Analysis: {{An}} Introduction to Its Methodology},
+  author = {Krippendorff, Klaus},
+  year = 2004,
+  publisher = {Sage},
+  address = {Thousand Oaks, CA}
 }
 
 @misc{kumarFineTuningCanDistort2022,
@@ -1149,6 +1215,25 @@
   keywords = {Computer Science - Computation and Language}
 }
 
+@misc{mao2025promptstemplatessystematicprompt,
+  title = {From Prompts to Templates: A Systematic Prompt Template Analysis for Real-World Llmapps},
+  author = {Mao, Yuetian and He, Junjie and Chen, Chunyang},
+  year = 2025,
+  eprint = {2504.02052},
+  primaryclass = {cs.SE},
+  doi = {10.48550/arXiv.2504.02052},
+  archiveprefix = {arXiv}
+}
+
+@article{masterman2024landscape,
+  title = {The Landscape of Emerging {{AI}} Agent Architectures for Reasoning, Planning, and Tool Calling},
+  author = {Masterman, Tula and others},
+  year = 2024,
+  journal = {arXiv preprint arXiv:2404.11584},
+  eprint = {2404.11584},
+  archiveprefix = {arXiv}
+}
+
 @misc{mikolovEfficientEstimationWord2013,
   title = {Efficient {{Estimation}} of {{Word Representations}} in {{Vector Space}}},
   author = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
@@ -1220,6 +1305,15 @@
   volume = {1},
   pages = {2},
   urldate = {2024-12-15}
+}
+
+@article{ong2024routellm,
+  title = {{{RouteLLM}}: {{Learning}} to Route {{LLMs}} with Preference Data},
+  author = {Ong, Isaac and others},
+  year = 2024,
+  journal = {arXiv preprint arXiv:2406.18665},
+  eprint = {2406.18665},
+  archiveprefix = {arXiv}
 }
 
 @article{ouyangTrainingLanguageModels2022,
@@ -1438,6 +1532,15 @@
   abstract = {Pretrained language models often do not perform tasks in ways that are in line with our preferences, e.g., generating offensive text or factually incorrect summaries. Recent work approaches the above issue by learning from a simple form of human evaluation: comparisons between pairs of model-generated task outputs. Comparison feedback conveys limited information about human preferences per human evaluation. Here, we propose to learn from natural language feedback, which conveys more information per human evaluation. We learn from language feedback on model outputs using a three-step learning algorithm. First, we condition the language model on the initial output and feedback to generate many refinements. Second, we choose the refinement with the highest similarity to the feedback. Third, we finetune a language model to maximize the likelihood of the chosen refinement given the input. In synthetic experiments, we first evaluate whether language models accurately incorporate feedback to produce refinements, finding that only large language models (175B parameters) do so. Using only 100 samples of human-written feedback, our learning algorithm finetunes a GPT-3 model to roughly human-level summarization ability.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
+@article{schulhoff2024promptreport,
+  title = {The Prompt Report: A Systematic Survey of Prompting Techniques},
+  author = {Schulhoff, Sander and others},
+  year = 2024,
+  journal = {arXiv preprint arXiv:2406.06608},
+  eprint = {2406.06608},
+  archiveprefix = {arXiv}
 }
 
 @misc{schulmanProximalPolicyOptimization2017,
@@ -1733,6 +1836,15 @@
   keywords = {Artificial intelligence,Big data,Bourgeoisie,Disintermediation,Internet-of-Things,Labour power,Platforms,Proletariat,Sharing economy}
 }
 
+@article{wang2024moa,
+  title = {Mixture-of-Agents Enhances Large Language Model Capabilities},
+  author = {Wang, Junlin and others},
+  year = 2024,
+  journal = {arXiv preprint arXiv:2406.04692},
+  eprint = {2406.04692},
+  archiveprefix = {arXiv}
+}
+
 @misc{wangComprehensiveSurveySmall2024,
   title = {A {{Comprehensive Survey}} of {{Small Language Models}} in the {{Era}} of {{Large Language Models}}: {{Techniques}}, {{Enhancements}}, {{Applications}}, {{Collaboration}} with {{LLMs}}, and {{Trustworthiness}}},
   shorttitle = {A {{Comprehensive Survey}} of {{Small Language Models}} in the {{Era}} of {{Large Language Models}}},
@@ -1989,6 +2101,13 @@
   abstract = {AI is undergoing a paradigm shift, with breakthroughs achieved by systems orchestrating multiple large language models (LLMs) and other complex components. As a result, developing principled and automated optimization methods for compound AI systems is one of the most important new challenges. Neural networks faced a similar challenge in its early days until backpropagation and automatic differentiation transformed the field by making optimization turn-key. Inspired by this, we introduce TextGrad, a powerful framework performing automatic ``differentiation'' via text. TextGrad backpropagates textual feedback provided by LLMs to improve individual components of a compound AI system. In our framework, LLMs provide rich, general, natural language suggestions to optimize variables in computation graphs, ranging from code snippets to molecular structures. TextGrad follows PyTorch's syntax and abstraction and is flexible and easy-to-use. It works out-of-the-box for a variety of tasks, where the users only provide the objective function without tuning components or prompts of the framework. We showcase TextGrad's effectiveness and generality across a diverse range of applications, from question answering and molecule optimization to radiotherapy treatment planning. Without modifying the framework, TextGrad improves the zero-shot accuracy of GPT-4o in Google-Proof Question Answering from \$51\textbackslash\%\$ to \$55\textbackslash\%\$, yields \$20\textbackslash\%\$ relative performance gain in optimizing LeetCode-Hard coding problem solutions, improves prompts for reasoning, designs new druglike small molecules with desirable in silico binding, and designs radiation oncology treatment plans with high specificity. TextGrad lays a foundation to accelerate the development of the next-generation of AI systems.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning}
+}
+
+@inproceedings{zheng2023judging,
+  title = {Judging {{LLM-as-a-judge}} with {{MT-bench}} and Chatbot Arena},
+  booktitle = {{{NeurIPS}} 2023 Datasets and Benchmarks},
+  author = {Zheng, Lianmin and others},
+  year = 2023
 }
 
 @misc{zhongCanChatGPTUnderstand2023,
