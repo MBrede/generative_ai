@@ -99,7 +99,7 @@ Constraints, Workflow, Examples), write a complete system prompt that
 addresses each provided dimension clearly. Output only the system prompt text.
 ```
 
-2. Call it with a test input — for example, a customer support agent for a software company.
+2. Call it with a test input, for example, a customer support agent for a software company.
 3. Inspect the output: does it address the dimensions you provided?
 4. Open `adk web` and examine the agent graph.
 
@@ -114,11 +114,51 @@ A harness is the complete scaffolding around an LLM pipeline: the class or modul
 
 The Claude Code source leak (April 2026) gave an unusually detailed public view of what a production-grade harness looks like.^[The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/] The Claude Code runtime turned out to be a sophisticated harness with three distinct control layers: **guides** (feedforward instructions, conventions, and bootstrap prompts injected before the model acts), **sensors** (linters, type checkers, and test suites that catch bad output after execution), and **control checks** (deterministic format and length validation first, then slower LLM-powered semantic review). The key observation from the leak analysis: agents do not mind being micromanaged: more constraints, more checks, and more structure tend to improve performance rather than limit it.^[A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model's output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.]
 
+### Wiring agents in sequence and passing state
+
+A `Workflow` runs its nodes in the order defined by its edges. Within a single edge chain (a tuple), each node's text output is passed as `node_input` to the next function in the chain, and as the user message to the next `Agent`. This is the primary mechanism for sequential data flow.
+
+Stopping conditions are encoded as **conditional edges**: an edge is only followed when the source node's routing function returns an `Event` with a matching `route` value. Routing is handled by plain Python functions in the edge chain, not by callbacks attached to agents. The tuple syntax makes this concrete: a 4-tuple `(a, b, router_fn, {"x": c, "y": d})` runs `a`, passes its output to `b`, then calls `router_fn` to route to `c` or `d`. A plain 2-tuple `(a, b)` is an unconditional edge. A 3-tuple `(a, router_fn, {"x": c})` routes `a`'s output directly without an intermediate agent.
+
+For **cross-branch data sharing** — when two separate branches of the graph both need access to the same value — use `ctx.state`. A function writes to `ctx.state["key"]` and any downstream agent can read it via a template variable `{key}` in its instruction string. Template variables in `{curly_braces}` are filled from `ctx.state` before the instruction reaches the model. Literal braces that should appear in the output (such as in a JSON schema) must be doubled: `{{` and `}}`.
+
+### Hard checks
+
+The first line of defence is a **deterministic hard check**: a plain Python function that rejects obviously bad output before any LLM evaluation happens. ADK treats plain functions placed in an edge chain as nodes automatically, no wrapper class needed. Such a function can declare `node_input: str` to receive the previous node's text output and `ctx` to read and write `ctx.state`. It returns an `Event` to control routing: `Event(route="pass")` follows the matching conditional edge; `Event(message="...")` emits a terminal message and halts the workflow.
+
+The same mechanism works *before* an agent: a function placed before the advisor in the chain receives the raw user message as `node_input`. This is the natural place to capture the original spec before the model transforms it.
+
+```python
+from google.adk.events.event import Event
+
+def store_spec(node_input: str, ctx):
+    ctx.state["original_spec"] = node_input
+    return node_input
+
+def hard_check(node_input: str, ctx):
+    if len(node_input.strip()) < 50:
+        return Event(message="Hard check failed: output shorter than 50 characters.")
+    ctx.state["draft_prompt"] = node_input
+    return Event(route="pass")
+```
+
+The edge chain `("START", store_spec, advisor, hard_check, {"pass": ...})` runs `store_spec` first — capturing the spec — then the advisor, then the hard check on the advisor's output.
+
+::: {.callout-note}
+## 📝 Task
+
+1. Implement `hard_check` (or extend it with your own criteria) and `store_spec` as above.
+2. Wire both into a `Workflow`: `("START", store_spec, advisor, hard_check, {"pass": pass_event})` where `pass_event` returns `Event(message="Passed!")`.
+3. Test it: what happens when you pass a minimal spec that produces a short output?
+4. **Design sketch — embedding check:** You now have both the original spec (`ctx.state["original_spec"]`) and the generated prompt available. Sketch how an embedding model could check *semantic alignment* between the two — independently of the LLM judge. In 3–5 sentences, address: what you would embed, what similarity measure and threshold you would use, and which failure modes this catches that the constitution judge misses. No code required.
+
+:::
+
 ### The constitution
 
-The term *constitution* comes from Anthropic's Constitutional AI work [@bai2022constitutional], where a model is evaluated against a written list of principles rather than vague notions of quality. We borrow the concept at the pipeline level, not for training but for evaluation: the judge applies the constitution's rules to each generated output. The full treatment of Constitutional AI as a training technique is session 11 material; here it functions as an evaluation design pattern.
+Hard checks catch structural failures but cannot evaluate meaning. For that we encode quality criteria as an explicit, auditable Python object — the **constitution**. The term comes from Anthropic's Constitutional AI work [@bai2022constitutional], where a model is evaluated against a written list of principles rather than vague notions of quality. We borrow the concept at the pipeline level, not for training but for evaluation: the judge applies the constitution's rules to each generated output. The full treatment of Constitutional AI as a training technique is session 11 material; here it functions as an evaluation design pattern.
 
-The **constitution** is the component of the harness that encodes these quality criteria as explicit, auditable Python objects rather than buried prompt text. Rules defined in a dataclass are inspectable, version-controllable, and changeable without touching any agent's system prompt.
+Rules defined in a dataclass are inspectable, version-controllable, and changeable without touching any agent's system prompt. The harness injects this constitution into the judge at call time.
 
 ```python
 from dataclasses import dataclass, field
@@ -132,40 +172,26 @@ class PromptConstitution:
         "Must define output format or communication style",
         "Must include constraints on behaviour or outputs",
     ])
+
+    def as_text(self) -> str:
+        return "\n".join(f"- {r}" for r in self.rules)
 ```
 
-These five rules map to the five most frequent components from @mao2025promptstemplatessystematicprompt, making the constitution the machine-readable equivalent of the framework. The harness injects this constitution into the judge at call time, not hardcoded into any agent's system prompt.
-
-Before wiring agents together, we add a **deterministic hard check** as a plain Python function. Functions placed directly in an edge chain are automatically treated as nodes: ADK wraps them transparently, with no explicit wrapper class needed. Such a function can declare `node_input: str` to receive the previous node's text output, and `ctx` to receive the `Context` object for reading and writing `ctx.state`. The function returns an `Event` to control routing: `Event(route="pass")` follows the matching conditional edge; `Event(message="...")` emits a terminal message and stops the workflow.
-
-```python
-from google.adk.events.event import Event
-
-def hard_check(node_input: str, ctx):
-    if len(node_input.strip()) < 50:
-        return Event(message="Hard check failed: output shorter than 50 characters.")
-    ctx.state["draft_prompt"] = node_input
-    return Event(route="pass")
-```
+These five rules map to the five most frequent components from @mao2025promptstemplatessystematicprompt, making the constitution the machine-readable equivalent of the framework.
 
 ::: {.callout-note}
 ## 📝 Task
 
-1. Define a `PromptConstitution` dataclass with 3–5 rules of your choice (you can use the component mapping above or define domain-specific criteria).
-2. Implement the `hard_check` function above (or extend it with your own criteria). No wrapper class is needed — pass it directly in the edge tuple.
-3. Wire as a `Workflow`: `("START", advisor, hard_check, {"pass": ...})`. Task 4 fills in the target of the `"pass"` edge.
-4. Test it: what happens when you pass a minimal spec that produces a short output?
-
-This pre-check illustrates the control spectrum: deterministic function checks are fast and free; LLM-powered checks are slower and more expensive. Run the cheap ones first.
+Define your own `PromptConstitution` dataclass with 3–10 rules. You can use the component mapping above as a starting point, but also add quality criteria: a prompt should not only cover the structural aspects but be sensible and appropriately scoped for whatever context the user described.
 
 :::
 
 
 ## LLM as a judge {#sec-llmjudge}
 
-The deterministic pre-check catches obvious failures but cannot evaluate whether the generated system prompt actually addresses the required components meaningfully. For that we need semantic evaluation, and a natural approach is to use an LLM.
+This contitution now has to be plumbed into the pipeline. The go to concept for this operation is using an LLM to judge something based on the criteria we just set.
 
-The idea behind **LLM-as-a-judge** is straightforward: use a language model to evaluate the quality of outputs produced by another language model [@zheng2023judging]. This is attractive because it scales to large volumes of outputs, can approximate nuanced qualitative judgement when prompted carefully, and requires no separate annotation pipeline. @zheng2023judging showed that strong LLM judges achieve over 80% agreement with human raters on instruction-following tasks, comparable to inter-human agreement rates. The pattern has known limitations, however. Models may prefer their own output style, reward verbosity over accuracy, or be manipulated by superficially confident-sounding responses. LLM judgements should therefore be treated as approximate signals rather than ground truth, and ideally calibrated against human ratings for high-stakes applications.
+The idea behind **LLM-as-a-judge** is straightforward: use a language model to evaluate the quality of some text, e.g., the outputs produced by another language model [@zheng2023judging]. This is attractive because it scales to large volumes of texts, can approximate nuanced qualitative judgement when prompted carefully, and requires no separate annotation pipeline. @zheng2023judging showed that strong LLM judges can achieve over 80% agreement with human raters on instruction-following tasks, comparable to inter-human agreement rates. The pattern has known limitations, however. Models may prefer their own output style, reward verbosity over accuracy, or be manipulated by superficially confident-sounding responses. LLM judgements should therefore be treated as approximate signals rather than ground truth, and ideally calibrated against human ratings for high-stakes applications.
 
 In the constitutional setting introduced by @bai2022constitutional, the judge does not evaluate against vague notions of quality but against an explicit, enumerable list of principles. This makes the evaluation more consistent and the failure modes more interpretable. Our judge receives the generated system prompt directly as `node_input` (the previous node's text output passed through the edge chain), and the constitution's rules are embedded into its instruction string via a Python f-string at definition time. The judge evaluates each rule and returns a structured verdict.
 
@@ -190,16 +216,6 @@ Return only valid JSON: {{"approved": true/false, "rule_scores": {{...}}, "feedb
 
 The system prompt to evaluate is not a template variable here — the judge receives it as the user message of its conversation turn, delivered automatically by ADK from the previous node's output. If the judge returns output that cannot be parsed as JSON, the pipeline defaults to `approved=False`. This deterministic fallback ensures the harness never silently passes a bad output because the judge misbehaved.
 
-### Wiring agents in sequence and passing state
-
-A `Workflow` runs its nodes in the order defined by its edges. Within a single edge chain (a tuple), each node's text output is passed as `node_input` to the next function in the chain, and as the user message to the next `Agent`. This is the primary mechanism for sequential data flow.
-
-For **cross-branch data sharing** — when two separate branches of the graph both need access to the same value — use `ctx.state`. A function writes to `ctx.state["key"]` and any downstream agent can read it via a template variable `{key}` in its instruction string. Template variables in `{curly_braces}` are filled from `ctx.state` before the instruction reaches the model. Literal braces that should appear in the output (such as in a JSON schema) must be doubled: `{{` and `}}`.
-
-In our pipeline the feedback agent and editor both need the current draft, so `hard_check` writes it to `ctx.state["draft_prompt"]`. The feedback agent reads `{draft_prompt}` and `{judge_feedback}` from state; the editor reads `{draft_prompt}` and `{feedback}`. The judge, however, receives the draft purely as `node_input` — no state read needed for its main input.
-
-The full `judge`, `feedback_agent`, and `editor` definitions, along with the loop routing functions, are consolidated in the next section.
-
 ::: {.callout-note}
 ## 📝 Task
 
@@ -213,9 +229,9 @@ The full `judge`, `feedback_agent`, and `editor` definitions, along with the loo
 :::::{.callout-tip collapse="true" appearance="minimal"}
 ## Rubric judging and qualitative content coding
 
-The binary judge (pass/fail) is the simplest form of LLM evaluation. A natural extension is to evaluate each rule independently on a 1/0 basis, giving partial credit and a more informative failure signal. This *rubric* approach has a precise analogue in qualitative research methodology.
+The binary judge (pass/fail) is the simplest form of LLM evaluation. A natural extension is to evaluate each rule independently on a scale, giving partial credit and a more informative failure signal. This *rubric* approach has a precise analogue in qualitative research methodology.
 
-Rubric-based LLM judging is structurally identical to **content coding**: a coder (the judge) applies a coding scheme (the rubric/constitution) to a unit of text (the output), producing a code (the score). Qualitative research has decades of accumulated best practice for this workflow, centred on inter-rater reliability. The standard measure is **Krippendorff's alpha** [@krippendorff2004content], a coefficient that accounts for chance agreement across nominal, ordinal, and interval scales. When multiple LLM judges disagree, alpha quantifies whether the disagreement is systematic (a codebook problem) or random (noise). @hayes2007kripp provide the computational procedure and a reference implementation; the practical target is alpha > 0.8 before treating coded data as reliable.
+Rubric-based LLM judging is structurally identical to **content coding**: a coder (the judge) applies a coding scheme (the rubric/constitution) to a unit of text (the output), producing a code (the score). Qualitative research has decades of accumulated best practice for this workflow, centred on inter-rater reliability. The standard measure is **Krippendorff's alpha** [@krippendorff2004content], a coefficient that accounts for chance agreement across nominal, ordinal, and interval scales. When multiple LLM judges disagree (with human coders), alpha quantifies whether the disagreement is systematic (a codebook problem) or random (noise). @hayes2007kripp provide the computational procedure and a reference implementation; the practical target is alpha > 0.8 before treating coded data as reliable.
 
 The design principles that make content coding reliable translate directly to constitution design. Rules should be mutually exclusive, covering distinct non-overlapping aspects of quality; collectively exhaustive, together covering all dimensions that matter; and anchored clearly enough that it is unambiguous what counts as a 0 and what counts as a 1. The constitution in our pipeline is the machine-readable equivalent of a codebook. If your judge scores are noisy or inconsistent, the remedy is the same as in qualitative research: refine the codebook until the criteria are unambiguous.
 
@@ -246,12 +262,6 @@ flowchart LR
     feedback --> editor
     editor --> judge
 ```
-
-The `Workflow` in ADK manages the graph. Stopping conditions are encoded as **conditional edges**: an edge is only followed when the source node's routing function returns an `Event` with a matching `route` value. Routing is handled by plain Python functions placed in the edge chain, not by callbacks attached to agents.
-
-The edge chain tuple syntax makes this concrete. A 4-tuple `(a, b, router_fn, {"x": c, "y": d})` means: run `a`, pass its output to `b`, then call `router_fn` with `b`'s output and route to `c` or `d` based on the `Event(route=...)` it returns. A plain 2-tuple `(a, b)` is an unconditional edge. A 3-tuple `(a, router_fn, {"x": c})` means `a`'s output goes directly to `router_fn` for routing, skipping any intermediate agent.
-
-The `route_after_judge` function parses the verdict JSON, writes `judge_feedback` to state, and returns `Event(route="approved")` or `Event(route="rejected")`. The `loop_or_stop` function increments an iteration counter and returns `Event(route="continue")` until `MAX_ITERATIONS` is reached; returning `None` terminates the workflow at that point. The `store_feedback` function writes the feedback agent's output to state so the editor can read it as `{feedback}`.
 
 ```python
 from google.adk import Agent, Workflow
@@ -356,7 +366,6 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic <base64-encoded-key>
 Systematic variation and testing of your pipeline (different constitutions, different models, different iteration limits) is also where the **Examples** component from @mao2025promptstemplatessystematicprompt becomes practically relevant: running the pipeline across a set of test cases and inspecting the traces is how you discover whether your prompt spec produces consistent outputs. Tools like Langfuse make that process tractable by preserving the full trace of each run.
 
 
-<!-- TODO: mcp with markdowns would be nicer -->
 
 :::::{.callout-tip collapse="true" appearance="minimal"}
 ## Extension: context store
@@ -388,6 +397,7 @@ Extend your pipeline to accumulate approved prompts in `session.state` and pass 
 :::
 
 :::::
+
 
 
 
