@@ -196,7 +196,6 @@ slides > slide {
   z-index: 2;
   background-color: #FCFCFC;
   box-shadow: 0px -1px 4px rgba(200,200,200,0.6);
-  width: auto; max-width: none;
 }
 
 

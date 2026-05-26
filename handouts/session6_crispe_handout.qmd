@@ -1,0 +1,102 @@
+---
+title: "Session 6 Reference: System Prompt Components & Constitutional Checklist"
+subtitle: "Multi-Agent Orchestration — Generative AI"
+format:
+  html:
+    toc: false
+    theme: simplex
+    css: ../styles.css
+  pdf:
+    documentclass: article
+    geometry: margin=2cm
+    fontsize: 11pt
+    toc: false
+number-sections: false
+---
+
+## System Prompt Components
+
+@mao2025promptstemplatessystematicprompt analysed 2,163 real production prompt templates from company repositories (Uber, Microsoft, LAION-AI and others) and identified seven components with the following frequencies.
+
+| Component | Frequency | What to include |
+|---|:---:|---|
+| **Directive / Task** | 87% | The core instruction: what the agent should do |
+| **Context / Background** | 56% | Information the agent needs to do the task well |
+| **Output Format** | 40% | How the response should be structured or formatted |
+| **Constraints** | 36% | What the agent must not do, or limits on behaviour |
+| **Role / Profile** | 28% | The persona or expertise the agent should adopt |
+| **Workflow / Steps** | 28% | Sequential process when task order matters |
+| **Examples** | 20% | Demonstrations of the desired output |
+
+Directive, Context, and Output Format appear in the majority of real-world templates. Role appears first in 87% of templates that include it.
+
+---
+
+## Constitutional Checklist
+
+Decide which components are mandatory for your specific agent. Only mandatory components are checked by the judge. Mark each mandatory criterion 1 (satisfied) or 0 (not satisfied).
+
+| Component | Mandatory? (Y/N) | Score (0/1) | Notes |
+|---|:---:|:---:|---|
+| Directive / Task | | | |
+| Context / Background | | | |
+| Output Format | | | |
+| Constraints | | | |
+| Role / Profile | | | |
+| Workflow / Steps | | | |
+| Examples | | | |
+| | **Total** | /  | Approved if all mandatory pass |
+
+---
+
+## Pipeline Structure (today's build)
+
+```
+Input (prompt spec dict)
+    ↓
+[Prompt Advisor Agent]     ← writes system prompt from spec fields
+    ↓
+[Hard Check]               ← deterministic: length, keyword presence (Python code)
+    ↓
+┌── Loop (max 3 iterations) ──────────────────────────────┐
+│   [Judge Agent]           ← evaluates against constitution│
+│       ↓ (if rejected)                                    │
+│   [Feedback Agent]        ← proposes specific changes    │
+│       ↓                                                  │
+│   [Editor Agent]          ← applies changes              │
+│       ↓ ──────────────────────────────────────────────→ │
+└─────────────────────────────────────────────────────────┘
+    ↓ (if approved)
+Output: approved system prompt
+```
+
+---
+
+## Quick ADK reference
+
+```python
+from google.adk.agents import LlmAgent, SequentialAgent, LoopAgent
+from google.adk.models.lite_llm import LiteLlm
+from google.adk.sessions import InMemorySessionService
+from google.adk.runners import Runner
+import os
+
+os.environ["OLLAMA_API_BASE"] = "http://localhost:11434"
+model = LiteLlm(model="ollama_chat/gemma3:latest")
+
+agent = LlmAgent(name="MyAgent", model=model, instruction="...")
+loop  = LoopAgent(name="Loop", sub_agents=[judge, feedback, editor], max_iterations=3)
+pipe  = SequentialAgent(name="Pipeline", sub_agents=[advisor, loop])
+```
+
+Start the Dev UI: `adk web`
+
+---
+
+## Sources
+
+Mao, Y., He, J., & Chen, C. (2025). From Prompts to Templates: A Systematic Prompt Template Analysis for Real-World LLMApps. arXiv:2504.02052.
+
+Bai, Y. et al. (2022). Constitutional AI: Harmlessness from AI Feedback. arXiv:2212.08073.
+
+Zheng, L. et al. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. NeurIPS 2023. arXiv:2306.05685.
