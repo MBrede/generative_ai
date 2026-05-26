@@ -3,7 +3,7 @@ toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and 
 ---
 
 <!--  -->
-# Chatbots and Function Calling
+# Chatbots and Function Calling {#sec-functioncalling}
 
 ## Chatbots
 
@@ -225,17 +225,19 @@ As above, but this time
 <!--  update models -->
 
 1. use a very small model (e.g [a small qwen model](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF))
-2. use a larger model pf the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
+2. use a larger model of the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
 3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
 <!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
 4. use a model of the same family not fine-tuned on this Task.
-
+5. Try changing the temperature as well. What effect does this have? 
 
 :::
+
 
 ### Code Generation
 
 The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
+
 
 ::: {.callout-note}
 ## 📝 Task
@@ -245,7 +247,6 @@ Try it!
 1. In your notebook, define the weather function (and/or some other function of your choice) in python code. 
 2. Write an appropriate prompt that makes it clear that you expect python code calling the defined function(s). 
 3. Test your prompt with an example input.
-
 
 :::
 
@@ -266,8 +267,43 @@ Try it!
 :::
 
 
+### Tool execution
+
+Until now, we only made the LLM generate the function call. The next step would be to parse the LLM output for function calls and then safely execute them. The result (i.e. the response of the function) would then be fed into the LLM via the memory function, and the LLM would be prompted to generate the final answer to the user. This is left as an exercise to the reader. 
+
+::: {.callout-note}
+## 📝 Task
+
+Try it! Since this is a bit more involved, this is an optional exercise. 
+
+1. Reuse your chatbot with memory for this, since we need the memory function.
+2. Add the function calling setup from above. It helps to prompt the model to indicate tool usage with specific signals, e.g. html-tags `<tool> {tool to use} </tool>` or keywords like `tool:` {tool to use}. 
+3. If not already done so, specify that tool use is optional and that the LLM is allowed to generate the final answer if it thinks it has all the required information.
+4. Parse the model output for tool calls. The signal words or keys defined above help here. 
+5. Execute the function. 
+6. Feed the function response back to the LLM. Hopefully, it will generate a final answer.
+7. Tweak your setup until it works. 
 
 
+:::
+
+## Project work
+
+Time to work on your projects!
+
+::: {.callout-note}
+## 📝 Task
+
+1. Discuss your project. 
+2. Set up the repository
+3. Plan the project
+4. Start collecting data or finding a data set
+5. Start implementing
+
+Happy coding!
+
+
+:::
 
 ## Further Readings
 
