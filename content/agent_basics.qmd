@@ -1,94 +1,58 @@
----
-toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agent Basics</h3>'
----
 
-# Agent Basics {#sec-agents}
 
-## Motivation and learning objectives
+# Agents {#sec-agents}
 
-In the first four sessions of this course you have seen language models as components in applications: as one-of calls, as chatbots, tools users can query, or models that are connected to a vector store.
 
-From now on, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.
+## Introduction
 
-In this session we will:
+So far in this course we covered the fundamentals of language models. We talked about chatbots and we discussed function calling (even thought we did not implement the function execution). We also covered retrieval augmented generation in some detail. 
+
+Today, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.
+
+<!-- In this session we will:
 
 - understand what an LLM agent is and how it differs from a “plain” LLM call,
 - analyse the core components of agent frameworks (planning, tools, memory),
 - explore a concrete EDA agent as a running example, and
-- get a first feel for when a simple pipeline is preferable to a full agentic setup.
+- get a first feel for when a simple pipeline is preferable to a full agentic setup. -->
 
-This prepares the ground for session @sec-evalpipelines, where we will add an evaluation layer using LLM as a judge and build evaluation pipelines for our systems.
+But let's talk some more about tools. there are two kinds: 
 
-## What is an agent? 
+1. read only
+    - read files
+    - search a vector store
+    - quick web search
 
-"An AI agent is a system that uses an LLM to decide the control flow of an application." [@WhatAIAgent2024]
+2. actions (needs better name)
+    - write, change or delete files
+    - execute commands, scripts, code
+    - open or interact with other applications
+    - install additional software
+    - order stuff online
+    - invest in totally valid cryptocurrency schemes
+    - delete all your files
+    - corrupt your operating system
 
-The term agent (from Latin agere – to act) emphasises action and decision-making. An agent is not just a model that generates text; it is a system that:
+as discussed in session @sec-function_calling, tool calling needs the following:
 
-- receives a goal or task,
-- decides which actions or tools to use in which order,
-- observes the results of these actions, and
-- continues until the goal is reached (or judged to be unreachable).
+1. the LLM needs to know about the available tools
+2. The LLM needs to be instructed to generate its answer in a structured format in order to use a tool
+3. The LLM response needs to be parsed for tool calls
+4. The tool needs to be executed. 
 
-In practice, this often means that the LLM has some degree of agency in your application. It can:
-
-- choose which tool to call (if any),
-- decide which information to retrieve from a vector store or database,
-- plan intermediate steps,
-- and determine when to stop and return a final answer.
-
-
-### A motivating example
-
-Assume the following question:
-
-__"What were the key learnings from the Generative AI elective module in SoSe 25 at FH Kiel?"__
-
-If the module script is not in the LLM’s training data, a single vanilla LLM call will likely hallucinate. A more promising route is a multi-step process:
-
-1. Locate the relevant material (e.g. a PDF script in your local storage or in a course repository).
-2. Read and understand the document.
-3. Summarise the important topics and activities.
-4. Answer the original question based on this summary.
-
-An agent can automate this process: it decides that it first needs to search, then read, then summarise, then answer, and it calls the corresponding tools.
-
-In this course, we will work with a similar multi-step scenario – but instead of reading a script, our agent will perform an exploratory data analysis (EDA) on a dataset.
+with this setup, we are only one step away from an agent. 
 
 
+## Agents: closing the loop
+
+Once tool calling and execution is implemented, the agent is basically just a loop around the tool call. 
+
+![Image credit https://x.com/adamdotdev (from [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents))](../imgs/agent_loop_tinyagents.jpg)
 
 
-## Agent framework
+<!-- ### ReAct -->
 
-![Architecture of the agent framework [@LLMAgentsNextra2024]](../imgs/agent-framework.png)
-
-Most agent frameworks share a similar high-level architecture:
-
-### Agent (core)
-The general-purpose LLM that acts as the brain of the system. It receives the current state (task, context, history) and decides:
-
-- which tool to call next,
-- how to interpret tool outputs,
-- when to stop and return a final answer.
-
-### Planning
-The mechanism that breaks down a complex task into smaller steps and orders them. In many frameworks, planning is not a separate module but largely encoded in the system prompt and the examples we give the LLM (“reason step by step”, “decide which tool to use next”, etc.).
-
-### Tools
-Functions the agent can call – this is where the “real work” happens: data loading, statistics, plotting, web search, calling another API, …
-Tools can be simple (e.g. a calculator) or complex (e.g. a database query, another agent). For our EDA agent, tools will include things like ``inspect_schema``, ``basic_stats``, or ``plot_distribution``.
-
-### Memory
-Storage for past interactions and intermediate results. Memory can be:
-
-- short-term: conversation history or recent tool outputs,
-- long-term: a vector store or database with previously seen information.
-Memory enables the agent to build on earlier steps instead of starting from scratch each time.
-
-
-### Multi-step agents and ReAct
-
-A widely used pattern for multi-step agents is ReAct (Reasoning + Acting) by Yao et al. [@yaoReActSynergizingReasoning2023]. The core idea:
+A widely used pattern for multi-step agents is _ReAct_ (Reasoning + Acting) by Yao et al. [@yaoReActSynergizingReasoning2023]. The core idea:
 
 1. The agent reasons about the current situation (“Thought”).
 2. It chooses and executes an action (e.g. a tool call).
@@ -108,6 +72,9 @@ In pseudocode (adapted from the [smolagents documentation](https://huggingface.c
     final_answer = llm_generate_answer(memory)
     return final_answer
 
+![Visualization of the ReAct agent loop (from [the n8n blogpost](https://blog.n8n.io/react-agent/))](../imgs/agent_loop_tinyagents.jpg)
+
+
 The intelligence of the system lies in:
 
 - the prompting that shapes how the LLM reasons and chooses actions,
@@ -115,95 +82,113 @@ The intelligence of the system lies in:
 - how we represent memory (what gets recorded, in which format, with which limits).
 
 
-## Agent frameworks in practice
+## Frameworks
 
-There are many frameworks for building LLM-based agents. In this course we focus on two:
+Implementing this from scratch, while good for education, is getting a bit too involved. it is a good idea, therefore, to use a framework. there is no shortage of those. here is a non-exhaustive list: 
 
-- [Llamaindex](https://github.com/run-llama/llama_index): Originally a data framework for building LLM applications around your own data. It offers convenient abstractions for tools, agents, and memory, and comes with many examples and tutorials.
 - [smolagents](https://huggingface.co/docs/smolagents/index): A lightweight agent framework by Hugging Face. It is designed to be simple and hackable, with good conceptual documentation and an active community.
-
-Two other popular frameworks you might encounter:
-
-- [LangChain](https://github.com/hwchase17/langchain): a modular library for building LLM applications (chains, agents, tools), with a large ecosystem of integrations.
+- [Llamaindex](https://github.com/run-llama/llama_index): Originally a data framework for building LLM applications around your own data. It offers convenient abstractions for tools, agents, and memory, and comes with many examples and tutorials.
 - [Haystack](https://github.com/deepset-ai/haystack): an open-source NLP framework focused on production-ready applications with LLMs and classic models, developed by deepset (Germany).
+- [LangChain](https://github.com/hwchase17/langchain): a modular library for building LLM applications (chains, agents, tools), with a large ecosystem of integrations.
+- [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview): AI agent framework by Langchain
+- [n8n](https://n8n.io/): low code/no code framework for workflow automatization
+- [Agent Development Kit (ADK)](https://adk.dev): AI agent framework by google, introduced in April 2025
+
+for something quick, smolagents is fine. for production use, adk seems a good idea. 
 
 
 ::: {.callout-note}
 ## 📝 Task
 
-Now it is your turn!
-
-Each group is to use one of the following frameworks to build a small demo agent:
-
-- [Llamaindex](https://docs.llamaindex.ai/en/stable/understanding/agent/) You can use [the ReAct example](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/) as a starting point. 
-- [Smolagents](https://huggingface.co/docs/smolagents/tutorials/building_good_agents)
-- Another framework of your choice. 
-
-For your chosen framework, do the following:
+Have a look at the smolagents framework.
 
 1. Set up a local LLM (e.g. using Ollama or LM Studio) to be used by the agent.
-2. Choose a small task for your agent, e.g. answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)
+2. Choose a small task for your agent, e.g. answering questions about a specific topic, summarizing a document, etc. (use the one in the tutorial)
 3. Implement the agent using one of the frameworks listed above.
-4. Have a deeper look! Try to find the system prompt, the agent gives to the LLM ( in LLamaindex you can find it using agent.get_prompts()). Try to find it in smolagents.
-4. Present your results and your experiences with the frameworks (presenting the notebook is fine.)
-<!-- 5. Submit your code and report on moodle. -->
+4. Have a deeper look! Try to find the system prompt, the agent gives to the LLM.
 
 :::
 
 
-## The EDA agent as a running example
+## Google ADK: first contact {#sec-adk}
 
-For the remainder of this session, we use a concrete use case:
+Google's Agent Development Kit (ADK) is a Python framework for building multi-agent systems with explicit graph-topology primitives [@huizenga2025adk]. Its main advantage for teaching is the built-in Dev UI, which renders the agent graph and execution trace in a browser with zero configuration. Comparable frameworks you may encounter include LangGraph (more granular node-based control), CrewAI (role-based agent teams), and AutoGen (conversation-based multi-agent coordination). ADK sits at the structured and illustrative end of this spectrum.
 
-__EDA Agent for tabular data:__ A system that receives a dataset and automatically produces a first EDA report.
+ADK does not speak to Ollama or LM Studio directly. It requires a LiteLlm wrapper that translates between ADK's interface and the local provider's API. LiteLlm is a thin SDK adapter, not a running service. The model string must include a provider prefix that tells LiteLLM which backend to use:
 
-### Problem setting
+    Python
 
-Data scientists regularly receive new datasets and need to answer questions like:
+    from google.adk.models.lite_llm import LiteLlm
+    import os
 
-- Which variables are present? With which types?
-- Are there missing values or obvious data quality issues?
-- How are key variables distributed?
-- Are there potentially interesting relationships or anomalies?
+    # Ollama
+    os.environ["OLLAMA_API_BASE"] = "http://localhost:11434"
+    model = LiteLlm(model="ollama_chat/gemma3:latest")
 
-This can become repetitive and time-consuming. Our EDA agent aims to automate the first pass of this process.
+    # LM Studio
+    os.environ["LM_STUDIO_API_BASE"] = "http://localhost:1234"
+    model = LiteLlm(model="lm_studio/gemma3")
 
-### Roles of tools in the EDA agent
 
-Sample tools could be:
+Without the prefix LiteLLM cannot route the request and raises a BadRequestError. The prefix is the only required change when switching backends.
 
-- ``inspect_schema(dataset)``: column names, types, basic info
-- ``basic_stats(dataset, columns)``: mean, median, min/max, missing values
-- ``plot_distribution(dataset, column)``: create histograms or boxplots
-- ``sample_rows(dataset, n)``: show a small sample for inspection
-- optional: ``vector_store_search(query)``: retrieve background information (e.g. on feature names)
+The three types needed for first contact are LlmAgent, Runner, and Session. An LlmAgent is a leaf node: a single LLM call with a system prompt and optional tools. Runner executes a pipeline against a Session, which holds conversation and pipeline state. ADK has further composition types that are introduced when they are needed below.
 
-The agent receives a task such as:
+| Type | Role |
+|---|---|
+| LlmAgent | Leaf node: one LLM call, one system prompt |
+| FunctionNode | Leaf node: a Python function as a graph step |
+| Workflow | Graph of nodes connected by explicit edges; handles sequential, looping, and parallel topologies |
+| Runner | Executes a pipeline against a session |
+| Session | Holds conversation and pipeline state |
 
-“Please perform a first exploratory analysis of this dataset and summarise the main findings.”
+Full API reference: https://google.github.io/adk-docs/
 
-It then:
+    Bash
 
-1. Calls inspect_schema to understand the structure.
-2. Decides which columns deserve a closer look.
-3. Calls basic_stats and plot_distribution for selected columns.
-4. Collects the outputs in memory.
-5. Generates a structured EDA report (e.g. “Data overview”, “Key distributions”, “Missing values”, “First hypotheses”).
+    uv add google-adk litellm
 
 
 ::: {.callout-note}
 ## 📝 Task
 
-Do the EDA agent
+1. Install the dependencies: uv add google-adk litellm
+2. Make sure Ollama is running with a model that supports tool calls (e.g. gemma3, qwen2.5, llama3:instruct).
+3. Run the following minimal agent and confirm it responds:
 
-1. In your agent setup, implement the above functions for doing the EDA. This should be simple enough. 
-2. Give it a dataset ,e.g. [the titanic dataset from kaggle](https://www.kaggle.com/competitions/titanic/data) or some other simple dataset you have laying around. 
-3. Test the agent with several prompts and observe when it uses tools, when it doesn’t, and where it struggles. 
-4. Try to get it to do the above steps. 
-5. Present to the group. 
+    Python
+
+    from google.adk.agents import LlmAgent
+    from google.adk.models.lite_llm import LiteLlm
+    from google.adk.sessions import InMemorySessionService
+    from google.adk.runners import Runner
+    from google.genai import types
+    import os
+
+    os.environ["OLLAMA_API_BASE"] = "http://localhost:11434"
+
+    agent = LlmAgent(
+        name="Hello",
+        model=LiteLlm(model="ollama_chat/gemma3:latest"),
+        instruction="You are a helpful assistant. Answer briefly.",
+    )
+
+    session_service = InMemorySessionService()
+    runner = Runner(agent=agent, app_name="hello", session_service=session_service)
+    session = session_service.create_session_sync(app_name="hello", user_id="student")
+
+    for event in runner.run(
+        user_id="student",
+        session_id=session.id,
+        new_message=types.Content(role="user", parts=[types.Part(text="Say hello!")])
+    ):
+        if event.is_final_response():
+            print(event.content.parts[0].text)
+
+
+4. Start the Dev UI: adk web and explore the agent tree in the browser.
 
 :::
-
 
 ## Pipelines vs. agents – when do we need agency?
 
@@ -238,25 +223,89 @@ For RAG-style systems, this is particularly relevant:
 - If retrieval is mandatory for correctness, you may not want to leave the “call retrieval or not?” decision to the LLM.
 - Instead, you enforce: “always retrieve, then generate”, implemented as a pipeline.
 
-<!-- We will build on this distinction in session @sec-evalpipelines, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense. -->
+## Model context protocol
 
-What does this mean for our EDA agent?
+So far, we only used small, self-written or pre-build tools. In general though, agents are not restricted to this. In order to harness LLM agents to their full potential, we want them to assist in a variety of tasks. In a company setting, the agent could be supposed to interact with the internal tool and applications the company uses in their daily business, e.g. gather information from the ERP system, write emails or search the web. 
+
+Every time developers want to give an AI access to external data or tools, they have to build custom, one-off integrations. It's like building a different key for every single door.
+
+MCP creates a standardized way for AI models to connect to external resources. Think of it as:
+
+- Universal translator: One standard "language" for AI-to-tool communication
+- Plugin system: Like browser extensions, but for AI assistants
+- Modular approach: Write a tool once, use it with any MCP-compatible AI
+
+So, first and foremost, **MCP is an interface standard** that defines how external tools can be integrated into large language models (LLMs). It provides a set of protocols and APIs that allow LLMs to interact with these tools seamlessly. This includes defining the inputs and outputs for each interaction, as well as the mechanisms for error handling and feedback loops.
+
+In addition to a standard definition, anthropic also released an implementation of MCP in a number of languages, including Python. It also hosts a repository on GitHub with examples and documentation that you can use as a starting point for building your own integrations. There is also a large and growing collection of pre-built connectors to third-party services like databases, APIs, and other tools. That means developers don't have to start from scratch every time they want to add new functionality to their LLMs.
 
 
 ::: {.callout-note}
 ## 📝 Task
 
+Have a look!
 
-1. Discuss: for our EDA example, does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?
-2. Implement your agent from above as a pipeline. 
-3. Upload your Notebook to Moodle. 
+1. Find the MCP and MCP server repository on GitHub
+2. Browse through the list of server implementations, find one (or many) that you find interesting.
+
+:::
+
+But what is an MCP server anyway? And how does MCP work exactly? 
+
+
+## Core concepts
+
+The following is more or less taken from the [official website](https://modelcontextprotocol.io). 
+
+At its core, MCP follows a client-server architecture where a host application can connect to multiple servers:
+
+![MCP architecture [@ModelContextProtocol]](../imgs/MCP_archi.png)
+
+
+- **MCP Hosts:** Programs like Claude Desktop, IDEs, or AI tools that want to access data through MCP
+- **MCP Clients:** Protocol clients that maintain 1:1 connections with servers
+- **MCP Servers:** Lightweight programs that each expose specific capabilities through the standardized Model Context Protocol
+- **Local Data Sources:** Your computer’s files, databases, and services that MCP servers can securely access
+- **Remote Services:** External systems available over the internet (e.g., through APIs) that MCP servers can connect to
+
+The servers come in three main flavours: 
+
+- **Resources:** File-like data that can be read by clients (like API responses or file contents)
+- **Tools:** Functions that can be called by the LLM (with user approval)
+- **Prompts:** Pre-written templates that help users accomplish specific tasks
+
+As you have seen in the repository, there are lots of pre-built servers available. 
+
+::: {.callout-note}
+## 📝 Task
+
+Now it's time to implement a simple example using MCP!
+
+1. Read the [MCP section for ADK](https://adk.dev/tools-custom/mcp-tools/#1-using-mcp-servers-with-adk-agents-adk-as-an-mcp-client-in-adk-web).
+2. Set up a local MCP server using one of the examples in the documentation.
+3. Make it work with your agent you implemented earlier. 
+
+:::
+
+
+
+## Project work
+
+Time to work on your projects!
+
+::: {.callout-note}
+## 🧠 Reflection – Applying This to Your Project
+
+Go in your project teams. Discuss:
+
+1. What framework do you want to use? Why do you prefer it?
+2. What tools (if any) do you need for your project?
+3. Do you need the full agent capability or a simpler pipeline setup?
 
 :::
 
 
 ## Further Readings
 
-A nice Example of an agent system is *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors. It provides valuable insights into how and why these systems fail and is a very good read overall. 
-
-
-## References
+- [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents) really helps understanding agents. 
+- A nice Example of an agent system is *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors. It provides valuable insights into how and why these systems fail and is a very good read overall. 

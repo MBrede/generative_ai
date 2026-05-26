@@ -3,7 +3,7 @@ toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and 
 ---
 
 <!--  -->
-# Chatbots and Function Calling
+# Chatbots and Function Calling {sec-function_calling}
 
 ## Chatbots
 
