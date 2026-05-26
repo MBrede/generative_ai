@@ -189,7 +189,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent Basics</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agents</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -361,7 +361,7 @@ Fig&nbsp;14.1: Depiction of the amount of articles published on arXiv and in for
 <p>So perhaps we should, strictly, say not that ChatGPT <em>is</em> bullshit but that it <em>outputs</em> bullshit in a way that goes beyond being simply a vector of bullshit: it does not and cannot care about the truth of its output, <em>and</em> the person using it does so not to convey truth or falsehood but rather to convince the hearer that the text was written by a interested and attentive agent. <em><span class="citation" data-cites="hicksChatGPTBullshit2024">(<a href="#ref-hicksChatGPTBullshit2024" role="doc-biblioref">Hicks et al., 2024, p. 7</a>)</span></em></p>
 </blockquote>
 <p>One could go further and argue that LLMs are unintentionally specifically trained and aligned to be bullshit generators. By using human feedback in the alignment process, specifically to tune a language model to get higher scores assigned by humans based on the factual accuracy of its output, we can find ourselves in a situation where a model is optimized to generate text that is more likely to be perceived as true by humans, regardless of whether it is actually true or if it actually means to deceit the rater into thinking that it sounds correct, just resulting in a higher grade of bullshit <span class="citation" data-cites="labsCanAIAlignment2023">(<a href="#ref-labsCanAIAlignment2023" role="doc-biblioref">Labs, 2023</a>)</span>. This is especially the case where raters, that naturally can’t be experts in all fields, are asked to evaluate the factual accuracy of generated texts. They will increasingly need to rely on heuristics for rating the quality of texts, the higher the specificity of its topic.</p>
-<p>This example highlights the importance of clearly defining alignment values — such as honesty — and developing robust ways to measure them. Without reliable metrics, optimization processes risk reinforcing outputs that meet surface-level heuristics while failing to align with deeper human values. The described behavior is an example of a model gaming the goal specification <span class="citation" data-cites="robertmilesaisafety9ExamplesSpecification2020">(<a href="#ref-robertmilesaisafety9ExamplesSpecification2020" role="doc-biblioref"><em>9 <span>Examples</span> of <span>Specification Gaming</span></em>, 2020</a>)</span> and illustrates the crucial role of <strong>defining</strong> and <strong>measuring</strong> values in alignment research.</p>
+<p>This example highlights the importance of clearly defining alignment values — such as honesty — and developing robust ways to measure them. Without reliable metrics, optimization processes risk reinforcing outputs that meet surface-level heuristics while failing to align with deeper human values. The described behavior is an example of a model gaming the goal specification <span class="citation" data-cites="robertmilesaisafety9ExamplesSpecification2020">(<a href="#ref-robertmilesaisafety9ExamplesSpecification2020" role="doc-biblioref">Robert Miles AI Safety, 2020</a>)</span> and illustrates the crucial role of <strong>defining</strong> and <strong>measuring</strong> values in alignment research.</p>
 <p>So, a first step towards aligning a model with human values is to define these values. <span class="citation" data-cites="askellGeneralLanguageAssistant2021">Askell et al. (<a href="#ref-askellGeneralLanguageAssistant2021" role="doc-biblioref">2021</a>)</span> propose the following targets for a LLM-assistant’s alignment:</p>
 <p>Such a model should be</p>
 <blockquote class="blockquote">
@@ -632,7 +632,7 @@ Fig&nbsp;14.5: Overview of challenges posed by RLHF. Taken from <span class="cit
 <p>Another interesting method is to let one or multiple agents debate about the correct action. This can be done by having a single agent that generates multiple arguments for and against each action and then selects the best one, or by having multiple agents that each generate an argument. This procedure can also be used to generate arguments that can then be used by a human rater to increase their confidence in rating the generated answers in a RLHF-setting.</p>
 <p><span class="citation" data-cites="duImprovingFactualityReasoning2023">Du et al. (<a href="#ref-duImprovingFactualityReasoning2023" role="doc-biblioref">2023</a>)</span> used a multi-agent approach to improve a LLMs mathematical and strategic reasoning. Their approach is composed of the following steps:</p>
 <ol type="1">
-<li>Multiple agents (not in the sense defined in our agent-chapter <a href="agent_basics.html" class="quarto-xref"><span>Agent Basics</span></a>, but in the sense of multiple LLM-calls) generate initial answers to a question.</li>
+<li>Multiple agents (not in the sense defined in our agent-chapter <a href="agent_basics.html" class="quarto-xref"><span>Agents</span></a>, but in the sense of multiple LLM-calls) generate initial answers to a question.</li>
 <li>All responses are concatenated and presented as context to each agent, combined with the instruction to construct a new response based on those presented which could look like this: &gt; “These are the solutions to the problem from other agents: [other answers] Based off the opinion of other agents, can you give an updated response . . .” <span class="citation" data-cites="duImprovingFactualityReasoning2023">(<a href="#ref-duImprovingFactualityReasoning2023" role="doc-biblioref">Du et al., 2023, p. 4</a>)</span></li>
 <li>An iterative repetition of step 2 for multiple rounds</li>
 </ol>
@@ -696,9 +696,6 @@ Fig&nbsp;14.5: Overview of challenges posed by RLHF. Taken from <span class="cit
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-robertmilesaisafety9ExamplesSpecification2020" class="csl-entry" role="listitem">
-<em>9 <span>Examples</span> of <span>Specification Gaming</span></em>. (2020).
-</div>
 <div id="ref-AligningLanguageModels" class="csl-entry" role="listitem">
 <em>Aligning language models to follow instructions</em>. (n.d.). https://openai.com/index/instruction-following/.
 </div>
@@ -725,6 +722,9 @@ Ng, A. Y., &amp; Russell, S. (2000). Algorithms for inverse reinforcement learni
 </div>
 <div id="ref-ouyangTrainingLanguageModels2022" class="csl-entry" role="listitem">
 Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., Schulman, J., Hilton, J., Kelton, F., Miller, L., Simens, M., Askell, A., Welinder, P., Christiano, P. F., Leike, J., &amp; Lowe, R. (2022). Training language models to follow instructions with human feedback. <em>Advances in Neural Information Processing Systems</em>, <em>35</em>, 27730–27744.
+</div>
+<div id="ref-robertmilesaisafety9ExamplesSpecification2020" class="csl-entry" role="listitem">
+Robert Miles AI Safety. (2020). <em>9 <span>Examples</span> of <span>Specification Gaming</span></em>.
 </div>
 <div id="ref-schulmanProximalPolicyOptimization2017" class="csl-entry" role="listitem">
 Schulman, J., Wolski, F., Dhariwal, P., Radford, A., &amp; Klimov, O. (2017). <em>Proximal <span>Policy Optimization Algorithms</span></em> (arXiv:1707.06347). arXiv. <a href="https://doi.org/10.48550/arXiv.1707.06347">https://doi.org/10.48550/arXiv.1707.06347</a>

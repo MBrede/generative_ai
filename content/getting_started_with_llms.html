@@ -254,7 +254,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agent Basics</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Agents</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -632,7 +632,7 @@ PE_{(pos, 2i+1)} &amp;=&amp; cos(\frac{pos}{10000^{\frac{2i}{d_{model}}}})
 <p>Where <span class="math inline">\(i\)</span> is the dimension and <span class="math inline">\(pos\)</span> is the position. Those 2 formulas are not the most intuitive, what they do is to add a unique offset to each embedding though, that allows the model to infer and weigh the token’s positions in the matrix on its own. <a href="#fig-positional" class="quarto-xref">Figure&nbsp;<span>3.8</span></a> illustrates the pattern this specific combination of sin and cos creates for each sequence-position and embedding-dimension.</p>
 <div class="cell enlarge-onhover" data-layout-align="center">
 <div class="cell-output-display">
-<div id="fig-positional" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" alt="A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The y-axis represents the position and the x-axis represents the dimension of the embedded token in the input sequence. The color represents the value of the encoding.">
+<div id="fig-positional" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The y-axis represents the position and the x-axis represents the dimension of the embedded token in the input sequence. The color represents the value of the encoding." data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-positional-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="getting_started_with_llms_files/figure-html/fig-positional-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="A heatmap of the positional encoding for 50 dimensions and 512 embedding-dimensions. The y-axis represents the position and the x-axis represents the dimension of the embedded token in the input sequence. The color represents the value of the encoding." width="672">
@@ -690,7 +690,7 @@ Fig&nbsp;3.11: Performance power law for transformer models. Taken from <span cl
 <section id="choosing-open-source-models" class="level2">
 <h2 class="anchored" data-anchor-id="choosing-open-source-models">Choosing open source models</h2>
 <p>The 2022 release of ChatGPT by OpenAI has sparked a lot of interest in large language models (LLMs) and their capabilities. This has also led to an increase in the number of available open-source LLMs. The selection of a model for your application is always a trade-off between performance, size, and computational requirements.</p>
-<p>Although <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span> showed a relationship between performance and model-size, the resources available will most probably limit you to smaller models. Additionally, a lot of tasks can be solved by smaller models if they are appropriately fine-tuned <span class="citation" data-cites="hsiehDistillingStepStepOutperforming2023">(<a href="#ref-hsiehDistillingStepStepOutperforming2023" role="doc-biblioref">Hsieh et al., 2023</a>)</span>.</p>
+<p>Although <span class="citation" data-cites="kaplanScalingLawsNeural2020a">Kaplan et al. (<a href="#ref-kaplanScalingLawsNeural2020a" role="doc-biblioref">2020</a>)</span> showed a relationship between performance and model-size, the resources available will most probably limit you to smaller models. Additionally, a lot of tasks can be solved by smaller models if they are appropriately fine-tuned <span class="citation" data-cites="hsiehDistillingStepStepOutperforming2023">(<a href="#ref-hsiehDistillingStepStepOutperforming2023" role="doc-biblioref"><strong>hsiehDistillingStepStepOutperforming2023?</strong></a>)</span>.</p>
 <p>A good idea when choosing an open source model is to start small and test whether the performance is sufficient for your use case. If not, you can always try a larger model later on.</p>
 <p>Additionally, it is good practice to check the license of the model you want to use. Some models are only available under a non-commercial license, which means that you cannot use them for commercial purposes.</p>
 <p>Thirdly, you should make sure that the model you choose is appropriate for your use case. For example, if you want to use a model for text generation, you should make sure that it was trained on a dataset that is similar to the data you will be using. If you want to use a model for translation, you should make sure that it was trained on a dataset that includes the languages you are interested in. A lot of usecases do already have benchmark datasets that can be used to pit models against each other and evaluate their appropriateness for a given use case based on a few key metrics.</p>
@@ -777,7 +777,7 @@ without any explanations.</code></pre>
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
 <ul>
 <li><p><a href="https://heidloff.net/article/foundation-models-transformers-bert-and-gpt/">This</a> quite high-level blog-article about foundational models by <span class="citation" data-cites="heidloffFoundationModelsTransformers2023">Heidloff (<a href="#ref-heidloffFoundationModelsTransformers2023" role="doc-biblioref">2023</a>)</span></p></li>
-<li><p>The Attention is all you need-paper <span class="citation" data-cites="vaswaniAttentionAllYou2023a">(<a href="#ref-vaswaniAttentionAllYou2023a" role="doc-biblioref">Vaswani et al., 2023</a>)</span> and the brilliant video discussing it by Umar Jamil <span class="citation" data-cites="umarjamilAttentionAllYou2023">(<a href="#ref-umarjamilAttentionAllYou2023" role="doc-biblioref"><em>Attention Is All You Need (<span>Transformer</span>) - <span>Model</span> Explanation (Including Math), <span>Inference</span> and <span>Training</span></em>, 2023</a>)</span></p></li>
+<li><p>The Attention is all you need-paper <span class="citation" data-cites="vaswaniAttentionAllYou2023a">(<a href="#ref-vaswaniAttentionAllYou2023a" role="doc-biblioref">Vaswani et al., 2023</a>)</span> and the brilliant video discussing it by Umar Jamil <span class="citation" data-cites="umarjamilAttentionAllYou2023">(<a href="#ref-umarjamilAttentionAllYou2023" role="doc-biblioref">Umar Jamil, 2023</a>)</span></p></li>
 <li><p><a href="https://stats.stackexchange.com/a/424127">This</a> <em>very</em> good answer on stack exchange that explains the attention-concept <span class="citation" data-cites="424127">(<a href="#ref-424127" role="doc-biblioref">(https://stats.stackexchange.com/users/95569/dontloo), n.d.</a>)</span></p></li>
 </ul>
 </section>
@@ -788,9 +788,6 @@ without any explanations.</code></pre>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-AIAAICChatGPTTraining" class="csl-entry" role="listitem">
 <em><span>AIAAIC - ChatGPT training emits 502 metric tons of carbon</span></em>. (n.d.). https://www.aiaaic.org/aiaaic-repository/ai-algorithmic-and-automation-incidents/chatgpt-training-emits-502-metric-tons-of-carbon.
-</div>
-<div id="ref-umarjamilAttentionAllYou2023" class="csl-entry" role="listitem">
-<em>Attention is all you need (<span>Transformer</span>) - <span>Model</span> explanation (including math), <span>Inference</span> and <span>Training</span></em>. (2023).
 </div>
 <div id="ref-bahdanauNeuralMachineTranslation2014" class="csl-entry" role="listitem">
 Bahdanau, D. (2014). Neural machine translation by jointly learning to align and translate. <em>arXiv Preprint arXiv:1409.0473</em>. <a href="https://arxiv.org/abs/1409.0473">https://arxiv.org/abs/1409.0473</a>
@@ -806,9 +803,6 @@ Heidloff, N. (2023). Foundation <span>Models</span>, <span>Transformers</span>, 
 </div>
 <div id="ref-hoffmannTrainingComputeOptimalLarge2022a" class="csl-entry" role="listitem">
 Hoffmann, J., Borgeaud, S., Mensch, A., Buchatskaya, E., Cai, T., Rutherford, E., Casas, D. de L., Hendricks, L. A., Welbl, J., Clark, A., Hennigan, T., Noland, E., Millican, K., Driessche, G. van den, Damoc, B., Guy, A., Osindero, S., Simonyan, K., Elsen, E., … Sifre, L. (2022). <em>Training <span>Compute-Optimal Large Language Models</span></em> (arXiv:2203.15556). arXiv. <a href="https://doi.org/10.48550/arXiv.2203.15556">https://doi.org/10.48550/arXiv.2203.15556</a>
-</div>
-<div id="ref-hsiehDistillingStepStepOutperforming2023" class="csl-entry" role="listitem">
-Hsieh, C.-Y., Li, C.-L., Yeh, C.-K., Nakhost, H., Fujii, Y., Ratner, A., Krishna, R., Lee, C.-Y., &amp; Pfister, T. (2023). <em>Distilling <span class="nocase">Step-by-Step</span>! <span>Outperforming Larger Language Models</span> with <span>Less Training Data</span> and <span>Smaller Model Sizes</span></em> (arXiv:2305.02301). arXiv. <a href="https://doi.org/10.48550/arXiv.2305.02301">https://doi.org/10.48550/arXiv.2305.02301</a>
 </div>
 <div id="ref-424127" class="csl-entry" role="listitem">
 (https://stats.stackexchange.com/users/95569/dontloo), dontloo. (n.d.). <em>What exactly are keys, queries, and values in attention mechanisms?</em> Cross Validated.
@@ -827,6 +821,9 @@ Peters, M. E., Neumann, M., Iyyer, M., Gardner, M., Clark, C., Lee, K., &amp; Ze
 </div>
 <div id="ref-radfordImprovingLanguageUnderstanding2018" class="csl-entry" role="listitem">
 Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). <em>Improving language understanding with unsupervised learning</em>.
+</div>
+<div id="ref-umarjamilAttentionAllYou2023" class="csl-entry" role="listitem">
+Umar Jamil. (2023). <em>Attention is all you need (<span>Transformer</span>) - <span>Model</span> explanation (including math), <span>Inference</span> and <span>Training</span></em>.
 </div>
 <div id="ref-vaswaniAttentionAllYou2023a" class="csl-entry" role="listitem">
 Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., &amp; Polosukhin, I. (2023). <em>Attention <span>Is All You Need</span></em> (arXiv:1706.03762). arXiv. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>

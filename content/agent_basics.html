@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Agent Basics – Generative AI</title>
+<title>Agents – Generative AI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -105,7 +140,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agent Basics</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agents</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -190,7 +225,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agent Basics</span></a>
+  <a href="../content/agent_basics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Agents</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -265,26 +300,14 @@ Agent Basics<br>
 </h3>
    
   <ul>
-  <li><a href="#motivation-and-learning-objectives" id="toc-motivation-and-learning-objectives" class="nav-link active" data-scroll-target="#motivation-and-learning-objectives">Motivation and learning objectives</a></li>
-  <li><a href="#what-is-an-agent" id="toc-what-is-an-agent" class="nav-link" data-scroll-target="#what-is-an-agent">What is an agent?</a>
-  <ul class="collapse">
-  <li><a href="#a-motivating-example" id="toc-a-motivating-example" class="nav-link" data-scroll-target="#a-motivating-example">A motivating example</a></li>
-  </ul></li>
-  <li><a href="#agent-framework" id="toc-agent-framework" class="nav-link" data-scroll-target="#agent-framework">Agent framework</a>
-  <ul class="collapse">
-  <li><a href="#agent-core" id="toc-agent-core" class="nav-link" data-scroll-target="#agent-core">Agent (core)</a></li>
-  <li><a href="#planning" id="toc-planning" class="nav-link" data-scroll-target="#planning">Planning</a></li>
-  <li><a href="#tools" id="toc-tools" class="nav-link" data-scroll-target="#tools">Tools</a></li>
-  <li><a href="#memory" id="toc-memory" class="nav-link" data-scroll-target="#memory">Memory</a></li>
-  <li><a href="#multi-step-agents-and-react" id="toc-multi-step-agents-and-react" class="nav-link" data-scroll-target="#multi-step-agents-and-react">Multi-step agents and ReAct</a></li>
-  </ul></li>
-  <li><a href="#agent-frameworks-in-practice" id="toc-agent-frameworks-in-practice" class="nav-link" data-scroll-target="#agent-frameworks-in-practice">Agent frameworks in practice</a></li>
-  <li><a href="#the-eda-agent-as-a-running-example" id="toc-the-eda-agent-as-a-running-example" class="nav-link" data-scroll-target="#the-eda-agent-as-a-running-example">The EDA agent as a running example</a>
-  <ul class="collapse">
-  <li><a href="#problem-setting" id="toc-problem-setting" class="nav-link" data-scroll-target="#problem-setting">Problem setting</a></li>
-  <li><a href="#roles-of-tools-in-the-eda-agent" id="toc-roles-of-tools-in-the-eda-agent" class="nav-link" data-scroll-target="#roles-of-tools-in-the-eda-agent">Roles of tools in the EDA agent</a></li>
-  </ul></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#agents-closing-the-loop" id="toc-agents-closing-the-loop" class="nav-link" data-scroll-target="#agents-closing-the-loop">Agents: closing the loop</a></li>
+  <li><a href="#frameworks" id="toc-frameworks" class="nav-link" data-scroll-target="#frameworks">Frameworks</a></li>
+  <li><a href="#sec-adk" id="toc-sec-adk" class="nav-link" data-scroll-target="#sec-adk">Google ADK: first contact</a></li>
   <li><a href="#pipelines-vs.-agents-when-do-we-need-agency" id="toc-pipelines-vs.-agents-when-do-we-need-agency" class="nav-link" data-scroll-target="#pipelines-vs.-agents-when-do-we-need-agency">Pipelines vs.&nbsp;agents – when do we need agency?</a></li>
+  <li><a href="#model-context-protocol" id="toc-model-context-protocol" class="nav-link" data-scroll-target="#model-context-protocol">Model context protocol</a></li>
+  <li><a href="#core-concepts" id="toc-core-concepts" class="nav-link" data-scroll-target="#core-concepts">Core concepts</a></li>
+  <li><a href="#project-work" id="toc-project-work" class="nav-link" data-scroll-target="#project-work">Project work</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further Readings</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -293,9 +316,9 @@ Agent Basics<br>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agent Basics</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/getting_started_with_llms.html">Language Models</a></li><li class="breadcrumb-item"><a href="../content/agent_basics.html"><span class="chapter-title">Agents</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-agents" class="quarto-section-identifier"><span class="chapter-title">Agent Basics</span></span></h1>
+<h1 class="title"><span id="sec-agents" class="quarto-section-identifier"><span class="chapter-title">Agents</span></span></h1>
 </div>
 
 
@@ -312,125 +335,77 @@ Agent Basics<br>
 </header>
 
 
-<section id="motivation-and-learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="motivation-and-learning-objectives">Motivation and learning objectives</h2>
-<p>In the first four sessions of this course you have seen language models as components in applications: as one-of calls, as chatbots, tools users can query, or models that are connected to a vector store.</p>
-<p>From now on, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.</p>
-<p>In this session we will:</p>
-<ul>
-<li>understand what an LLM agent is and how it differs from a “plain” LLM call,</li>
-<li>analyse the core components of agent frameworks (planning, tools, memory),</li>
-<li>explore a concrete EDA agent as a running example, and</li>
-<li>get a first feel for when a simple pipeline is preferable to a full agentic setup.</li>
-</ul>
-<p>This prepares the ground for session <a href="llm_pipelines.html" class="quarto-xref"><span>LLM pipelines</span></a>, where we will add an evaluation layer using LLM as a judge and build evaluation pipelines for our systems.</p>
-</section>
-<section id="what-is-an-agent" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-an-agent">What is an agent?</h2>
-<p>“An AI agent is a system that uses an LLM to decide the control flow of an application.” <span class="citation" data-cites="WhatAIAgent2024">(<a href="#ref-WhatAIAgent2024" role="doc-biblioref"><span>“What Is an <span>AI</span> Agent?”</span> 2024</a>)</span></p>
-<p>The term agent (from Latin agere – to act) emphasises action and decision-making. An agent is not just a model that generates text; it is a system that:</p>
-<ul>
-<li>receives a goal or task,</li>
-<li>decides which actions or tools to use in which order,</li>
-<li>observes the results of these actions, and</li>
-<li>continues until the goal is reached (or judged to be unreachable).</li>
-</ul>
-<p>In practice, this often means that the LLM has some degree of agency in your application. It can:</p>
-<ul>
-<li>choose which tool to call (if any),</li>
-<li>decide which information to retrieve from a vector store or database,</li>
-<li>plan intermediate steps,</li>
-<li>and determine when to stop and return a final answer.</li>
-</ul>
-<section id="a-motivating-example" class="level3">
-<h3 class="anchored" data-anchor-id="a-motivating-example">A motivating example</h3>
-<p>Assume the following question:</p>
-<p><strong>“What were the key learnings from the Generative AI elective module in SoSe 25 at FH Kiel?”</strong></p>
-<p>If the module script is not in the LLM’s training data, a single vanilla LLM call will likely hallucinate. A more promising route is a multi-step process:</p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>So far in this course we covered the fundamentals of language models. We talked about chatbots and we discussed function calling (even though we did not implement the function execution). We also covered retrieval augmented generation (RAG) in some detail.</p>
+<p>Today, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.</p>
+<p>Before we get there, let’s take a closer look at tools — because tools are what give an LLM the ability to actually <em>do</em> things, rather than just talk about them.</p>
+<p>We can broadly distinguish two kinds of tools. The first kind is <strong>read-only and non-invasive</strong>: the model can observe the world, but not change it. Examples include reading files, searching a vector store, or running a quick web search.</p>
+<p>The second kind involves <strong>actions</strong> — tools that change state in the world. This includes sending emails; writing, modifying, or deleting files; executing commands, scripts, or code; opening and interacting with other applications; or installing additional software. And, at the more adventurous end of the spectrum: ordering things online, investing in totally valid cryptocurrency schemes, deleting all your files, or corrupting your operating system.</p>
+<p>The distinction matters, because read-only tools are relatively safe to hand to an autonomous system — the worst case is a bad answer. Action tools, by contrast, can have real, irreversible consequences.</p>
+<p>As discussed in <a href="function_calling.html" class="quarto-xref"><span>Chatbots and Function Calling</span></a>, integrating a tool requires the following steps:</p>
 <ol type="1">
-<li>Locate the relevant material (e.g.&nbsp;a PDF script in your local storage or in a course repository).</li>
-<li>Read and understand the document.</li>
-<li>Summarise the important topics and activities.</li>
-<li>Answer the original question based on this summary.</li>
+<li>The LLM must know which tools are available — typically via descriptions passed in the system prompt.</li>
+<li>The LLM must be instructed to produce its response in a structured format when it intends to call a tool.</li>
+<li>That response must be parsed to extract the tool call and its arguments.</li>
+<li>Finally, the tool must actually be executed, and the result fed back to the model.</li>
 </ol>
-<p>An agent can automate this process: it decides that it first needs to search, then read, then summarise, then answer, and it calls the corresponding tools.</p>
-<p>In this course, we will work with a similar multi-step scenario – but instead of reading a script, our agent will perform an exploratory data analysis (EDA) on a dataset.</p>
+<p>With this infrastructure in place, we are only one small step away from an agent.</p>
 </section>
-</section>
-<section id="agent-framework" class="level2">
-<h2 class="anchored" data-anchor-id="agent-framework">Agent framework</h2>
+<section id="agents-closing-the-loop" class="level2">
+<h2 class="anchored" data-anchor-id="agents-closing-the-loop">Agents: closing the loop</h2>
+<p>Once tool calling and execution are in place, building an agent is conceptually straightforward: it is essentially a loop wrapped around the tool-calling mechanism.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../imgs/agent-framework.png" class="img-fluid figure-img"></p>
-<figcaption>Architecture of the agent framework <span class="citation" data-cites="LLMAgentsNextra2024">(<a href="#ref-LLMAgentsNextra2024" role="doc-biblioref"><em><span>LLM Agents</span> – <span>Nextra</span></em>, 2024</a>)</span></figcaption>
+<p><img src="../imgs/agent_loop_tinyagents.jpg" class="img-fluid figure-img"></p>
+<figcaption>Image credit https://x.com/adamdotdev (from <a href="https://huggingface.co/blog/tiny-agents">the Tiny Agents blogpost</a>)</figcaption>
 </figure>
 </div>
-<p>Most agent frameworks share a similar high-level architecture:</p>
-<section id="agent-core" class="level3">
-<h3 class="anchored" data-anchor-id="agent-core">Agent (core)</h3>
-<p>The general-purpose LLM that acts as the brain of the system. It receives the current state (task, context, history) and decides:</p>
-<ul>
-<li>which tool to call next,</li>
-<li>how to interpret tool outputs,</li>
-<li>when to stop and return a final answer.</li>
-</ul>
-</section>
-<section id="planning" class="level3">
-<h3 class="anchored" data-anchor-id="planning">Planning</h3>
-<p>The mechanism that breaks down a complex task into smaller steps and orders them. In many frameworks, planning is not a separate module but largely encoded in the system prompt and the examples we give the LLM (“reason step by step”, “decide which tool to use next”, etc.).</p>
-</section>
-<section id="tools" class="level3">
-<h3 class="anchored" data-anchor-id="tools">Tools</h3>
-<p>Functions the agent can call – this is where the “real work” happens: data loading, statistics, plotting, web search, calling another API, … Tools can be simple (e.g.&nbsp;a calculator) or complex (e.g.&nbsp;a database query, another agent). For our EDA agent, tools will include things like <code>inspect_schema</code>, <code>basic_stats</code>, or <code>plot_distribution</code>.</p>
-</section>
-<section id="memory" class="level3">
-<h3 class="anchored" data-anchor-id="memory">Memory</h3>
-<p>Storage for past interactions and intermediate results. Memory can be:</p>
-<ul>
-<li>short-term: conversation history or recent tool outputs,</li>
-<li>long-term: a vector store or database with previously seen information. Memory enables the agent to build on earlier steps instead of starting from scratch each time.</li>
-</ul>
-</section>
-<section id="multi-step-agents-and-react" class="level3">
-<h3 class="anchored" data-anchor-id="multi-step-agents-and-react">Multi-step agents and ReAct</h3>
-<p>A widely used pattern for multi-step agents is ReAct (Reasoning + Acting) by Yao et al. <span class="citation" data-cites="yaoReActSynergizingReasoning2023">(<a href="#ref-yaoReActSynergizingReasoning2023" role="doc-biblioref">Yao et al., 2023</a>)</span>. The core idea:</p>
+<p>A widely used pattern for structuring this loop is <em>ReAct</em> (Reasoning + Acting), introduced by Yao et al. <span class="citation" data-cites="yaoReActSynergizingReasoning2023">(<a href="#ref-yaoReActSynergizingReasoning2023" role="doc-biblioref">Yao et al., 2023</a>)</span>. The core idea is to interleave reasoning and action in a repeating cycle:</p>
 <ol type="1">
 <li>The agent reasons about the current situation (“Thought”).</li>
-<li>It chooses and executes an action (e.g.&nbsp;a tool call).</li>
+<li>It chooses and executes an action — typically a tool call.</li>
 <li>It observes the result (“Observation”).</li>
-<li>It updates its reasoning and decides on the next action.</li>
+<li>It updates its reasoning and decides on the next step.</li>
 <li>This thought–action–observation loop repeats until a stopping condition is met.</li>
 </ol>
 <p>In pseudocode (adapted from the <a href="https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents">smolagents documentation</a>):</p>
-<pre><code>memory = [user_defined_task]
-
-while llm_should_continue(memory):
-    action = llm_get_next_action(memory)
-    observations = execute_action(action)
-    memory += [action, observations]
-
-final_answer = llm_generate_answer(memory)
-return final_answer</code></pre>
-<p>The intelligence of the system lies in:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>memory <span class="op">=</span> [user_defined_task]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> llm_should_continue(memory):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    action <span class="op">=</span> llm_get_next_action(memory)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    observations <span class="op">=</span> execute_action(action)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    memory <span class="op">+=</span> [action, observations]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>final_answer <span class="op">=</span> llm_generate_answer(memory)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> final_answer</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/react-agent-n8n.jpg" class="img-fluid figure-img"></p>
+<figcaption>Visualization of the ReAct agent loop (from <a href="https://blog.n8n.io/react-agent/">the n8n blog</a>)</figcaption>
+</figure>
+</div>
+<p>The intelligence of the system is not in the loop itself — that part is trivial. It lies in three things:</p>
 <ul>
-<li>the prompting that shapes how the LLM reasons and chooses actions,</li>
-<li>the tool design (signatures, descriptions), and</li>
-<li>how we represent memory (what gets recorded, in which format, with which limits).</li>
+<li>the <strong>prompting</strong> that shapes how the LLM reasons and selects actions,</li>
+<li>the <strong>tool design</strong> (signatures, descriptions, and error behavior), and</li>
+<li>the <strong>memory representation</strong> — what gets recorded, in what format, and subject to what limits.</li>
 </ul>
+<p>Get those three right, and a surprisingly simple loop can produce remarkably capable behavior.</p>
 </section>
-</section>
-<section id="agent-frameworks-in-practice" class="level2">
-<h2 class="anchored" data-anchor-id="agent-frameworks-in-practice">Agent frameworks in practice</h2>
-<p>There are many frameworks for building LLM-based agents. In this course we focus on two:</p>
+<section id="frameworks" class="level2">
+<h2 class="anchored" data-anchor-id="frameworks">Frameworks</h2>
+<p>Implementing all of this from scratch is instructive, but quickly becomes involved. In practice, you would reach for a framework — and there is no shortage of options. Here is a non-exhaustive overview:</p>
 <ul>
-<li><a href="https://github.com/run-llama/llama_index">Llamaindex</a>: Originally a data framework for building LLM applications around your own data. It offers convenient abstractions for tools, agents, and memory, and comes with many examples and tutorials.</li>
-<li><a href="https://huggingface.co/docs/smolagents/index">smolagents</a>: A lightweight agent framework by Hugging Face. It is designed to be simple and hackable, with good conceptual documentation and an active community.</li>
+<li><a href="https://huggingface.co/docs/smolagents/index"><strong>smolagents</strong></a>: A lightweight agent framework by Hugging Face, designed to be simple and hackable. It has good conceptual documentation and an active community, making it a natural starting point.</li>
+<li><a href="https://github.com/run-llama/llama_index"><strong>LlamaIndex</strong></a>: Originally a data framework for building LLM applications around your own data. It has grown to offer convenient abstractions for tools, agents, and memory, with many examples and tutorials.</li>
+<li><a href="https://github.com/deepset-ai/haystack"><strong>Haystack</strong></a>: An open-source NLP framework focused on production-ready applications, developed by the German company deepset. It supports both LLMs and classical NLP models.</li>
+<li><a href="https://github.com/hwchase17/langchain"><strong>LangChain</strong></a>: A modular library for building LLM applications — chains, agents, tools — with a large ecosystem of integrations. One of the most widely adopted frameworks in the space.</li>
+<li><a href="https://docs.langchain.com/oss/python/langgraph/overview"><strong>LangGraph</strong></a>: An agent framework by the LangChain team that models agent behavior as a graph of states and transitions, giving you finer control over multi-step workflows.</li>
+<li><a href="https://n8n.io/"><strong>n8n</strong></a>: A low-code/no-code platform for workflow automation, useful when you want to wire together tools and APIs without writing much code.</li>
+<li><a href="https://adk.dev"><strong>Agent Development Kit (ADK)</strong></a>: Google’s agent framework, introduced in April 2025. It is relatively new but comes with strong tooling and production-oriented design.</li>
 </ul>
-<p>Two other popular frameworks you might encounter:</p>
-<ul>
-<li><a href="https://github.com/hwchase17/langchain">LangChain</a>: a modular library for building LLM applications (chains, agents, tools), with a large ecosystem of integrations.</li>
-<li><a href="https://github.com/deepset-ai/haystack">Haystack</a>: an open-source NLP framework focused on production-ready applications with LLMs and classic models, developed by deepset (Germany).</li>
-</ul>
+<p>For a quick prototype or to get a feel for agent mechanics, smolagents is a good choice — it stays close to the concepts without too much abstraction. For production use, the ADK is worth a closer look.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -441,59 +416,68 @@ return final_answer</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Now it is your turn!</p>
-<p>Each group is to use one of the following frameworks to build a small demo agent:</p>
-<ul>
-<li><a href="https://docs.llamaindex.ai/en/stable/understanding/agent/">Llamaindex</a> You can use <a href="https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/">the ReAct example</a> as a starting point.</li>
-<li><a href="https://huggingface.co/docs/smolagents/tutorials/building_good_agents">Smolagents</a></li>
-<li>Another framework of your choice.</li>
-</ul>
-<p>For your chosen framework, do the following:</p>
+<p>Have a look at the <a href="https://huggingface.co/docs/smolagents/index">smolagents</a> framework.</p>
 <ol type="1">
 <li>Set up a local LLM (e.g.&nbsp;using Ollama or LM Studio) to be used by the agent.</li>
-<li>Choose a small task for your agent, e.g.&nbsp;answering questions about a specific topic, summarizing a document, etc. (use the one in the respective tutorial)</li>
-<li>Implement the agent using one of the frameworks listed above.</li>
-<li>Have a deeper look! Try to find the system prompt, the agent gives to the LLM ( in LLamaindex you can find it using agent.get_prompts()). Try to find it in smolagents.</li>
-<li>Present your results and your experiences with the frameworks (presenting the notebook is fine.) <!-- 5. Submit your code and report on moodle. --></li>
+<li>Choose a small task for your agent, e.g.&nbsp;answering questions about a specific topic, summarizing a document, etc. (use the one in the tutorial).</li>
+<li>Implement the agent.</li>
+<li>Have a deeper look! Try to find the system prompt, the agent gives to the LLM.</li>
 </ol>
 </div>
 </div>
 </section>
-<section id="the-eda-agent-as-a-running-example" class="level2">
-<h2 class="anchored" data-anchor-id="the-eda-agent-as-a-running-example">The EDA agent as a running example</h2>
-<p>For the remainder of this session, we use a concrete use case:</p>
-<p><strong>EDA Agent for tabular data:</strong> A system that receives a dataset and automatically produces a first EDA report.</p>
-<section id="problem-setting" class="level3">
-<h3 class="anchored" data-anchor-id="problem-setting">Problem setting</h3>
-<p>Data scientists regularly receive new datasets and need to answer questions like:</p>
-<ul>
-<li>Which variables are present? With which types?</li>
-<li>Are there missing values or obvious data quality issues?</li>
-<li>How are key variables distributed?</li>
-<li>Are there potentially interesting relationships or anomalies?</li>
-</ul>
-<p>This can become repetitive and time-consuming. Our EDA agent aims to automate the first pass of this process.</p>
-</section>
-<section id="roles-of-tools-in-the-eda-agent" class="level3">
-<h3 class="anchored" data-anchor-id="roles-of-tools-in-the-eda-agent">Roles of tools in the EDA agent</h3>
-<p>Sample tools could be:</p>
-<ul>
-<li><code>inspect_schema(dataset)</code>: column names, types, basic info</li>
-<li><code>basic_stats(dataset, columns)</code>: mean, median, min/max, missing values</li>
-<li><code>plot_distribution(dataset, column)</code>: create histograms or boxplots</li>
-<li><code>sample_rows(dataset, n)</code>: show a small sample for inspection</li>
-<li>optional: <code>vector_store_search(query)</code>: retrieve background information (e.g.&nbsp;on feature names)</li>
-</ul>
-<p>The agent receives a task such as:</p>
-<p>“Please perform a first exploratory analysis of this dataset and summarise the main findings.”</p>
-<p>It then:</p>
-<ol type="1">
-<li>Calls inspect_schema to understand the structure.</li>
-<li>Decides which columns deserve a closer look.</li>
-<li>Calls basic_stats and plot_distribution for selected columns.</li>
-<li>Collects the outputs in memory.</li>
-<li>Generates a structured EDA report (e.g.&nbsp;“Data overview”, “Key distributions”, “Missing values”, “First hypotheses”).</li>
-</ol>
+<section id="sec-adk" class="level2">
+<h2 class="anchored" data-anchor-id="sec-adk">Google ADK: first contact</h2>
+<p>Google’s Agent Development Kit (ADK) is a Python framework for building multi-agent systems with explicit graph-topology primitives <span class="citation" data-cites="erwinhuizengaAgentDevelopmentKit2025">(<a href="#ref-erwinhuizengaAgentDevelopmentKit2025" role="doc-biblioref">Erwin Huizenga &amp; Bo Yang, 2025</a>)</span>. Its main advantage for teaching is the built-in Dev UI, which renders the agent graph and execution trace in a browser with zero configuration. Comparable frameworks you may encounter include LangGraph (more granular node-based control), CrewAI (role-based agent teams), and AutoGen (conversation-based multi-agent coordination). ADK sits at the structured and illustrative end of this spectrum.</p>
+<p>ADK does not speak to Ollama or LM Studio directly. It requires a LiteLlm wrapper that translates between ADK’s interface and the local provider’s API. LiteLlm is a thin SDK adapter, not a running service. The model string must include a provider prefix that tells LiteLLM which backend to use:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add google-adk litellm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.models.lite_llm <span class="im">import</span> LiteLlm</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ollama</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"OLLAMA_API_BASE"</span>] <span class="op">=</span> <span class="st">"http://localhost:11434"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LiteLlm(model<span class="op">=</span><span class="st">"ollama_chat/gemma3:latest"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># LM Studio</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"LM_STUDIO_API_BASE"</span>] <span class="op">=</span> <span class="st">"http://localhost:1234"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LiteLlm(model<span class="op">=</span><span class="st">"lm_studio/gemma3"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Without the prefix LiteLLM cannot route the request and raises a BadRequestError. The prefix is the only required change when switching backends.</p>
+<p>The three types needed for first contact are LlmAgent, Runner, and Session. An LlmAgent is a leaf node: a single LLM call with a system prompt and optional tools. Runner executes a pipeline against a Session, which holds conversation and pipeline state. ADK has further composition types that are introduced when they are needed below.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>LlmAgent</td>
+<td>Leaf node: one LLM call, one system prompt</td>
+</tr>
+<tr class="even">
+<td>FunctionNode</td>
+<td>Leaf node: a Python function as a graph step</td>
+</tr>
+<tr class="odd">
+<td>Workflow</td>
+<td>Graph of nodes connected by explicit edges; handles sequential, looping, and parallel topologies</td>
+</tr>
+<tr class="even">
+<td>Runner</td>
+<td>Executes a pipeline against a session</td>
+</tr>
+<tr class="odd">
+<td>Session</td>
+<td>Holds conversation and pipeline state</td>
+</tr>
+</tbody>
+</table>
+<p>Full API reference: <a href="https://google.github.io/adk-docs/">https://google.github.io/adk-docs/</a></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -504,17 +488,42 @@ return final_answer</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Do the EDA agent</p>
 <ol type="1">
-<li>In your agent setup, implement the above functions for doing the EDA. This should be simple enough.</li>
-<li>Give it a dataset ,e.g.&nbsp;<a href="https://www.kaggle.com/competitions/titanic/data">the titanic dataset from kaggle</a> or some other simple dataset you have laying around.</li>
-<li>Test the agent with several prompts and observe when it uses tools, when it doesn’t, and where it struggles.</li>
-<li>Try to get it to do the above steps.</li>
-<li>Present to the group.</li>
+<li>Install the dependencies: <code>uv add google-adk litellm</code></li>
+<li>Make sure Ollama is running with a model that supports tool calls (e.g.&nbsp;<code>gemma3</code>, <code>qwen2.5</code>, <code>llama3:instruct</code>).</li>
+<li>Run the following minimal agent and confirm it responds:</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.agents <span class="im">import</span> LlmAgent</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.models.lite_llm <span class="im">import</span> LiteLlm</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.sessions <span class="im">import</span> InMemorySessionService</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.runners <span class="im">import</span> Runner</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.genai <span class="im">import</span> types</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"OLLAMA_API_BASE"</span>] <span class="op">=</span> <span class="st">"http://localhost:11434"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>agent <span class="op">=</span> LlmAgent(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"Hello"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>LiteLlm(model<span class="op">=</span><span class="st">"ollama_chat/gemma3:latest"</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    instruction<span class="op">=</span><span class="st">"You are a helpful assistant. Answer briefly."</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>session_service <span class="op">=</span> InMemorySessionService()</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>runner <span class="op">=</span> Runner(agent<span class="op">=</span>agent, app_name<span class="op">=</span><span class="st">"hello"</span>, session_service<span class="op">=</span>session_service)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>session <span class="op">=</span> session_service.create_session_sync(app_name<span class="op">=</span><span class="st">"hello"</span>, user_id<span class="op">=</span><span class="st">"student"</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> event <span class="kw">in</span> runner.run(</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    user_id<span class="op">=</span><span class="st">"student"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    session_id<span class="op">=</span>session.<span class="bu">id</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    new_message<span class="op">=</span>types.Content(role<span class="op">=</span><span class="st">"user"</span>, parts<span class="op">=</span>[types.Part(text<span class="op">=</span><span class="st">"Say hello!"</span>)])</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> event.is_final_response():</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(event.content.parts[<span class="dv">0</span>].text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol start="4" type="1">
+<li>Start the Dev UI: <code>adk web</code> and explore the agent tree in the browser.</li>
 </ol>
 </div>
 </div>
-</section>
 </section>
 <section id="pipelines-vs.-agents-when-do-we-need-agency" class="level2">
 <h2 class="anchored" data-anchor-id="pipelines-vs.-agents-when-do-we-need-agency">Pipelines vs.&nbsp;agents – when do we need agency?</h2>
@@ -537,8 +546,6 @@ return final_answer</code></pre>
 <li>If retrieval is mandatory for correctness, you may not want to leave the “call retrieval or not?” decision to the LLM.</li>
 <li>Instead, you enforce: “always retrieve, then generate”, implemented as a pipeline.</li>
 </ul>
-<!-- We will build on this distinction in session @sec-evalpipelines, where we construct LLM pipelines with evaluation steps and discuss where agentic orchestration still makes sense. -->
-<p>What does this mean for our EDA agent?</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -549,17 +556,112 @@ return final_answer</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p>Discuss: for the examples encountered so far, does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?</p>
+</div>
+</div>
+</section>
+<section id="model-context-protocol" class="level2">
+<h2 class="anchored" data-anchor-id="model-context-protocol">Model context protocol</h2>
+<p>So far, we only used small, self-written or pre-build tools. In general though, agents are not restricted to this. In order to harness LLM agents to their full potential, we want them to assist in a variety of tasks. In a company setting, the agent could be supposed to interact with the internal tool and applications the company uses in their daily business, e.g.&nbsp;gather information from the ERP system, write emails or search the web.</p>
+<p>Every time developers want to give an AI access to external data or tools, they have to build custom, one-off integrations. It’s like building a different key for every single door.</p>
+<p>MCP creates a standardized way for AI models to connect to external resources. Think of it as:</p>
+<ul>
+<li>Universal translator: One standard “language” for AI-to-tool communication</li>
+<li>Plugin system: Like browser extensions, but for AI assistants</li>
+<li>Modular approach: Write a tool once, use it with any MCP-compatible AI</li>
+</ul>
+<p>So, first and foremost, <strong>MCP is an interface standard</strong> that defines how external tools can be integrated into large language models (LLMs). It provides a set of protocols and APIs that allow LLMs to interact with these tools seamlessly. This includes defining the inputs and outputs for each interaction, as well as the mechanisms for error handling and feedback loops.</p>
+<p>In addition to a standard definition, anthropic also released an implementation of MCP in a number of languages, including Python. It also hosts a repository on GitHub with examples and documentation that you can use as a starting point for building your own integrations. There is also a large and growing collection of pre-built connectors to third-party services like databases, APIs, and other tools. That means developers don’t have to start from scratch every time they want to add new functionality to their LLMs.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Have a look!</p>
 <ol type="1">
-<li>Discuss: for our EDA example, does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?</li>
-<li>Implement your agent from above as a pipeline.</li>
-<li>Upload your Notebook to Moodle.</li>
+<li>Find the MCP and MCP server repository on GitHub</li>
+<li>Browse through the list of server implementations, find one (or many) that you find interesting.</li>
+</ol>
+</div>
+</div>
+<p>But what is an MCP server anyway? And how does MCP work exactly?</p>
+</section>
+<section id="core-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="core-concepts">Core concepts</h2>
+<p>The following is more or less taken from the <a href="https://modelcontextprotocol.io">official website</a>.</p>
+<p>At its core, MCP follows a client-server architecture where a host application can connect to multiple servers:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/MCP_archi.png" class="img-fluid figure-img"></p>
+<figcaption>MCP architecture <span class="citation" data-cites="ModelContextProtocol">(<a href="#ref-ModelContextProtocol" role="doc-biblioref"><span>“Model <span>Context Protocol</span>,”</span> n.d.</a>)</span></figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>MCP Hosts:</strong> Programs like Claude Desktop, IDEs, or AI tools that want to access data through MCP</li>
+<li><strong>MCP Clients:</strong> Protocol clients that maintain 1:1 connections with servers</li>
+<li><strong>MCP Servers:</strong> Lightweight programs that each expose specific capabilities through the standardized Model Context Protocol</li>
+<li><strong>Local Data Sources:</strong> Your computer’s files, databases, and services that MCP servers can securely access</li>
+<li><strong>Remote Services:</strong> External systems available over the internet (e.g., through APIs) that MCP servers can connect to</li>
+</ul>
+<p>The servers come in three main flavours:</p>
+<ul>
+<li><strong>Resources:</strong> File-like data that can be read by clients (like API responses or file contents)</li>
+<li><strong>Tools:</strong> Functions that can be called by the LLM (with user approval)</li>
+<li><strong>Prompts:</strong> Pre-written templates that help users accomplish specific tasks</li>
+</ul>
+<p>As you have seen in the repository, there are lots of pre-built servers available.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now it’s time to implement a simple example using MCP!</p>
+<ol type="1">
+<li>Read the <a href="https://adk.dev/tools-custom/mcp-tools/#1-using-mcp-servers-with-adk-agents-adk-as-an-mcp-client-in-adk-web">MCP section for ADK</a>.</li>
+<li>Set up a local MCP server using one of the examples in the documentation.</li>
+<li>Make it work with your agent you implemented earlier.</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="project-work" class="level2">
+<h2 class="anchored" data-anchor-id="project-work">Project work</h2>
+<p>Time to work on your projects!</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>🧠 Reflection – Applying This to Your Project
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Go in your project teams. Discuss:</p>
+<ol type="1">
+<li>What framework do you want to use? Why do you prefer it?</li>
+<li>What tools (if any) do you need for your project?</li>
+<li>Do you need the full agent capability or a simpler pipeline setup?</li>
 </ol>
 </div>
 </div>
 </section>
 <section id="further-readings" class="level2">
 <h2 class="anchored" data-anchor-id="further-readings">Further Readings</h2>
-<p>A nice Example of an agent system is <em>Vending-Bench</em> <span class="citation" data-cites="backlundVendingBenchBenchmarkLongTerm2025">(<a href="#ref-backlundVendingBenchBenchmarkLongTerm2025" role="doc-biblioref">Backlund &amp; Petersson, 2025</a>)</span>, where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors. It provides valuable insights into how and why these systems fail and is a very good read overall.</p>
+<ul>
+<li><a href="https://huggingface.co/blog/tiny-agents">The Tiny Agents blogpost</a> really helps understanding agents.</li>
+<li>A nice Example of an agent system is <em>Vending-Bench</em> <span class="citation" data-cites="backlundVendingBenchBenchmarkLongTerm2025">(<a href="#ref-backlundVendingBenchBenchmarkLongTerm2025" role="doc-biblioref">Backlund &amp; Petersson, 2025</a>)</span>, where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors. It provides valuable insights into how and why these systems fail and is a very good read overall.</li>
+</ul>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
@@ -569,11 +671,11 @@ return final_answer</code></pre>
 <div id="ref-backlundVendingBenchBenchmarkLongTerm2025" class="csl-entry" role="listitem">
 Backlund, A., &amp; Petersson, L. (2025). <em>Vending-<span>Bench</span>: <span>A Benchmark</span> for <span>Long-Term Coherence</span> of <span>Autonomous Agents</span></em> (arXiv:2502.15840). arXiv. <a href="https://doi.org/10.48550/arXiv.2502.15840">https://doi.org/10.48550/arXiv.2502.15840</a>
 </div>
-<div id="ref-LLMAgentsNextra2024" class="csl-entry" role="listitem">
-<em><span>LLM Agents</span> – <span>Nextra</span></em>. (2024). https://www.promptingguide.ai/research/llm-agents.
+<div id="ref-erwinhuizengaAgentDevelopmentKit2025" class="csl-entry" role="listitem">
+Erwin Huizenga, &amp; Bo Yang. (2025). <em>Agent <span>Development Kit</span>: <span>Making</span> it easy to build multi-agent applications- <span>Google Developers Blog</span></em>. https://developers.googleblog.com/en/agent-development-kit-easy-to-build-multi-agent-applications/.
 </div>
-<div id="ref-WhatAIAgent2024" class="csl-entry" role="listitem">
-What is an <span>AI</span> agent? (2024). In <em>LangChain Blog</em>. https://blog.langchain.dev/what-is-an-agent/.
+<div id="ref-ModelContextProtocol" class="csl-entry" role="listitem">
+Model <span>Context Protocol</span>. (n.d.). In <em>Model Context Protocol</em>. https://modelcontextprotocol.io/introduction.
 </div>
 <div id="ref-yaoReActSynergizingReasoning2023" class="csl-entry" role="listitem">
 Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., &amp; Cao, Y. (2023). <em><span>ReAct</span>: <span>Synergizing Reasoning</span> and <span>Acting</span> in <span>Language Models</span></em> (arXiv:2210.03629). arXiv. <a href="https://doi.org/10.48550/arXiv.2210.03629">https://doi.org/10.48550/arXiv.2210.03629</a>
