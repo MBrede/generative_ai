@@ -313,12 +313,11 @@ Multi-Agent Orchestration<br>
   <li><a href="#sec-promptadvisor" id="toc-sec-promptadvisor" class="nav-link" data-scroll-target="#sec-promptadvisor">A prompt advisor</a></li>
   <li><a href="#sec-harnessing" id="toc-sec-harnessing" class="nav-link" data-scroll-target="#sec-harnessing">Harnessing</a>
   <ul class="collapse">
+  <li><a href="#wiring-agents-in-sequence-and-passing-state" id="toc-wiring-agents-in-sequence-and-passing-state" class="nav-link" data-scroll-target="#wiring-agents-in-sequence-and-passing-state">Wiring agents in sequence and passing state</a></li>
+  <li><a href="#hard-checks" id="toc-hard-checks" class="nav-link" data-scroll-target="#hard-checks">Hard checks</a></li>
   <li><a href="#the-constitution" id="toc-the-constitution" class="nav-link" data-scroll-target="#the-constitution">The constitution</a></li>
   </ul></li>
-  <li><a href="#sec-llmjudge" id="toc-sec-llmjudge" class="nav-link" data-scroll-target="#sec-llmjudge">LLM as a judge</a>
-  <ul class="collapse">
-  <li><a href="#wiring-agents-in-sequence-and-passing-state" id="toc-wiring-agents-in-sequence-and-passing-state" class="nav-link" data-scroll-target="#wiring-agents-in-sequence-and-passing-state">Wiring agents in sequence and passing state</a></li>
-  </ul></li>
+  <li><a href="#sec-llmjudge" id="toc-sec-llmjudge" class="nav-link" data-scroll-target="#sec-llmjudge">LLM as a judge</a></li>
   <li><a href="#sec-editor" id="toc-sec-editor" class="nav-link" data-scroll-target="#sec-editor">Editor and improvement loop</a></li>
   <li><a href="#sec-observability" id="toc-sec-observability" class="nav-link" data-scroll-target="#sec-observability">Observability</a></li>
   <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further readings</a></li>
@@ -551,7 +550,7 @@ across up to seven dimensions (Role, Context, Task, Output Format,
 Constraints, Workflow, Examples), write a complete system prompt that
 addresses each provided dimension clearly. Output only the system prompt text.</code></pre>
 <ol start="2" type="1">
-<li>Call it with a test input — for example, a customer support agent for a software company.</li>
+<li>Call it with a test input, for example, a customer support agent for a software company.</li>
 <li>Inspect the output: does it address the dimensions you provided?</li>
 <li>Open <code>adk web</code> and examine the agent graph.</li>
 </ol>
@@ -563,30 +562,28 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 <p>The prompt advisor works, but it is unguarded. It will happily write a prompt that omits the persona, ignores safety, or produces something grammatically fine but semantically wrong. To make it reliable we need a <strong>harness</strong>.</p>
 <p>A harness is the complete scaffolding around an LLM pipeline: the class or module that holds the rules, runs the agents in order, enforces checks, and decides when to stop. It is everything except the model weights. The entire pipeline we are building today <em>is</em> the harness; the constitution (defined below) is one component inside it.</p>
 <p>The Claude Code source leak (April 2026) gave an unusually detailed public view of what a production-grade harness looks like.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The Claude Code runtime turned out to be a sophisticated harness with three distinct control layers: <strong>guides</strong> (feedforward instructions, conventions, and bootstrap prompts injected before the model acts), <strong>sensors</strong> (linters, type checkers, and test suites that catch bad output after execution), and <strong>control checks</strong> (deterministic format and length validation first, then slower LLM-powered semantic review). The key observation from the leak analysis: agents do not mind being micromanaged: more constraints, more checks, and more structure tend to improve performance rather than limit it.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/</p></div><div id="fn3"><p><sup>3</sup>&nbsp;A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model’s output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.</p></div></div><section id="the-constitution" class="level3">
-<h3 class="anchored" data-anchor-id="the-constitution">The constitution</h3>
-<p>The term <em>constitution</em> comes from Anthropic’s Constitutional AI work <span class="citation" data-cites="bai2022constitutional">(<a href="#ref-bai2022constitutional" role="doc-biblioref">Bai et al., 2022</a>)</span>, where a model is evaluated against a written list of principles rather than vague notions of quality. We borrow the concept at the pipeline level, not for training but for evaluation: the judge applies the constitution’s rules to each generated output. The full treatment of Constitutional AI as a training technique is session 11 material; here it functions as an evaluation design pattern.</p>
-<p>The <strong>constitution</strong> is the component of the harness that encodes these quality criteria as explicit, auditable Python objects rather than buried prompt text. Rules defined in a dataclass are inspectable, version-controllable, and changeable without touching any agent’s system prompt.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass, field</span>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/</p></div><div id="fn3"><p><sup>3</sup>&nbsp;A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model’s output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.</p></div></div><section id="wiring-agents-in-sequence-and-passing-state" class="level3">
+<h3 class="anchored" data-anchor-id="wiring-agents-in-sequence-and-passing-state">Wiring agents in sequence and passing state</h3>
+<p>A <code>Workflow</code> runs its nodes in the order defined by its edges. Within a single edge chain (a tuple), each node’s text output is passed as <code>node_input</code> to the next function in the chain, and as the user message to the next <code>Agent</code>. This is the primary mechanism for sequential data flow.</p>
+<p>Stopping conditions are encoded as <strong>conditional edges</strong>: an edge is only followed when the source node’s routing function returns an <code>Event</code> with a matching <code>route</code> value. Routing is handled by plain Python functions in the edge chain, not by callbacks attached to agents. The tuple syntax makes this concrete: a 4-tuple <code>(a, b, router_fn, {"x": c, "y": d})</code> runs <code>a</code>, passes its output to <code>b</code>, then calls <code>router_fn</code> to route to <code>c</code> or <code>d</code>. A plain 2-tuple <code>(a, b)</code> is an unconditional edge. A 3-tuple <code>(a, router_fn, {"x": c})</code> routes <code>a</code>’s output directly without an intermediate agent.</p>
+<p>For <strong>cross-branch data sharing</strong> — when two separate branches of the graph both need access to the same value — use <code>ctx.state</code>. A function writes to <code>ctx.state["key"]</code> and any downstream agent can read it via a template variable <code>{key}</code> in its instruction string. Template variables in <code>{curly_braces}</code> are filled from <code>ctx.state</code> before the instruction reaches the model. Literal braces that should appear in the output (such as in a JSON schema) must be doubled: <code>{{</code> and <code>}}</code>.</p>
+</section>
+<section id="hard-checks" class="level3">
+<h3 class="anchored" data-anchor-id="hard-checks">Hard checks</h3>
+<p>The first line of defence is a <strong>deterministic hard check</strong>: a plain Python function that rejects obviously bad output before any LLM evaluation happens. ADK treats plain functions placed in an edge chain as nodes automatically, no wrapper class needed. Such a function can declare <code>node_input: str</code> to receive the previous node’s text output and <code>ctx</code> to read and write <code>ctx.state</code>. It returns an <code>Event</code> to control routing: <code>Event(route="pass")</code> follows the matching conditional edge; <code>Event(message="...")</code> emits a terminal message and halts the workflow.</p>
+<p>The same mechanism works <em>before</em> an agent: a function placed before the advisor in the chain receives the raw user message as <code>node_input</code>. This is the natural place to capture the original spec before the model transforms it.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.events.event <span class="im">import</span> Event</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PromptConstitution:</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    rules: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> field(default_factory<span class="op">=</span><span class="kw">lambda</span>: [</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must clearly specify a Role or persona"</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must include relevant context or background knowledge"</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must state the agent's core task explicitly"</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must define output format or communication style"</span>,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must include constraints on behaviour or outputs"</span>,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>These five rules map to the five most frequent components from <span class="citation" data-cites="mao2025promptstemplatessystematicprompt">Mao et al. (<a href="#ref-mao2025promptstemplatessystematicprompt" role="doc-biblioref">2025</a>)</span>, making the constitution the machine-readable equivalent of the framework. The harness injects this constitution into the judge at call time, not hardcoded into any agent’s system prompt.</p>
-<p>Before wiring agents together, we add a <strong>deterministic hard check</strong> as a plain Python function. Functions placed directly in an edge chain are automatically treated as nodes: ADK wraps them transparently, with no explicit wrapper class needed. Such a function can declare <code>node_input: str</code> to receive the previous node’s text output, and <code>ctx</code> to receive the <code>Context</code> object for reading and writing <code>ctx.state</code>. The function returns an <code>Event</code> to control routing: <code>Event(route="pass")</code> follows the matching conditional edge; <code>Event(message="...")</code> emits a terminal message and stops the workflow.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.events.event <span class="im">import</span> Event</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hard_check(node_input: <span class="bu">str</span>, ctx):</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(node_input.strip()) <span class="op">&lt;</span> <span class="dv">50</span>:</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> Event(message<span class="op">=</span><span class="st">"Hard check failed: output shorter than 50 characters."</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"draft_prompt"</span>] <span class="op">=</span> node_input</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Event(route<span class="op">=</span><span class="st">"pass"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> store_spec(node_input: <span class="bu">str</span>, ctx):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"original_spec"</span>] <span class="op">=</span> node_input</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> node_input</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hard_check(node_input: <span class="bu">str</span>, ctx):</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(node_input.strip()) <span class="op">&lt;</span> <span class="dv">50</span>:</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> Event(message<span class="op">=</span><span class="st">"Hard check failed: output shorter than 50 characters."</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    ctx.state[<span class="st">"draft_prompt"</span>] <span class="op">=</span> node_input</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Event(route<span class="op">=</span><span class="st">"pass"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The edge chain <code>("START", store_spec, advisor, hard_check, {"pass": ...})</code> runs <code>store_spec</code> first — capturing the spec — then the advisor, then the hard check on the advisor’s output.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -598,20 +595,52 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>Define a <code>PromptConstitution</code> dataclass with 3–5 rules of your choice (you can use the component mapping above or define domain-specific criteria).</li>
-<li>Implement the <code>hard_check</code> function above (or extend it with your own criteria). No wrapper class is needed — pass it directly in the edge tuple.</li>
-<li>Wire as a <code>Workflow</code>: <code>("START", advisor, hard_check, {"pass": ...})</code>. Task 4 fills in the target of the <code>"pass"</code> edge.</li>
+<li>Implement <code>hard_check</code> (or extend it with your own criteria) and <code>store_spec</code> as above.</li>
+<li>Wire both into a <code>Workflow</code>: <code>("START", store_spec, advisor, hard_check, {"pass": pass_event})</code> where <code>pass_event</code> returns <code>Event(message="Passed!")</code>.</li>
 <li>Test it: what happens when you pass a minimal spec that produces a short output?</li>
+<li><strong>Design sketch — embedding check:</strong> You now have both the original spec (<code>ctx.state["original_spec"]</code>) and the generated prompt available. Sketch how an embedding model could check <em>semantic alignment</em> between the two — independently of the LLM judge. In 3–5 sentences, address: what you would embed, what similarity measure and threshold you would use, and which failure modes this catches that the constitution judge misses. No code required.</li>
 </ol>
-<p>This pre-check illustrates the control spectrum: deterministic function checks are fast and free; LLM-powered checks are slower and more expensive. Run the cheap ones first.</p>
+</div>
+</div>
+</section>
+<section id="the-constitution" class="level3">
+<h3 class="anchored" data-anchor-id="the-constitution">The constitution</h3>
+<p>Hard checks catch structural failures but cannot evaluate meaning. For that we encode quality criteria as an explicit, auditable Python object — the <strong>constitution</strong>. The term comes from Anthropic’s Constitutional AI work <span class="citation" data-cites="bai2022constitutional">(<a href="#ref-bai2022constitutional" role="doc-biblioref">Bai et al., 2022</a>)</span>, where a model is evaluated against a written list of principles rather than vague notions of quality. We borrow the concept at the pipeline level, not for training but for evaluation: the judge applies the constitution’s rules to each generated output. The full treatment of Constitutional AI as a training technique is session 11 material; here it functions as an evaluation design pattern.</p>
+<p>Rules defined in a dataclass are inspectable, version-controllable, and changeable without touching any agent’s system prompt. The harness injects this constitution into the judge at call time.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass, field</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PromptConstitution:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    rules: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> field(default_factory<span class="op">=</span><span class="kw">lambda</span>: [</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must clearly specify a Role or persona"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must include relevant context or background knowledge"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must state the agent's core task explicitly"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must define output format or communication style"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Must include constraints on behaviour or outputs"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> as_text(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(<span class="ss">f"- </span><span class="sc">{</span>r<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="va">self</span>.rules)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These five rules map to the five most frequent components from <span class="citation" data-cites="mao2025promptstemplatessystematicprompt">Mao et al. (<a href="#ref-mao2025promptstemplatessystematicprompt" role="doc-biblioref">2025</a>)</span>, making the constitution the machine-readable equivalent of the framework.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>📝 Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Define your own <code>PromptConstitution</code> dataclass with 3–10 rules. You can use the component mapping above as a starting point, but also add quality criteria: a prompt should not only cover the structural aspects but be sensible and appropriately scoped for whatever context the user described.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="sec-llmjudge" class="level2">
 <h2 class="anchored" data-anchor-id="sec-llmjudge">LLM as a judge</h2>
-<p>The deterministic pre-check catches obvious failures but cannot evaluate whether the generated system prompt actually addresses the required components meaningfully. For that we need semantic evaluation, and a natural approach is to use an LLM.</p>
-<p>The idea behind <strong>LLM-as-a-judge</strong> is straightforward: use a language model to evaluate the quality of outputs produced by another language model <span class="citation" data-cites="zheng2023judging">(<a href="#ref-zheng2023judging" role="doc-biblioref">Zheng et al., 2023</a>)</span>. This is attractive because it scales to large volumes of outputs, can approximate nuanced qualitative judgement when prompted carefully, and requires no separate annotation pipeline. <span class="citation" data-cites="zheng2023judging">Zheng et al. (<a href="#ref-zheng2023judging" role="doc-biblioref">2023</a>)</span> showed that strong LLM judges achieve over 80% agreement with human raters on instruction-following tasks, comparable to inter-human agreement rates. The pattern has known limitations, however. Models may prefer their own output style, reward verbosity over accuracy, or be manipulated by superficially confident-sounding responses. LLM judgements should therefore be treated as approximate signals rather than ground truth, and ideally calibrated against human ratings for high-stakes applications.</p>
+<p>This contitution now has to be plumbed into the pipeline. The go to concept for this operation is using an LLM to judge something based on the criteria we just set.</p>
+<p>The idea behind <strong>LLM-as-a-judge</strong> is straightforward: use a language model to evaluate the quality of some text, e.g., the outputs produced by another language model <span class="citation" data-cites="zheng2023judging">(<a href="#ref-zheng2023judging" role="doc-biblioref">Zheng et al., 2023</a>)</span>. This is attractive because it scales to large volumes of texts, can approximate nuanced qualitative judgement when prompted carefully, and requires no separate annotation pipeline. <span class="citation" data-cites="zheng2023judging">Zheng et al. (<a href="#ref-zheng2023judging" role="doc-biblioref">2023</a>)</span> showed that strong LLM judges can achieve over 80% agreement with human raters on instruction-following tasks, comparable to inter-human agreement rates. The pattern has known limitations, however. Models may prefer their own output style, reward verbosity over accuracy, or be manipulated by superficially confident-sounding responses. LLM judgements should therefore be treated as approximate signals rather than ground truth, and ideally calibrated against human ratings for high-stakes applications.</p>
 <p>In the constitutional setting introduced by <span class="citation" data-cites="bai2022constitutional">Bai et al. (<a href="#ref-bai2022constitutional" role="doc-biblioref">2022</a>)</span>, the judge does not evaluate against vague notions of quality but against an explicit, enumerable list of principles. This makes the evaluation more consistent and the failure modes more interpretable. Our judge receives the generated system prompt directly as <code>node_input</code> (the previous node’s text output passed through the edge chain), and the constitution’s rules are embedded into its instruction string via a Python f-string at definition time. The judge evaluates each rule and returns a structured verdict.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>constitution <span class="op">=</span> PromptConstitution()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -630,12 +659,6 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="ss">Return only valid JSON: </span><span class="ch">{{</span><span class="ss">"approved": true/false, "rule_scores": </span><span class="ch">{{</span><span class="ss">...</span><span class="ch">}}</span><span class="ss">, "feedback": "..."</span><span class="ch">}}</span><span class="ss">"""</span>,</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The system prompt to evaluate is not a template variable here — the judge receives it as the user message of its conversation turn, delivered automatically by ADK from the previous node’s output. If the judge returns output that cannot be parsed as JSON, the pipeline defaults to <code>approved=False</code>. This deterministic fallback ensures the harness never silently passes a bad output because the judge misbehaved.</p>
-<section id="wiring-agents-in-sequence-and-passing-state" class="level3">
-<h3 class="anchored" data-anchor-id="wiring-agents-in-sequence-and-passing-state">Wiring agents in sequence and passing state</h3>
-<p>A <code>Workflow</code> runs its nodes in the order defined by its edges. Within a single edge chain (a tuple), each node’s text output is passed as <code>node_input</code> to the next function in the chain, and as the user message to the next <code>Agent</code>. This is the primary mechanism for sequential data flow.</p>
-<p>For <strong>cross-branch data sharing</strong> — when two separate branches of the graph both need access to the same value — use <code>ctx.state</code>. A function writes to <code>ctx.state["key"]</code> and any downstream agent can read it via a template variable <code>{key}</code> in its instruction string. Template variables in <code>{curly_braces}</code> are filled from <code>ctx.state</code> before the instruction reaches the model. Literal braces that should appear in the output (such as in a JSON schema) must be doubled: <code>{{</code> and <code>}}</code>.</p>
-<p>In our pipeline the feedback agent and editor both need the current draft, so <code>hard_check</code> writes it to <code>ctx.state["draft_prompt"]</code>. The feedback agent reads <code>{draft_prompt}</code> and <code>{judge_feedback}</code> from state; the editor reads <code>{draft_prompt}</code> and <code>{feedback}</code>. The judge, however, receives the draft purely as <code>node_input</code> — no state read needed for its main input.</p>
-<p>The full <code>judge</code>, <code>feedback_agent</code>, and <code>editor</code> definitions, along with the loop routing functions, are consolidated in the next section.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -655,7 +678,7 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -664,15 +687,14 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The binary judge (pass/fail) is the simplest form of LLM evaluation. A natural extension is to evaluate each rule independently on a 1/0 basis, giving partial credit and a more informative failure signal. This <em>rubric</em> approach has a precise analogue in qualitative research methodology.</p>
-<p>Rubric-based LLM judging is structurally identical to <strong>content coding</strong>: a coder (the judge) applies a coding scheme (the rubric/constitution) to a unit of text (the output), producing a code (the score). Qualitative research has decades of accumulated best practice for this workflow, centred on inter-rater reliability. The standard measure is <strong>Krippendorff’s alpha</strong> <span class="citation" data-cites="krippendorff2004content">(<a href="#ref-krippendorff2004content" role="doc-biblioref">Krippendorff, 2004</a>)</span>, a coefficient that accounts for chance agreement across nominal, ordinal, and interval scales. When multiple LLM judges disagree, alpha quantifies whether the disagreement is systematic (a codebook problem) or random (noise). <span class="citation" data-cites="hayes2007kripp">Hayes &amp; Krippendorff (<a href="#ref-hayes2007kripp" role="doc-biblioref">2007</a>)</span> provide the computational procedure and a reference implementation; the practical target is alpha &gt; 0.8 before treating coded data as reliable.</p>
+<p>The binary judge (pass/fail) is the simplest form of LLM evaluation. A natural extension is to evaluate each rule independently on a scale, giving partial credit and a more informative failure signal. This <em>rubric</em> approach has a precise analogue in qualitative research methodology.</p>
+<p>Rubric-based LLM judging is structurally identical to <strong>content coding</strong>: a coder (the judge) applies a coding scheme (the rubric/constitution) to a unit of text (the output), producing a code (the score). Qualitative research has decades of accumulated best practice for this workflow, centred on inter-rater reliability. The standard measure is <strong>Krippendorff’s alpha</strong> <span class="citation" data-cites="krippendorff2004content">(<a href="#ref-krippendorff2004content" role="doc-biblioref">Krippendorff, 2004</a>)</span>, a coefficient that accounts for chance agreement across nominal, ordinal, and interval scales. When multiple LLM judges disagree (with human coders), alpha quantifies whether the disagreement is systematic (a codebook problem) or random (noise). <span class="citation" data-cites="hayes2007kripp">Hayes &amp; Krippendorff (<a href="#ref-hayes2007kripp" role="doc-biblioref">2007</a>)</span> provide the computational procedure and a reference implementation; the practical target is alpha &gt; 0.8 before treating coded data as reliable.</p>
 <p>The design principles that make content coding reliable translate directly to constitution design. Rules should be mutually exclusive, covering distinct non-overlapping aspects of quality; collectively exhaustive, together covering all dimensions that matter; and anchored clearly enough that it is unambiguous what counts as a 0 and what counts as a 1. The constitution in our pipeline is the machine-readable equivalent of a codebook. If your judge scores are noisy or inconsistent, the remedy is the same as in qualitative research: refine the codebook until the criteria are unambiguous.</p>
 </div>
 </div>
 </div>
-</section>
 </section>
 <section id="sec-editor" class="level2">
 <h2 class="anchored" data-anchor-id="sec-editor">Editor and improvement loop</h2>
@@ -705,9 +727,6 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 </div>
 </div>
 </div>
-<p>The <code>Workflow</code> in ADK manages the graph. Stopping conditions are encoded as <strong>conditional edges</strong>: an edge is only followed when the source node’s routing function returns an <code>Event</code> with a matching <code>route</code> value. Routing is handled by plain Python functions placed in the edge chain, not by callbacks attached to agents.</p>
-<p>The edge chain tuple syntax makes this concrete. A 4-tuple <code>(a, b, router_fn, {"x": c, "y": d})</code> means: run <code>a</code>, pass its output to <code>b</code>, then call <code>router_fn</code> with <code>b</code>’s output and route to <code>c</code> or <code>d</code> based on the <code>Event(route=...)</code> it returns. A plain 2-tuple <code>(a, b)</code> is an unconditional edge. A 3-tuple <code>(a, router_fn, {"x": c})</code> means <code>a</code>’s output goes directly to <code>router_fn</code> for routing, skipping any intermediate agent.</p>
-<p>The <code>route_after_judge</code> function parses the verdict JSON, writes <code>judge_feedback</code> to state, and returns <code>Event(route="approved")</code> or <code>Event(route="rejected")</code>. The <code>loop_or_stop</code> function increments an iteration counter and returns <code>Event(route="continue")</code> until <code>MAX_ITERATIONS</code> is reached; returning <code>None</code> terminates the workflow at that point. The <code>store_feedback</code> function writes the feedback agent’s output to state so the editor can read it as <code>{feedback}</code>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk <span class="im">import</span> Agent, Workflow</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.adk.events.event <span class="im">import</span> Event</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
@@ -816,9 +835,8 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">OTEL_EXPORTER_OTLP_ENDPOINT</span><span class="op">=</span>https://your-langfuse-instance/api/public/otel</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="va">OTEL_EXPORTER_OTLP_HEADERS</span><span class="op">=</span>Authorization=Basic <span class="op">&lt;</span>base64-encoded-key<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Systematic variation and testing of your pipeline (different constitutions, different models, different iteration limits) is also where the <strong>Examples</strong> component from <span class="citation" data-cites="mao2025promptstemplatessystematicprompt">Mao et al. (<a href="#ref-mao2025promptstemplatessystematicprompt" role="doc-biblioref">2025</a>)</span> becomes practically relevant: running the pipeline across a set of test cases and inspecting the traces is how you discover whether your prompt spec produces consistent outputs. Tools like Langfuse make that process tractable by preserving the full trace of each run.</p>
-<!-- TODO: mcp with markdowns would be nicer -->
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -827,7 +845,7 @@ addresses each provided dimension clearly. Output only the system prompt text.</
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>ADK’s <code>Session</code> object carries a <code>state</code> dict that persists across agent turns. The pipeline can accumulate previously approved prompts there, giving the editor access to examples of what has worked before — a lightweight form of episodic memory with no vector store or embeddings required.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add this inside loop_or_stop when the judge approved:</span></span>
