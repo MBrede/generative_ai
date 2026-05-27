@@ -114,7 +114,7 @@ A harness is the complete scaffolding around an LLM pipeline: the class or modul
 
 The Claude Code source leak (April 2026) gave an unusually detailed public view of what a production-grade harness looks like.^[The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/] The Claude Code runtime turned out to be a sophisticated harness with three distinct control layers: **guides** (feedforward instructions, conventions, and bootstrap prompts injected before the model acts), **sensors** (linters, type checkers, and test suites that catch bad output after execution), and **control checks** (deterministic format and length validation first, then slower LLM-powered semantic review). The key observation from the leak analysis: agents do not mind being micromanaged: more constraints, more checks, and more structure tend to improve performance rather than limit it.^[A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model's output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.]
 
-### Wiring agents in sequence and passing state
+### Harnessing with ADK Graph API
 
 A `Workflow` runs its nodes in the order defined by its edges. Within a single edge chain (a tuple), each node's text output is passed as `node_input` to the next function in the chain, and as the user message to the next `Agent`. This is the primary mechanism for sequential data flow.
 
