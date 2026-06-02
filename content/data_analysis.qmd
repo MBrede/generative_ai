@@ -83,7 +83,7 @@ In a scientific (knowledge gathering) context, you ideally deal with hypotheses.
 
 > *“On what device do users have the highest return rate?.”*
 
-Those high-level questions can then be broken down into several low-level questions. In this lecture, i tried to stick to proper hypotheses, but the line got blurred several times. 
+Those high-level questions can then be broken down into several low-level questions. In this lecture, we tried to stick to proper hypotheses, but the line got blurred several times (as it would be in the real world). 
 
 ### Insight
 
@@ -97,7 +97,7 @@ An **insight** is a *short textual finding* derived from the data.
 > *“Mobile users show a higher return rate (18%) than desktop users (12%), especially in the last quarter.  
 > This suggests that mobile purchasing behavior is more exploratory or less informed.”*
 
-As the example shows, an insight is verified or falsified hypothesis, together with an *interpretation*. 
+As the example shows, an insight is *verified* or *falsified* *hypothesis*, together with an *interpretation*. 
 
 Insights are what you ultimately want to show to users or stakeholders.
 
