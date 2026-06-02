@@ -45,6 +45,11 @@ In LLM-based data analysis we need clear language to talk about what the system 
 
 ### Hypothesis
 
+::: {.callout-note}
+## ℹ️ Info 
+A __hypothesis__ is a testable prediction or proposed explanation for a phenomenon, based on limited evidence that serves as a starting point for further investigation. It typically takes the form of an "if-then" statement that can be supported or refuted through experimentation and observation. A good scientific hypothesis must be __falsifiable__ — meaning there must be a possible way to prove it wrong through empirical evidence.
+:::
+
 A **hypothesis** is a testable, domain-specific assumption about the data.
 
 - It usually relates multiple variables and suggests a pattern.
@@ -74,6 +79,12 @@ Questions are typically what the **query agent** will turn into pandas or SQL co
 - Hypotheses are **high-level, interpretive**.
 - Questions are **low-level, operational** steps that help test or explore hypotheses.
 
+In a scientific (knowledge gathering) context, you ideally deal with hypotheses. In the commercial world, you usually jump straight to (high-level) questions instead. 
+
+> *“On what device do users have the highest return rate?.”*
+
+Those high-level questions can then be broken down into several low-level questions. In this lecture, i tried to stick to proper hypotheses, but the line got blurred several times. 
+
 ### Insight
 
 An **insight** is a *short textual finding* derived from the data.
@@ -84,7 +95,9 @@ An **insight** is a *short textual finding* derived from the data.
 **Example:**
 
 > *“Mobile users show a higher return rate (18%) than desktop users (12%), especially in the last quarter.  
-> This suggests that mobile purchasing behaviour is more exploratory or less informed.”*
+> This suggests that mobile purchasing behavior is more exploratory or less informed.”*
+
+As the example shows, an insight is verified or falsified hypothesis, together with an *interpretation*. 
 
 Insights are what you ultimately want to show to users or stakeholders.
 
@@ -197,7 +210,7 @@ flowchart LR
 
 Data flow (intuitively):
 
-- The hypothesis generator takes a high-level question or a description of the dataset and proposes high-level hypotheses and low-level questions.
+- The hypothesis generator takes a description of the dataset (and other relevant information) and proposes a high-level hypotheses. It then breaks down the hypothesis into low-level questions.
 - The query agent turns each low-level question into code (e.g. pandas), executes it safely and returns concise answers.
 - The summarizer aggregates low-level answers into human-readable insights and explicit claims.
 - The optional verifier (not shown) checks these claims for correctness and flags issues.
@@ -263,18 +276,23 @@ We will use this fictitious dataset and these types of questions in the code exa
 
 ## Hypothesis Generator
 
-We introduced a hypothesis generator in the last session. Today, we will expand it to additionally break a hypothesis down into smaller questions. The hypothesis generator is responsible for:
+As shown above, the hypothesis generator has two tasks. 
+
+1. Produce a hypothesis or a  high-level question regarding the data set. 
+2. Break down the hypothesis or high-level question into several low-level questions. 
+
+<!-- We introduced a hypothesis generator in the last session. Today, we will expand it to additionally break a hypothesis down into smaller questions. The hypothesis generator is responsible for:
 
 - turning a high-level task or dataset description into
     - high-level, domain-relevant hypotheses and/or
-    - concrete low-level questions that the query agent can answer.
+    - concrete low-level questions that the query agent can answer. -->
 
 ### Concept
 
 Input:
 
 - a short description of the dataset (columns, domain),
-- optionally a high-level question or user goal.
+- additional information or context, maybe a user goal.
 
 Output:
 
@@ -325,7 +343,7 @@ The design of prompts is important:
 
     Given the following high-level hypothesis:
 
-    "Mobile users have a higher return rate than desktop users."
+    {hypothesis}
 
     and the dataset schema:
 
@@ -348,20 +366,18 @@ The design of prompts is important:
 
 ## 📝 Task
 
-Build a Hypothesis Generator. You already build the high-level generator last time. Expand it to include the low-level breakdown.
+Build a Hypothesis Generator. 
 
 1. Find an interesting dataset (e.g. fom [the world bank](https://data.worldbank.org/)) and load it. You can, of course, also use the fictitious e-commerce dataset from the example, but it is more fun with real data. 
 <!-- TODO: get the data set -->
-2. Implement a function generate_low_level_questions similar to the example above.
-3. Test it with at least two different high-level questions, for example:
-    - “Which customer segments drive the most revenue?”
-    - “Do new customers behave differently from returning customers?”
-
-4. Inspect the generated questions:
+2. Implement the hypothesis generator function. `
+3. Test the output. Does it generate proper hypotheses?
+4. Implement a function ``generate_low_level_questions`` similar to the example above.
+5. Inspect the generated questions:
     - Are they answerable with the available columns?
     - Do they match the high-level question?
 
-**Goal**: Practice the distinction between high-level and low-level questions and build a first pipeline component.
+**Goal**: Practice the distinction between high-level hypothesis and low-level questions and build a first pipeline component.
 :::
 
 ## Query Agent
@@ -385,7 +401,7 @@ For each low-level question:
 Typical pattern:
 
 ```python
-User question:
+Question:
 "What is the return rate per device_type?"
 
 Expected code:
@@ -591,6 +607,8 @@ User message:
 
 **Goal:** Practice turning fragmented analysis results into structured insights and claims.
 
+**Note:** This is where state-of-the-art models struggle (at least in 2025), see [@perezLLMBasedApproachInsight2025] and [@baiInsightAgentsLLMBased2025]. Don't be too frustrated if it does not work with small open-source models. It is, however, good for educational purposes to experience the limits of LLMs. 
+
 :::
 
 ## Verifier
@@ -624,7 +642,7 @@ This is a form of LLM-as-a-judge applied to data analysis.
     - When does it answer uncertain?
     - Where could this be integrated into your project (e.g. as a filter, a warning, or part of an evaluation pipeline)?
 
-Goal: Explore the idea of using an LLM as a judge for data analysis results.
+**Goal**: Explore the idea of using an LLM as a judge for data analysis results.
 :::
 
 
