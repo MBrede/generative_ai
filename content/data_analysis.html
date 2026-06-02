@@ -98,7 +98,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a5ccd6f002c5a51f8b8c2177036eb71e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c26b66d000a903ded351c14d20e72938.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -398,6 +398,19 @@ Problematisierung: „Wie weit darf man dem trauen? Wo sind Risiken?“ (Stichwo
 <p>In LLM-based data analysis we need clear language to talk about what the system is doing. We will use the following terms (adapted from <span class="citation" data-cites="perezLLMBasedApproachInsight2025">(<a href="#ref-perezLLMBasedApproachInsight2025" role="doc-biblioref">Pérez et al., 2025</a>)</span> and <span class="citation" data-cites="baiInsightAgentsLLMBased2025">(<a href="#ref-baiInsightAgentsLLMBased2025" role="doc-biblioref">Bai et al., 2025</a>)</span>):</p>
 <section id="hypothesis" class="level3">
 <h3 class="anchored" data-anchor-id="hypothesis">Hypothesis</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>ℹ️ Info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>hypothesis</strong> is a testable prediction or proposed explanation for a phenomenon, based on limited evidence that serves as a starting point for further investigation. It typically takes the form of an “if-then” statement that can be supported or refuted through experimentation and observation. A good scientific hypothesis must be <strong>falsifiable</strong> — meaning there must be a possible way to prove it wrong through empirical evidence.</p>
+</div>
+</div>
 <p>A <strong>hypothesis</strong> is a testable, domain-specific assumption about the data.</p>
 <ul>
 <li>It usually relates multiple variables and suggests a pattern.</li>
@@ -426,6 +439,11 @@ Problematisierung: „Wie weit darf man dem trauen? Wo sind Risiken?“ (Stichwo
 <li>Hypotheses are <strong>high-level, interpretive</strong>.</li>
 <li>Questions are <strong>low-level, operational</strong> steps that help test or explore hypotheses.</li>
 </ul>
+<p>In a scientific (knowledge gathering) context, you ideally deal with hypotheses. In the commercial world, you usually jump straight to (high-level) questions instead.</p>
+<blockquote class="blockquote">
+<p><em>“On what device do users have the highest return rate?.”</em></p>
+</blockquote>
+<p>Those high-level questions can then be broken down into several low-level questions. In this lecture, we tried to stick to proper hypotheses, but the line got blurred several times (as it would be in the real world).</p>
 </section>
 <section id="insight" class="level3">
 <h3 class="anchored" data-anchor-id="insight">Insight</h3>
@@ -437,8 +455,9 @@ Problematisierung: „Wie weit darf man dem trauen? Wo sind Risiken?“ (Stichwo
 <p><strong>Example:</strong></p>
 <blockquote class="blockquote">
 <p><em>“Mobile users show a higher return rate (18%) than desktop users (12%), especially in the last quarter.<br>
-This suggests that mobile purchasing behaviour is more exploratory or less informed.”</em></p>
+This suggests that mobile purchasing behavior is more exploratory or less informed.”</em></p>
 </blockquote>
+<p>As the example shows, an insight is <em>verified</em> or <em>falsified</em> <em>hypothesis</em>, together with an <em>interpretation</em>.</p>
 <p>Insights are what you ultimately want to show to users or stakeholders.</p>
 </section>
 <section id="claim" class="level3">
@@ -553,7 +572,7 @@ This suggests that mobile purchasing behaviour is more exploratory or less infor
 </div>
 <p>Data flow (intuitively):</p>
 <ul>
-<li>The hypothesis generator takes a high-level question or a description of the dataset and proposes high-level hypotheses and low-level questions.</li>
+<li>The hypothesis generator takes a description of the dataset (and other relevant information) and proposes a high-level hypotheses. It then breaks down the hypothesis into low-level questions.</li>
 <li>The query agent turns each low-level question into code (e.g.&nbsp;pandas), executes it safely and returns concise answers.</li>
 <li>The summarizer aggregates low-level answers into human-readable insights and explicit claims.</li>
 <li>The optional verifier (not shown) checks these claims for correctness and flags issues.</li>
@@ -619,20 +638,22 @@ This suggests that mobile purchasing behaviour is more exploratory or less infor
 </section>
 <section id="hypothesis-generator" class="level2">
 <h2 class="anchored" data-anchor-id="hypothesis-generator">Hypothesis Generator</h2>
-<p>We introduced a hypothesis generator in the last session. Today, we will expand it to additionally break a hypothesis down into smaller questions. The hypothesis generator is responsible for:</p>
-<ul>
-<li>turning a high-level task or dataset description into
-<ul>
-<li>high-level, domain-relevant hypotheses and/or</li>
-<li>concrete low-level questions that the query agent can answer.</li>
-</ul></li>
-</ul>
+<p>As shown above, the hypothesis generator has two tasks.</p>
+<ol type="1">
+<li>Produce a hypothesis or a high-level question regarding the data set.</li>
+<li>Break down the hypothesis or high-level question into several low-level questions.</li>
+</ol>
+<!-- We introduced a hypothesis generator in the last session. Today, we will expand it to additionally break a hypothesis down into smaller questions. The hypothesis generator is responsible for:
+
+- turning a high-level task or dataset description into
+    - high-level, domain-relevant hypotheses and/or
+    - concrete low-level questions that the query agent can answer. -->
 <section id="concept" class="level3">
 <h3 class="anchored" data-anchor-id="concept">Concept</h3>
 <p>Input:</p>
 <ul>
 <li>a short description of the dataset (columns, domain),</li>
-<li>optionally a high-level question or user goal.</li>
+<li>additional information or context, maybe a user goal.</li>
 </ul>
 <p>Output:</p>
 <ul>
@@ -648,7 +669,7 @@ This suggests that mobile purchasing behaviour is more exploratory or less infor
 <section id="example-prompts" class="level3">
 <h3 class="anchored" data-anchor-id="example-prompts">Example prompts</h3>
 <div id="high-level" class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -657,7 +678,7 @@ This suggests that mobile purchasing behaviour is more exploratory or less infor
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <pre><code>You are a data analyst for an e-commerce company.
 
@@ -687,7 +708,7 @@ Each hypothesis should:
 </div>
 </div>
 <div id="low-level" class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -696,13 +717,13 @@ Each hypothesis should:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <pre><code>You are a data analyst.
 
 Given the following high-level hypothesis:
 
-"Mobile users have a higher return rate than desktop users."
+{hypothesis}
 
 and the dataset schema:
 
@@ -729,22 +750,19 @@ Return the questions as a numbered list.</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Build a Hypothesis Generator. You already build the high-level generator last time. Expand it to include the low-level breakdown.</p>
+<p>Build a Hypothesis Generator.</p>
 <ol type="1">
 <li>Find an interesting dataset (e.g.&nbsp;fom <a href="https://data.worldbank.org/">the world bank</a>) and load it. You can, of course, also use the fictitious e-commerce dataset from the example, but it is more fun with real data. <!-- TODO: get the data set --></li>
-<li>Implement a function generate_low_level_questions similar to the example above.</li>
-<li>Test it with at least two different high-level questions, for example:
-<ul>
-<li>“Which customer segments drive the most revenue?”</li>
-<li>“Do new customers behave differently from returning customers?”</li>
-</ul></li>
+<li>Implement the hypothesis generator function. `</li>
+<li>Test the output. Does it generate proper hypotheses?</li>
+<li>Implement a function <code>generate_low_level_questions</code> similar to the example above.</li>
 <li>Inspect the generated questions:
 <ul>
 <li>Are they answerable with the available columns?</li>
 <li>Do they match the high-level question?</li>
 </ul></li>
 </ol>
-<p><strong>Goal</strong>: Practice the distinction between high-level and low-level questions and build a first pipeline component.</p>
+<p><strong>Goal</strong>: Practice the distinction between high-level hypothesis and low-level questions and build a first pipeline component.</p>
 </div>
 </div>
 </section>
@@ -768,7 +786,7 @@ Return the questions as a numbered list.</code></pre>
 <section id="step-1-natural-language-pandas-code" class="level4">
 <h4 class="anchored" data-anchor-id="step-1-natural-language-pandas-code">Step 1: Natural language → pandas code</h4>
 <p>Typical pattern:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>User question:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Question:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">"What is the return rate per device_type?"</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>Expected code:</span>
@@ -821,7 +839,7 @@ Return the questions as a numbered list.</code></pre>
 <section id="example" class="level3">
 <h3 class="anchored" data-anchor-id="example">Example</h3>
 <div id="safe-exec" class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -830,7 +848,7 @@ Return the questions as a numbered list.</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Disclaimer: This is an example for safe-ish code execution generated by ChatGPT for educational purposes. It is by no means <strong>SAFE</strong>. Please use at own risk.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FORBIDDEN_PATTERNS <span class="op">=</span> [</span>
@@ -931,7 +949,7 @@ Return the questions as a numbered list.</code></pre>
 <li>we can trace each claim back to the questions and data that support it.</li>
 </ul>
 <div id="summarizer" class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -940,7 +958,7 @@ Return the questions as a numbered list.</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>System message:</p>
 <pre><code>You are a data analyst. You write short, high-quality data insights and extract atomic claims.</code></pre>
@@ -995,6 +1013,7 @@ Return the result as JSON with the following structure:
 <li>(Optional) Manually label each claim as correct/incorrect/uncertain based on the data.</li>
 </ol>
 <p><strong>Goal:</strong> Practice turning fragmented analysis results into structured insights and claims.</p>
+<p><strong>Note:</strong> This is where state-of-the-art models struggle (at least in 2025), see <span class="citation" data-cites="perezLLMBasedApproachInsight2025">(<a href="#ref-perezLLMBasedApproachInsight2025" role="doc-biblioref">Pérez et al., 2025</a>)</span> and <span class="citation" data-cites="baiInsightAgentsLLMBased2025">(<a href="#ref-baiInsightAgentsLLMBased2025" role="doc-biblioref">Bai et al., 2025</a>)</span>. Don’t be too frustrated if it does not work with small open-source models. It is, however, good for educational purposes to experience the limits of LLMs.</p>
 </div>
 </div>
 </section>
@@ -1035,7 +1054,7 @@ Return the result as JSON with the following structure:
 <li>Where could this be integrated into your project (e.g.&nbsp;as a filter, a warning, or part of an evaluation pipeline)?</li>
 </ul></li>
 </ol>
-<p>Goal: Explore the idea of using an LLM as a judge for data analysis results.</p>
+<p><strong>Goal</strong>: Explore the idea of using an LLM as a judge for data analysis results.</p>
 </div>
 </div>
 </section>
