@@ -370,7 +370,7 @@ Build a Hypothesis Generator.
 
 1. Find an interesting dataset (e.g. fom [the world bank](https://data.worldbank.org/)) and load it. You can, of course, also use the fictitious e-commerce dataset from the example, but it is more fun with real data. 
 <!-- TODO: get the data set -->
-2. Implement the hypothesis generator function. `
+2. Implement the hypothesis generator function. 
 3. Test the output. Does it generate proper hypotheses?
 4. Implement a function ``generate_low_level_questions`` similar to the example above.
 5. Inspect the generated questions:

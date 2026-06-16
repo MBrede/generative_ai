@@ -274,5 +274,10 @@ Initially, the AI tutor appears aligned because its simple strategies both impro
 
 The test and improvement of inner alignment is hard to test and train against, it's central pitfalls are important to keep in mind when designing and implementing AI systems.
 
+### Further Reading
+
+An interesting paper by @wangPersonaFeaturesControl2025 (see also [this blogpost](https://openai.com/index/emergent-misalignment/)) find that finetuning a model on bad behavior in one specific field (e.g. bad code completion) leads to misaligned answers in other fields. The authors attribute this to a "misaligned persona" feature in the model weights. 
+
+![Narrow incorrect datasets in many domains produce emergent misalignment by activating “misaligned persona” features. From @wangPersonaFeaturesControl2025](../imgs/misaligned_persona.png)
 
 ## References
