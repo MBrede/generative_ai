@@ -203,13 +203,12 @@ Upload your results until here (embedder, database and summarization) to moodle.
 
 Most agent frameworks provide integrations for a variety of vector databases. 
 
-In terms of llamaindex, there are not just one but two tutorials on how to get qdrant to integrate into your agent, one from [qdrant](https://qdrant.tech/documentation/frameworks/llama-index/) for general integration and one from [llamaindex](https://developers.llamaindex.ai/python/examples/vector_stores/qdrantindexdemo/).
+Others, like Google's Agent Development Kit (ADK), skip the wrappers: the retrieval stays plain qdrant code, and the agent just gets it as a tool.
+See @tip-adkRag for an example RAG-system implemented with ADK.
 
-The pipeline is pretty close to what we discussed until here, it just uses the llamaindex-typical wrapper classes. See @tip-llamaindexRag for an example RAG-system implemented in Llamaindex.
+:::{#tip-adkRag .callout-tip collapse="true" appearance="minimal"}
 
-:::{#tip-llamaindexRag .callout-tip collapse="true" appearance="minimal"}
-
-{{< include llamaindex_rag.md >}}
+{{< include adk_rag.md >}}
 
 :::
 
@@ -253,7 +252,7 @@ Another approach is to use a keyword extraction algorithm to extract keywords fr
 
 The most basic way to implement a query-expansion is to  build a tool that instructs a LLM to give multiple alternate formulations of the original query. Though this will probably work, there are more refined methods.
 
-Llamaindex implements two more sophisticated approaches to transform queries:
+Two more sophisticated approaches to transform queries are:
 
 
 1. Hypothetical Document Embeddings (HyDe): A LLM is instructed to generate a hypothetical document that answers the query. This document is then used to query the index
@@ -264,7 +263,7 @@ Llamaindex implements two more sophisticated approaches to transform queries:
 
 #### 📝 Task
 
-Implement query expansion for the climate_fever dataset using llamaindex. [This](https://developers.llamaindex.ai/python/framework/optimizing/advanced_retrieval/query_transformations/) might be helpful.
+Implement query expansion for the climate_fever dataset using an ADK agent. Let the agent either generate alternative formulations of the query or a hypothetical answer document (HyDE), and use its output to query your index. The RAG example in @tip-adkRag shows how to set up an agent and run it.
 
 Experiment with different prompts and temperatures.
 
