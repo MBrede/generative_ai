@@ -529,7 +529,7 @@
     "href": "content/llm_pipelines.html#sec-adk",
     "title": "Multi-Agent Orchestration",
     "section": "Google ADK: key types",
-    "text": "Google ADK: key types\nThe four types used throughout this session:\n\n\n\n\n\n\n\nType\nRole\n\n\n\n\nAgent\nLeaf node: one LLM call, one system prompt\n\n\nWorkflow\nGraph of nodes; edges define sequential, conditional, and looping flows\n\n\nInMemoryRunner\nExecutes a pipeline against an in-memory session; suitable for notebooks and local dev\n\n\nSession\nHolds conversation and pipeline state across agent turns\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nLM Studio users: the lm_studio/ prefix is not pre-registered in ADK’s model registry. Add this before creating any agent:\nfrom google.adk.models.lite_llm import LiteLlm\nfrom google.adk.models.registry import LLMRegistry\n\nLLMRegistry._register(r\"lm_studio/.*\", LiteLlm)",
+    "text": "Google ADK: key types\nThe four types used throughout this session:\n\n\n\n\n\n\n\nType\nRole\n\n\n\n\nAgent\nLeaf node: one LLM call, one system prompt\n\n\nWorkflow\nGraph of nodes; edges define sequential, conditional, and looping flows\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nLM Studio users: the lm_studio/ prefix is not pre-registered in ADK’s model registry. Add this before creating any agent:\nfrom google.adk.models.lite_llm import LiteLlm\nfrom google.adk.models.registry import LLMRegistry\n\nLLMRegistry._register(r\"lm_studio/.*\", LiteLlm)",
     "crumbs": [
       "Language Models",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Multi-Agent Orchestration</span>"
