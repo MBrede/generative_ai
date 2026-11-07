@@ -3,15 +3,22 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     container:
       image: mbrede/quarto-render:latest
-    permissions:
-      contents: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -19,23 +26,7 @@ jobs:
           fetch-depth: 0
 
       - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global --add safe.directory /__w/$(basename $GITHUB_REPOSITORY)/$(basename $GITHUB_REPOSITORY)
-
-      - name: Initialize gh-pages branch if needed
-        run: |
-          if ! git ls-remote --heads origin gh-pages | grep -q gh-pages; then
-            echo "Creating gh-pages branch..."
-            git checkout --orphan gh-pages
-            git reset --hard
-            git commit --allow-empty -m "Initialize gh-pages branch"
-            git push origin gh-pages
-            git checkout main
-          else
-            echo "gh-pages branch already exists"
-          fi
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Collect and Install Python dependencies
         run: /workspace/req-venv/bin/python3 /workspace/collect_python_deps.py
@@ -43,9 +34,21 @@ jobs:
       - name: Collect and Install R packages
         run: Rscript /workspace/collect_r_deps.R
 
-      - name: Render and Publish
-        uses: quarto-dev/quarto-actions/publish@v2.1.9
+      - name: Render
+        uses: quarto-dev/quarto-actions/render@v2.1.9
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          target: gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
