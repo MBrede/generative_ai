@@ -1,9 +1,11 @@
 ---
-toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and Function Calling</h3>'
+toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and Tool Calling</h3>'
 ---
 
 <!--  -->
-# Chatbots and Function Calling {#sec-functioncalling}
+# Chatbots and Tool Calling {#sec-functioncalling}
+
+So far, we've only ever looked at the model in isolation: one prompt in, one response out. But real assistants seem to do much more than that — they remember what you told them, and they can look things up or do things they were never trained to do directly. Both of those look like abilities of the model. They aren't. The LLM itself is still just a function from text to text, called once, with no memory of anything before and no way to act on anything outside the conversation. Everything else — remembering, acting — is the *harness*: the code wrapped around the model that makes up for exactly these two gaps. Today we build both halves of it: one that gives the model memory, one that gives it tools. You'll notice they share the same basic shape — take something the model produced (or something it needs), handle it outside the model, feed the result back in for the next call.
 
 ## Chatbots
 
@@ -14,7 +16,7 @@ So far, we covered connecting with a local LLM and getting a single response. We
 
 Let's talk!
 
-1. Open a notebook and connect to a local LLM using LM Studio.
+1. Open a notebook and connect to a local LLM using LM Studio (or Ollama or any other framework of your choice).
 2. Tell the LLM something about you.
 3. In a second call, ask the LLM what you just told it. It should know, right? You just told it.
 
@@ -97,9 +99,9 @@ Here are this section's take home messages:
     - Store the conversation history (user and assistant messages).
     - Send the full history with each new request. (As long as it fits within the context window.)
 
+Memory solved one gap — the model forgetting. Now we tackle the other one: the model being unable to reach outside the conversation at all.
 
-
-## Function Calling
+## Tool Calling
 
 ### Motivation
 
@@ -199,41 +201,6 @@ Try it!
 
 :::
 
-#### Challenges, fine-tuned models and the influence of size
-
-The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
-
-- They can hallucinate functions or arguments that do not exist.
-- They can forget to call a function.
-- They can forget to provide all required arguments.
-- They can provide the wrong type for an argument.
-- They can provide invalid values for an argument.
-
-There are several strategies to mitigate these issues:
-
-1. **Prompt engineering**: A good prompt can help to guide the LLM towards generating valid output. This is especially true for larger models, as they have a better understanding of the world and can therefore generate more accurate responses.
-2. **Finetuning**: Finetuning a model on a specific task can improve its performance on that task. This is especially useful for smaller models, as they are less likely to hallucinate functions or arguments that do not exist.
-3. **Size**: Larger models are better at generating valid output than smaller models. However, larger models are also more expensive to run and require more computational resources.
-
-::: {.callout-note}
-## 📝 Task
-
-Test it! (we can do it together, if your hardware does not allow you to run the model.)
-
-As above, but this time
-
-<!--  update models -->
-
-1. use a very small model (e.g [a small qwen model](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF))
-2. use a larger model of the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
-3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
-<!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
-4. use a model of the same family not fine-tuned on this Task.
-5. Try changing the temperature as well. What effect does this have? 
-
-:::
-
-
 ### Code Generation
 
 The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
@@ -263,6 +230,47 @@ Try it!
 3. Now write a badly written python function, without clear names, descriptions or typing hints. Test it with your example inputs too. Are the results better or worse? Why do you think that's happening?
 4. Upload your notebook to Moodle.
 
+
+:::
+
+
+### The Practical Way
+
+<!-- TODO: native `tools=`/`tool_choice` API (OpenAI SDK / LM Studio / Ollama), `tool_calls` field,
+constrained decoding explanation, model-support capability check, `tool`-role feedback. See
+notes/function_calling_improvements.md items 1 and 4. -->
+
+### Limits that remain either way
+
+The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
+
+- They can hallucinate functions or arguments that do not exist.
+- They can forget to call a function.
+- They can forget to provide all required arguments.
+- They can provide the wrong type for an argument.
+- They can provide invalid values for an argument.
+
+There are several strategies to mitigate these issues:
+
+1. **Prompt engineering**: A good prompt can help to guide the LLM towards generating valid output. This is especially true for larger models, as they have a better understanding of the world and can therefore generate more accurate responses.
+2. **Finetuning**: Finetuning a model on a specific task can improve its performance on that task. This is especially useful for smaller models, as they are less likely to hallucinate functions or arguments that do not exist.
+3. **Size**: Larger models are better at generating valid output than smaller models. However, larger models are also more expensive to run and require more computational resources.
+
+::: {.callout-note}
+## 📝 Task
+
+Test it! (we can do it together, if your hardware does not allow you to run the model.)
+
+As above, but this time
+
+<!--  update models -->
+
+1. use a very small model (e.g [a small qwen model](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF))
+2. use a larger model of the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
+3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
+<!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
+4. use a model of the same family not fine-tuned on this Task.
+5. Try changing the temperature as well. What effect does this have?
 
 :::
 
