@@ -300,37 +300,35 @@ Try it!
 
 :::
 
-### Limits that remain either way
+### Limitations
 
-The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
+The Practical Way guarantees that a tool call comes back in the right *shape* — a valid tool name, valid argument types, all required fields present. It does not guarantee the model made the right *decision*. A few classic failure modes disappear once you're using constrained decoding; a few don't, because they were never shape problems in the first place.
 
-- They can hallucinate functions or arguments that do not exist.
-- They can forget to call a function.
-- They can forget to provide all required arguments.
-- They can provide the wrong type for an argument.
-- They can provide invalid values for an argument.
+**Solved by constrained decoding** — worth knowing these used to be common, because with the native API they're largely gone:
 
-There are several strategies to mitigate these issues:
+- Hallucinating a tool name that doesn't exist — generation is constrained to the tools you supplied.
+- Hallucinating an argument that doesn't exist — constrained to the schema's declared fields.
+- Wrong type for an argument — the schema enforces type.
+- Missing a required argument — strict schemas enforce presence.
 
-1. **Prompt engineering**: A good prompt can help to guide the LLM towards generating valid output. This is especially true for larger models, as they have a better understanding of the world and can therefore generate more accurate responses.
-2. **Finetuning**: Finetuning a model on a specific task can improve its performance on that task. This is especially useful for smaller models, as they are less likely to hallucinate functions or arguments that do not exist.
-3. **Size**: Larger models are better at generating valid output than smaller models. However, larger models are also more expensive to run and require more computational resources.
+**Still live** — these are reasoning/behavior problems, upstream of any shape constraint:
+
+- Deciding *whether* to call a tool at all — forgetting to call one when it should have, or calling one when it shouldn't have.
+- Picking the *wrong* tool, especially when several similar or badly documented tools are on offer.
+- Free-text argument *plausibility* — a schema guarantees a field is a string, not that its content is correct (the right unit, a real place name, ...).
+
+Model quality still matters here, just for a narrower reason than it used to. The usual levers — a clearer prompt, a better or larger model, fine-tuning on this specific kind of task — still help with the "still live" column; they're no longer needed just to get a syntactically valid tool call at all.
 
 ::: {.callout-note}
 ## 📝 Task
 
-Test it! (we can do it together, if your hardware does not allow you to run the model.)
+(Optional) Vibe check: is this actually better now?
 
-As above, but this time
-
-<!--  update models -->
-
-1. use a very small model (e.g [a small qwen model](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF))
-2. use a larger model of the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
-3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
-<!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
-4. use a model of the same family not fine-tuned on this Task.
-5. Try changing the temperature as well. What effect does this have?
+1. Connect to two models of different "ages" but similar size — for example [Llama 3.1 8B Instruct](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF) (2024) and [Qwen3 8B](https://huggingface.co/Qwen/Qwen3-8B-GGUF) (2025) — using the native tools API from the previous section.
+2. Give both the same set of several *similar* or ambiguously named tools (e.g. `get_current_weather` next to a near-duplicate like `get_weather_forecast`), and ask something that should trigger exactly one of them.
+3. Also try a request that shouldn't need any tool at all, and one where a sensible argument value has to be guessed (e.g. a city with no unit specified).
+4. Compare: does the newer model pick the right tool more reliably? Does it know when *not* to call one? Are its guessed argument values more sensible?
+5. This isn't a controlled experiment — model families differ in plenty of ways besides "age." Treat it as a vibe check, not a benchmark.
 
 :::
 
