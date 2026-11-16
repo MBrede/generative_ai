@@ -94,10 +94,11 @@ Congratulations! You just built yourself a chatbot.
 
 Here are this section's take home messages:
 
-1. A single LLM call is stateless—it has no memory of previous interactions. Each request is independent. 
+1. A single LLM call is stateless—it has no memory of previous interactions. Each request is independent.
 2. To enable multi-turn conversations, we need to
     - Store the conversation history (user and assistant messages).
     - Send the full history with each new request. (As long as it fits within the context window.)
+3. What we built here is only the simplest kind of memory: *session* (or conversation) memory, which just replays the raw history. Real systems often do more — summarizing old messages instead of resending them verbatim, retrieving relevant facts from a knowledge store instead of the full history, or even remembering things about you across entirely different conversations. We're only scratching the surface of memory here.
 
 Memory solved one gap — the model forgetting. Now we tackle the other one: the model being unable to reach outside the conversation at all.
 
