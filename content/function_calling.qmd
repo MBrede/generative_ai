@@ -106,7 +106,7 @@ Memory solved one gap — the model forgetting. Now we tackle the other one: the
 ### Motivation
 
 
-Sometimes you want your AI assistant to answer more complex tasks then the LLM can handle out of the box. For example, you might want to ask questions regarding documents or datasets on your hard drive, or ask about recent events. This is a hard task for an LLM, because, if it was not trained on this information, i.e. the information wasn't part of its training data, it won't be able to answer these questions correctly. 
+Sometimes you want your AI assistant to answer more complex tasks than the LLM can handle out of the box. For example, you might want to ask questions regarding documents or datasets on your hard drive, or ask about recent events. This is a hard task for an LLM, because, if it was not trained on this information, i.e. the information wasn't part of its training data, it won't be able to answer these questions correctly. 
 
 ::: {.callout-note}
 ## 📝 Task
@@ -121,31 +121,32 @@ Try it!
 :::
 
 
-To solve this problem, we need to give the LLM assistant some tools it can use to access this additional information. This is where **function calling** comes into play. Function calling allows the assistant to call a function with specific parameters to get the required information. The function then returns the requested data or performs the necessary task, and the LLM can continue generating its response based on that information.
+To solve this problem, we need to give the LLM access to tools it can use to reach outside the conversation. This is where **tool calling** comes into play (you'll also see this called *function calling* — that's the older, narrower term, from back when a tool was always a plain function you wrote yourself; today a tool can just as well be a provider-hosted capability like web search). Tool calling lets the model request that a specific tool be invoked with specific arguments to get the information or effect it needs. The harness then actually runs that tool and feeds the result back, and the LLM can continue generating its response based on that information.
 
-This is what we call an LLM agent or agent system. We will look deeper into agents (and alternatives) soon. For now, we will just say that we have an *agent system* or that a system is *agentic* if the system has access to tools or functions and if the LLM decides which tools to use and when (or if). 
+We'll hold off on calling this an *agent* for now — that word is doing a lot of different jobs across the industry, and we'll give it a precise definition once we get to agents later in the course. Today we're only building the piece underneath: letting the model ask for a tool call at all.
 
 
-A basic agentic workflow may look like this: 
+Under the hood, a basic tool-calling workflow looks like this:
 
 1. The user inputs a question or task.
-2. The LLM determines if it needs additional information or assistance from external tools.
-3. If needed, the LLM calls a function with specific parameters to retrieve the required data or perform the necessary task. This means the LLM generates an answer containing either some executable code or a JSON object containing the name of the function and its parameters. These functions have to be defined in advance. 
-4. The LLM response is then scanned for these elements (code or JSON object) and these are executed if possible.
-5. The response is then fed back into the LLM (usually as user input) for further processing. 
-6. The LLM uses the returned information to continue generating its response.
+2. The LLM decides whether it needs a tool to answer it.
+3. If so, the LLM generates a tool call: structured output naming which tool to use and what arguments to call it with (a JSON object, or — less commonly today — a snippet of code). These tools have to be defined in advance.
+4. The harness parses that output to extract the tool call.
+5. The harness executes it.
+6. The harness feeds the result back to the LLM — as a dedicated `tool` message — for further processing.
+7. The LLM uses the returned information to continue generating its response.
 
-We obviously need the conversation history from earlier for this to work. We also need to give the system access to the functions.
+We obviously need the conversation history from earlier for this to work — that's the memory half of the harness. We also need to give the system access to the tools themselves.
 
-**Note:** As stated above, the functions need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however not the best idea for reasons of security. 
+**Note:** As stated above, the tools need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however, not generally a good idea for reasons of security — more on that when we get to code generation and tool execution.
 
 
-There are two main ways to implement function calling:
+There are two main ways to implement tool calling:
 
-1. **Structured output**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the function and its parameters. 
-2. **Code generation**: Here, we ask the LLM to generate the function calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined functions. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine. 
+1. **Structured output**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the tool and its parameters.
+2. **Code generation**: Here, we ask the LLM to generate the tool calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined tools. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine.
 
-Today, we will not implement the full agentic workflow outlined above. We will get there eventually, though. Here, we want to focus on step 3, the function call. The aim is to take a user request and translate it into structured output, either JSON or code. In the following, we will explore how to do it. 
+Today, we'll work through the whole workflow above: first getting the model to generate a tool call at all — the historically hard part — using both structured output and code generation, and then, later in this session, actually parsing, executing, and feeding back a tool call ourselves: first by hand, to see the mechanics, then using the native API that handles most of it for us.
 
 
 
