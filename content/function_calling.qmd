@@ -144,21 +144,21 @@ We obviously need the conversation history from earlier for this to work — tha
 
 There are two main ways to implement tool calling:
 
-1. **Structured output**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the tool and its parameters.
-2. **Code generation**: Here, we ask the LLM to generate the tool calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined tools. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine.
+1. **Structured Output (JSON)**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the tool and its parameters.
+2. **Code Generation**: Here, we ask the LLM to generate the tool calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined tools. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine.
 
 Today, we'll work through the whole workflow above: first getting the model to generate a tool call at all — the historically hard part — using both structured output and code generation, and then, later in this session, actually parsing, executing, and feeding back a tool call ourselves: first by hand, to see the mechanics, then using the native API that handles most of it for us.
 
 
 
-### Structured output
+### Structured Output (JSON)
 
-The traditional way^[In this context, *traditional* means: people have been using it for more than a year. ] of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. We already talked about generating structured output before. Here, we will use it to generate a function call. 
+One of the two ways to implement tool calling (see Motivation above) is to have the model generate a JSON object naming the tool and its arguments — historically the first format to become mainstream.^[Though in a field that moves this fast, "first" can still mean "about a year ago."] We already talked about generating structured output before; here, we'll use it specifically to generate a tool call.
 
 
 #### Function definition
 
-The first step in using function calling is to define the functions that the LLM can call. This is done by providing a JSON schema that describes the name of the function, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: ^[Note, that this is not an executable implementation but just a description of the function for the LLM.]
+The first step in using tool calling is to define the tools the LLM can call. This is done by providing a JSON schema that describes the name of the tool, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: ^[Note, that this is not an executable implementation but just a description of the tool for the LLM.]
 
 
     {
@@ -170,16 +170,16 @@ The first step in using function calling is to define the functions that the LLM
             } 
     }
 
-Function name and description should be as clear as possible to make it easier for the LLM to decide which function to use and how to properly use it. Argument names and types should be as precise as possible to avoid ambiguity in the function call.
+Tool name and description should be as clear as possible to make it easier for the LLM to decide which tool to use and how to properly use it. Argument names and types should be as precise as possible to avoid ambiguity in the tool call.
 
 
 #### Prompting
 
-The second step is to provide a good prompt. The prompt should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for function calling:
+The second step is to provide a good prompt. The prompt should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for tool calling:
 
-    You are a helpful assistant that generates function calls based on user input. Only use the functions you have been provided with.
+    You are a helpful assistant that generates tool calls based on user input. Only use the tools you have been provided with.
 
-    {function definition as described above}
+    {tool definition as described above}
 
     User: What's the weather like in Berlin?
 
@@ -188,7 +188,7 @@ The second step is to provide a good prompt. The prompt should make it clear to 
         "arguments": {"location": "Berlin", "unit": "celsius"}
     }
 
-Another way of forcing the LLM to output structured format is to use ``pydantic`` classes as described last time. 
+Another way of forcing the LLM to output a structured format is to use ``pydantic`` classes as described last time.
 
 ::: {.callout-note}
 ## 📝 Task
@@ -196,10 +196,10 @@ Another way of forcing the LLM to output structured format is to use ``pydantic`
 Try it!
 
 1. Open a notebook and connect to a local LLM using LM Studio.
-2. Define the function `get_current_weather` as shown above.
-3. Write a prompt that asks the LLM to generate a function call based on user input. Use prompt engineering as shown above or pydantic classes as shown last time. 
+2. Define the tool `get_current_weather` as shown above.
+3. Write a prompt that asks the LLM to generate a tool call based on user input. Use prompt engineering as shown above or pydantic classes as shown last time.
 4. Test the prompt with an example input.
-5. Define other functions and try other inputs and see if the LLM generates valid output.
+5. Define other tools and try other inputs and see if the LLM generates valid output.
 
 :::
 
