@@ -496,6 +496,8 @@ print(chat_completion.choices[0].message.content)
 
 * [This](https://stats.stackexchange.com/a/424127) *very* good answer on stack exchange that explains the attention-concept [@424127]
 
+* [This](https://bbycroft.net/llm) very nice visual explanation of how a transformer works. Honestly, look at it.
+
 ## References
 
 
