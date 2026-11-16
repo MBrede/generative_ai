@@ -205,7 +205,9 @@ Try it!
 
 ### Code Generation
 
-The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
+The second mainstream paradigm is code generation, popularized by frameworks like [smolagents](https://huggingface.co/docs/smolagents/index), where it's the default mode (JSON mode is also supported there). Instead of asking the model for a JSON object, we ask it to write a short Python snippet that calls the tool directly — this becomes attractive once you have many tools available, since a script chaining several calls together can be far more token-efficient than round-tripping JSON tool calls one at a time. When using this approach, the tool definition and description are given to the LLM as python code, and the LLM is expected to generate the tool call also as valid python code. As with structured output, tool name and description should be as clear as possible. Typing might also help.
+
+Unlike JSON mode, there's no native, local fix that makes this safe or reliable by construction — which is exactly why execution-time safety matters so much here, as we'll see when we get to actually running these calls.
 
 
 ::: {.callout-note}
