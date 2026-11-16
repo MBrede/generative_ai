@@ -240,9 +240,65 @@ Try it!
 
 ### The Practical Way
 
-<!-- TODO: native `tools=`/`tool_choice` API (OpenAI SDK / LM Studio / Ollama), `tool_calls` field,
-constrained decoding explanation, model-support capability check, `tool`-role feedback. See
-notes/function_calling_improvements.md items 1 and 4. -->
+So far, we've asked the model to put its tool call inside plain text and then hunted for it ourselves. Most LLM APIs — including the OpenAI-compatible one we've been using — offer a far more direct way to do this: a `tools` parameter you pass alongside your messages, built from exactly the kind of JSON schema we wrote by hand above. Instead of a wall of text to search through, the response comes back with a dedicated `tool_calls` field naming the tool and its arguments directly.
+
+How does this actually get more reliable, rather than just moving the same problem into a different field? Under the hood, the serving stack — LM Studio, Ollama, or OpenAI's own servers — uses the schema you pass to *constrain* which tokens the model is even allowed to generate at each step, the same mechanism behind the `pydantic`-based structured output from last session. The model still only predicts one token at a time; it's just no longer free to predict a token that would break the schema. That's why tool names, argument names and types come out valid now — not because the model got smarter, but because invalid options were taken off the table during generation. Keep in mind that this only guarantees the *shape* is right, not that the model picked the right tool or sensible values for it — more on that in the next section.
+
+:::{#tip-native_tool_call .callout-tip collapse="true" appearance="minimal"}
+### Example: calling the weather tool
+
+One wrinkle worth knowing about before you try it: `tool_calls` is a *list* — a model can request more than one tool call in a single turn — and each entry's `arguments` field is a JSON-encoded *string*, not already a Python dict. There's still one `json.loads()` call between you and usable arguments; the win is not having to hunt for where the JSON even starts.
+
+```python
+weather_tool = {
+    "type": "function",
+    "function": {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {"type": "string", "description": "City name"},
+                "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+            },
+            "required": ["location"]
+        }
+    }
+}
+
+response = client.chat.completions.create(
+    model="meta-llama-3.1-8b-instruct",
+    messages=[{"role": "user", "content": "What's the weather like in Berlin?"}],
+    tools=[weather_tool]
+)
+
+print(response.choices[0].message.tool_calls)
+```
+
+> **Response:** `[ChatCompletionMessageToolCall(id='call_abc123', function=Function(arguments='{"location": "Berlin", "unit": "celsius"}', name='get_current_weather'), type='function')]`
+
+```python
+call = response.choices[0].message.tool_calls[0]
+call.function.name       # 'get_current_weather'
+call.function.arguments  # '{"location": "Berlin", "unit": "celsius"}' — still a string!
+```
+:::
+
+Not every local model supports this yet — it depends on whether the model was trained with tool calling in mind, and whether your serving tool recognizes it. In LM Studio, check whether the model is flagged for tool use (or query its `/api/v0/models` endpoint for a `capabilities` field); for Ollama, recent Llama, Qwen, and Mistral models are safe bets.
+
+::: {.callout-note}
+## 📝 Task
+
+Try it!
+
+1. Reuse the `client` object from earlier.
+2. Define a tool schema for `get_current_weather` (or one of your own) in the format shown above.
+3. Send a message that should trigger that tool, passing your tool list via `tools=`.
+4. Print `response.choices[0].message.tool_calls` and inspect it: which tool did the model choose, and what are the (still string!) arguments?
+5. If `tool_calls` comes back empty even though it should have triggered, your model/server combination probably doesn't support this yet — try a different model and compare.
+6. (Optional) Send a message that should *not* need any tool, and see what comes back instead.
+
+:::
 
 ### Limits that remain either way
 
