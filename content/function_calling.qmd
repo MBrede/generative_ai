@@ -179,7 +179,7 @@ The second step is to provide a good prompt. The prompt should make it clear to 
 
     You are a helpful assistant that generates tool calls based on user input. Only use the tools you have been provided with.
 
-    {tool definition as described above}
+    {tool definition as described above} # by this i mean copy the content from the tool description into this line. 
 
     User: What's the weather like in Berlin?
 
@@ -335,21 +335,92 @@ Model quality still matters here, just for a narrower reason than it used to. Th
 
 ### Tool execution
 
-Until now, we only made the LLM generate the function call. The next step would be to parse the LLM output for function calls and then safely execute them. The result (i.e. the response of the function) would then be fed into the LLM via the memory function, and the LLM would be prompted to generate the final answer to the user. This is left as an exercise to the reader. 
+Until now, we've only made the LLM generate a tool call — first by hand, then with the native API — and read what came back. The missing piece is steps 4-6 from the Motivation section: parse the call, execute it, and feed the result back so the LLM can produce a final answer.
+
+#### Under the hood
+
+Without a native API, you have to invent your own signal for "this is a tool call" and write your own parser for it — for example, prompting the model to wrap calls in a marker like `<tool>{tool to use}</tool>` or a keyword like `tool:`, then scanning the response for it and pulling the tool name and arguments into a plain Python dict yourself.
+
+This marker trick is, in fact, exactly what's happening under the hood of the native API too: tool-trained models are fine-tuned to emit their own fixed, recognizable marker (a special token, or a model-specific string like `<tool_call>` or `[TOOL_CALLS]`) whenever they decide a tool call is warranted — that decision itself is never constrained, it's just learned behavior. The serving stack only enforces the JSON schema *after* it recognizes that marker, and it has to know the specific model family's marker convention in advance to do so. Hand-rolling your own marker and parsing for it is a perfectly good way to see that mechanism up close; the native API is the same idea with a known marker and a grammar enforced on the far side of it.
+
+For JSON-based tool calls — the ones you just parsed into a dict — actually running them is simple: build a dictionary mapping tool names to the Python functions that implement them, look up the name you parsed, and call it with the parsed arguments (e.g. `tools_by_name[call["name"]](**call["arguments"])`). Since you only ever call functions you wrote yourself and listed in that dictionary, there's nothing here the model can trick you into running that you didn't already allow.
+
+Code-generated tool calls are a different story: naively `exec()`-ing a parsed-out Python snippet runs whatever the model wrote, with whatever access your process has — there's no dictionary of allowed names to fall back on, and no grammar that can guarantee generated code is *safe* the way one guarantees JSON is valid. We won't implement a safe version of this here — you'll see proper safeguards (restricted execution environments, sandboxing, LLM-based code review) in the Data Analysis session, where this exact problem comes up again. For now: treat `exec()` on model-written code as a demonstration of the mechanism, not something to do with untrusted input.
 
 ::: {.callout-note}
 ## 📝 Task
 
-Try it! Since this is a bit more involved, this is an optional exercise. 
+Try it! This one's a bit more involved, since it's where everything from this session comes together.
 
-1. Reuse your chatbot with memory for this, since we need the memory function.
-2. Add the function calling setup from above. It helps to prompt the model to indicate tool usage with specific signals, e.g. html-tags `<tool> {tool to use} </tool>` or keywords like `tool:` {tool to use}. 
+1. Reuse your chatbot with memory for this, since we need the memory.
+2. Add the JSON-based tool-calling setup from above. It helps to prompt the model to indicate tool usage with specific signals, e.g. html-tags `<tool> {tool to use} </tool>` or keywords like `tool:` {tool to use}.
 3. If not already done so, specify that tool use is optional and that the LLM is allowed to generate the final answer if it thinks it has all the required information.
-4. Parse the model output for tool calls. The signal words or keys defined above help here. 
-5. Execute the function. 
-6. Feed the function response back to the LLM. Hopefully, it will generate a final answer.
-7. Tweak your setup until it works. 
+4. Parse the model output for tool calls. The signal words or keys defined above help here.
+5. Execute the tool via a dict-based lookup (tool name → Python function), as described above.
+6. Feed the result back to the LLM (a simple "Observation: ..." message works for this hand-rolled version; the native API's dedicated `tool` role, covered next, is the more correct way to do this). Hopefully, it will generate a final answer.
+7. Tweak your setup until it works.
 
+:::
+
+#### With the native API
+
+With the native API, there's no parsing step at all: `response.choices[0].message.tool_calls` already gives you a tool name and arguments directly. Dispatch is just a dictionary lookup, and the message schema has a dedicated `tool` role for feeding the result back.
+
+:::{#tip-tool_dispatch .callout-tip collapse="true" appearance="minimal"}
+### Example: executing a tool call and feeding back the result
+
+```python
+import json
+
+def get_current_weather(location, unit="celsius"):
+    return f"It's sunny and 21°{unit[0].upper()} in {location}."
+
+tools_by_name = {"get_current_weather": get_current_weather}
+
+messages = [{"role": "user", "content": "What's the weather like in Berlin?"}]
+response = client.chat.completions.create(
+    model="meta-llama-3.1-8b-instruct",
+    messages=messages,
+    tools=[weather_tool]
+)
+
+call = response.choices[0].message.tool_calls[0]
+function = tools_by_name[call.function.name]
+arguments = json.loads(call.function.arguments)
+result = function(**arguments)
+
+messages.append(response.choices[0].message)
+messages.append({
+    "role": "tool",
+    "tool_call_id": call.id,
+    "content": result,
+})
+
+final_response = client.chat.completions.create(
+    model="meta-llama-3.1-8b-instruct",
+    messages=messages,
+    tools=[weather_tool]
+)
+
+print(final_response.choices[0].message.content)
+```
+
+> **Response:** "It's sunny and 21°C in Berlin right now!"
+
+The result doesn't have to be a success story — if the function raises or the arguments don't make sense, feeding back something like `"content": "Error: location not found"` works the same way: it's just another observation for the model to react to.
+:::
+
+For code-generated tool calls, the equivalent of "the practical way" isn't a library to install locally — it's a provider-hosted, sandboxed code-execution tool, since the safety problem from above needs real isolation, not just a cleaner API. Locally, you're stuck with the under-the-hood version above, and the caution that comes with it.
+
+::: {.callout-note}
+## 📝 Task
+
+Try it!
+
+1. Reuse the tool call you generated with the native API earlier.
+2. Look up and call the matching Python function, following the pattern above.
+3. Add the model's tool-call message and your tool's result (as a `tool` message) to your message list.
+4. Call the API again with the updated messages and print the final answer.
 
 :::
 
