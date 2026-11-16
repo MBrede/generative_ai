@@ -424,6 +424,16 @@ Try it!
 
 :::
 
+## Wrap-up
+
+We set out to open up two pieces of the harness that sit underneath every chatbot and tool-using assistant you've used: a way to remember, and a way to act.
+
+For memory, we saw that the model itself contributes nothing — every call is stateless — so the harness has to keep the conversation history itself and resend it every time. For tool calling, we saw a longer arc: the model still can't act, so it has to produce a structured request instead, first by hand (JSON or code, parsed and executed by hand), then via a native API that makes the JSON path far more reliable — though only for the *shape* of the request, never for whether it was the right one to make.
+
+**Take-home message:** nothing in this session made the model smarter. We never changed a single weight. Everything we built — the history list, the JSON schema, the parser, the dispatch table, the constrained decoding — is harness: code sitting around a model that still just turns the text in front of it into more text, once, with no memory and no hands. That harness is what turns a stateless text-completion engine into something that feels like it remembers you and can get things done.
+
+That's exactly the shape we promised at the start: take something outside the model's own turn — a message history, or a tool's result — handle it outside the model, feed it back in for the next call. Next time, we start asking a different question: what happens once we let the model itself decide when to make that loop continue?
+
 ## Project work
 
 Time to work on your projects!
