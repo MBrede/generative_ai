@@ -14,7 +14,7 @@ source('../_src/gif_handling.R')
 This chapter provides a brief introduction to the history and function of modern language models, focusing on their practical use in text generation tasks.
 It will then give a short introduction on how to utilize pretrained language models for your own applications.
 
-## Language Model Basics
+## Language Model Basics {#sec-lmbasics}
 
 Language models have diverse applications, including speech recognition, machine translation, text generation, and question answering. While we'll concentrate on **text generation** for this course, understanding the general concept of language models is crucial. Given language's inherent complexity and ambiguity, a fundamental challenge in NLP is creating structured representations that can be employed downstream.
 This section will first explore the evolution of these representations before introducing the transformer architecture, which forms the foundation of most modern language models.

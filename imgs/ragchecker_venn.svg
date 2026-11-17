@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 827" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <rect width="640" height="827" fill="#ffffff"/>
+  <circle cx="240" cy="210" r="150" fill="#4c9be8" fill-opacity="0.28" stroke="#2f6fb0" stroke-width="2"/>
+  <circle cx="400" cy="210" r="150" fill="#e8584c" fill-opacity="0.25" stroke="#b0392f" stroke-width="2"/>
+  <circle cx="320" cy="345" r="150" fill="#5cb85c" fill-opacity="0.25" stroke="#3d8b3d" stroke-width="2"/>
+  <text x="130" y="40" text-anchor="middle" font-weight="bold" fill="#2f6fb0">ground-truth answer</text>
+  <text x="510" y="40" text-anchor="middle" font-weight="bold" fill="#b0392f">model response</text>
+  <text x="320" y="540" text-anchor="middle" font-weight="bold" fill="#3d8b3d">retrieved context</text>
+  <g text-anchor="middle" fill="#222">
+    <text x="165" y="165"><tspan x="165">missing,</tspan><tspan x="165" dy="17">never retrieved</tspan><tspan x="165" dy="16" font-size="11.5" font-style="italic" fill="#555">(low claim recall)</tspan></text>
+    <text x="320" y="105"><tspan x="320">correct,</tspan><tspan x="320" dy="17">not from context</tspan><tspan x="320" dy="16" font-size="11.5" font-style="italic" fill="#555">(self-knowledge)</tspan></text>
+    <text x="475" y="170"><tspan x="475" font-weight="bold">hallucination</tspan></text>
+    <text x="320" y="265"><tspan x="320" font-weight="bold">correct</tspan><tspan x="320" dy="17">and grounded</tspan></text>
+    <text x="225" y="283"><tspan x="222">missing,</tspan><tspan x="222" dy="17">retrieved</tspan><tspan x="222" dy="17">but unused</tspan><tspan x="222" dy="16" font-size="11.5" font-style="italic" fill="#555">(low context</tspan><tspan x="222" dy="14" font-size="11.5" font-style="italic" fill="#555">utilization)</tspan></text>
+    <text x="418" y="295"><tspan x="418">wrong, copied</tspan><tspan x="418" dy="17">from context</tspan><tspan x="418" dy="16" font-size="11.5" font-style="italic" fill="#555">(noise</tspan><tspan x="418" dy="14" font-size="11.5" font-style="italic" fill="#555">sensitivity)</tspan></text>
+    <text x="320" y="425"><tspan x="320">irrelevant</tspan><tspan x="320" dy="17">chunks</tspan><tspan x="320" dy="16" font-size="11.5" font-style="italic" fill="#555">(low context precision)</tspan></text>
+  </g>
+  <line x1="30" y1="565" x2="610" y2="565" stroke="#ccc"/>
+  <g font-size="13" fill="#222">
+    <text x="30" y="590" font-weight="bold" fill="#555">overall</text>
+    <text x="120" y="590" font-style="italic">precision</text>
+    <text x="265" y="590">= correct / all response claims</text>
+    <text x="120" y="614" font-style="italic">recall</text>
+    <text x="265" y="614">= correct / all ground-truth claims</text>
+    <text x="30" y="646" font-weight="bold" fill="#555">retriever</text>
+    <text x="120" y="646" font-style="italic">claim recall</text>
+    <text x="265" y="646">= ground-truth claims in context / all ground-truth claims</text>
+    <text x="120" y="670" font-style="italic">context precision</text>
+    <text x="265" y="670">= chunks with a ground-truth claim / all retrieved chunks</text>
+    <text x="30" y="702" font-weight="bold" fill="#555">generator</text>
+    <text x="120" y="702" font-style="italic">context utilization</text>
+    <text x="265" y="702">= correct and grounded / ground-truth claims in context</text>
+    <text x="120" y="726" font-style="italic">hallucination</text>
+    <text x="265" y="726">= hallucination / all response claims</text>
+    <text x="120" y="750" font-style="italic">noise sensitivity</text>
+    <text x="265" y="750">= wrong, copied from context / all response claims</text>
+    <text x="120" y="774" font-style="italic">self-knowledge</text>
+    <text x="265" y="774">= correct, not from context / all response claims</text>
+    <text x="120" y="798" font-style="italic">faithfulness</text>
+    <text x="265" y="798">= response claims in context / all response claims</text>
+  </g>
+</svg>
