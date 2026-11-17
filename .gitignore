@@ -18,3 +18,6 @@ figure-latex
 .venv/
 .venv
 **/*.quarto_ipynb
+
+# local discussion/review notes, not for the repo
+/notes/

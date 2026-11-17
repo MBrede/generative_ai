@@ -1,20 +1,22 @@
 ---
-toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and Function Calling</h3>'
+toc-title: '![](../imgs/function calling.png){width=240px}<br> <h3>Chatbots and Tool Calling</h3>'
 ---
 
 <!--  -->
-# Chatbots and Function Calling {#sec-functioncalling}
+# Chatbots and Tool Calling {#sec-functioncalling}
+
+So far, we've only ever looked at the model in isolation: one prompt in, one response out. But real assistants seem to do much more than that — they remember what you told them, and they can look things up or do things they were never trained to do directly. Both of those look like abilities of the model. They aren't. The LLM itself is still just a function from text to text, called once, with no memory of anything before and no way to act on anything outside the conversation. Everything else — remembering, acting — is the *harness*: the code wrapped around the model that makes up for exactly these two gaps. Today we build both halves of it: one that gives the model memory, one that gives it tools. You'll notice they share the same basic shape — take something the model produced (or something it needs), handle it outside the model, feed the result back in for the next call.
 
 ## Chatbots
 
-So far, we covered connecting with a local LLM and getting a single response. We also discussed the difference between base models and instruct-tuned models. On thing though is still missing, especially if you want to have something resembling a meaningful conversation with the LLM. 
+So far, we covered connecting with a local LLM and getting a single response. We also discussed the difference between base models and instruct-tuned models. One thing though is still missing, especially if you want to have something resembling a meaningful conversation with the LLM.
 
 ::: {.callout-note}
 ## 📝 Task
 
 Let's talk!
 
-1. Open a notebook and connect to a local LLM using LM Studio.
+1. Open a notebook and connect to a local LLM using LM Studio (or Ollama or any other framework of your choice).
 2. Tell the LLM something about you.
 3. In a second call, ask the LLM what you just told it. It should know, right? You just told it.
 
@@ -32,7 +34,7 @@ from openai import OpenAI
 
 class LLMCall():
     
-    def __init__(self, client, model, system_message = "You are a helpful AI agent.", temperature = 0.7):
+    def __init__(self, client, model, system_message = "You are a helpful AI assistant.", temperature = 0.7):
         self.client = client
         self.model = model
         self.temperature = temperature
@@ -52,23 +54,23 @@ class LLMCall():
 
 client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
 
-llm_assistent = LLMCall(client=client, model="meta-llama-3.1-8b-instruct")
+llm_assistant = LLMCall(client=client, model="meta-llama-3.1-8b-instruct")
 
 ```
 
 ```python
-llm_assistent.simple_call("Please remember that i really like potatoes")
+llm_assistant.simple_call("Please remember that i really like potatoes")
 ```
 
-    "A potato enthusiast! I'll make sure to keep that in mind as we chat. Do you have a favorite way of preparing or using potatoes? Are you more into baked, mashed, roasted, or maybe something else entirely? Let me know and I can try to suggest some delicious ideas for you."
+> **Response:** "A potato enthusiast! I'll make sure to keep that in mind as we chat. Do you have a favorite way of preparing or using potatoes? Are you more into baked, mashed, roasted, or maybe something else entirely? Let me know and I can try to suggest some delicious ideas for you."
 
 ```python
-llm_assistent.simple_call("what food item do i like to eat?")
+llm_assistant.simple_call("what food item do i like to eat?")
 ```
-    "I'm happy to help you, but I don't have any prior knowledge about your preferences or eating habits. However, I can try to make an educated guess.\n\nCan you give me some hints or clues about the type of cuisine or food item that you enjoy? For example:\n\n- Do you like sweet treats or savory dishes?\n- Are you a meat-lover or do you prefer plant-based options?\n- Do you have a favorite continent or country's cuisine (e.g. Italian, Chinese, Mexican)?\n- Is there a particular texture or consistency you prefer (e.g. crunchy, soft, chewy)?\n\nLet me know and I can try to suggest some possibilities!"
+> **Response:** "I'm happy to help you, but I don't have any prior knowledge about your preferences or eating habits. However, I can try to make an educated guess.\n\nCan you give me some hints or clues about the type of cuisine or food item that you enjoy? For example:\n\n- Do you like sweet treats or savory dishes?\n- Are you a meat-lover or do you prefer plant-based options?\n- Do you have a favorite continent or country's cuisine (e.g. Italian, Chinese, Mexican)?\n- Is there a particular texture or consistency you prefer (e.g. crunchy, soft, chewy)?\n\nLet me know and I can try to suggest some possibilities!"
 :::
 
-As you have seen, the LLM cannot remember what we just told it. In technical terms, we say the LLM is stateless. To emphasize this: this is not what most people expect. It clearly is not how conversations with people work, it is also not how conversations with popular chatbots (i.e. chatgpt or claude) usually go. So, what is missing, here?
+As you have seen, the LLM cannot remember what we just told it. In technical terms, we say the LLM is stateless. To emphasize this: this is not what most people expect. It clearly is not how conversations with people work, it is also not how conversations with popular chatbots (e.g. ChatGPT or Claude) usually go. So, what is missing, here?
 
 ::: {.callout-note}
 ## 📝 Task
@@ -77,34 +79,35 @@ We should have a conversation.
 
 1. In your notebook, write a chat function or method that does the following:
     - saves the conversation history.
-    - adds the user' message to the history.
+    - adds the user's message to the history.
     - sends the system message plus conversation to the LLM.
     - adds the response to the history
 
 2. Test the chat function as above.
 3. Can you see any downsides of this approach? What about long conversations?
-4. (Optional) Implement a limit to the conversation length. Make sure the system message is always read. 
+4. (Optional) Implement a limit to the conversation length. Make sure the system message is always read.
 
-3. Upload your results to Moodle.
+5. Upload your results to Moodle.
 :::
 
-Congratulations! You just build yourself a chatbot. 
+Congratulations! You just built yourself a chatbot.
 
 Here are this section's take home messages:
 
-1. A single LLM call is stateless—it has no memory of previous interactions. Each request is independent. 
+1. A single LLM call is stateless—it has no memory of previous interactions. Each request is independent.
 2. To enable multi-turn conversations, we need to
     - Store the conversation history (user and assistant messages).
     - Send the full history with each new request. (As long as it fits within the context window.)
+3. What we built here is only the simplest kind of memory: *session* (or conversation) memory, which just replays the raw history. Real systems often do more — summarizing old messages instead of resending them verbatim, retrieving relevant facts from a knowledge store instead of the full history, or even remembering things about you across entirely different conversations. We're only scratching the surface of memory here.
 
+Memory solved one gap — the model forgetting. Now we tackle the other one: the model being unable to reach outside the conversation at all.
 
-
-## Function Calling
+## Tool Calling
 
 ### Motivation
 
 
-Sometimes you want your AI assistant to answer more complex tasks then the LLM can handle out of the box. For example, you might want to ask questions regarding documents or datasets on your hard drive, or ask about recent events. This is a hard task for an LLM, because, if it was not trained on this information, i.e. the information wasn't part of its training data, it won't be able to answer these questions correctly. 
+Sometimes you want your AI assistant to answer more complex tasks than the LLM can handle out of the box. For example, you might want to ask questions regarding documents or datasets on your hard drive, or ask about recent events. This is a hard task for an LLM, because, if it was not trained on this information, i.e. the information wasn't part of its training data, it won't be able to answer these questions correctly. 
 
 ::: {.callout-note}
 ## 📝 Task
@@ -119,42 +122,43 @@ Try it!
 :::
 
 
-To solve this problem, we need to give the LLM assistant some tools it can use to access this additional information. This is where **function calling** comes into play. Function calling allows the assistant to call a function with specific parameters to get the required information. The function then returns the requested data or performs the necessary task, and the LLM can continue generating its response based on that information.
+To solve this problem, we need to give the LLM access to tools it can use to reach outside the conversation. This is where **tool calling** comes into play (you'll also see this called *function calling* — that's the older, narrower term, from back when a tool was always a plain function you wrote yourself; today a tool can just as well be a provider-hosted capability like web search). Tool calling lets the model request that a specific tool be invoked with specific arguments to get the information or effect it needs. The harness then actually runs that tool and feeds the result back, and the LLM can continue generating its response based on that information.
 
-This is what we call an LLM agent or agent system. We will look deeper into agents (and alternatives) soon. For now, we will just say that we have an *agent system* or that a system is *agentic* if the system has access to tools or functions and if the LLM decides which tools to use and when (or if). 
+We'll hold off on calling this an *agent* for now — that word is doing a lot of different jobs across the industry, and we'll give it a precise definition once we get to agents later in the course. Today we're only building the piece underneath: letting the model ask for a tool call at all.
 
 
-A basic agentic workflow may look like this: 
+Under the hood, a basic tool-calling workflow looks like this:
 
 1. The user inputs a question or task.
-2. The LLM determines if it needs additional information or assistance from external tools.
-3. If needed, the LLM calls a function with specific parameters to retrieve the required data or perform the necessary task. This means the LLM generates an answer containing either some executable code or a JSON object containing the name of the function and its parameters. These functions have to be defined in advance. 
-4. The LLM response is then scanned for these elements (code or JSON object) and these are executed if possible.
-5. The response is then fed back into the LLM (usually as user input) for further processing. 
-6. The LLM uses the returned information to continue generating its response.
+2. The LLM decides whether it needs a tool to answer it.
+3. If so, the LLM generates a tool call: structured output naming which tool to use and what arguments to call it with (a JSON object, or — less commonly today — a snippet of code). These tools have to be defined in advance.
+4. The harness parses that output to extract the tool call.
+5. The harness executes it.
+6. The harness feeds the result back to the LLM — as a dedicated `tool` message — for further processing.
+7. The LLM uses the returned information to continue generating its response.
 
-We obviously need the conversation history from earlier for this to work. We also need to give the system access to the functions.
+We obviously need the conversation history from earlier for this to work — that's the memory half of the harness. We also need to give the system access to the tools themselves.
 
-**Note:** As stated above, the functions need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however not the best idea for reasons of security. 
-
-
-There are two main ways to implement function calling:
-
-1. **Structured output**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the function and its parameters. 
-2. **Code generation**: Here, we ask the LLM to generate the function calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined functions. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine. 
-
-Today, we will not implement the full agentic workflow outlined above. We will get there eventually, though. Here, we want to focus on step 3, the function call. The aim is to take a user request and translate it into structured output, either JSON or code. In the following, we will explore how to do it. 
+**Note:** As stated above, the tools need to be predefined. In theory, we could just give the LLM its task and let it generate code to be executed. This is, however, not generally a good idea for reasons of security — more on that when we get to code generation and tool execution.
 
 
+There are two main ways to implement tool calling:
 
-### Structured output
+1. **Structured Output (JSON)**: Here, the LLM is tasked to generate a tool call in the form of a JSON object containing the name of the tool and its parameters.
+2. **Code Generation**: Here, we ask the LLM to generate the tool calls in the form of executable python code. Usually, we still want to restrict the LLM to use only predefined tools. Nevertheless, this can pose a severe security issue because this approach hinges on running generated code on your machine.
 
-The traditional way^[In this context, *traditional* means: people have been using it for more than a year. ] of doing function calling is to generate a JSON object containing the name of the function and its parameters. Until recently, all major agent frameworks (more on agents next time) used this approach. Here, the LLM response is scanned for a JSON object. Function name and arguments are extracted and the function is executed, if possible. We already talked about generating structured output before. Here, we will use it to generate a function call. 
+Today, we'll work through the whole workflow above: first getting the model to generate a tool call at all — the historically hard part — using both structured output and code generation, and then, later in this session, actually parsing, executing, and feeding back a tool call ourselves: first by hand, to see the mechanics, then using the native API that handles most of it for us.
+
+
+
+### Structured Output (JSON)
+
+One of the two ways to implement tool calling (see Motivation above) is to have the model generate a JSON object naming the tool and its arguments — historically the first format to become mainstream.^[Though in a field that moves this fast, "first" can still mean "about a year ago."] We already talked about generating structured output before; here, we'll use it specifically to generate a tool call.
 
 
 #### Function definition
 
-The first step in using function calling is to define the functions that the LLM can call. This is done by providing a JSON schema that describes the name of the function, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: ^[Note, that this is not an executable implementation but just a description of the function for the LLM.]
+The first step in using tool calling is to define the tools the LLM can call. This is done by providing a JSON schema that describes the name of the tool, its arguments and their types. The JSON schema should be provided to the LLM in the system prompt. Here is an example: ^[Note, that this is not an executable implementation but just a description of the tool for the LLM.]
 
 
     {
@@ -166,16 +170,16 @@ The first step in using function calling is to define the functions that the LLM
             } 
     }
 
-Function name and description should be as clear as possible to make it easier for the LLM to decide which function to use and how to properly use it. Argument names and types should be as precise as possible to avoid ambiguity in the function call.
+Tool name and description should be as clear as possible to make it easier for the LLM to decide which tool to use and how to properly use it. Argument names and types should be as precise as possible to avoid ambiguity in the tool call.
 
 
 #### Prompting
 
-The second step is to provide a good prompt. The prompt should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for function calling:
+The second step is to provide a good prompt. The prompt should make it clear to the LLM to only generate valid output and that it should follow the JSON schema. Here is an example of a prompt that can be used for tool calling:
 
-    You are a helpful assistant that generates function calls based on user input. Only use the functions you have been provided with.
+    You are a helpful assistant that generates tool calls based on user input. Only use the tools you have been provided with.
 
-    {function definition as described above}
+    {tool definition as described above} # by this i mean copy the content from the tool description into this line. 
 
     User: What's the weather like in Berlin?
 
@@ -184,7 +188,7 @@ The second step is to provide a good prompt. The prompt should make it clear to 
         "arguments": {"location": "Berlin", "unit": "celsius"}
     }
 
-Another way of forcing the LLM to output structured format is to use ``pydantic`` classes as described last time. 
+Another way of forcing the LLM to output a structured format is to use ``pydantic`` classes as described last time.
 
 ::: {.callout-note}
 ## 📝 Task
@@ -192,51 +196,18 @@ Another way of forcing the LLM to output structured format is to use ``pydantic`
 Try it!
 
 1. Open a notebook and connect to a local LLM using LM Studio.
-2. Define the function `get_current_weather` as shown above.
-3. Write a prompt that asks the LLM to generate a function call based on user input. Use prompt engineering as shown above or pydantic classes as shown last time. 
+2. Define the tool `get_current_weather` as shown above.
+3. Write a prompt that asks the LLM to generate a tool call based on user input. Use prompt engineering as shown above or pydantic classes as shown last time.
 4. Test the prompt with an example input.
-5. Define other functions and try other inputs and see if the LLM generates valid output.
+5. Define other tools and try other inputs and see if the LLM generates valid output.
 
 :::
-
-#### Challenges, fine-tuned models and the influence of size
-
-The main challenge is here to get the LLM to generate a valid answer. This is not always easy, as LLMs are not usually super safe coders 😃.
-
-- They can hallucinate functions or arguments that do not exist.
-- They can forget to call a function.
-- They can forget to provide all required arguments.
-- They can provide the wrong type for an argument.
-- They can provide invalid values for an argument.
-
-There are several strategies to mitigate these issues:
-
-1. **Prompt engineering**: A good prompt can help to guide the LLM towards generating valid output. This is especially true for larger models, as they have a better understanding of the world and can therefore generate more accurate responses.
-2. **Finetuning**: Finetuning a model on a specific task can improve its performance on that task. This is especially useful for smaller models, as they are less likely to hallucinate functions or arguments that do not exist.
-3. **Size**: Larger models are better at generating valid output than smaller models. However, larger models are also more expensive to run and require more computational resources.
-
-::: {.callout-note}
-## 📝 Task
-
-Test it! (we can do it together, if your hardware does not allow you to run the model.)
-
-As above, but this time
-
-<!--  update models -->
-
-1. use a very small model (e.g [a small qwen model](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF))
-2. use a larger model of the same model family (e.g. [this one](https://huggingface.co/Qwen/Qwen3-8B-GGUF))
-3. use a model fine-tuned for the task (see the small tool symbol in LMStudio). You could try [this one](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF)
-<!-- 3. a larger model ([a larger llama in this case](https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF)) -->
-4. use a model of the same family not fine-tuned on this Task.
-5. Try changing the temperature as well. What effect does this have? 
-
-:::
-
 
 ### Code Generation
 
-The exception mentioned above is the [smolagents framework](https://huggingface.co/docs/smolagents/index). Here, the default mode is code generation, but JSON mode is also supported. (We will talk more about agents and the smolagents framework soon.) When using this approach, the function definition and description will be given to the LLM as python code. Additionally, the LLM is expected to generate the function call also as valid python code. As with structured output, function name and description should be as clear as possible. Typing might also help. 
+The second mainstream paradigm is code generation, popularized by frameworks like [smolagents](https://huggingface.co/docs/smolagents/index), where it's the default mode (JSON mode is also supported there). Instead of asking the model for a JSON object, we ask it to write a short Python snippet that calls the tool directly — this becomes attractive once you have many tools available, since a script chaining several calls together can be far more token-efficient than round-tripping JSON tool calls one at a time. When using this approach, the tool definition and description are given to the LLM as python code, and the LLM is expected to generate the tool call also as valid python code. As with structured output, tool name and description should be as clear as possible. Typing might also help.
+
+Unlike JSON mode, there's no native, local fix that makes this safe or reliable by construction — which is exactly why execution-time safety matters so much here, as we'll see when we get to actually running these calls.
 
 
 ::: {.callout-note}
@@ -267,25 +238,201 @@ Try it!
 :::
 
 
-### Tool execution
+### The Practical Way
 
-Until now, we only made the LLM generate the function call. The next step would be to parse the LLM output for function calls and then safely execute them. The result (i.e. the response of the function) would then be fed into the LLM via the memory function, and the LLM would be prompted to generate the final answer to the user. This is left as an exercise to the reader. 
+So far, we've asked the model to put its tool call inside plain text and then hunted for it ourselves. Most LLM APIs — including the OpenAI-compatible one we've been using — offer a far more direct way to do this: a `tools` parameter you pass alongside your messages, built from exactly the kind of JSON schema we wrote by hand above. Instead of a wall of text to search through, the response comes back with a dedicated `tool_calls` field naming the tool and its arguments directly.
+
+How does this actually get more reliable, rather than just moving the same problem into a different field? Under the hood, the serving stack — LM Studio, Ollama, or OpenAI's own servers — uses the schema you pass to *constrain* which tokens the model is even allowed to generate at each step, the same mechanism behind the `pydantic`-based structured output from last session. The model still only predicts one token at a time; it's just no longer free to predict a token that would break the schema. That's why tool names, argument names and types come out valid now — not because the model got smarter, but because invalid options were taken off the table during generation. Keep in mind that this only guarantees the *shape* is right, not that the model picked the right tool or sensible values for it — more on that in the next section.
+
+:::{#tip-native_tool_call .callout-tip collapse="true" appearance="minimal"}
+### Example: calling the weather tool
+
+One wrinkle worth knowing about before you try it: `tool_calls` is a *list* — a model can request more than one tool call in a single turn — and each entry's `arguments` field is a JSON-encoded *string*, not already a Python dict. There's still one `json.loads()` call between you and usable arguments; the win is not having to hunt for where the JSON even starts.
+
+```python
+weather_tool = {
+    "type": "function",
+    "function": {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {"type": "string", "description": "City name"},
+                "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+            },
+            "required": ["location"]
+        }
+    }
+}
+
+response = client.chat.completions.create(
+    model="meta-llama-3.1-8b-instruct",
+    messages=[{"role": "user", "content": "What's the weather like in Berlin?"}],
+    tools=[weather_tool]
+)
+
+print(response.choices[0].message.tool_calls)
+```
+
+> **Response:** `[ChatCompletionMessageToolCall(id='call_abc123', function=Function(arguments='{"location": "Berlin", "unit": "celsius"}', name='get_current_weather'), type='function')]`
+
+```python
+call = response.choices[0].message.tool_calls[0]
+call.function.name       # 'get_current_weather'
+call.function.arguments  # '{"location": "Berlin", "unit": "celsius"}' — still a string!
+```
+:::
+
+Not every local model supports this yet — it depends on whether the model was trained with tool calling in mind, and whether your serving tool recognizes it. In LM Studio, check whether the model is flagged for tool use (or query its `/api/v0/models` endpoint for a `capabilities` field); for Ollama, recent Llama, Qwen, and Mistral models are safe bets.
 
 ::: {.callout-note}
 ## 📝 Task
 
-Try it! Since this is a bit more involved, this is an optional exercise. 
+Try it!
 
-1. Reuse your chatbot with memory for this, since we need the memory function.
-2. Add the function calling setup from above. It helps to prompt the model to indicate tool usage with specific signals, e.g. html-tags `<tool> {tool to use} </tool>` or keywords like `tool:` {tool to use}. 
-3. If not already done so, specify that tool use is optional and that the LLM is allowed to generate the final answer if it thinks it has all the required information.
-4. Parse the model output for tool calls. The signal words or keys defined above help here. 
-5. Execute the function. 
-6. Feed the function response back to the LLM. Hopefully, it will generate a final answer.
-7. Tweak your setup until it works. 
-
+1. Reuse the `client` object from earlier.
+2. Define a tool schema for `get_current_weather` (or one of your own) in the format shown above.
+3. Send a message that should trigger that tool, passing your tool list via `tools=`.
+4. Print `response.choices[0].message.tool_calls` and inspect it: which tool did the model choose, and what are the (still string!) arguments?
+5. If `tool_calls` comes back empty even though it should have triggered, your model/server combination probably doesn't support this yet — try a different model and compare.
+6. (Optional) Send a message that should *not* need any tool, and see what comes back instead.
 
 :::
+
+### Limitations
+
+The Practical Way guarantees that a tool call comes back in the right *shape* — a valid tool name, valid argument types, all required fields present. It does not guarantee the model made the right *decision*. A few classic failure modes disappear once you're using constrained decoding; a few don't, because they were never shape problems in the first place.
+
+**Solved by constrained decoding** — worth knowing these used to be common, because with the native API they're largely gone:
+
+- Hallucinating a tool name that doesn't exist — generation is constrained to the tools you supplied.
+- Hallucinating an argument that doesn't exist — constrained to the schema's declared fields.
+- Wrong type for an argument — the schema enforces type.
+- Missing a required argument — strict schemas enforce presence.
+
+**Still live** — these are reasoning/behavior problems, upstream of any shape constraint:
+
+- Deciding *whether* to call a tool at all — forgetting to call one when it should have, or calling one when it shouldn't have.
+- Picking the *wrong* tool, especially when several similar or badly documented tools are on offer.
+- Free-text argument *plausibility* — a schema guarantees a field is a string, not that its content is correct (the right unit, a real place name, ...).
+
+Model quality still matters here, just for a narrower reason than it used to. The usual levers — a clearer prompt, a better or larger model, fine-tuning on this specific kind of task — still help with the "still live" column; they're no longer needed just to get a syntactically valid tool call at all.
+
+::: {.callout-note}
+## 📝 Task
+
+(Optional) Vibe check: is this actually better now?
+
+1. Connect to two models of different "ages" but similar size — for example [Llama 3.1 8B Instruct](https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF) (2024) and [Qwen3 8B](https://huggingface.co/Qwen/Qwen3-8B-GGUF) (2025) — using the native tools API from the previous section.
+2. Give both the same set of several *similar* or ambiguously named tools (e.g. `get_current_weather` next to a near-duplicate like `get_weather_forecast`), and ask something that should trigger exactly one of them.
+3. Also try a request that shouldn't need any tool at all, and one where a sensible argument value has to be guessed (e.g. a city with no unit specified).
+4. Compare: does the newer model pick the right tool more reliably? Does it know when *not* to call one? Are its guessed argument values more sensible?
+5. This isn't a controlled experiment — model families differ in plenty of ways besides "age." Treat it as a vibe check, not a benchmark.
+
+:::
+
+
+### Tool execution
+
+Until now, we've only made the LLM generate a tool call — first by hand, then with the native API — and read what came back. The missing piece is steps 4-6 from the Motivation section: parse the call, execute it, and feed the result back so the LLM can produce a final answer.
+
+#### Under the hood
+
+Without a native API, you have to invent your own signal for "this is a tool call" and write your own parser for it — for example, prompting the model to wrap calls in a marker like `<tool>{tool to use}</tool>` or a keyword like `tool:`, then scanning the response for it and pulling the tool name and arguments into a plain Python dict yourself.
+
+This marker trick is, in fact, exactly what's happening under the hood of the native API too: tool-trained models are fine-tuned to emit their own fixed, recognizable marker (a special token, or a model-specific string like `<tool_call>` or `[TOOL_CALLS]`) whenever they decide a tool call is warranted — that decision itself is never constrained, it's just learned behavior. The serving stack only enforces the JSON schema *after* it recognizes that marker, and it has to know the specific model family's marker convention in advance to do so. Hand-rolling your own marker and parsing for it is a perfectly good way to see that mechanism up close; the native API is the same idea with a known marker and a grammar enforced on the far side of it.
+
+For JSON-based tool calls — the ones you just parsed into a dict — actually running them is simple: build a dictionary mapping tool names to the Python functions that implement them, look up the name you parsed, and call it with the parsed arguments (e.g. `tools_by_name[call["name"]](**call["arguments"])`). Since you only ever call functions you wrote yourself and listed in that dictionary, there's nothing here the model can trick you into running that you didn't already allow.
+
+Code-generated tool calls are a different story: naively `exec()`-ing a parsed-out Python snippet runs whatever the model wrote, with whatever access your process has — there's no dictionary of allowed names to fall back on, and no grammar that can guarantee generated code is *safe* the way one guarantees JSON is valid. We won't implement a safe version of this here — you'll see proper safeguards (restricted execution environments, sandboxing, LLM-based code review) in the Data Analysis session, where this exact problem comes up again. For now: treat `exec()` on model-written code as a demonstration of the mechanism, not something to do with untrusted input.
+
+::: {.callout-note}
+## 📝 Task
+
+Try it! This one's a bit more involved, since it's where everything from this session comes together.
+
+1. Reuse your chatbot with memory for this, since we need the memory.
+2. Add the JSON-based tool-calling setup from above. It helps to prompt the model to indicate tool usage with specific signals, e.g. html-tags `<tool> {tool to use} </tool>` or keywords like `tool:` {tool to use}.
+3. If not already done so, specify that tool use is optional and that the LLM is allowed to generate the final answer if it thinks it has all the required information.
+4. Parse the model output for tool calls. The signal words or keys defined above help here.
+5. Execute the tool via a dict-based lookup (tool name → Python function), as described above.
+6. Feed the result back to the LLM (a simple "Observation: ..." message works for this hand-rolled version; the native API's dedicated `tool` role, covered next, is the more correct way to do this). Hopefully, it will generate a final answer.
+7. Tweak your setup until it works.
+
+:::
+
+#### With the native API
+
+With the native API, there's no parsing step at all: `response.choices[0].message.tool_calls` already gives you a tool name and arguments directly. Dispatch is just a dictionary lookup, and the message schema has a dedicated `tool` role for feeding the result back.
+
+:::{#tip-tool_dispatch .callout-tip collapse="true" appearance="minimal"}
+### Example: executing a tool call and feeding back the result
+
+```python
+import json
+
+def get_current_weather(location, unit="celsius"):
+    return f"It's sunny and 21°{unit[0].upper()} in {location}."
+
+tools_by_name = {"get_current_weather": get_current_weather}
+
+messages = [{"role": "user", "content": "What's the weather like in Berlin?"}]
+response = client.chat.completions.create(
+    model="meta-llama-3.1-8b-instruct",
+    messages=messages,
+    tools=[weather_tool]
+)
+
+call = response.choices[0].message.tool_calls[0]
+function = tools_by_name[call.function.name]
+arguments = json.loads(call.function.arguments)
+result = function(**arguments)
+
+messages.append(response.choices[0].message)
+messages.append({
+    "role": "tool",
+    "tool_call_id": call.id,
+    "content": result,
+})
+
+final_response = client.chat.completions.create(
+    model="meta-llama-3.1-8b-instruct",
+    messages=messages,
+    tools=[weather_tool]
+)
+
+print(final_response.choices[0].message.content)
+```
+
+> **Response:** "It's sunny and 21°C in Berlin right now!"
+
+The result doesn't have to be a success story — if the function raises or the arguments don't make sense, feeding back something like `"content": "Error: location not found"` works the same way: it's just another observation for the model to react to.
+:::
+
+For code-generated tool calls, the equivalent of "the practical way" isn't a library to install locally — it's a provider-hosted, sandboxed code-execution tool, since the safety problem from above needs real isolation, not just a cleaner API. Locally, you're stuck with the under-the-hood version above, and the caution that comes with it.
+
+::: {.callout-note}
+## 📝 Task
+
+Try it!
+
+1. Reuse the tool call you generated with the native API earlier.
+2. Look up and call the matching Python function, following the pattern above.
+3. Add the model's tool-call message and your tool's result (as a `tool` message) to your message list.
+4. Call the API again with the updated messages and print the final answer.
+
+:::
+
+## Wrap-up
+
+We set out to open up two pieces of the harness that sit underneath every chatbot and tool-using assistant you've used: a way to remember, and a way to act.
+
+For memory, we saw that the model itself contributes nothing — every call is stateless — so the harness has to keep the conversation history itself and resend it every time. For tool calling, we saw a longer arc: the model still can't act, so it has to produce a structured request instead, first by hand (JSON or code, parsed and executed by hand), then via a native API that makes the JSON path far more reliable — though only for the *shape* of the request, never for whether it was the right one to make.
+
+**Take-home message:** nothing in this session made the model smarter. We never changed a single weight. Everything we built — the history list, the JSON schema, the parser, the dispatch table, the constrained decoding — is harness: code sitting around a model that still just turns the text in front of it into more text, once, with no memory and no hands. That harness is what turns a stateless text-completion engine into something that feels like it remembers you and can get things done.
+
+That's exactly the shape we promised at the start: take something outside the model's own turn — a message history, or a tool's result — handle it outside the model, feed it back in for the next call. Next time, we start asking a different question: what happens once we let the model itself decide when to make that loop continue?
 
 ## Project work
 
