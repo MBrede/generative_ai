@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" font-family="Helvetica, Arial, sans-serif" font-size="15">
+  <rect x="10" y="10" width="620" height="295" rx="10" fill="#f4f4f4" stroke="#999"/>
+  <text x="24" y="290" fill="#555">all documents in the collection</text>
+  <circle cx="255" cy="170" r="110" fill="#4c9be8" fill-opacity="0.3" stroke="#2f6fb0" stroke-width="2"/>
+  <circle cx="385" cy="170" r="110" fill="#f0a030" fill-opacity="0.3" stroke="#b5741a" stroke-width="2"/>
+  <text x="190" y="40" text-anchor="middle" font-weight="bold" fill="#2f6fb0">relevant</text>
+  <text x="450" y="40" text-anchor="middle" font-weight="bold" fill="#b5741a">retrieved (top-k)</text>
+  <text x="195" y="160" text-anchor="middle" fill="#222"><tspan x="195">relevant,</tspan><tspan x="195" dy="18">missed</tspan></text>
+  <text x="320" y="160" text-anchor="middle" font-weight="bold" fill="#222"><tspan x="320">hits</tspan></text>
+  <text x="445" y="160" text-anchor="middle" fill="#222"><tspan x="445">retrieved,</tspan><tspan x="445" dy="18">irrelevant</tspan></text>
+  <text x="320" y="340" text-anchor="middle" fill="#222">precision = hits / retrieved     (how much of what we got is useful?)</text>
+  <text x="320" y="370" text-anchor="middle" fill="#222">recall = hits / relevant     (how much of what is useful did we get?)</text>
+</svg>

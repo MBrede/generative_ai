@@ -1,4 +1,6 @@
 ---
+resources:
+  - ../data/chunking_demo.json
 toc-title: '![](../imgs/rag.png){width=240px}<br> <h3>Embedding-based LLM-systems</h3>'
 ---
 
@@ -230,6 +232,159 @@ An alternative approach is to use **semantic chunking**. This means that you spl
 
 Another approach to semantic chunking is described on the doc-pages of [LlamaIndex](https://docs.llamaindex.ai/en/stable/examples/node_parsers/semantic_chunking/). In their approach to semantic chunking, an adaptive splitting-rule is used, that splits the documents based on semantic similarity of sentences. This means that sentences that are semantically similar are grouped together into chunks.
 
+@quSemanticChunkingWorth2025 compared two semantic chunkers of this kind against fixed-size chunking. The **breakpoint-based** chunker walks through the document and starts a new chunk wherever the cosine distance between two neighbouring sentences exceeds a threshold, which is usually set relative to all distances in the document, for example as a percentile. The **clustering-based** chunker clusters all sentences at once instead. Its distance mixes the semantic distance of two sentences with their distance in the document, weighted by a parameter λ, so a chunk can also collect sentences that are far apart. The result of the comparison is sobering: across document retrieval, evidence retrieval and answer generation, neither semantic chunker consistently beat the fixed-size baseline, which makes the additional compute hard to justify.
+
+The interactive illustration below applies all three strategies to the introduction of their paper. The colours mark the four paragraphs of the introduction, so a chunk with a single colour stays within one paragraph.
+
+```{ojs}
+//| echo: false
+//| output: false
+demo = FileAttachment("../data/chunking_demo.json").json()
+sents = demo.sentences
+n = sents.length
+S = demo.similarity
+topics = [...new Set(sents.map(d => d.topic))]
+color = new Map(topics.map((t, i) => [t, ["#7c3aed", "#059669", "#d97706", "#dc2626", "#2563eb", "#64748b"][i % 6]]))
+gaps = d3.range(n - 1).map(i => 1 - S[i][i + 1])
+dist = (a, b, lam) => Math.max(lam * Math.abs(a - b) / n + (1 - lam) * (1 - Math.max(S[a][b], 0)), 0)
+
+function fixedChunks(size, overlap) {
+  const out = [];
+  for (let s = 0; s < Math.max(n - overlap, 1); s += size - overlap) out.push(d3.range(s, Math.min(s + size, n)));
+  return out;
+}
+
+function splitAt(breaks) {
+  const edges = [0, ...breaks.map(b => b + 1), n];
+  return d3.pairs(edges).filter(([a, b]) => b > a).map(([a, b]) => d3.range(a, b));
+}
+
+// single linkage with a distance threshold = connected components of all pairs closer than the threshold
+function clusterChunks(lam, t) {
+  const parent = d3.range(n), find = i => parent[i] === i ? i : (parent[i] = find(parent[i]));
+  for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) if (dist(a, b, lam) < t) parent[find(a)] = find(b);
+  return d3.groups(d3.range(n), find).map(([, m]) => m).sort((x, y) => x[0] - y[0]);
+}
+
+function chunkView(chunks) {
+  const purity = d3.mean(chunks, c => d3.max(d3.rollup(c, v => v.length, i => sents[i].topic).values()) / c.length);
+  return htl.html`<div>
+    <div class="cd-stats">
+      <span><b>${chunks.length}</b>chunks</span>
+      <span><b>${Math.round(100 * purity)}%</b>purity</span>
+      <span><b>${d3.mean(chunks, c => c.length).toFixed(1)}</b>sentences/chunk</span>
+    </div>
+    ${chunks.map((c, k) => htl.html`<div class="cd-chunk"><div class="cd-chunk-head">chunk ${k + 1}</div>
+      ${c.map(i => htl.html`<div class="cd-sent" style=${`--c:${color.get(sents[i].topic)}`} title=${sents[i].sentence}>
+        <span class="cd-idx">${i}</span>${sents[i].sentence}</div>`)}</div>`)}
+  </div>`;
+}
+```
+
+<details class="cd-details">
+<summary><span>Interactive illustration: fixed-size vs. semantic chunking</span><span class="cd-hint"></span></summary>
+
+```{ojs}
+//| echo: false
+htl.html`<div class="cd-legend">${topics.map(t => htl.html`<span style=${`--c:${color.get(t)}`}>${t}</span>`)}</div>`
+```
+
+:::: {.cd-grid}
+
+::: {.cd-card}
+<div class="cd-title">Fixed-size <span class="cd-badge base">baseline</span></div>
+<div class="cd-desc">Cuts every n sentences, blind to their content. Overlap repeats sentences in neighbouring chunks to keep some context.</div>
+
+```{ojs}
+//| echo: false
+viewof size = Inputs.range([2, 8], {step: 1, value: 3, label: "Chunk size"})
+viewof overlap = Inputs.range([0, size - 1], {step: 1, value: 0, label: "Overlap"})
+chunkView(fixedChunks(size, overlap))
+```
+:::
+
+::: {.cd-card}
+<div class="cd-title">Breakpoint-based <span class="cd-badge">semantic</span></div>
+<div class="cd-desc">Cuts wherever two neighbouring sentences are further apart than the threshold (red bars), set either as a percentile of all distances or as an absolute cosine distance. Only ever compares two sentences at a time.</div>
+
+```{ojs}
+//| echo: false
+viewof mode = Inputs.radio(["percentile", "absolute"], {value: "percentile", label: "Threshold"})
+viewof q = mode === "percentile"
+  ? Inputs.range([50, 99], {step: 1, value: 80, label: "Percentile"})
+  : Inputs.range([0, 1], {step: 0.01, value: +d3.median(gaps).toFixed(2), label: "Distance"})
+thr = mode === "percentile" ? d3.quantile(gaps, q / 100) : q
+chunkView(splitAt(d3.range(n - 1).filter(i => gaps[i] > thr)))
+htl.html`<div class="cd-plot">${Plot.plot({
+  width: 330, height: 170, marginLeft: 40, marginBottom: 45, style: {background: "transparent", fontSize: "10px"},
+  x: {label: "between sentences", tickFormat: i => `${i}|${i + 1}`, tickRotate: -45},
+  y: {label: "cos. distance", grid: true},
+  marks: [
+    Plot.barY(gaps.map((g, i) => ({i, g})), {x: "i", y: "g", fill: d => d.g > thr ? "#dc2626" : "#cbd5e1"}),
+    Plot.ruleY([thr], {stroke: "#dc2626", strokeDasharray: "4,3"})
+  ]})}</div>`
+```
+:::
+
+::: {.cd-card}
+<div class="cd-title">Clustering-based <span class="cd-badge">semantic</span></div>
+<div class="cd-desc">Links all sentence pairs closer than the threshold (white dots) and makes each connected group a chunk, even across the document. λ mixes position (1) and meaning (0).</div>
+
+```{ojs}
+//| echo: false
+viewof lam = Inputs.range([0, 1], {step: 0.05, value: 0.2, label: "λ"})
+viewof t = Inputs.range([0.05, 0.6], {step: 0.01, value: 0.3, label: "Threshold"})
+chunkView(clusterChunks(lam, t))
+pairs = d3.cross(d3.range(n), d3.range(n)).map(([a, b]) => ({a, b, d: dist(a, b, lam)}))
+htl.html`<div class="cd-plot">${Plot.plot({
+  height: 250, width: 250, padding: 0, marginLeft: 25, marginBottom: 25, style: {background: "transparent", fontSize: "10px"},
+  x: {label: null}, y: {label: null}, color: {scheme: "purples", reverse: true},
+  marks: [
+    Plot.cell(pairs, {x: "a", y: "b", fill: "d", title: p => `${p.a}–${p.b}: ${p.d.toFixed(2)}`}),
+    Plot.dot(pairs.filter(p => p.a !== p.b && p.d < t), {x: "a", y: "b", r: 2.5, fill: "white"})
+  ]})}</div>`
+```
+:::
+
+::::
+
+</details>
+
+Purity is the share of the most frequent paragraph per chunk, averaged over all chunks. The sentence embeddings were computed once with a small embedding model, everything else runs in your browser.
+
+Playing with the sliders shows that the semantic chunkers can produce cleaner chunks than the fixed-size baseline. Whether this matters for retrieval is a different question. @fig-quResults shows the document-retrieval results of @quSemanticChunkingWorth2025 as the gain of each semantic chunker over fixed-size chunking. The large gains appear only on the *stitched* datasets, which the authors built by concatenating short documents on unrelated topics, a situation in which topic shifts are easy to detect. On the datasets with real, coherent documents, fixed-size chunking is as good or better.
+
+::: {#fig-quResults}
+
+```{ojs}
+//| echo: false
+quTable = [
+  ["Miracl", true, 69.45, 81.89, 67.35], ["NQ", true, 43.79, 63.93, 41.01], ["Scidocs", true, 16.82, 17.60, 19.87],
+  ["Scifact", true, 35.27, 36.27, 35.70], ["BioASQ", true, 61.86, 61.87, 62.49], ["NFCorpus", true, 21.36, 21.07, 22.12],
+  ["HotpotQA", false, 90.59, 87.37, 84.79], ["MSMARCO", false, 93.58, 92.23, 93.18],
+  ["ConditionalQA", false, 68.11, 64.44, 65.94], ["Qasper", false, 90.99, 89.27, 90.77]
+].flatMap(([name, stitched, fixed, bp, cl]) => [
+  {dataset: stitched ? `${name}*` : name, chunker: "breakpoint", gain: bp - fixed},
+  {dataset: stitched ? `${name}*` : name, chunker: "clustering", gain: cl - fixed}
+])
+Plot.plot({
+  width: 700, height: 330, marginLeft: 100, marginBottom: 45, style: {fontSize: "12px", background: "transparent"},
+  x: {label: "F1@5 gain over fixed-size chunking (percentage points) →", labelAnchor: "center", labelOffset: 38, grid: true},
+  y: {label: null, domain: [...new Set(quTable.map(d => d.dataset))]},
+  color: {domain: ["breakpoint", "clustering"], range: ["#dc2626", "#7c3aed"], legend: true},
+  marks: [
+    Plot.ruleX([0], {stroke: "#475569"}),
+    Plot.ruleY(["HotpotQA"], {stroke: "#94a3b8", strokeDasharray: "4,3", dy: -13}),
+    Plot.text(["stitched documents ↑", "real documents ↓"], {x: 21, y: ["NFCorpus*", "HotpotQA"], dy: [4, -4], textAnchor: "end", fill: "#64748b"}),
+    Plot.ruleY(quTable, Plot.groupY({x1: "min", x2: "max"}, {y: "dataset", x: "gain", stroke: "#cbd5e1"})),
+    Plot.dot(quTable, {x: "gain", y: "dataset", fill: "chunker", r: 5, title: d => `${d.chunker}: ${d.gain.toFixed(2)}`})
+  ]
+})
+```
+
+Document retrieval (F1@5) of the two semantic chunkers relative to fixed-size chunking, redrawn from Table 1 of @quSemanticChunkingWorth2025 (CC BY 4.0). Datasets marked with * are stitched: artificially concatenated short documents on different topics.
+:::
+
 ::: {.callout-note}
 
 #### 📝 Task
@@ -263,15 +418,49 @@ Two more sophisticated approaches to transform queries are:
 
 #### 📝 Task
 
-Implement query expansion for the climate_fever dataset using an ADK agent. Let the agent either generate alternative formulations of the query or a hypothetical answer document (HyDE), and use its output to query your index. The RAG example in @tip-adkRag shows how to set up an agent and run it.
+Implement query expansion for the climate_fever dataset. Use the `openai` client from @sec-prompting to let a LLM either generate alternative formulations of the query or a hypothetical answer document (HyDE), and use its output to query your index.
 
 Experiment with different prompts and temperatures.
 
 :::
 
+::::{.callout-tip collapse="true" appearance="minimal"}
+## HyDE as an ADK workflow
+
+In the workflow of @tip-adkRag, HyDE is just one more agent in front of the retrieval step: the agent writes the hypothetical document, and the retrieval function searches with it instead of with the question. Since the summarizer should still answer the original question, a first function node stores it in `ctx.state`, the workflow's shared memory. The code reuses `model`, `ask`, `find_references` and `summarizer` from @tip-adkRag:
+
+```python
+from google.adk import Agent, Workflow
+
+def store_question(node_input: str, ctx):
+    ctx.state["question"] = node_input
+    return node_input
+
+hyde_writer = Agent(
+    name="hyde_writer",
+    model=model("qwen3:4b"),
+    instruction="Write a short passage, as it could appear in a scientific paper, "
+                "that answers the question. Output only the passage.",
+)
+
+def retrieve(node_input: str, ctx) -> str:
+    # node_input is the hypothetical passage: search with it, but answer the original question
+    return f"Question: {ctx.state['question']}\n\nSnippets:\n{find_references(node_input)}"
+
+hyde_rag = Workflow(
+    name="hyde_rag",
+    edges=[("START", store_question, hyde_writer, retrieve, summarizer)],
+)
+
+print(await ask(hyde_rag, "What is the meaning of Query, Key and Value in the context of self-attention?"))
+```
+
+We will look at `ctx.state` and more complex workflow graphs in @sec-orchestration.
+::::
+
 ### Hybrid Search
 
-So far, we have focused exclusively on semantic search using vector embeddings. However, purely semantic approaches can sometimes miss documents that contain exact keyword matches or specific terminology that users explicitly mention in their queries. This is where **hybrid search** becomes valuable by combining multiple retrieval strategies.
+Up to here, we have focused exclusively on semantic search using vector embeddings. However, purely semantic approaches can sometimes miss documents that contain exact keyword matches or specific terminology that users explicitly mention in their queries. This is where **hybrid search** becomes valuable by combining multiple retrieval strategies.
 
 Hybrid search integrates semantic search with traditional keyword-based methods (like BM25 or full-text search) to leverage the strengths of both approaches. Semantic search excels at understanding context and finding conceptually related documents, while keyword search ensures exact matches are not missed.
 
@@ -309,6 +498,10 @@ Individual components of your RAG pipeline can be tested separately:
 - **Generation quality**: Does the LLM produce accurate, relevant, and coherent answers given the retrieved context?
 - **End-to-end**: Does the complete pipeline answer questions correctly?
 
+For the retrieval step, precision and recall compare two sets of documents: the ones the retriever returned and the ones that would have been relevant (@fig-retrievalVenn). The two metrics pull in opposite directions: retrieving more chunks (a larger top-k) can only increase recall, but usually decreases precision.
+
+![Precision and recall of a retriever as a Venn diagram of relevant and retrieved documents.](../imgs/retrieval_venn.svg){#fig-retrievalVenn .enlarge-onhover}
+
 Frameworks like [DeepEval](https://deepeval.com/guides/guides-rag-evaluation) provide tools for automated RAG evaluation. DeepEval offers three central, [LLM as a judge](@sec-llmJudge)-based RAG-specific metrics:
 
 1. **Contextual Precision**: an indication whether relevant nodes are ranked higher than irrelevant ones.
@@ -316,6 +509,22 @@ Frameworks like [DeepEval](https://deepeval.com/guides/guides-rag-evaluation) pr
 2. **Contextual Recall**: this metric indicates to what extent the retrieved nodes align with the expected output.
 
 3. **Contextual Relevance**: an evaluation in how far each returned note is at all relevant to the query.
+
+@fig-deepevalMetrics shows which parts of the pipeline each of these metrics compares. Contextual precision and recall need an expected output to compare against, contextual relevance only needs the query.
+
+```{mermaid}
+%%| label: fig-deepevalMetrics
+%%| fig-cap: "What DeepEval's contextual metrics compare. Solid arrows are the RAG pipeline, dotted arrows are the comparisons an LLM judge makes."
+flowchart LR
+    Q[Query] --> R[Retriever]
+    R --> C[Retrieved nodes]
+    C --> L[LLM]
+    L --> A[Answer]
+    E[Expected output]
+    C -.->|"Contextual Precision: relevant nodes ranked first?"| E
+    C -.->|"Contextual Recall: is everything needed retrieved?"| E
+    C -.->|"Contextual Relevance: does each node fit the query?"| Q
+```
 
 Since the base for these scores is an assessment of a LLM, these scores can both be calculated for the retrievers answers as well as the output of the whole RAG pipeline.
 
@@ -327,6 +536,10 @@ For more comprehensive evaluation, standardized benchmark-systems like [RAGCheck
 2. **Overall accuracy**: Correctness of final answers
 3. **Hallucination detection**: Identification of generated content not supported by retrieved documents
 4. **Missing information**: Detection of incomplete answers
+
+These checks can be pictured as a Venn diagram of three sets of statements: the ground-truth answer, the model's response and the retrieved context (@fig-ragcheckerVenn). Correct statements lie where response and ground truth overlap, hallucinations are statements of the response that are backed by neither, and missing information is the part of the ground truth that the response does not contain. The context circle tells us *why* something went wrong: missing information that was retrieved but not used points to the generator, missing information that was never retrieved points to the retriever.
+
+![The statements of ground-truth answer, model response and retrieved context, and what each region means for the evaluation of a RAG system.](../imgs/ragchecker_venn.svg){#fig-ragcheckerVenn .enlarge-onhover}
 
 These benchmarks use curated datasets with ground-truth answers, allowing you to compare your system's performance against baselines.
 

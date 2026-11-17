@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 560" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <rect width="640" height="560" fill="#ffffff"/>
+  <circle cx="240" cy="210" r="150" fill="#4c9be8" fill-opacity="0.28" stroke="#2f6fb0" stroke-width="2"/>
+  <circle cx="400" cy="210" r="150" fill="#e8584c" fill-opacity="0.25" stroke="#b0392f" stroke-width="2"/>
+  <circle cx="320" cy="345" r="150" fill="#5cb85c" fill-opacity="0.25" stroke="#3d8b3d" stroke-width="2"/>
+  <text x="130" y="40" text-anchor="middle" font-weight="bold" fill="#2f6fb0">ground-truth answer</text>
+  <text x="510" y="40" text-anchor="middle" font-weight="bold" fill="#b0392f">model response</text>
+  <text x="320" y="540" text-anchor="middle" font-weight="bold" fill="#3d8b3d">retrieved context</text>
+  <g text-anchor="middle" fill="#222">
+    <text x="165" y="170"><tspan x="165">missing,</tspan><tspan x="165" dy="17">never retrieved</tspan></text>
+    <text x="320" y="112"><tspan x="320">correct,</tspan><tspan x="320" dy="17">not from</tspan><tspan x="320" dy="17">context</tspan></text>
+    <text x="475" y="170"><tspan x="475" font-weight="bold">hallucination</tspan></text>
+    <text x="320" y="265"><tspan x="320" font-weight="bold">correct</tspan><tspan x="320" dy="17">and grounded</tspan></text>
+    <text x="222" y="300"><tspan x="222">missing,</tspan><tspan x="222" dy="17">retrieved</tspan><tspan x="222" dy="17">but unused</tspan></text>
+    <text x="418" y="300"><tspan x="418">wrong, copied</tspan><tspan x="418" dy="17">from noisy</tspan><tspan x="418" dy="17">context</tspan></text>
+    <text x="320" y="430"><tspan x="320">irrelevant</tspan><tspan x="320" dy="17">context</tspan></text>
+  </g>
+</svg>
