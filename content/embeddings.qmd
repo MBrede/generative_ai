@@ -6,22 +6,22 @@ toc-title: '![](../imgs/rag.png){width=240px}<br> <h3>Embedding-based LLM-system
 
 # Embedding-based LLM-systems
 
-In the session on tool calling (@sec-functioncalling), we built a harness around the model that lets it act beyond generating text: the model requests a tool call, our code executes it and feeds the result back. One of the most useful tools is one that lets a model look up information it was never trained on, such as the documents on your hard drive.
-In many tasks, we do not only want an LLM to generate text but to base the generation on an existing knowledge base.
+All tool-calling LLMs we discussed until here (see @sec-functioncalling) are using tools that allow them to use their generated inputs in some way.
+In most of the tasks we want to utilize LLMs for, we do not only want to generate text but to also inform the generation based on some kind of existing knowledge base.
 Examples for these kinds of use cases include:
 
 - Answering questions about a specific topic (e.g., a company or product)
 - Summarizing a document
 - Generating a report based on data
 
-Though modern LLMs are increasingly capable of answering knowledge questions, the more complex a topic or the more important the factual basis of an answer, the more important it is to base generated answers on actual data.
+Though most modern LLMs are increasingly capable in answering basic knowledge-questions, the more complex a topic or the more relevant the factual basis of an answer is, the more important it is to base generated answers on actual data.
 
 ## Semantic embeddings and vector stores
 
-To let an LLM look up information, we need a tool that retrieves the information necessary for a task based on a request in natural language.
-The basis for this are so-called *semantic embeddings*.
-These are close to the concept we introduced when talking about the foundations of LLMs (see @sec-lmbasics) and can be understood as a way to map textual data into a vector space.
-The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context means a small distance or, equivalently, a high similarity. The usual measure is the **cosine similarity**, which has proven useful enough to be the default in a range of semantic retrieval implementations (e.g., it is used in [OpenAI tutorials](https://cookbook.openai.com/examples/recommendation_using_embeddings) and in [Azure AI Foundry embedding-applications](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/understand-embeddings?view=foundry-classic&viewFallbackFrom=foundry)). The cosine similarity is defined as:
+To empower an LLM to look up information during its thought-process, one has to build a tool that allows an LLM to use natural language to retrieve information necessary for a task.
+The fundamental principle to do this are so-called *semantic embeddings*.
+These are pretty close to the concept we introduced when talking about the foundations of LLMs (see @sec-lmbasics) and can be understood as a way to map textual data into a vector space.
+The main idea is that semantically similar texts should have similar embeddings, i.e., they are close in the vector space. Close in this context is meant as having a reasonably small distance between them. The go-to standard to measure this distance is the **cosine similarity**, which has proven useful enough to be the standard for a range of semantic retrieval implementations (e.g., it is used in [OpenAI tutorials](https://cookbook.openai.com/examples/recommendation_using_embeddings) and in [Azure AI Foundry embedding-applications](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/understand-embeddings?view=foundry-classic&viewFallbackFrom=foundry)). The cosine similarity is defined as:
 
 $$
 \text{cosine\_similarity}(u, v) = \frac{u \cdot v}{\|u\| \|v\|} = \frac{\sum_{i=1}^{n} u_i v_i}{\sqrt{\sum_{i=1}^{n} u_i^2} \sqrt{\sum_{i=1}^{n} v_i^2}}
@@ -34,7 +34,7 @@ The rationale here is that sequences with semantically similar contents should p
 #| fig-cap: Illustration of common similarity metrics in semantic search.
 #| fig-subcap: 
 #|    - Illustration of "semantic embeddings" of different word.
-#|    - "Illustration of 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan. Cosine similarity depends only on the angle between two vectors, the dot product on the angle and on both vectors' lengths. Euclidean and manhattan measure the distance between two points, as the straight line or as the sum of the absolute differences of the coordinates. Both distances are turned into similarities via 1/(1 + distance), and every panel is rescaled to the range 0 to 1, so colors are only comparable within a panel."
+#|    - "Illustration of 4 common similarity concepts seen in semantic retrieval: cosine, euclidean, dot product and manhattan. dot product and cosine are taking the direction of the vector into account, while the cosine ignores the length of the vectors and the dot product does not. Manhattan and euclidean are both measuring the distance between two points in a vector space, but they do it differently. Euclidean is the straight line between two points, while manhattan is the sum of the absolute differences between the coordinates of the two points. Distances are shown as similarities via 1/(1 + distance), and each panel is rescaled to 0 to 1."
 #| fig-alt: 
 #| - Illustration of "semantic embeddings" of different word.
 #|  The words "good", "nice", "orange", "bad" and "blue" are all mapped to a vector space.
@@ -103,19 +103,19 @@ mutate(value = (value - min(value))/(max(value)-min(value))) %>%
 
 ```
 
-As always, no single measure fits every problem, and the applicability of cosine similarity might not be optimal for your use case [@steckCosineSimilarityEmbeddingsReally2024; @goyalComparativeAnalysisDifferent2022].
+As always, there is not the one solution to all problems though and the applicability of cosine similarity might not be optimal for your use case [@steckCosineSimilarityEmbeddingsReally2024; @goyalComparativeAnalysisDifferent2022].
 
-Though one could use any kind of (L)LM to calculate embeddings for this case^[And there are approaches to use LLMs for this task, e.g., @jiangScalingSentenceEmbeddings2023a.], it is advisable to use models specifically trained for this purpose. 
+Though one could use any kind of (L)LM to calculate embeddings for this case^[And there are approaches to use LLMs to solve this task, e.g., @jiangScalingSentenceEmbeddings2023a], it is advisable to use models specifically trained for this purpose. 
 @reimersSentenceBERTSentenceEmbeddings2019a proposed *Sentence-BERT* which is a simple but effective approach to calculate semantic embeddings. SBERT and similar approaches are based on a (L)LM that was trained to predict missing words as we discussed before, resulting in a general representation of natural language. In the case of the original paper, they used (among others) the BERT model [@devlinBERTPretrainingDeep2019a] mentioned before.
 
-The authors then use this to embed a pair of sentences into one embedding-vector each^[BERT used the embedding of its special `[CLS]` token as a representation of the whole input. The SBERT paper compared this `[CLS]` token, mean pooling and max pooling over all token embeddings and settled on mean pooling.], for which some measure of semantic similarity is known. 
-An example for a dataset containing such sentences is the [Stanford Natural Language Inference (SNLI) corpus](https://aclanthology.org/D15-1075/) [@bowmanLargeAnnotatedCorpus2015], which labels about 570k pairs of sentences as either *entailment*, *contradiction* or *neutral*.
-@reimersSentenceBERTSentenceEmbeddings2019a then concatenated the two sentence embeddings $u$ and $v$ with their absolute element-wise difference $|u - v|$ into a single vector, which is fed to a classifier that predicts the relationship of the two sentences. At inference, this classification head is removed and replaced by the cosine similarity discussed above.
+The authors then use this to embed a pair of sentences into one embedding-vector each^[The original BERT-paper did this by adding a pooling layer before the task-header that extracted and weighed the context-dependent embedding of the first token. The SBERT paper tried different pooling-strategies and used a mean over each embedding dimension of the sequence.], for which some measure of semantic similarity is known. 
+An example for a dataset containing such sentences is the [Stanford Natural Language Inference (SNLI) corpus](https://aclanthology.org/D15-1075/) [@bowmanLargeAnnotatedCorpus2015] which labels 570k pairs of sentences as either *entailment*, *contradiction* or *neutral*.
+@reimersSentenceBERTSentenceEmbeddings2019a then concatenated both sentence embeddings and their absolute element-wise difference into a single vector which is fed to a multiclass classifier, indicating in which category the sentences relationship falls. At inference, this classification head was removed and replaced by the cosine similarity as discussed above.
 The resulting network is highly effective in calculating semantic similarities between sentences.
 
-A look at the [sbert-website](https://www.sbert.net/docs/sentence_transformer/loss_overview.html) shows that the library has grown and now supplies a series of learning paradigms that can be used to efficiently tune a model for your specific use case^[And this does not have to be expensive. @tunstallEfficientFewShotLearning2022 have shown a contrastive fine-tuning approach (SetFit) that reaches competitive accuracy with only a handful of labeled examples per class.]. 
+A look at the [sbert-website](https://www.sbert.net/docs/sentence_transformer/loss_overview.html) shows that the module has somewhat grown and now does supply a series of learning paradigms that can be used to efficiently tune a model for your specific use case^[And this does not have to be expensive. @tunstallEfficientFewShotLearning2022 have shown a highly efficient contrastive learning paradigm that reduces the amount of necessary labels to a ridiculously small number.]. 
 As the library has grown, so has the sheer amount of pretrained embedding-models in some way based on this architecture that are hosted on huggingface. The [MTEB-Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) is a good start to search for a model for your application.
-One important use of this model family is the semantic search for documents.
+One utilization of this model-family is their very efficient ability to semantically search for documents.
 If a model is very good at finding similar sentences, it can also be very good to find documents that are very similar to a question.
 
 Look at the example illustrated in @fig-docRetrieval. The question "why is the sky blue" is embedded with the same model as our 5 documents stating some facts.
@@ -129,7 +129,7 @@ We can then calculate the cosine-similarity between these embeddings and return 
 
 ### 📝 Task
 
-Install the necessary packages (`uv add sentence-transformers datasets scikit-learn`) and download [the climate_fever-dataset](https://huggingface.co/datasets/tdiggelm/climate_fever).
+Install the sentence-transformers package (`uv add sentence-transformers datasets scikit-learn`) and download [the climate_fever-dataset](https://huggingface.co/datasets/tdiggelm/climate_fever).
 
 Choose one model from the [MTEB-Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) that you deem adequately sized and appropriate for the task
 
@@ -145,31 +145,34 @@ This approach of using a model to embed documents and questions into a vector sp
 
 Retrieval augmented generation (RAG) is a framework that does pretty much what it says on the tin.
 You use a retrieval model to find documents that are similar to your question and then either return these documents or feed them into a generative model, which then generates an answer based on these documents.
-This process can also be wrapped as a tool (see @sec-functioncalling), so that the LLM itself requests a lookup when it needs one.
+This process can additionally be wrapped as a tool (see @sec-functioncalling), so that your LLM can now also use external knowledge sources to answer questions.
 
-Retrieval does not have to be semantic. All kinds of data sources and databases can be made accessible to an LLM, but we will focus on embedding-based retrieval here.
+Retrieval does not have to be semantics-based in this context: all kinds of data sources and databases can be made accessible for an LLM. We will focus on a purely embedding based approach here though.
 
-Although the small example in the last task was working, it is not really scalable. Comparing a question with every single document is fine for a limited set of examples, but to make a whole knowledge base searchable, you need an appropriate database system.
+Although the small example in the last task was working, it is not really scalable. It was fine for a limited set of examples, if you want to realistically make a whole knowledge base searchable, you need to use an appropriate database system.
 
 ### Vector databases
 
-A vector database is a database that stores vectors and allows for efficient similarity searches. Efficient here means that the database does not compare a query with every stored vector. Instead, it builds an index for *approximate nearest neighbor* search. Qdrant, for example, uses a graph-based index (HNSW, Hierarchical Navigable Small World) in which each vector is linked to a few similar vectors, so a search only has to follow a short path through the graph. The result is not guaranteed to be the exact top-k, but it is very close and orders of magnitude faster on large collections.
+A vector database is a database that stores vectors and allows for efficient similarity searches.
+
+Efficient here means that the database does not compare a query with every stored vector. Instead, it builds an index for *approximate nearest neighbour* search. Qdrant, for example, uses a graph-based index (HNSW, Hierarchical Navigable Small World) in which each vector is linked to a few similar vectors, so a search only has to follow a short path through the graph. The result is not guaranteed to be the exact top-k, but it is very close and orders of magnitude faster on large collections.
+
 As can be seen in the [db-engines ranking](https://db-engines.com/en/ranking) there has been a surge of interest in this area recently, with many new players entering the market.
-From the plethora of vector databases, these three deserve an honorable mention:
+From the plethora of vector databases, these three are examples that deserve an honorary mention:
 
-1. [Chroma](https://www.trychroma.com/): an open-source database that is especially easy to get running, either in memory, on disk or as a server.
+1. [Chroma](https://www.trychroma.com/) - an in-memory database for small applications that is especially easy to get to run. 
 
-2. [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/bring-your-own-vectors.html): a well established database that is the go to system for open source search engines and has recently (and kind of naturally) also branched out into vector databases.
+2. [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/bring-your-own-vectors.html) - a well established database that is the go to system for open source search engines and has recently (and kind of naturally) also branched out into vector databases.
 
-3. [Qdrant](https://qdrant.tech/): the product of a Berlin-based startup that focusses on stability and scalability. It can also run in memory, but does natively support hard drive storage.
+3. [Qdrant](https://qdrant.tech/) - the product of a Berlin-based startup that focuses on stability and scalability. It can also run in memory, but does natively support hard drive storage.
 
-For production, Qdrant is usually run as a server via [docker](https://qdrant.tech/documentation/quickstart/) and accessed with the Python client. For experiments, the client can also run Qdrant in-process (`QdrantClient(":memory:")` or a local path), which is all we need in class.
+The best way to use qdrant is to use [docker](https://qdrant.tech/documentation/quickstart/) to run it and the python sdk to interact with it. The sdk also allows to just run the client in memory (`QdrantClient(":memory:")`).
 
 ::: {.callout-note}
 
 #### 📝 Task
 
-Install the Qdrant Python client (`uv add qdrant-client`).
+Install the qdrant-client python-sdk (`uv add qdrant-client`).
 
 Create a collection for the claims and one for the evidence in [the climate_fever-dataset](https://huggingface.co/datasets/tdiggelm/climate_fever).
 Add the first 200 entries to each of these collections. Use sentence_transformers to do this, [here](https://qdrant.tech/documentation/beginner-tutorials/search-beginners/) is a tutorial by qdrant that leads you through the process.
@@ -204,7 +207,7 @@ Question: {question}"""
 
 #### 📝 Task
 
-Implement a RAG pipeline for the climate_fever dataset using Qdrant as vector database and an LLM of your choice for answer generation.
+Implement a RAG pipeline for the climate_fever dataset using qdrant as vector database and an LLM of your choice for the summarization.
 
 Try to find a prompt that results in the LLM
 
@@ -213,13 +216,13 @@ b) not inventing new information
 c) referencing the source of the information it uses
 
 
-Upload your results until here (embedder, database and answer generation) to moodle. All following tasks are optional.
+Upload your results until here (embedder, database and summarization) to moodle. All following tasks are optional.
 :::
 
 
-Most LLM frameworks, such as LlamaIndex or LangChain, provide integrations for a variety of vector databases.
+Most agent frameworks provide integrations for a variety of vector databases. 
 
-Others, like Google's Agent Development Kit (ADK), which we will use from the session on agents onwards, skip the wrappers: the retrieval stays plain Qdrant code, and the agent just gets it as a tool.
+Others, like Google's Agent Development Kit (ADK), skip the wrappers: the retrieval stays plain qdrant code, and the agent just gets it as a tool.
 See @tip-adkRag for an example RAG-system implemented with ADK.
 
 :::{#tip-adkRag .callout-tip collapse="true" appearance="minimal"}
@@ -232,10 +235,12 @@ See @tip-adkRag for an example RAG-system implemented with ADK.
 
 ### Document chunking
 
-The examples we looked at until now were all working with short text snippets that comfortably fit into the context window of an LLM.
-If you think about usual use cases for RAG systems, this is not the most common case though.
+The examples we looked at until now were all working with short text-snippets that comfortably fit into the context window of an LLM.
+If you think about usual use cases for RAG-systems, this is not the most common case though.
 Usually, you will have a base of documents that can span several thousand tokens and you want to be able to answer questions about these documents.
-Furthermore, you do not only want to know which document might be relevant, but ideally also which part of the document matches your question best. There is also a technical reason: embedding models have a maximum input length, often 256 to 512 tokens for SBERT-style models, and silently truncate everything beyond it. A whole document embedded as one vector would therefore often only represent its beginning, and even with a long-context model, one vector would average over all topics of the document.
+Furthermore, you do not only want to know which document might be relevant, but ideally also which part of the document matches your question best.
+
+There is also a technical reason: embedding models have a maximum input length, often 256 to 512 tokens for SBERT-style models, and silently truncate everything beyond it. A whole document embedded as one vector would therefore often only represent its beginning.
 
 This is where the process of document chunking or document splitting comes into play.
 The most common, so-called **naive chunking** methods ignore the content of the document: they either cut at structural boundaries such as sentences, paragraphs or pages, or into windows of a fixed size, measured in tokens or sentences. The resulting chunks are individually embedded and stored in the vector database.
@@ -248,7 +253,7 @@ An alternative is **semantic chunking**, which places the cuts based on the mean
 A third option keeps the naive boundaries but changes how the chunks are embedded. In *late chunking* [@guntherLateChunkingContextual2024; @LateChunkingLongContext2024], the whole document is first run once through a long-context embedding model, and the resulting token embeddings are only then averaged per chunk. Each chunk embedding thereby carries information about the context of the whole document, without any change to the chunk boundaries.
 <!-- Haystack does not implement this feature yet, though [it is planned](https://github.com/deepset-ai/haystack/issues/8111). -->
 
-The interactive illustration below applies all three strategies to the introduction of their paper. The colors mark the four paragraphs of the introduction, so a chunk with a single color stays within one paragraph.
+The interactive illustration below applies all three strategies to the introduction of their paper. The colours mark the four paragraphs of the introduction, so a chunk with a single colour stays within one paragraph.
 
 ```{ojs}
 //| echo: false
@@ -307,7 +312,7 @@ htl.html`<div class="cd-legend">${topics.map(t => htl.html`<span style=${`--c:${
 
 ::: {.cd-card}
 <div class="cd-title">Fixed-size <span class="cd-badge base">baseline</span></div>
-<div class="cd-desc">Cuts every n sentences, blind to their content. Overlap repeats sentences in neighboring chunks to keep some context.</div>
+<div class="cd-desc">Cuts every n sentences, blind to their content. Overlap repeats sentences in neighbouring chunks to keep some context.</div>
 
 ```{ojs}
 //| echo: false
@@ -319,7 +324,7 @@ chunkView(fixedChunks(size, overlap))
 
 ::: {.cd-card}
 <div class="cd-title">Breakpoint-based <span class="cd-badge">semantic</span></div>
-<div class="cd-desc">Cuts wherever two neighboring sentences are further apart than the threshold (red bars), set either as a percentile of all distances or as an absolute cosine distance. Only ever compares two sentences at a time.</div>
+<div class="cd-desc">Cuts wherever two neighbouring sentences are further apart than the threshold (red bars), set either as a percentile of all distances or as an absolute cosine distance. Only ever compares two sentences at a time.</div>
 
 ```{ojs}
 //| echo: false
@@ -414,10 +419,19 @@ You can use any approach you like, but you should explain your choice and why it
 Until now, we have based our retrieval on the assumption, that the question the user formulates is a good representation of their information need.
 This is not always the case though.
 Often, users do not know what they are looking for or they use synonyms or paraphrases that are not present in the documents.
-If the question is formulated poorly or uses different words than the documents, the system might not find the relevant documents.
-**Query expansion** addresses this by enriching the original question with paraphrases, synonyms or related terms, so that documents phrased differently from the question are also found. The simplest implementation asks an LLM for several alternative formulations of the question, runs all of them against the index and merges the results. Without an LLM, keywords extracted from the question can be used in the same way.
+If the question is not formulated well, or if it is too specific, the system might not be able to find relevant documents.
+To improve the quality of the questions, we can use **query expansion**. This means that we take the original question and expand it with additional information to cover paraphrases and synonyms and to increase the chances of finding relevant documents.
+This can be done in multiple ways, one common approach is to use a generative model to generate multiple queries based on the original question.
+Another approach is to use a keyword extraction algorithm to extract keywords from the question and then use these keywords to expand the query.
 
-A more refined approach are *Hypothetical Document Embeddings* (HyDE) [@gaoPreciseZeroShotDense2023]. Instead of reformulating the question, an LLM writes a hypothetical document that answers it, and this document is used to query the index. The idea behind this is that an answer resembles other answers more than a question does, so the hypothetical document lands closer to the relevant documents in embedding space. Factual errors in the generated document matter little, since it is only used for the search and never shown to the user. Going one step further, *multi-step query transformations* first run a (complex) query against the index and use the answer to formulate follow-up questions, which are then executed against the index in turn.
+The most basic way to implement a query-expansion is to build a tool that instructs an LLM to give multiple alternate formulations of the original query. Though this will probably work, there are more refined methods.
+
+Two more sophisticated approaches to transform queries are:
+
+
+1. Hypothetical Document Embeddings (HyDE) [@gaoPreciseZeroShotDense2023]: An LLM is instructed to generate a hypothetical document that answers the query. This document is then used to query the index
+
+2. Multi-Step Query Transformations: After a first execution of a (complex) query against an index, the answer is used to iteratively formulate follow-up questions that are then executed against the index.
 
 ::: {.callout-note}
 
@@ -467,9 +481,15 @@ We will look at `ctx.state` and more complex workflow graphs in @sec-orchestrati
 
 Up to here, we have focused exclusively on semantic search using vector embeddings. However, purely semantic approaches can sometimes miss documents that contain exact keyword matches or specific terminology that users explicitly mention in their queries. This is where **hybrid search** becomes valuable by combining multiple retrieval strategies.
 
-Hybrid search combines semantic search with traditional keyword-based methods to leverage the strengths of both. The classic keyword method is BM25, which scores a document by how often the query terms occur in it, weighted by how rare these terms are in the whole collection. Semantic search excels at finding conceptually related documents, while keyword search ensures that exact matches of names, numbers or technical terms are not missed.
+Hybrid search integrates semantic search with traditional keyword-based methods (like BM25^[BM25 scores a document by how often the query terms occur in it, weighted by how rare these terms are in the whole collection.] or full-text search) to leverage the strengths of both approaches. Semantic search excels at understanding context and finding conceptually related documents, while keyword search ensures exact matches are not missed.
 
-Qdrant supports hybrid search through its [query API](https://qdrant.tech/documentation/concepts/hybrid-queries/). A dense vector search and a sparse vector search (for example with BM25 vectors) are executed in parallel as so-called prefetches, and their result lists are fused. Qdrant offers Reciprocal Rank Fusion (RRF), which combines the ranks of a document in both lists, and Distribution-Based Score Fusion (DBSF), which combines their normalized scores. The fused list can optionally be re-ranked by a more expensive model, for example a cross-encoder that reads query and document together, or a late-interaction model like ColBERT [@santhanamColBERTv2EffectiveEfficient2022]. Which mix works best depends on the queries: conceptual questions profit from the dense part, queries with specific technical terms or proper nouns from the sparse part.
+Qdrant supports hybrid search through its [multi-stage query capabilities](https://qdrant.tech/documentation/concepts/hybrid-queries/#multi-stage-queries). The basic approach involves:
+
+1. **Parallel retrieval**: Execute both a dense vector search (semantic) and a sparse vector search (keyword-based) simultaneously
+2. **Score fusion**: Combine the results using a fusion strategy such as Reciprocal Rank Fusion (RRF) or weighted scoring
+3. **Re-ranking**: Optionally apply a re-ranking strategy to refine the final result ordering [e.g., using Maximal Marginal Relevance or a higher-resolution embedding-model like ColBERT @santhanamColBERTv2EffectiveEfficient2022]
+
+Qdrant's implementation allows you to configure how these different search strategies are combined (e.g., Reciprocal Rank Fusion or Distribution-Based Score Fusion). For example, you might give more weight to semantic similarity for conceptual queries, while prioritizing keyword matches for queries containing specific technical terms or proper nouns.
 
 ::: {.callout-note}
 
