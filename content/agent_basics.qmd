@@ -41,8 +41,7 @@ Once tool calling and execution are in place, building an agent is conceptually 
 <!-- please explain the pop culture reference or meme in the image, i don't get it (not in text, to me in the chat) -->
 ![Image credit https://x.com/adamdotdev (from [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents))](../imgs/agent_loop_tinyagents.jpg)
 
-<!-- is it still true, that ReAct is the most common agent setup? -->
-A widely used pattern for structuring this loop is _ReAct_ (Reasoning + Acting), introduced by Yao et al. [@yaoReActSynergizingReasoning2023]. The core idea is to interleave reasoning and action in a repeating cycle:
+One of the earliest and most influential patterns for structuring this loop is _ReAct_ (Reasoning + Acting), introduced by Yao et al. [@yaoReActSynergizingReasoning2023]. Many current agents don't spell out explicit "Thought:"/"Action:" text anymore — native tool-calling APIs and reasoning-capable models fold much of that into the model's own internal reasoning — but the underlying idea still holds, and is worth seeing explicitly once. The core idea is to interleave reasoning and action in a repeating cycle:
 
 1. The agent reasons about the current situation ("Thought").
 2. It chooses and executes an action — typically a tool call.
@@ -63,8 +62,7 @@ while llm_should_continue(memory):
 final_answer = llm_generate_answer(memory)
 return final_answer
 ```
-<!-- make the image smaller (if kept at all) -->
-![Visualization of the ReAct agent loop (from [the n8n blog](https://blog.n8n.io/react-agent/))](../imgs/react-agent-n8n.jpg)
+![Visualization of the ReAct agent loop (from [the n8n blog](https://blog.n8n.io/react-agent/))](../imgs/react-agent-n8n.jpg){width=60%}
 
 The intelligence of the system is not in the loop itself — that part is trivial. It lies in three things:
 
@@ -77,7 +75,7 @@ Get those three right, and a surprisingly simple loop can produce remarkably cap
 
 ## Pipelines vs. agents – when do we need agency?
 
-An agent is defined by its ability to decide. This brings flexibility – but also complexity and potential instability. You have to decide, if an agent is necessary to solve your problem or if you are better of using a pipeline.
+An agent is defined by its ability to decide. This brings flexibility – but also complexity and potential instability. You have to decide, if an agent is necessary to solve your problem or if you are better off using a pipeline.
 Actually, most of the examples you find in tutorials will be better solved with a pipeline. We will use the example from the [smolagents introduction](https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents) to illustrate that.
 
 
@@ -93,7 +91,7 @@ You know in advance that user requests fall into a few categories and can be han
 Here, a hand-coded workflow is simpler, more robust, and easier to test.
 
 __2. Open-ended, complex workflow__
-Let's assume he user asks:
+Let's assume the user asks:
 
 “I can come on Monday, but I forgot my passport so I might be delayed to Wednesday. Is it possible to take me and my luggage surfing on Tuesday morning, with cancellation insurance?”
 
