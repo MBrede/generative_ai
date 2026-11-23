@@ -10,13 +10,12 @@ toc-title: '![](../imgs/robotic_agent.png){width=240px}<br> <h3>Agents</h3>'
 
 ## Introduction
 
-<!-- we actually did implement tool execution, reframe to start implementing the harness or something -->
-So far in this course we covered the fundamentals of language models. We talked about chatbots and we discussed function calling (even though we did not implement the function execution). We also covered retrieval augmented generation (RAG) in some detail.
+So far in this course we covered the fundamentals of language models. We talked about chatbots and built the harness behind tool calling — a way for the model to request an action and have it actually carried out. We also covered retrieval augmented generation (RAG) in some detail.
 
-<!-- important point, the control aspect. maybe reference the vending bench example here -->
 Today, we move one step further: we look at systems in which an LLM controls the flow of an application, orchestrates tools, and decides which steps to take next. These systems are often called agents. Closely related are LLM pipelines, where we hard-code a sequence of steps instead of letting the model decide dynamically.
 
-<!-- the following is valid, too -->
+A concrete picture of what that control looks like: in *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], an LLM agent runs a simulated vending-machine business end to end — deciding what to stock, when to restock, and which prices to set — based on its own read of demand and competition, with nobody hard-coding the order of those decisions. It's also a good showcase of how and why such systems fail once nobody is steering turn by turn.
+
 Before we get there, let's take a closer look at tools — because tools are what give an LLM the ability to actually *do* things, rather than just talk about them.
 
 We can broadly distinguish two kinds of tools. The first kind is **read-only and non-invasive**: the model can observe the world, but not change it. Examples include reading files, searching a vector store, or running a quick web search.
@@ -337,6 +336,6 @@ Go in your project teams. Discuss:
 ## Further Readings
 
 - [The Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents) really helps understanding agents. 
-- A nice Example of an agent system is *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], where an AI agent is tasked with managing a vending machine. The agent is responsible for deciding what products to stock, when to restock, which prices to set, etc. based on its understanding of the market demand, competition, and other factors. It provides valuable insights into how and why these systems fail and is a very good read overall. 
+- We introduced *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025] above as a concrete picture of agent control — it's a genuinely good full read on how and why these systems fail in practice.
 
 ## References
