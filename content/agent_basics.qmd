@@ -38,7 +38,6 @@ With this infrastructure in place, we are only one small step away from an agent
 
 Once tool calling and execution are in place, building an agent is conceptually straightforward: it is essentially a loop wrapped around the tool-calling mechanism.
 
-<!-- please explain the pop culture reference or meme in the image, i don't get it (not in text, to me in the chat) -->
 ![Image credit https://x.com/adamdotdev (from [the Tiny Agents blogpost](https://huggingface.co/blog/tiny-agents))](../imgs/agent_loop_tinyagents.jpg)
 
 One of the earliest and most influential patterns for structuring this loop is _ReAct_ (Reasoning + Acting), introduced by Yao et al. [@yaoReActSynergizingReasoning2023]. Many current agents don't spell out explicit "Thought:"/"Action:" text anymore — native tool-calling APIs and reasoning-capable models fold much of that into the model's own internal reasoning — but the underlying idea still holds, and is worth seeing explicitly once. The core idea is to interleave reasoning and action in a repeating cycle:
@@ -116,7 +115,6 @@ Discuss: for the examples encountered so far, does it make sense to use an agent
 
 ## Frameworks
 
-<!-- needs rework, partly obsolete. more so, because we use google adk in this course. worth mentioning other frameworks though -->
 Implementing all of this from scratch is instructive, but quickly becomes involved. In practice, you would reach for a framework — and there is no shortage of options. Here is a non-exhaustive overview: 
 
 - [**smolagents**](https://huggingface.co/docs/smolagents/index): A lightweight agent framework by Hugging Face, designed to be simple and hackable. It has good conceptual documentation and an active community, making it a natural starting point.
@@ -259,41 +257,28 @@ def write_note(filename: str, content: str) -> dict:
 
 
 ## Model context protocol
-<!-- this drops unmotivated, why are we doing this, here. this whole section needs rework all around -->
 
-So far, we only used small, self-written or pre-build tools. In general though, agents are not restricted to this. In order to harness LLM agents to their full potential, we want them to assist in a variety of tasks. In a company setting, the agent could be supposed to interact with the internal tool and applications the company uses in their daily business, e.g. gather information from the ERP system, write emails or search the web. 
+You just wrote the `get_current_weather` and `write_note` tools yourself, by hand, as plain Python functions. That works fine for a couple of tools you own — but what if you want your agent to use a tool someone else already built, or you want to expose a tool you wrote so that *other* people's agents can use it too, without everyone inventing their own calling convention? In a company setting this comes up constantly: an agent that's supposed to gather information from the ERP system, look up tickets in Jira, or search an internal wiki needs some way to reach all of those systems that isn't "someone hand-writes a bespoke Python wrapper for each one."
 
-Every time developers want to give an AI access to external data or tools, they have to build custom, one-off integrations. It's like building a different key for every single door.
-
-MCP creates a standardized way for AI models to connect to external resources. Think of it as:
-
-- Universal translator: One standard "language" for AI-to-tool communication
-- Plugin system: Like browser extensions, but for AI assistants
-- Modular approach: Write a tool once, use it with any MCP-compatible AI
-
-So, first and foremost, **MCP is an interface standard** that defines how external tools can be integrated into large language models (LLMs). It provides a set of protocols and APIs that allow LLMs to interact with these tools seamlessly. This includes defining the inputs and outputs for each interaction, as well as the mechanisms for error handling and feedback loops.
-
-In addition to a standard definition, anthropic also released an implementation of MCP in a number of languages, including Python. It also hosts a repository on GitHub with examples and documentation that you can use as a starting point for building your own integrations. There is also a large and growing collection of pre-built connectors to third-party services like databases, APIs, and other tools. That means developers don't have to start from scratch every time they want to add new functionality to their LLMs.
-
+Before a standard existed, this meant a custom, one-off integration for every tool/model combination — a different key for every door. The **Model Context Protocol (MCP)** standardizes this: a common way for a host application to discover and call tools exposed by any server, instead of one-off integration code per tool source. Anthropic defined the protocol and released reference implementations in several languages (including Python), plus a growing ecosystem of pre-built servers for third-party services — so you don't have to write, or re-write, an integration from scratch every time your agent needs to reach a new system.
 
 ::: {.callout-note}
 ## 📝 Task
-<!-- obsolete, mostly, need better introduction example -->
-Have a look!
 
-1. Find the MCP and MCP server repository on GitHub
-2. Browse through the list of server implementations, find one (or many) that you find interesting.
+Before getting into how MCP works, see it in action.
+
+1. Install the [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector): ``npx @modelcontextprotocol/inspector``
+2. Connect it to the reference [filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) (the Inspector's own quickstart shows the exact command for your platform).
+3. Browse the tools, resources, and prompts it exposes, and try calling one of its tools directly from the Inspector UI.
 
 :::
 
-But what is an MCP server anyway? And how does MCP work exactly? 
+But what is an MCP server anyway? And how does MCP work exactly?
 
 
 ### Core concepts
 
-The following is more or less taken from the [official website](https://modelcontextprotocol.io).
-
-At its core, MCP follows a client-server architecture where a host application can connect to multiple servers:
+The Inspector you just used *is* an MCP **Host** — here's the fuller picture of what it was talking to. At its core, MCP follows a client-server architecture where a host application can connect to multiple servers:
 
 ![MCP architecture [@ModelContextProtocol]](../imgs/MCP_archi.png)
 
@@ -304,33 +289,43 @@ At its core, MCP follows a client-server architecture where a host application c
 - **Local Data Sources:** Your computer’s files, databases, and services that MCP servers can securely access
 - **Remote Services:** External systems available over the internet (e.g., through APIs) that MCP servers can connect to
 
-The servers come in three main flavours: 
+The servers come in three main flavours:
 
 - **Resources:** File-like data that can be read by clients (like API responses or file contents)
 - **Tools:** Functions that can be called by the LLM (with user approval)
 - **Prompts:** Pre-written templates that help users accomplish specific tasks
 
-As you have seen in the repository, there are lots of pre-built servers available. 
+This course focuses on Tools, since that's what an agent calls directly — Resources and Prompts matter more once you're building a full MCP host, which is beyond what we cover here.
 
 ::: {.callout-note}
 ## 📝 Task
-<!-- i like that students use mcp with their own app/harness, maybe needs more steps?  -->
-Now it's time to implement a simple example using MCP!
+
+Earlier, you gave your ADK agent a hand-written `write_note` tool. Now do the same thing through MCP instead.
 
 1. Read the [MCP section for ADK](https://adk.dev/tools-custom/mcp-tools/#1-using-mcp-servers-with-adk-agents-adk-as-an-mcp-client-in-adk-web).
-2. Set up a local MCP server using one of the examples in the documentation.
-3. Make it work with your agent you implemented earlier. 
+2. Connect your ADK agent to the same filesystem MCP server from the Inspector task, instead of your hand-written `write_note` function.
+3. Ask it to do something that writes or edits a file, and confirm it goes through the MCP server this time.
+4. Compare: what did you get for free by using the MCP server instead of your own function? What did you lose (e.g. control over exactly what the tool does)?
 
 :::
 
-<!-- can students easily build own mpc server? -->
+::: {.callout-note}
+## 📝 Task
+
+(Optional) Up to now you've only *consumed* MCP servers. Building your own isn't much harder:
+
+1. Skim the [Python SDK's server quickstart](https://modelcontextprotocol.io/quickstart/server).
+2. Wrap one of your own earlier tools (e.g. the weather tool) as an MCP server instead of a plain Python function.
+3. Connect it in the Inspector and confirm it shows up correctly.
+
+:::
 
 
 ## Wrap-up
 
 We started this session already holding every piece an agent needs — tool definitions, parsing, execution, feeding results back — because all of that was built in @sec-functioncalling. The only genuinely new ingredient today was control: instead of a human (or a hard-coded pipeline) deciding what happens next, the model itself decides, inside a loop that keeps calling it until it's done.
 
-That reframes most of what we did as harness again, not model capability: ReAct is just a convention for *how* the loop talks to itself, ADK is a framework that implements the loop (plus a graph of nodes) so you don't have to, and MCP is a standard for *where tools come from* so you're not stuck hand-writing every integration. None of it changes what the model can do in a single turn — it changes how many turns it gets, and how much of the world it can reach from inside them.
+That reframes most of what we did as harness again, not model capability: ReAct is just a convention for *how* the loop talks to itself, ADK is a framework that implements the loop (plus a graph of nodes) so you don't have to, and MCP is a standard for *where tools come from* so you're not stuck hand-writing every integration. None of it changes what the model can do in a single turn — it changes how many turns it gets, and how much of the world it can reach from inside them. That reach is also why today's ADK task gave the agent a real **action** tool, not just a read-only one: the moment a tool can actually change something, a bad decision in the loop stops being just a bad answer.
 
 The judgment call that matters most going forward isn't "can I build an agent for this" — usually yes — but "should I": a fixed pipeline is simpler, cheaper, and easier to debug whenever the steps are known in advance, and agency is worth its added complexity only once they aren't.
 
