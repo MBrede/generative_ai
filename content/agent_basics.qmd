@@ -122,10 +122,10 @@ Implementing all of this from scratch is instructive, but quickly becomes involv
 - [**smolagents**](https://huggingface.co/docs/smolagents/index): A lightweight agent framework by Hugging Face, designed to be simple and hackable. It has good conceptual documentation and an active community, making it a natural starting point.
 - [**LlamaIndex**](https://github.com/run-llama/llama_index): Originally a data framework for building LLM applications around your own data. It has grown to offer convenient abstractions for tools, agents, and memory, with many examples and tutorials.
 - [**Haystack**](https://github.com/deepset-ai/haystack): An open-source NLP framework focused on production-ready applications, developed by the German company deepset. It supports both LLMs and classical NLP models.
-- [**LangChain**](https://github.com/hwchase17/langchain): A modular library for building LLM applications — chains, agents, tools — with a large ecosystem of integrations. One of the most widely adopted frameworks in the space.
+- [**LangChain**](https://github.com/langchain-ai/langchain): A modular library for building LLM applications — chains, agents, tools — with a large ecosystem of integrations. One of the most widely adopted frameworks in the space.
 - [**LangGraph**](https://docs.langchain.com/oss/python/langgraph/overview): An agent framework by the LangChain team that models agent behavior as a graph of states and transitions, giving you finer control over multi-step workflows.
 - [**n8n**](https://n8n.io/): A low-code/no-code platform for workflow automation, useful when you want to wire together tools and APIs without writing much code.
-- [**Agent Development Kit (ADK)**](https://adk.dev): Google's agent framework, introduced in April 2025. It is relatively new but comes with strong tooling and production-oriented design.
+- [**Agent Development Kit (ADK)**](https://adk.dev): Google's agent framework, introduced in 2025 and now actively developed across Python, Java, Go, and Kotlin SDKs. It comes with strong tooling and production-oriented design.
 
 For a quick prototype or to get a feel for agent mechanics, smolagents is a good choice — it stays close to the concepts without too much abstraction. In this course, we build hands-on with the ADK, introduced next.
 
@@ -155,7 +155,7 @@ model = LiteLlm(model="lm_studio/gemma3")
 
 Without the prefix LiteLLM cannot route the request and raises a BadRequestError. The prefix is the only required change when switching backends.
 
-The three types needed for first contact are LlmAgent, Runner, and Session. An LlmAgent is a leaf node: a single LLM call with a system prompt and optional tools. Runner executes a pipeline against a Session, which holds conversation and pipeline state. ADK has further composition types that are introduced when they are needed below.
+The three types needed for first contact are LlmAgent, Runner, and Session. An LlmAgent is a leaf node: a single LLM call with a system prompt and optional tools. Runner executes a pipeline against a Session, which holds conversation and pipeline state. ADK has further composition types, introduced in @sec-orchestration once we actually need them.
 
 | Type | Role |
 |---|---|
@@ -173,8 +173,7 @@ Full API reference: [https://google.github.io/adk-docs/](https://google.github.i
 ## 📝 Task
 
 1. Install the dependencies: ``uv add google-adk litellm``
-<!-- update to more up-to-date models, if applicable -->
-2. Make sure Ollama is running with a model that supports tool calls (e.g. ``gemma3``, ``qwen2.5``, ``llama3:instruct``).
+2. Make sure Ollama is running with a model that supports tool calls (e.g. ``gemma3``, ``qwen3:8b``, ``llama3:instruct``).
 3. Run the following minimal agent and confirm it responds:
 
 ```Python
@@ -209,12 +208,12 @@ for event in runner.run(
 4. Start the Dev UI: ``adk web`` and explore the agent tree in the browser.
 :::
 
+Right now we have an agent with no tools — is it really an agent at all? Time to give it something to do, closing the loop back to @sec-functioncalling.
+
 ::: {.callout-note}
 ## 📝 Task
 
-Now give the agent a tool, closing the loop back to @sec-functioncalling.
-
-1. Define the weather tool as a plain Python function with type hints and a docstring — ADK derives the tool's schema from these automatically, no hand-written JSON schema required:
+1. Define the weather tool — a **read-only** tool, in the terms from the Introduction — as a plain Python function with type hints and a docstring. ADK derives the tool's schema from these automatically, no hand-written JSON schema required:
 
 ```Python
 def get_current_weather(location: str, unit: str = "celsius") -> dict:
@@ -230,9 +229,31 @@ def get_current_weather(location: str, unit: str = "celsius") -> dict:
     return {"location": location, "unit": unit, "forecast": "sunny", "temperature": 21}
 ```
 
-2. Pass it to your agent via ``tools=[get_current_weather]`` when constructing the ``LlmAgent``.
-3. Ask the agent something that should trigger the tool (e.g. "What's the weather in Berlin?") and confirm, in the Dev UI's trace or the printed events, that the tool was actually called rather than the model guessing an answer on its own.
-4. Compare this to the two ways of wiring up a tool call from @sec-functioncalling: what does ADK still do for you, and what would you have had to write by hand without it?
+2. Now define a second tool that actually *does* something — an **action** tool this time:
+
+```Python
+def write_note(filename: str, content: str) -> dict:
+    """Create or overwrite a text file in the local 'notes' folder.
+
+    Args:
+        filename: Name of the file to write, e.g. "todo.txt".
+        content: Text content to write into the file.
+
+    Returns:
+        A dict confirming the file path that was written.
+    """
+    import os
+    os.makedirs("notes", exist_ok=True)
+    path = os.path.join("notes", filename)
+    with open(path, "w") as f:
+        f.write(content)
+    return {"path": path}
+```
+
+3. Pass both tools to your agent via ``tools=[get_current_weather, write_note]`` when constructing the ``LlmAgent``.
+4. Ask the agent something that should trigger each tool in turn (e.g. "What's the weather in Berlin? Also, jot that down in a file called weather.txt.") and confirm, in the Dev UI's trace or the printed events, that both tools were actually called.
+5. Compare this to the two ways of wiring up a tool call from @sec-functioncalling: what does ADK still do for you, and what would you have had to write by hand without it?
+6. Before you run it: `write_note` can overwrite any file the agent decides to name, with no confirmation step. What would you want in place before handing an agent a tool like this for real, beyond "it's just a demo"?
 
 :::
 
