@@ -17,7 +17,7 @@ Today, we move one step further: we look at systems in which an LLM controls the
 A concrete picture of what that control looks like: in *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], an LLM agent runs a simulated vending-machine business end to end — deciding what to stock, when to restock, and which prices to set — based on its own read of demand and competition, with nobody hard-coding the order of those decisions. It's also a good showcase of how and why such systems fail once nobody is steering turn by turn.
 
 
-## A Closer Look at Tools
+## A closer look at tools
 
 Before we get there, let's take a closer look at tools — because tools are what give an LLM the ability to actually *do* things, rather than just talk about them.
 
@@ -174,7 +174,7 @@ Full API reference: [https://google.github.io/adk-docs/](https://google.github.i
 ## 📝 Task
 
 1. Install the dependencies: ``uv add google-adk litellm``
-2. Make sure Ollama is running with a model that supports tool calls (e.g. ``gemma3``, ``qwen3:8b``, ``llama3:instruct``).
+2. Make sure Ollama or LM Studio is running with a model that supports tool calls (e.g. ``gemma3``, ``qwen3:8b``, ``llama3:instruct``).
 3. Write a minimal agent: an ``LlmAgent`` wired up to your local model via ``LiteLlm``, run through a ``Runner`` against a ``Session``, with one message sent to confirm it responds.
 4. Start the Dev UI: ``adk web`` and explore the agent tree in the browser.
 
@@ -182,6 +182,8 @@ Full API reference: [https://google.github.io/adk-docs/](https://google.github.i
 
 :::{#tip-adk_hello .callout-tip collapse="true" appearance="minimal"}
 ### Example: a minimal ADK agent
+
+Shown here with Ollama; swap in the LM Studio env var and model prefix from above if that's what you're running.
 
 ```Python
 from google.adk.agents import LlmAgent
