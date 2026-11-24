@@ -46,6 +46,46 @@ Smaller local models (Ollama, LM Studio) are not reliable orchestrators. They te
 
 There are real gains to this decomposition. Routing queries to a cheaper model for simpler subtasks rather than sending everything to one large generalist can reduce inference costs by more than 2x without measurable quality loss [@ong2024routellm]. The tradeoff is real: you give up the emergent flexibility of a single capable model and invest more effort in upfront design. The same tradeoff exists between microservices and monoliths, and neither is universally the right answer.
 
+## A prompt advisor {#sec-promptadvisor}
+
+The domain for today is **prompt writing**: an agent that takes a description of a desired AI assistant and produces a well-structured system prompt for it. This is deliberately self-referential: you are building an agent that writes prompts for agents.
+
+Good system prompts share a common structure. @mao2025promptstemplatessystematicprompt analysed 2,163 real production system prompts from repositories of companies including Uber, Microsoft, and LAION-AI, and identified seven components that appear with measurable frequency in deployed LLM applications. OpenAI, Anthropic, and Google each independently converge on the same set in their prompt engineering documentation.
+
+| Component | Frequency | Meaning |
+|--|:--:|--|
+| Directive / Task | 87% | The core instruction: what the agent should do |
+| Context / Background | 56% | Information the agent needs to do the task well |
+| Output Format | 40% | How the response should be structured or formatted |
+| Constraints | 36% | What the agent must not do, or limits on behaviour |
+| Role / Profile | 28% | The persona or expertise the agent should adopt |
+| Workflow / Steps | 28% | Sequential process when task order matters |
+| Examples | 20% | Demonstrations of the desired output |
+
+Your agent receives a plain-text description of the desired assistant, covering some or all of these components, and produces a complete system prompt.
+
+Over the session you extend this single agent, step by step, into the following pipeline, one node at a time:
+
+```{mermaid}
+flowchart LR
+    advisor(Prompt\nAdvisor)
+    check{Hard\nCheck}
+    judge(Judge)
+    feedback(Feedback\nAgent)
+    editor(Editor)
+    out((Approved\nPrompt))
+    fail[Reject]
+
+    advisor --> check
+    check -->|pass| judge
+    check -->|fail| fail
+    judge -->|approved| out
+    judge -->|rejected| feedback
+    feedback --> editor
+    editor --> judge
+```
+
+
 ## Google ADK: key types {#sec-adk}
 
 ::: {.callout-important}
@@ -90,46 +130,6 @@ session6/            <- run `adk web` here
 ```
 
 Start it from the parent folder with `adk web` and open `http://localhost:8000`. Pick your agent in the dropdown, chat with it, and click on any event to see what each node received and produced. The Dev UI is for development only, not for deployment.
-
-
-## A prompt advisor {#sec-promptadvisor}
-
-The domain for today is **prompt writing**: an agent that takes a description of a desired AI assistant and produces a well-structured system prompt for it. This is deliberately self-referential: you are building an agent that writes prompts for agents.
-
-Good system prompts share a common structure. @mao2025promptstemplatessystematicprompt analysed 2,163 real production system prompts from repositories of companies including Uber, Microsoft, and LAION-AI, and identified seven components that appear with measurable frequency in deployed LLM applications. OpenAI, Anthropic, and Google each independently converge on the same set in their prompt engineering documentation.
-
-| Component | Frequency | Meaning |
-|--|:--:|--|
-| Directive / Task | 87% | The core instruction: what the agent should do |
-| Context / Background | 56% | Information the agent needs to do the task well |
-| Output Format | 40% | How the response should be structured or formatted |
-| Constraints | 36% | What the agent must not do, or limits on behaviour |
-| Role / Profile | 28% | The persona or expertise the agent should adopt |
-| Workflow / Steps | 28% | Sequential process when task order matters |
-| Examples | 20% | Demonstrations of the desired output |
-
-Your agent receives a plain-text description of the desired assistant, covering some or all of these components, and produces a complete system prompt.
-
-Over the session you extend this single agent, step by step, into the following pipeline, one node at a time:
-
-```{mermaid}
-flowchart LR
-    advisor(Prompt\nAdvisor)
-    check{Hard\nCheck}
-    judge(Judge)
-    feedback(Feedback\nAgent)
-    editor(Editor)
-    out((Approved\nPrompt))
-    fail[Reject]
-
-    advisor --> check
-    check -->|pass| judge
-    check -->|fail| fail
-    judge -->|approved| out
-    judge -->|rejected| feedback
-    feedback --> editor
-    editor --> judge
-```
 
 
 ::: {.callout-note}
