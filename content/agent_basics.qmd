@@ -16,6 +16,9 @@ Today, we move one step further: we look at systems in which an LLM controls the
 
 A concrete picture of what that control looks like: in *Vending-Bench* [@backlundVendingBenchBenchmarkLongTerm2025], an LLM agent runs a simulated vending-machine business end to end — deciding what to stock, when to restock, and which prices to set — based on its own read of demand and competition, with nobody hard-coding the order of those decisions. It's also a good showcase of how and why such systems fail once nobody is steering turn by turn.
 
+
+## A Closer Look at Tools
+
 Before we get there, let's take a closer look at tools — because tools are what give an LLM the ability to actually *do* things, rather than just talk about them.
 
 We can broadly distinguish two kinds of tools. The first kind is **read-only and non-invasive**: the model can observe the world, but not change it. Examples include reading files, searching a vector store, or running a quick web search.
@@ -172,7 +175,13 @@ Full API reference: [https://google.github.io/adk-docs/](https://google.github.i
 
 1. Install the dependencies: ``uv add google-adk litellm``
 2. Make sure Ollama is running with a model that supports tool calls (e.g. ``gemma3``, ``qwen3:8b``, ``llama3:instruct``).
-3. Run the following minimal agent and confirm it responds:
+3. Write a minimal agent: an ``LlmAgent`` wired up to your local model via ``LiteLlm``, run through a ``Runner`` against a ``Session``, with one message sent to confirm it responds.
+4. Start the Dev UI: ``adk web`` and explore the agent tree in the browser.
+
+:::
+
+:::{#tip-adk_hello .callout-tip collapse="true" appearance="minimal"}
+### Example: a minimal ADK agent
 
 ```Python
 from google.adk.agents import LlmAgent
@@ -202,8 +211,6 @@ for event in runner.run(
     if event.is_final_response():
         print(event.content.parts[0].text)
 ```
-
-4. Start the Dev UI: ``adk web`` and explore the agent tree in the browser.
 :::
 
 Right now we have an agent with no tools — is it really an agent at all? Time to give it something to do, closing the loop back to @sec-functioncalling.
@@ -211,7 +218,17 @@ Right now we have an agent with no tools — is it really an agent at all? Time 
 ::: {.callout-note}
 ## 📝 Task
 
-1. Define the weather tool — a **read-only** tool, in the terms from the Introduction — as a plain Python function with type hints and a docstring. ADK derives the tool's schema from these automatically, no hand-written JSON schema required:
+1. Define the weather tool — a **read-only** tool, in the terms we introduced earlier — as a plain Python function with type hints and a docstring. ADK derives the tool's schema from these automatically, no hand-written JSON schema required.
+2. Now define a second tool that actually *does* something — an **action** tool this time: one that creates or overwrites a text file in a local folder.
+3. Pass both tools to your agent via ``tools=[get_current_weather, write_note]`` when constructing the ``LlmAgent``.
+4. Ask the agent something that should trigger each tool in turn (e.g. "What's the weather in Berlin? Also, jot that down in a file called weather.txt.") and confirm, in the Dev UI's trace or the printed events, that both tools were actually called.
+5. Compare this to the two ways of wiring up a tool call from @sec-functioncalling: what does ADK still do for you, and what would you have had to write by hand without it?
+6. Before you run it: think about what could go wrong with an action tool that can overwrite any file the agent decides to name, with no confirmation step. What would you want in place before handing an agent a tool like this for real, beyond "it's just a demo"?
+
+:::
+
+:::{#tip-adk_tools .callout-tip collapse="true" appearance="minimal"}
+### Example: a read-only and an action tool
 
 ```Python
 def get_current_weather(location: str, unit: str = "celsius") -> dict:
@@ -225,11 +242,8 @@ def get_current_weather(location: str, unit: str = "celsius") -> dict:
         A dict describing the (mocked) current weather.
     """
     return {"location": location, "unit": unit, "forecast": "sunny", "temperature": 21}
-```
 
-2. Now define a second tool that actually *does* something — an **action** tool this time:
 
-```Python
 def write_note(filename: str, content: str) -> dict:
     """Create or overwrite a text file in the local 'notes' folder.
 
@@ -247,12 +261,6 @@ def write_note(filename: str, content: str) -> dict:
         f.write(content)
     return {"path": path}
 ```
-
-3. Pass both tools to your agent via ``tools=[get_current_weather, write_note]`` when constructing the ``LlmAgent``.
-4. Ask the agent something that should trigger each tool in turn (e.g. "What's the weather in Berlin? Also, jot that down in a file called weather.txt.") and confirm, in the Dev UI's trace or the printed events, that both tools were actually called.
-5. Compare this to the two ways of wiring up a tool call from @sec-functioncalling: what does ADK still do for you, and what would you have had to write by hand without it?
-6. Before you run it: `write_note` can overwrite any file the agent decides to name, with no confirmation step. What would you want in place before handing an agent a tool like this for real, beyond "it's just a demo"?
-
 :::
 
 
