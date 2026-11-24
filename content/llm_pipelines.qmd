@@ -562,21 +562,6 @@ Today's pipeline has five LLM agents, but what holds them together is plain Pyth
 
 The same structure (generate, check, judge, revise) carries over to most of what you will build: replace the prompt advisor with a RAG answerer or a data-analysis agent, and the constitution with rules for that domain.
 
-## Project work
-
-Time to work on your projects!
-
-::: {.callout-note}
-## 🧠 Reflection – Applying This to Your Project
-
-Go in your project teams. Discuss:
-
-1. Which steps of your project could be separate nodes in a pipeline? Sketch the graph.
-2. Where does your system need a hard check, and where an LLM judge? What would your constitution contain?
-3. Is there any step where you really need the model to decide what happens next, or does a fixed graph do the job?
-
-:::
-
 ## Further readings
 
 - @mao2025promptstemplatessystematicprompt: empirical analysis of 2,163 real-world system prompt templates, identifying seven components and their frequencies
