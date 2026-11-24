@@ -219,6 +219,8 @@ Try it!
 2. Write an appropriate prompt that makes it clear that you expect python code calling the defined function(s). 
 3. Test your prompt with an example input.
 
+__Note:__ The expected output, here, is not the function definition in python code, but the *function call* in python code. In our example the response should be ``get_current_weather(location=Kiel)``. 
+
 :::
 
 As mentioned above (several times already), giving clear names and descriptions for functions, parameters, etc., will help the model generate more accurate code snippets. (PRO TIP: it will help your human coworkers as well in understanding your code.) Here, you have the opportunity to see the consequences in action in a save environment without angering fellow humans or yourself later on!
@@ -226,19 +228,20 @@ As mentioned above (several times already), giving clear names and descriptions 
 
 ::: {.callout-note}
 ## 📝 Task
-
+<!-- make this one optional -->
 Try it!
 
 1. In your notebook, write a well written python function using clear names, description text and typing hints. You can use the one you wrote earlier, because of course you wrote clean code!
 2. Test the function with your prompt and example inputs. 
 3. Now write a badly written python function, without clear names, descriptions or typing hints. Test it with your example inputs too. Are the results better or worse? Why do you think that's happening?
 4. Upload your notebook to Moodle.
-
-
+<!-- test with several functions, more then just one -->
+<!-- only upload at the end of the session, can be the same notebook. check in other task frames as well. -->
 :::
 
 
 ### The Practical Way
+<!-- rename to something else, Native tool API? -->
 
 So far, we've asked the model to put its tool call inside plain text and then hunted for it ourselves. Most LLM APIs — including the OpenAI-compatible one we've been using — offer a far more direct way to do this: a `tools` parameter you pass alongside your messages, built from exactly the kind of JSON schema we wrote by hand above. Instead of a wall of text to search through, the response comes back with a dedicated `tool_calls` field naming the tool and its arguments directly.
 
@@ -248,6 +251,7 @@ How does this actually get more reliable, rather than just moving the same probl
 ### Example: calling the weather tool
 
 One wrinkle worth knowing about before you try it: `tool_calls` is a *list* — a model can request more than one tool call in a single turn — and each entry's `arguments` field is a JSON-encoded *string*, not already a Python dict. There's still one `json.loads()` call between you and usable arguments; the win is not having to hunt for where the JSON even starts.
+<!-- add a note here, that when using a framework, you do not have to write the stuff below. usually just add the @tool decorator non top of the function and the framework will do this for you. -->
 
 ```python
 weather_tool = {
@@ -349,7 +353,8 @@ Code-generated tool calls are a different story: naively `exec()`-ing a parsed-o
 
 ::: {.callout-note}
 ## 📝 Task
-
+<!-- make it clear that this one is NOT allowed to use the native api -->
+<!-- make this one optional, students may do this one or the one with the native tool api below -->
 Try it! This one's a bit more involved, since it's where everything from this session comes together.
 
 1. Reuse your chatbot with memory for this, since we need the memory.
@@ -369,6 +374,7 @@ With the native API, there's no parsing step at all: `response.choices[0].messag
 :::{#tip-tool_dispatch .callout-tip collapse="true" appearance="minimal"}
 ### Example: executing a tool call and feeding back the result
 
+<!-- nicefy example code below -->
 ```python
 import json
 
@@ -426,17 +432,26 @@ Try it!
 
 ## Wrap-up
 
+<!-- we did a lot of hand-crafting stuff that any framework already implemented for us and you will never touch again. this is instructional. you now know how all llm-based systems work under the hood, at least in principle.  -->
+
 We set out to open up two pieces of the harness that sit underneath every chatbot and tool-using assistant you've used: a way to remember, and a way to act.
 
 For memory, we saw that the model itself contributes nothing — every call is stateless — so the harness has to keep the conversation history itself and resend it every time. For tool calling, we saw a longer arc: the model still can't act, so it has to produce a structured request instead, first by hand (JSON or code, parsed and executed by hand), then via a native API that makes the JSON path far more reliable — though only for the *shape* of the request, never for whether it was the right one to make.
 
 **Take-home message:** nothing in this session made the model smarter. We never changed a single weight. Everything we built — the history list, the JSON schema, the parser, the dispatch table, the constrained decoding — is harness: code sitting around a model that still just turns the text in front of it into more text, once, with no memory and no hands. That harness is what turns a stateless text-completion engine into something that feels like it remembers you and can get things done.
 
+<!-- rework last paragraph -->
 That's exactly the shape we promised at the start: take something outside the model's own turn — a message history, or a tool's result — handle it outside the model, feed it back in for the next call. Next time, we start asking a different question: what happens once we let the model itself decide when to make that loop continue?
 
 ## Project work
 
 Time to work on your projects!
+<!-- 
+task for today regarding project is
+- build groups (2-4 students each)
+- register at prüfungsamt for the exam
+- think about ideas (maybe give a quick outlook on what is to come)
+-->
 
 ::: {.callout-note}
 ## 📝 Task
