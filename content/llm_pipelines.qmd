@@ -445,6 +445,24 @@ Is this still a pipeline? Yes. The LLM makes a decision, but only between edges 
 
 :::
 
+## Routing by confidence: cascades {#sec-cascade}
+
+The gate routes by *use case*. A second routing signal comes from the judge itself: how sure is it? A judge that is confident can be trusted; one that is unsure can hand the item to a stronger, slower judge. This is a **cascade**: accept when confident, escalate when unsure [@jung2025trust].
+
+```{mermaid}
+flowchart LR
+    item[Draft] --> fast(Fast judge)
+    fast -->|confident| accept((Accept verdict))
+    fast -->|unsure| strong(Reasoning judge)
+    strong --> accept
+```
+
+The fast first stage does not have to be a chat model. **JEV** by TypeSafe is a *decision model*: instead of generating text, it receives a state (the text to judge), a typed question and the label options, and returns a probability for each label in a single forward pass. The largest probability serves as its confidence. @li2026jevjudge report that JEV comes within three points of a frontier reasoning judge wherever the verdict can be read off the text, at a fraction of the cost and with a median latency of 0.15 seconds, but falls behind where the verdict must be derived, as in math, code and logic. Accepting JEV's confident verdicts and escalating the rest to the reasoning judge was slightly more accurate than that judge alone, at 41% of its fee. These numbers come from the authors of a commercial product, so treat them as claims to check, not as settled.
+
+We checked some of them in our own paper club on three judging tasks. Compared with `qwen3-8-27b` as a judge, JEV agreed with human raters about as well as the best prompting strategies for Qwen, at roughly 0.16 seconds per item instead of 3 to 30 seconds. The cascade itself was the surprise: escalating JEV's least confident items to Qwen made the agreement with humans *worse*, not better: on exactly those hard items, Qwen was no better than JEV. A cascade only helps if the second stage is better than the first on the items you escalate. Whatever judges you combine, validate the threshold on a small labelled sample from your own task before trusting it.
+
+For your pipeline, the takeaway is structural: the routing function after a judge can look at the judge's confidence, not only at its verdict. With `output_schema`, a judge can return a confidence field alongside its verdict; with models that expose token probabilities, you can read the confidence directly from the probabilities of the label tokens.
+
 ## Observability {#sec-observability}
 
 A multi-step pipeline is harder to debug than a single LLM call. Failures can be buried two or three hops deep in the graph: the editor may have applied a change that satisfied the judge locally but broke a different rule in the next iteration.
