@@ -1,8 +1,8 @@
 ---
-toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>Multi-Agent Orchestration</h3>'
+toc-title: '![](../imgs/llm-pipeline.jpg){width=240px}<br> <h3>LLM Pipelines</h3>'
 ---
 
-# Multi-Agent Orchestration {#sec-orchestration}
+# LLM Pipelines {#sec-orchestration}
 
 Multi-agent systems are, at their core, a bet on decomposition: split a hard task into narrower subtasks, assign each to a specialised agent, and coordinate the results. Whether that coordination is worth the overhead depends almost entirely on how you orchestrate the pieces. This session introduces two fundamentally different approaches to that coordination, explains why we focus on one of them for practical work with local models, and then builds a working constitutional prompt-advisor pipeline step by step using Google ADK.
 
@@ -393,6 +393,58 @@ root_agent = Workflow(
 
 :::
 
+## Routing with an LLM gate {#sec-gate}
+
+Right now every draft that passes the hard check goes through the full review loop: up to three rounds of judge, feedback, and editor, so up to nine extra LLM calls. For a customer-facing chatbot at a health insurer, that is money well spent. For a private helper that sorts your shopping list, it is not. Routing only some requests to the expensive path is exactly the cost argument from @ong2024routellm above.
+
+The decision "does this need a review?" is hard to write as an `if` statement, but easy for an LLM. So we add a **gate**: a small agent that classifies the request, followed by a routing function that turns its answer into an edge.
+
+```{mermaid}
+flowchart LR
+    check{Hard\nCheck} -->|pass| gate(Gate)
+    gate -->|review| loop[[Review loop]]
+    gate -->|skip| out((Prompt))
+    loop --> out
+```
+
+```python
+from typing import Literal
+from pydantic import BaseModel
+
+class GateDecision(BaseModel):
+    reason: str
+    route: Literal["review", "skip"]
+
+gate = Agent(
+    name="Gate",
+    model="ollama_chat/gemma3:latest",
+    instruction="""You decide whether a system prompt needs a full quality review before use.
+Choose "review" if the assistant described below will talk to customers or the public,
+handle health, legal, financial or personal data, or act on its own.
+Choose "skip" for low-stakes personal or internal use, such as a private writing helper.
+
+Assistant description:
+{original_spec}""",
+    output_schema=GateDecision,
+)
+
+def route_gate(node_input: dict, ctx):
+    return Event(route=node_input["route"], output=ctx.state["draft_prompt"])
+```
+
+`Literal` restricts the answer to the two routes that exist in the graph, so the model cannot invent a third. The gate judges the *use case* from the original spec, not the quality of the draft: letting a model decide whether its own output is good enough to skip review would undo the harness. Note that `route_gate` passes the draft on as `output`; the gate's own verdict is not what the review loop should see.
+
+Is this still a pipeline? Yes. The LLM makes a decision, but only between edges you drew in advance, and your code still defines everything that can happen. This is the smallest step toward agent-driven orchestration: the model chooses the route, you choose the map. Handing it the map as well, with `AgentTool` and a free choice of which sub-agent to call next, is the step this chapter deliberately does not take.
+
+::: {.callout-note}
+## 📝 Task
+
+1. Add the `gate` and `route_gate` to your pipeline between the hard check and the review loop: `("START", store_spec, advisor, hard_check, {"pass": gate})` and `(gate, route_gate, {"review": review_loop, "skip": done})`, where `done` returns `Event(message="Approved without review.")`.
+2. Run three specs you expect to be routed differently, and one borderline case. Check the gate's `reason` in `adk web`.
+3. What happens to the cost of your pipeline if the gate is wrong in either direction? Which error is worse here?
+
+:::
+
 ## Observability {#sec-observability}
 
 A multi-step pipeline is harder to debug than a single LLM call. Failures can be buried two or three hops deep in the graph: the editor may have applied a change that satisfied the judge locally but broke a different rule in the next iteration.
@@ -413,7 +465,7 @@ Systematic variation and testing of your pipeline (different constitutions, diff
 ::: {.callout-important}
 ## 📤 Upload to Moodle
 
-Upload your notebook with the full pipeline (advisor, hard check, judge, review loop) and your embedding-check sketch to Moodle. Everything below is optional.
+Upload your notebook with the full pipeline (advisor, hard check, judge, review loop, gate) and your embedding-check sketch to Moodle. Everything below is optional.
 
 :::
 
@@ -484,7 +536,7 @@ Extend your pipeline to accumulate approved prompts in `session.state` and pass 
 
 ## Wrap-up
 
-Today's pipeline has four LLM agents, but what holds them together is plain Python: the hard check, the routers that decide what runs next, and the state that moves data between nodes. That is the main point of deterministic orchestration: the model does the writing and the judging, your code keeps control of the flow. Every decision is visible in the graph and in the `adk web` trace, so when something goes wrong you can see which node received what.
+Today's pipeline has five LLM agents, but what holds them together is plain Python: the hard check, the routers that decide what runs next, and the state that moves data between nodes. Even where an LLM picks the route, as the gate does, it only chooses among edges your code defined. That is the main point of deterministic orchestration: the model does the writing and the judging, your code keeps control of the flow. Every decision is visible in the graph and in the `adk web` trace, so when something goes wrong you can see which node received what.
 
 The same structure (generate, check, judge, revise) carries over to most of what you will build: replace the prompt advisor with a RAG answerer or a data-analysis agent, and the constitution with rules for that domain.
 
