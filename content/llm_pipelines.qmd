@@ -36,9 +36,9 @@ flowchart TD
     orch -->|decides: enough?| out[Final answer]
 ```
 
-The orchestrator selects which sub-agent to invoke based on current state rather than a fixed plan [@anthropic2025multiagent; @wang2024moa]. 
-<!-- 
-Google ADK supports this pattern via `AgentTool`, which exposes sub-agents as callable tools for a root `Agent`. We will not build this today, but it is important to know it exists. -->
+The orchestrator selects which sub-agent to invoke based on current state rather than a fixed plan [@anthropic2025multiagent; @wang2024moa].
+
+Google ADK supports this pattern via `AgentTool`, which wraps a sub-agent so a root `Agent` can call it like any other tool: `Agent(..., tools=[AgentTool(agent=search_agent)])` (`from google.adk.tools.agent_tool import AgentTool`). We will not build this today, but keep it in mind if your project needs the model to choose between sub-agents.
 
 ### Why we focus on deterministic pipelines today
 
@@ -48,7 +48,18 @@ There are real gains to this decomposition. Routing queries to a cheaper model f
 
 ## Google ADK: key types {#sec-adk}
 
-The four types used throughout this session:
+::: {.callout-important}
+## Update ADK first
+
+`Workflow` and the graph API are recent and still change between releases. This chapter was tested with `google-adk` 2.15. Update the project you set up in @sec-adk-intro before starting:
+
+```bash
+uv add "google-adk>=2.15" litellm
+uv run python -c "import google.adk; print(google.adk.__version__)"
+```
+:::
+
+The two types used throughout this session:
 
 | Type | Role |
 |---|---|
@@ -65,6 +76,20 @@ from google.adk.models.registry import LLMRegistry
 LLMRegistry._register(r"lm_studio/.*", LiteLlm)
 ```
 :::
+
+### Running your pipeline in `adk web`
+
+From the first task on, run everything in the ADK Dev UI. It shows the graph, every node's input and output, and the session state after each step, which is how you will debug the pipeline as it grows. `adk web` expects one folder per agent, each with an `agent.py` that defines `root_agent` and an `__init__.py` that imports it:
+
+```
+session6/            <- run `adk web` here
+├── .env             <- e.g. OLLAMA_API_BASE=http://localhost:11434
+└── prompt_advisor/
+    ├── __init__.py  <- from . import agent
+    └── agent.py     <- root_agent = advisor   (later: root_agent = Workflow(...))
+```
+
+Start it from the parent folder with `adk web` and open `http://localhost:8000`. Pick your agent in the dropdown, chat with it, and click on any event to see what each node received and produced. The Dev UI is for development only, not for deployment.
 
 
 ## A prompt advisor {#sec-promptadvisor}
@@ -83,7 +108,29 @@ Good system prompts share a common structure. @mao2025promptstemplatessystematic
 | Workflow / Steps | 28% | Sequential process when task order matters |
 | Examples | 20% | Demonstrations of the desired output |
 
-Your agent receives a Python dict with these fields and produces a complete system prompt.
+Your agent receives a plain-text description of the desired assistant, covering some or all of these components, and produces a complete system prompt.
+
+Over the session you extend this single agent, step by step, into the following pipeline, one node at a time:
+
+```{mermaid}
+flowchart LR
+    advisor(Prompt\nAdvisor)
+    check{Hard\nCheck}
+    judge(Judge)
+    feedback(Feedback\nAgent)
+    editor(Editor)
+    out((Approved\nPrompt))
+    fail[Reject]
+
+    advisor --> check
+    check -->|pass| judge
+    check -->|fail| fail
+    judge -->|approved| out
+    judge -->|rejected| feedback
+    feedback --> editor
+    editor --> judge
+```
+
 
 ::: {.callout-note}
 ## 📝 Task
@@ -99,7 +146,7 @@ addresses each provided dimension clearly. Output only the system prompt text.
 
 2. Call it with a test input, for example, a customer support agent for a software company.
 3. Inspect the output: does it address the dimensions you provided?
-4. Open `adk web` and examine the agent graph.
+4. Run it in `adk web` and click through the events to see what the agent received and returned.
 
 :::
 
@@ -122,7 +169,9 @@ For **cross-branch data sharing** — when two separate branches of the graph bo
 
 ### Hard checks
 
-The first line of defence is a **deterministic hard check**: a plain Python function that rejects obviously bad output before any LLM evaluation happens. ADK treats plain functions placed in an edge chain as nodes automatically, no wrapper class needed. Such a function can declare `node_input: str` to receive the previous node's text output and `ctx` to read and write `ctx.state`. It returns an `Event` to control routing: `Event(route="pass")` follows the matching conditional edge; `Event(message="...")` emits a terminal message and halts the workflow.
+The first line of defence is a **deterministic hard check**: a plain Python function that rejects obviously bad output before any LLM evaluation happens. ADK treats plain functions placed in an edge chain as nodes automatically, no wrapper class needed. Such a function can declare `node_input: str` to receive the previous node's text output and `ctx` to read and write `ctx.state`. It returns an `Event` to control routing: `Event(route="pass", output=...)` follows the matching conditional edge and hands `output` to the next node; `Event(message="...")` emits a terminal message and halts the workflow.
+
+Always set `output` on a routing event. A router that only returns `Event(route="pass")` hands `None` to the next node, and an `Agent` that receives `None` falls back to the user's original message. Your judge would then evaluate the task description instead of the generated prompt, without any error.
 
 The same mechanism works *before* an agent: a function placed before the advisor in the chain receives the raw user message as `node_input`. This is the natural place to capture the original spec before the model transforms it.
 
@@ -137,7 +186,7 @@ def hard_check(node_input: str, ctx):
     if len(node_input.strip()) < 50:
         return Event(message="Hard check failed: output shorter than 50 characters.")
     ctx.state["draft_prompt"] = node_input
-    return Event(route="pass")
+    return Event(route="pass", output=node_input)
 ```
 
 The edge chain `("START", store_spec, advisor, hard_check, {"pass": ...})` runs `store_spec` first — capturing the spec — then the advisor, then the hard check on the advisor's output.
@@ -184,6 +233,14 @@ Define your own `PromptConstitution` dataclass with 3–10 rules. You can use th
 
 :::
 
+::: {.callout-note}
+## Side note: safety as a constitution
+
+The same pipeline structure applies to safety evaluation. Replace or extend the quality rules in the constitution with safety criteria: for example, "must not produce instructions for harmful activities", "must not impersonate real individuals", or "must not claim capabilities the model does not have". The judge becomes a safety gate; the constitution is the policy; the harness enforces it. Structurally identical to the quality pipeline: different constitution, same code.
+
+:::
+
+
 
 ## LLM as a judge {#sec-llmjudge}
 
@@ -214,12 +271,38 @@ Return only valid JSON: {{"approved": true/false, "rule_scores": {{...}}, "feedb
 
 The system prompt to evaluate is not a template variable here — the judge receives it as the user message of its conversation turn, delivered automatically by ADK from the previous node's output. If the judge returns output that cannot be parsed as JSON, the pipeline defaults to `approved=False`. This deterministic fallback ensures the harness never silently passes a bad output because the judge misbehaved.
 
+Note what the judge should *not* see: inside a `Workflow`, an agent receives the previous node's output as its user message, not the rest of the conversation. That is intended here, since a judge that reads the task description tends to grade the description instead of the prompt. This only holds if every router passes `output` along (see @sec-harnessing); otherwise the agent silently gets the user's original message. If a node does need earlier information (for example, the original spec to check whether the prompt fits the use case), put it into `ctx.state` and reference it explicitly as `{original_spec}` in the instruction. Check in `adk web` that each agent receives exactly what you expect.
+
+:::::{.callout-tip collapse="true" appearance="minimal"}
+## Structured output instead of parsing JSON by hand
+
+Reasoning models such as `qwen3` put a `<think>...</think>` block before their answer, so `json.loads` on the raw output fails and your judge would reject everything. Instead of stripping and parsing by hand, you can let ADK enforce the format with a Pydantic schema:
+
+```python
+from pydantic import BaseModel
+
+class Verdict(BaseModel):
+    feedback: str      # first, so the model reasons before it decides
+    approved: bool
+
+judge = Agent(
+    name="Judge",
+    model=...,
+    instruction=...,
+    output_schema=Verdict,
+    output_key="verdict",   # parsed dict is also stored in ctx.state["verdict"]
+)
+```
+
+The next node then receives a `dict` as `node_input` instead of a string. Field order matters with small models: with `approved` first, they tend to decide before reasoning and can return `approved: true` next to feedback listing failures. `output_schema` does not combine well with tools, so keep the judge a tool-free agent.
+:::::
+
 ::: {.callout-note}
 ## 📝 Task
 
 1. Define a `judge` (`Agent`) with the evaluation instruction above, embedding the constitution rules via Python f-string.
-2. Write a `route_after_judge` routing function that parses the judge's JSON output, writes `judge_feedback` to state, and returns `Event(route="approved")` or `Event(route="rejected")`. If parsing fails, force `approved=False`.
-3. Wire the hard check and judge into the graph using the chain tuple syntax: `("START", advisor, hard_check, {"pass": judge})` and continue from there with `route_after_judge`. The full workflow is now `START → advisor →[hard_check]→[pass]→ judge →[route_after_judge]→ ...`.
+2. Write a `route_after_judge` routing function that parses the judge's JSON output, writes `judge_feedback` to state, and returns `Event(route="approved")` or `Event(route="rejected")`, each with `output=` set to the feedback. If parsing fails, force `approved=False`.
+3. Wire the hard check and judge into the graph using the chain tuple syntax: `("START", store_spec, advisor, hard_check, {"pass": judge})` and continue from there with `route_after_judge`. The full workflow is now `START → store_spec → advisor →[hard_check]→[pass]→ judge →[route_after_judge]→ ...`.
 4. Run the full pipeline on two inputs: one you expect to pass and one you expect to fail. Inspect the judge's feedback for each.
 
 :::
@@ -238,28 +321,10 @@ The design principles that make content coding reliable translate directly to co
 
 ## Editor and improvement loop {#sec-editor}
 
-A single judge pass identifies problems but does not fix them. The natural next step is an improvement loop: the judge evaluates, a feedback agent proposes concrete changes, and an editor applies them. This loop repeats until the judge approves or a maximum iteration count is reached.
+A single judge pass identifies problems but does not fix them. The natural next step is the improvement loop from the diagram in @sec-promptadvisor: the judge evaluates, a feedback agent proposes concrete changes, and an editor applies them. This loop repeats until the judge approves or a maximum iteration count is reached.
 
 This three-role structure is worth keeping explicit rather than merging roles. The judge computes *what is wrong* with the current output; the feedback agent computes *what to change* in response; the editor *applies* the change to produce the next candidate. Keeping them separate makes each role narrower and easier to prompt precisely, and it maps naturally to the structure of Constitutional AI [@bai2022constitutional], where critique and revision are distinct operations.
 
-```{mermaid}
-flowchart LR
-    advisor(Prompt\nAdvisor)
-    check{Hard\nCheck}
-    judge(Judge)
-    feedback(Feedback\nAgent)
-    editor(Editor)
-    out((Approved\nPrompt))
-    fail[Reject]
-
-    advisor --> check
-    check -->|pass| judge
-    check -->|fail| fail
-    judge -->|approved| out
-    judge -->|rejected| feedback
-    feedback --> editor
-    editor --> judge
-```
 
 ```python
 from google.adk import Agent, Workflow
@@ -274,17 +339,19 @@ def route_after_judge(node_input: str, ctx):
     except (json.JSONDecodeError, ValueError):
         verdict = {"approved": False, "feedback": "Could not parse verdict."}
     ctx.state["judge_feedback"] = verdict.get("feedback", "")
-    return Event(route="approved" if verdict.get("approved") else "rejected")
+    return Event(route="approved" if verdict.get("approved") else "rejected",
+                 output=ctx.state["judge_feedback"])
 
 def store_feedback(node_input: str, ctx):
     ctx.state["feedback"] = node_input
-    return Event(route="next")
+    return Event(route="next", output=node_input)
 
 def loop_or_stop(node_input: str, ctx):
     ctx.state["draft_prompt"] = node_input
     ctx.state["iteration"] = ctx.state.get("iteration", 0) + 1
     if ctx.state["iteration"] < MAX_ITERATIONS:
         return Event(route="continue", output=node_input)
+    return Event(message=f"Stopped after {MAX_ITERATIONS} iterations without approval.")
 ```
 
 This pattern generalises: routing functions receive the previous node's text output as `node_input`, update state as needed, and return an `Event` to direct the graph. The same function signature works for both branching and looping.
@@ -326,33 +393,11 @@ root_agent = Workflow(
 
 :::
 
-::: {.callout-note}
-## 📝 Task (extension): LLM jury
-
-Instead of a single judge, run multiple judges in parallel, each focusing on a different subset of the constitution's rules. Aggregate their verdicts by majority vote.
-
-1. Define three `judge` (`Agent`) instances, each responsible for one or two rules.
-2. Wire them in parallel using `Workflow`'s fan-out syntax: `(advisor, (judge1, judge2, judge3))` fans out to all three simultaneously; `((judge1, judge2, judge3), aggregator)` fans back in.
-3. Add a plain `def aggregator(ctx)` function that combines the three verdicts from `ctx.state`.
-4. Compare the jury's behaviour to the single judge on a set of test prompts.
-
-@juryon2025 discuss dynamic jury selection; @chen2024chateval show that diverse role prompts are essential; judges with identical instructions tend to degrade toward noise.
-
-:::
-
-::: {.callout-note}
-## Side note: safety as a constitution
-
-The same pipeline structure applies to safety evaluation. Replace or extend the quality rules in the constitution with safety criteria: for example, "must not produce instructions for harmful activities", "must not impersonate real individuals", or "must not claim capabilities the model does not have". The judge becomes a safety gate; the constitution is the policy; the harness enforces it. Structurally identical to the quality pipeline: different constitution, same code.
-
-:::
-
-
 ## Observability {#sec-observability}
 
 A multi-step pipeline is harder to debug than a single LLM call. Failures can be buried two or three hops deep in the graph: the editor may have applied a change that satisfied the judge locally but broke a different rule in the next iteration.
 
-The ADK Dev UI (launched with `adk web`) is the primary debugging tool for today's session. It shows the full agent tree, per-node input and output, and execution timing without any configuration.
+The ADK Dev UI you have been using since the first task covers local debugging: the full agent tree, per-node input and output, and the session state, without any configuration.
 
 For production deployments, **Langfuse** (https://langfuse.com) provides open-source LLM observability with a self-hostable backend. ADK emits OpenTelemetry traces natively, so connecting it to Langfuse requires only setting two environment variables; no code changes to your agents are needed:
 
@@ -364,6 +409,44 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic <base64-encoded-key>
 Systematic variation and testing of your pipeline (different constitutions, different models, different iteration limits) is also where the **Examples** component from @mao2025promptstemplatessystematicprompt becomes practically relevant: running the pipeline across a set of test cases and inspecting the traces is how you discover whether your prompt spec produces consistent outputs. Tools like Langfuse make that process tractable by preserving the full trace of each run.
 
 
+
+::: {.callout-important}
+## 📤 Upload to Moodle
+
+Upload your notebook with the full pipeline (advisor, hard check, judge, review loop) and your embedding-check sketch to Moodle. Everything below is optional.
+
+:::
+
+
+## Optional extensions
+
+The core pipeline is done. If you have time left, pick one of these.
+
+::: {.callout-note}
+## 📝 Task (extension): LLM jury
+
+Instead of a single judge, run multiple judges in parallel, each focusing on a different subset of the constitution's rules. Aggregate their verdicts by majority vote.
+
+1. Define three `judge` (`Agent`) instances, each responsible for one or two rules.
+2. Wire them in parallel: a tuple of nodes in an edge chain fans out, and a `JoinNode` waits for all branches before continuing: `("START", advisor, (judge1, judge2, judge3), jury, aggregator)` with `jury = JoinNode(name="jury")` (`from google.adk.workflow import JoinNode`). Without the `JoinNode`, the aggregator runs once per judge instead of once for all of them.
+3. Add a plain `def aggregator(node_input, ctx)` function. `node_input` is a dict mapping each judge's name to its verdict; combine them by majority vote.
+4. Compare the jury's behaviour to the single judge on a set of test prompts.
+
+@juryon2025 discuss dynamic jury selection; @chen2024chateval show that diverse role prompts are essential; judges with identical instructions tend to degrade toward noise.
+
+:::
+
+::: {.callout-note}
+## 📝 Task (extension): ask the user
+
+The advisor currently has to guess whenever the spec is vague. Let it ask instead:
+
+1. Extend the advisor's instruction: if details are missing, it should answer only with `QUESTION: <your question>`.
+2. Write a routing function `check_or_draft` after the advisor that returns `Event(route="question")` if the output starts with `QUESTION:` (store the question in `ctx.state`), and `Event(route="pass", output=node_input)` otherwise.
+3. Pause for the user with a generator node: `yield RequestInput(message=ctx.state["advisor_question"])` (`from google.adk.events import RequestInput`). The user's reply becomes the next node's `node_input`.
+4. Append the reply to `ctx.state["original_spec"]` and route back to the advisor, passing the extended spec as `output`. Test it in `adk web` with a one-line spec such as "a chatbot for a bakery".
+
+:::
 
 :::::{.callout-tip collapse="true" appearance="minimal"}
 ## Extension: context store
@@ -398,6 +481,27 @@ Extend your pipeline to accumulate approved prompts in `session.state` and pass 
 
 
 
+
+## Wrap-up
+
+Today's pipeline has four LLM agents, but what holds them together is plain Python: the hard check, the routers that decide what runs next, and the state that moves data between nodes. That is the main point of deterministic orchestration: the model does the writing and the judging, your code keeps control of the flow. Every decision is visible in the graph and in the `adk web` trace, so when something goes wrong you can see which node received what.
+
+The same structure (generate, check, judge, revise) carries over to most of what you will build: replace the prompt advisor with a RAG answerer or a data-analysis agent, and the constitution with rules for that domain.
+
+## Project work
+
+Time to work on your projects!
+
+::: {.callout-note}
+## 🧠 Reflection – Applying This to Your Project
+
+Go in your project teams. Discuss:
+
+1. Which steps of your project could be separate nodes in a pipeline? Sketch the graph.
+2. Where does your system need a hard check, and where an LLM judge? What would your constitution contain?
+3. Is there any step where you really need the model to decide what happens next, or does a fixed graph do the job?
+
+:::
 
 ## Further readings
 
