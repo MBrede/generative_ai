@@ -556,12 +556,6 @@ Extend your pipeline to accumulate approved prompts in `session.state` and pass 
 
 
 
-## Wrap-up
-
-Today's pipeline has five LLM agents, but what holds them together is plain Python: the hard check, the routers that decide what runs next, and the state that moves data between nodes. Even where an LLM picks the route, as the gate does, it only chooses among edges your code defined. That is the main point of deterministic orchestration: the model does the writing and the judging, your code keeps control of the flow. Every decision is visible in the graph and in the `adk web` trace, so when something goes wrong you can see which node received what.
-
-The same structure (generate, check, judge, revise) carries over to most of what you will build: replace the prompt advisor with a RAG answerer or a data-analysis agent, and the constitution with rules for that domain.
-
 ## Further readings
 
 - @mao2025promptstemplatessystematicprompt: empirical analysis of 2,163 real-world system prompt templates, identifying seven components and their frequencies
