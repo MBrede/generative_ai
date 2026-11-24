@@ -108,10 +108,12 @@ For RAG-style systems, this is particularly relevant:
 - If retrieval is mandatory for correctness, you may not want to leave the “call retrieval or not?” decision to the LLM.
 - Instead, you enforce: “always retrieve, then generate”, implemented as a pipeline.
 
+There's a second axis to this decision, besides complexity: what's actually at stake if the agent decides wrong. Vending-Bench's worst case is a bad restocking call and some lost revenue — a fine place to let an LLM decide freely. Handing agency over decisions that affect people's lives directly — who gets a loan, who gets interviewed for a job — is a different proposition. Today's LLMs are fine-tuned to behave well, but that fine-tuning sits on top of pretraining on old books and the open internet, both full of biases and, at times, outright harmful stereotypes that don't simply vanish afterward. We'll get into this properly in @sec-alignment; for now, treat "can this agent decide?" and "should this agent decide?" as two separate questions.
+
 ::: {.callout-note}
 ## 📝 Task
 
-Discuss: for the examples encountered so far, does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?
+Discuss: for the examples encountered so far — the surfing-trip assistant, Vending-Bench — does it make sense to use an agent? Or would a pipeline be sufficient? Maybe even better?
 
 :::
 
