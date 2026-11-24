@@ -7,7 +7,8 @@
 .env
 _freeze
 _cache/
-data/
+data/*
+!data/chunking_demo.json
 docs/
 example_solutions/
 *.drawio
