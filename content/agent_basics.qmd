@@ -306,6 +306,7 @@ Earlier, you gave your ADK agent a hand-written `write_note` tool. Now do the sa
 2. Connect your ADK agent to the same filesystem MCP server from the Inspector task, instead of your hand-written `write_note` function.
 3. Ask it to do something that writes or edits a file, and confirm it goes through the MCP server this time.
 4. Compare: what did you get for free by using the MCP server instead of your own function? What did you lose (e.g. control over exactly what the tool does)?
+5. upload your notebook to Moodle. 
 
 :::
 
