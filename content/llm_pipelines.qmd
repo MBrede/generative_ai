@@ -46,6 +46,14 @@ Smaller local models (Ollama, LM Studio) are not reliable orchestrators. They te
 
 There are real gains to this decomposition. Routing queries to a cheaper model for simpler subtasks rather than sending everything to one large generalist can reduce inference costs by more than 2x without measurable quality loss [@ong2024routellm]. The tradeoff is real: you give up the emergent flexibility of a single capable model and invest more effort in upfront design. The same tradeoff exists between microservices and monoliths, and neither is universally the right answer.
 
+## Harnessing {#sec-harnessing}
+
+Splitting a task across several agents is only half of a pipeline. The other half is everything around the models that keeps them on track: a **harness**.
+
+A harness is the complete scaffolding around an LLM pipeline: the class or module that holds the rules, runs the agents in order, enforces checks, and decides when to stop. It is everything except the model weights. The entire pipeline we are building today *is* the harness; the constitution (defined below) is one component inside it.
+
+The Claude Code source leak (April 2026) gave an unusually detailed public view of what a production-grade harness looks like.^[The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/] The Claude Code runtime turned out to be a sophisticated harness with three distinct control layers: **guides** (feedforward instructions, conventions, and bootstrap prompts injected before the model acts), **sensors** (linters, type checkers, and test suites that catch bad output after execution), and **control checks** (deterministic format and length validation first, then slower LLM-powered semantic review). The key observation from the leak analysis: agents do not mind being micromanaged: more constraints, more checks, and more structure tend to improve performance rather than limit it.^[A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model's output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.]
+
 ## A prompt advisor {#sec-promptadvisor}
 
 The domain for today is **prompt writing**: an agent that takes a description of a desired AI assistant and produces a well-structured system prompt for it. This is deliberately self-referential: you are building an agent that writes prompts for agents.
@@ -151,13 +159,9 @@ addresses each provided dimension clearly. Output only the system prompt text.
 :::
 
 
-## Harnessing {#sec-harnessing}
+## Guarding the advisor
 
-The prompt advisor works, but it is unguarded. It will happily write a prompt that omits the persona, ignores safety, or produces something grammatically fine but semantically wrong. To make it reliable we need a **harness**.
-
-A harness is the complete scaffolding around an LLM pipeline: the class or module that holds the rules, runs the agents in order, enforces checks, and decides when to stop. It is everything except the model weights. The entire pipeline we are building today *is* the harness; the constitution (defined below) is one component inside it.
-
-The Claude Code source leak (April 2026) gave an unusually detailed public view of what a production-grade harness looks like.^[The leak was analysed at https://github.com/0PeterAdel/ClaudeCode-Leak and https://paddo.dev/blog/claude-code-leak-harness-exposed/] The Claude Code runtime turned out to be a sophisticated harness with three distinct control layers: **guides** (feedforward instructions, conventions, and bootstrap prompts injected before the model acts), **sensors** (linters, type checkers, and test suites that catch bad output after execution), and **control checks** (deterministic format and length validation first, then slower LLM-powered semantic review). The key observation from the leak analysis: agents do not mind being micromanaged: more constraints, more checks, and more structure tend to improve performance rather than limit it.^[A simpler illustration is the Caveman plugin for Claude Code (https://github.com/JuliusBrussee/caveman), which uses three lifecycle hooks and a flag file to constrain the model's output style, achieving 65–75% token savings per session through prompt injection alone and without any model changes.]
+The prompt advisor works, but it is unguarded. It will happily write a prompt that omits the persona, ignores safety, or produces something grammatically fine but semantically wrong. Time to build the harness from @sec-harnessing around it.
 
 ### Harnessing with ADK Graph API
 
