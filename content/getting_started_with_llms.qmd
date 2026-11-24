@@ -407,6 +407,7 @@ Thirdly, you should make sure that the model you choose is appropriate for your 
 A good starting point for getting an overview about such metrics and benchmarks is [Hugging Face](https://huggingface.co). This platform has long cemented itself as the go-to place for getting access to open source models, but also provides a lot of resources for evaluating and comparing them.
 [This page](https://huggingface.co/collections/open-llm-leaderboard/the-big-benchmarks-collection-64faca6335a7fc7d4ffe974a) provides an overview of benchmarks, leaderboards and comparisons for a variety of tasks.
 
+<!-- benchmarks are long dead by now, find other. maybe this site? https://canirun.ai -->
 
 
 ## Basics of using open source models
